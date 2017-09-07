@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    >
+
+    <data>
+
+        <import type="com.framgia.fdms.utils.Utils"/>
+
+        <variable
+            name="viewModel"
+            type="com.framgia.fdms.screen.devicedetail.infomation.DeviceInfomationViewModel"
+            />
+
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_white"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/dp_10"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_name_24dp}"
+                    bind:text="@{viewModel.device.productionName}"
+                    bind:title="@{@string/title_device_name}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_code_24dp}"
+                    bind:text="@{viewModel.device.deviceCode}"
+                    bind:title="@{@string/title_code}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_price_tag_24dp}"
+                    bind:text="@{viewModel.device.originalPrice == null ? @string/title_unknown : Utils.formatPrice(viewModel.device.originalPrice)}"
+                    bind:title="@{@string/title_original_price}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_calendar_24dp}"
+                    bind:text="@{Utils.getStringDate(viewModel.device.boughtDate)}"
+                    bind:title="@{@string/title_bought_date}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_print_24dp}"
+                    bind:text="@{viewModel.device.printedCode}"
+                    bind:title="@{@string/title_printed_code}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_list_24dp}"
+                    bind:text="@{viewModel.device.deviceStatusName}"
+                    bind:title="@{@string/title_device_status}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_device_24dp}"
+                    bind:text="@{viewModel.device.deviceCategoryName}"
+                    bind:title="@{@string/title_device_category}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_vendor_24dp}"
+                    bind:text="@{viewModel.device.vendor.name}"
+                    bind:title="@{@string/title_vendor}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_maker_24dp}"
+                    bind:text="@{viewModel.device.maker.name}"
+                    bind:title="@{@string/title_maker}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_warranty_24dp}"
+                    bind:text="@{viewModel.device.warranty}"
+                    bind:title="@{@string/title_warranty}"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

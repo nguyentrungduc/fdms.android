@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/framgia/.android/build-cache/668a7315b804ee314ac86b680bb7e5d5d479e2fd/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="461929440e66685425a298693507f6fb27b0a872">
+        <dex dex="/home/framgia/Framgia/fdms/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_ea95da94ffe419ae55df5058eec9e6f98075bd94/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/framgia/.android/build-cache/beb4dbde860946c3585db4eda47fa5aaf36afe21/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="646439081688c43e04ec4aa7ba6915ddfdcc337f">
+        <dex dex="/home/framgia/Framgia/fdms/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_55c8ca8e686907295bcfb3c79b7816c8902aefe7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/framgia/.android/build-cache/de51acbf590480ef7d8a3f307c7bc674af051df1/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="7045152f3bd1870740b9bcb1cddff495e189774e">
+        <dex dex="/home/framgia/Framgia/fdms/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_6ab1f6ea6187444ca75af7852da18fadf4929f60/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/framgia/.android/build-cache/36799a717fd7ec3c2ebf11a1bab0b70181e53e41/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="204f607419af8247cc1b2a61f50663c65f841c12">
+        <dex dex="/home/framgia/Framgia/fdms/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_865c2c055f0a0a5616402e67ce1dd1a3d4a92a38/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/framgia/.android/build-cache/e524e38c492484e489d7aec4d4becab73a73bd7d/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="005d20a198159b87f65812fc5c51b2d84c5eba0a">
+        <dex dex="/home/framgia/Framgia/fdms/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_fc408a2918191747de9a02f527e59bb4559f3340/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/framgia/.gradle/caches/modules-2/files-2.1/com.aspose/aspose-words/17.5/f6664e8d5c51321715cd221c5f1b344f9d5bba3e/aspose-words-17.5-android.via.java.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f6664e8d5c51321715cd221c5f1b344f9d5bba3e">
+        <dex dex="/home/framgia/Framgia/fdms/app/build/intermediates/transforms/dex/debug/folders/1000/10/aspose-words-17.5-android.via.java_174f04709b59b8bde604bbc98fbd236e91321567/classes.dex" />
+    </item>
+
+</items>
