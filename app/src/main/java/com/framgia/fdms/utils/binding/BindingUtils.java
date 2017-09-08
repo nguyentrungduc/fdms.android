@@ -387,19 +387,6 @@ public final class BindingUtils {
         view.setOnItemSelectedListener(listener);
     }
 
-    @BindingAdapter({"position", "viewModel"})
-    public static void setAdapterSpinner(AppCompatSpinner spinner, final int position,
-                                         final RequestCreationViewModel viewModel) {
-        spinner.setAdapter(viewModel.getAdapterCategory());
-        spinner.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                /*viewModel.onAddRequestDetailClick(position);*/
-                return false;
-            }
-        });
-    }
-
     /*
     * bind Spinner Adapter
     * in Activity Return Device
