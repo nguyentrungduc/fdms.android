@@ -122,7 +122,9 @@
                         android:paddingBottom="@dimen/dp_10"
                         app:layoutManager="LinearLayoutManager"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        app:recyclerAdapter="@{viewModel.listMeetingRoomAdapter}"
                         />
+
                     <ProgressBar
                         android:id="@+id/progressBar"
                         android:layout_width="@dimen/dp_40"
@@ -132,6 +134,17 @@
                         />
                 </RelativeLayout>
             </LinearLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/dp_20"
+                android:onClick="@{() -> viewModel.onAddMeetingRoomClick()}"
+                app:backgroundTint="@color/colorPrimaryDark"
+                app:srcCompat="@drawable/ic_add_white_24dp"
+                />
         </android.support.design.widget.CoordinatorLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </layout>
