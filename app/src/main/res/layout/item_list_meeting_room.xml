@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.framgia.fdms.screen.meetingroom.listmeetingroom.ListMeetingRoomViewModel"
+            type="com.framgia.fdms.screen.meetingroom.listmeetingroom.ItemListMeetingRoomViewModel"
             />
     </data>
 
@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_2"
+        android:onClick="@{viewModel::onItemClicked}"
         app:cardCornerRadius="@dimen/dp_2"
         >
         <RelativeLayout
@@ -33,6 +34,7 @@
                     android:layout_width="@dimen/dp_35"
                     android:layout_height="@dimen/dp_35"
                     android:layout_margin="@dimen/dp_5"
+                    android:onClick="@{()-> viewModel.onEditMeetingRoom()}"
                     app:srcCompat="@drawable/ic_edit"
                     tools:ignore="ContentDescription"
                     />
@@ -40,6 +42,7 @@
                     android:layout_width="@dimen/dp_35"
                     android:layout_height="@dimen/dp_35"
                     android:layout_margin="@dimen/dp_5"
+                    android:onClick="@{()-> viewModel.onDeleteMeetingRoom()}"
                     app:srcCompat="@drawable/ic_x_button"
                     tools:ignore="ContentDescription"
                     />
@@ -76,6 +79,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp_3"
+                            android:text="@{viewModel.roomName}"
                             android:textColor="@color/color_gray"
                             android:textSize="@dimen/sp_25"
                             android:textStyle="bold"
@@ -94,6 +98,7 @@
                         android:layout_marginStart="@dimen/dp_3"
                         android:ellipsize="end"
                         android:maxLines="1"
+                        android:text="@{viewModel.roomDescription}"
                         android:textSize="@dimen/sp_15"
                         />
                 </LinearLayout>

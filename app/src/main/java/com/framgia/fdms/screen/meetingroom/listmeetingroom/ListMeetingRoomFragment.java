@@ -24,7 +24,7 @@ public class ListMeetingRoomFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new ListMeetingRoomViewModel();
+        mViewModel = new ListMeetingRoomViewModel(this.getActivity());
 
         ListMeetingRoomContract.Presenter presenter = new ListMeetingRoomPresenter(mViewModel);
         mViewModel.setPresenter(presenter);

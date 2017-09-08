@@ -21,4 +21,9 @@ final class ListMeetingRoomPresenter implements ListMeetingRoomContract.Presente
     @Override
     public void onStop() {
     }
+
+    @Override
+    public void getListMeetingRoom() {
+        // TODO: get List meeting room
+    }
 }
