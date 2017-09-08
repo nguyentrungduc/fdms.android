@@ -52,6 +52,7 @@ public class Constant {
         public static final String REQUEST_STATUS_ID = "request_status_id";
         public static final String RELATIVE_ID = "relative_id";
         public static final String DEVICE_NAME = "device_name";
+        public static final String ROOM_NAME = "room_name";
         public static final String REQUEST_TITLE = "request[title]";
         public static final String REQUEST_DESCRIPTION = "request[description]";
         public static final String REQUEST_FOR_USER_ID = "request[for_user_id]";

@@ -131,6 +131,7 @@
                         android:layout_height="@dimen/dp_40"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
+                        android:visibility="@{viewModel.progressBarVisibility}"
                         />
                 </RelativeLayout>
             </LinearLayout>

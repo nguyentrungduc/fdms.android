@@ -5,8 +5,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ASUS on 08/09/2017.
@@ -24,14 +22,18 @@ public class MeetingRoom extends BaseObservable implements Parcelable {
     @SerializedName("description")
     private String mDescription;
     @Expose
-    @SerializedName("device")
-    private List<Device> mDevices = new ArrayList<>();
+    @SerializedName("created_at")
+    private String mCreatedAt;
+    @Expose
+    @SerializedName("updated_at")
+    private String mUpdatedAt;
 
     protected MeetingRoom(Parcel in) {
         mId = in.readInt();
         mName = in.readString();
         mDescription = in.readString();
-        mDevices = in.createTypedArrayList(Device.CREATOR);
+        mCreatedAt = in.readString();
+        mUpdatedAt = in.readString();
     }
 
     @Override
@@ -39,7 +41,8 @@ public class MeetingRoom extends BaseObservable implements Parcelable {
         dest.writeInt(mId);
         dest.writeString(mName);
         dest.writeString(mDescription);
-        dest.writeTypedList(mDevices);
+        dest.writeString(mCreatedAt);
+        dest.writeString(mUpdatedAt);
     }
 
     @Override
@@ -83,11 +86,19 @@ public class MeetingRoom extends BaseObservable implements Parcelable {
         mDescription = description;
     }
 
-    public List<Device> getDevices() {
-        return mDevices;
+    public String getCreatedAt() {
+        return mCreatedAt;
     }
 
-    public void setDevices(List<Device> devices) {
-        mDevices = devices;
+    public void setCreatedAt(String createdAt) {
+        mCreatedAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return mUpdatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        mUpdatedAt = updatedAt;
     }
 }

@@ -5,6 +5,7 @@ import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
+import com.framgia.fdms.data.model.MeetingRoom;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
@@ -95,4 +96,7 @@ public interface FDMSApi {
     // TODO: 05/07/2017  later
     @GET("api/makers")
     Observable<Respone<List<Producer>>> getMakers(@QueryMap Map<String, Integer> params);
+    @GET("api/meeting_rooms")
+    Observable<Respone<List<MeetingRoom>>> getListMeetingRoom(
+            @QueryMap Map<String, String> params);
 }
