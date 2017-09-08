@@ -7,13 +7,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.RequestRepository;
-import com.framgia.fdms.data.source.StatusRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
-import com.framgia.fdms.data.source.remote.CategoryRemoteDataSource;
 import com.framgia.fdms.data.source.remote.RequestRemoteDataSource;
-import com.framgia.fdms.data.source.remote.StatusRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityRequestCreationBinding;
 
 /**
@@ -34,9 +30,6 @@ public class RequestCreationActivity extends AppCompatActivity {
         mViewModel = new RequestCreationViewModel(this);
 
         RequestCreationContract.Presenter presenter = new RequestCreationPresenter(mViewModel,
-                new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance())),
-                new CategoryRepository(
-                        new CategoryRemoteDataSource(FDMSServiceClient.getInstance())),
                 new RequestRepository(
                         new RequestRemoteDataSource(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
@@ -45,12 +38,6 @@ public class RequestCreationActivity extends AppCompatActivity {
                 DataBindingUtil.setContentView(this, R.layout.activity_request_creation);
         binding.setViewModel((RequestCreationViewModel) mViewModel);
         setTitle(getString(R.string.title_create_request));
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (mViewModel != null) mViewModel.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

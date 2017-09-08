@@ -70,9 +70,6 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
 
         parrams.put(REQUEST_TITLE, request.getTitle());
         parrams.put(REQUEST_DESCRIPTION, request.getDescription());
-        parrams.put(REQUEST_FOR_USER_ID, String.valueOf(request.getForUserId()));
-        parrams.put(REQUEST_ASSIGNEE_ID, String.valueOf(request.getAssigneeId()));
-        parrams.put(REQUEST_REQUEST_DETAILS, request.getDeviceRequests().toString());
 
         return mFDMSApi.registerRequest(parrams)
                 .flatMap(new Func1<Respone<Request>, Observable<Request>>() {
