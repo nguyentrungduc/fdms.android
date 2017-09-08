@@ -206,7 +206,7 @@ public class VendorViewModel extends BaseObservable
             if (!mIsLoadMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                 mIsLoadMore = true;
                 setLoadingMoreVisibility(View.VISIBLE);
-                ((VendorPresenter) mPresenter).getVendors();
+                ((VendorPresenter) mPresenter).loadMorePage();
             }
         }
     };
