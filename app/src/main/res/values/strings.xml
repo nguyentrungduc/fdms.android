@@ -279,4 +279,7 @@
     <string name="title_device_using_history">Device Using History</string>
     <string name="title_logout_cap">LOGOUT</string>
     <string name="title_scan_qrcode">SCAN QRCODE</string>
+    <string name="fragment_all_device_using">All</string>
+    <string name="fragment_using_device_using">Using</string>
+    <string name="fragment_returned_device_using">Returned</string>
 </resources>

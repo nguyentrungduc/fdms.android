@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
@@ -110,10 +111,10 @@ public final class BindingUtils {
     public static void loadImage(ImageView view, String imageUrl, Drawable error) {
         if (error == null) {
             Glide.with(view.getContext())
-                .load(imageUrl)
-                .centerCrop()
-                .placeholder(R.drawable.ic_no_image)
-                .into(view);
+                    .load(imageUrl)
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_no_image)
+                    .into(view);
         } else {
             Glide.with(view.getContext()).load(imageUrl).centerCrop().placeholder(error).into(view);
         }
@@ -163,7 +164,7 @@ public final class BindingUtils {
                             continue;
                         }
                         view.setBackgroundResource(position == i ? R.drawable.ic_circle_white
-                            : R.drawable.ic_circle_border_white);
+                                : R.drawable.ic_circle_border_white);
                     }
                 }
             }
@@ -176,8 +177,8 @@ public final class BindingUtils {
 
     private static void changeImageColor(ImageView image, int colorRes) {
         image.getDrawable()
-            .setColorFilter(image.getContext().getResources().getColor(colorRes),
-                PorterDuff.Mode.SRC_IN);
+                .setColorFilter(image.getContext().getResources().getColor(colorRes),
+                        PorterDuff.Mode.SRC_IN);
     }
 
     @BindingAdapter({"bind:activity"})
@@ -285,7 +286,7 @@ public final class BindingUtils {
             return;
         }
         String niceDateStr = String.valueOf(DateUtils.getRelativeTimeSpanString(dateTime.getTime(),
-            Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS));
+                Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS));
         view.setText(niceDateStr);
     }
 
@@ -348,7 +349,7 @@ public final class BindingUtils {
     }
 
     @BindingAdapter(value = {
-        "deviceCategoryId", "deviceCategoryIdAttrChanged"
+            "deviceCategoryId", "deviceCategoryIdAttrChanged"
     }, requireAll = false)
     public static void setCategoryId(AppCompatSpinner view, int newSelectedValue,
                                      final InverseBindingListener bindingListener) {
@@ -428,8 +429,8 @@ public final class BindingUtils {
     public static void setVisibility(com.github.clans.fab.FloatingActionButton view,
                                      RequestDetailViewModel viewModel) {
         int visibility = viewModel.getStatusRequest().equals(DONE)
-            || viewModel.getStatusRequest().equals(APPROVED) ? View.GONE
-            : View.VISIBLE;
+                || viewModel.getStatusRequest().equals(APPROVED) ? View.GONE
+                : View.VISIBLE;
         view.setVisibility(visibility);
     }
 
@@ -439,12 +440,12 @@ public final class BindingUtils {
         for (int i = 0; i <= total; i++) {
             ImageView imageView = new ImageView(layout.getContext());
             LinearLayout.LayoutParams lp =
-                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
+                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins((int) resources.getDimension(R.dimen.dp_0),
-                (int) resources.getDimension(R.dimen.dp_0),
-                (int) resources.getDimension(R.dimen.dp_10),
-                (int) resources.getDimension(R.dimen.dp_0));
+                    (int) resources.getDimension(R.dimen.dp_0),
+                    (int) resources.getDimension(R.dimen.dp_10),
+                    (int) resources.getDimension(R.dimen.dp_0));
             imageView.setLayoutParams(lp);
             layout.addView(imageView);
             layout.getChildAt(i).setBackgroundResource(R.drawable.ic_circle_border_white);
@@ -503,7 +504,7 @@ public final class BindingUtils {
 
     @BindingAdapter({"showcaseSequence", "contentShowCase", "dismissText"})
     public static void setTooltip(final View view, final FDMSShowcaseSequence sequence, String
-        content, String dismissText) {
+            content, String dismissText) {
         sequence.addSequenceItem(view, content, dismissText);
     }
 
@@ -515,31 +516,31 @@ public final class BindingUtils {
         Activity activity = viewModel.getActivity();
         final FDMSShowcaseSequence sequence = viewModel.getSequence();
         new MaterialShowcaseView.Builder(activity).setTarget(view)
-            .withoutShape()
-            .setMaskColour(R.color.color_black_transprarent)
-            .setDismissText(R.string.title_ok)
-            .setContentText(R.string.title_welcome)
-            .setListener(new IShowcaseListener() {
-                @Override
-                public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {
-                }
-
-                @Override
-                public void onShowcaseDismissed(MaterialShowcaseView materialShowcaseView) {
-                    sequence.start();
-                }
-            })
-            .show();
-        sequence.setOnItemDismissedListener(
-            new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
-                @Override
-                public void onDismiss(MaterialShowcaseView materialShowcaseView, int i) {
-                    sequence.setCount(sequence.getCount() - 1);
-                    if (sequence.getCount() == 0) {
-                        viewModel.onShowCaseDashBoard();
+                .withoutShape()
+                .setMaskColour(R.color.color_black_transprarent)
+                .setDismissText(R.string.title_ok)
+                .setContentText(R.string.title_welcome)
+                .setListener(new IShowcaseListener() {
+                    @Override
+                    public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {
                     }
-                }
-            });
+
+                    @Override
+                    public void onShowcaseDismissed(MaterialShowcaseView materialShowcaseView) {
+                        sequence.start();
+                    }
+                })
+                .show();
+        sequence.setOnItemDismissedListener(
+                new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
+                    @Override
+                    public void onDismiss(MaterialShowcaseView materialShowcaseView, int i) {
+                        sequence.setCount(sequence.getCount() - 1);
+                        if (sequence.getCount() == 0) {
+                            viewModel.onShowCaseDashBoard();
+                        }
+                    }
+                });
     }
 
     @BindingAdapter("hideMenuButton")
@@ -571,7 +572,7 @@ public final class BindingUtils {
 
     @BindingAdapter("scrollListener")
     public static void setOnScrollListener(ExpandableListView expandableListView, AbsListView
-        .OnScrollListener listener) {
+            .OnScrollListener listener) {
         expandableListView.setOnScrollListener(listener);
     }
 
@@ -695,5 +696,14 @@ public final class BindingUtils {
     @BindingAdapter("lockMode")
     public static void setLockMode(DrawerLayout layout, int lockMode) {
         layout.setDrawerLockMode(lockMode);
+    }
+    @BindingAdapter("bind:pagerAdapter")
+    public static void setAdapter(ViewPager viewPager, FragmentPagerAdapter pagerAdapter) {
+        viewPager.setAdapter(pagerAdapter);
+    }
+
+    @BindingAdapter("bind:viewPager")
+    public static void setupWithViewPager(TabLayout tabLayout, ViewPager viewPager) {
+        tabLayout.setupWithViewPager(viewPager);
     }
 }
