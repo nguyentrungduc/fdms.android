@@ -63,7 +63,7 @@ public class DeviceViewModel extends BaseObservable
         if (mIsBo) {
             fragments.add(ListDeviceFragment.newInstance(TAB_MANAGE_DEVICE));
             fragments.add(VendorFragment.newInstance());
-            fragments.add(MarkerFragment.newInstance(TAB_MAKER));
+            fragments.add(MarkerFragment.newInstance());
         }
         mAdapter = new ViewPagerAdapter(mFragment.getChildFragmentManager(), fragments);
         setAdapter(mAdapter);

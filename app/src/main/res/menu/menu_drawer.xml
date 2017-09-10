@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <item android:title="@string/title_profile_cap">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/item_set_up_profile"
+                    android:icon="@drawable/ic_profile"
+                    android:title="@string/title_set_up_profile"/>
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/title_home_cap">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/item_dashboard"
+                    android:icon="@drawable/ic_dashboard_24dp"
+                    android:title="@string/title_dashboard"/>
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/title_manage_cap">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/item_manage_device"
+                    android:icon="@drawable/ic_device_manager"
+                    android:title="@string/title_manage_device"/>
+                <item
+                    android:id="@+id/item_manage_request"
+                    android:icon="@drawable/ic_request_manager"
+                    android:title="@string/title_manage_request"/>
+                <item
+                    android:id="@+id/item_manage_vendor"
+                    android:icon="@drawable/ic_vendor_24dp"
+                    android:title="@string/title_manage_vendor"/>
+                <item
+                    android:id="@+id/item_manage_maker"
+                    android:icon="@drawable/ic_maker_24dp"
+                    android:title="@string/title_manage_maker"/>
+                <item
+                    android:id="@+id/item_my_device"
+                    android:icon="@drawable/ic_device_24dp"
+                    android:title="@string/title_my_device"/>
+                <item
+                    android:id="@+id/item_my_request"
+                    android:icon="@drawable/ic_request_actived"
+                    android:title="@string/title_my_request"/>
+                <item
+                    android:id="@+id/item_manage_meeting_room"
+                    android:icon="@drawable/ic_meeting_room_24dp"
+                    android:title="@string/title_manage_meeting_room"/>
+                <item
+                    android:id="@+id/item_device_using_history"
+                    android:icon="@drawable/ic_history_black_24dp"
+                    android:title="@string/title_device_using_history"/>
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/item_scan_qrcode"
+        android:icon="@drawable/ic_qr_code"
+        android:title="@string/title_scan_qrcode"/>
+
+    <item
+        android:id="@+id/item_logout"
+        android:icon="@drawable/ic_logout"
+        android:title="@string/title_logout_cap"/>
+</menu>

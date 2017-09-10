@@ -13,9 +13,6 @@ import com.framgia.fdms.data.source.MakerRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.remote.MakerRemoteDataSource;
 import com.framgia.fdms.databinding.FragmentMarkerBinding;
-import com.framgia.fdms.screen.device.DeviceViewModel;
-
-import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_TAB;
 
 /**
  * MarkerFragment Screen.
@@ -23,12 +20,8 @@ import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_TAB;
 public class MarkerFragment extends Fragment {
     private MarkerContract.ViewModel mViewModel;
 
-    public static MarkerFragment newInstance(@DeviceViewModel.Tab int tabDevice) {
-        MarkerFragment fragment = new MarkerFragment();
-        Bundle args = new Bundle();
-        args.putInt(BUNDLE_TAB, tabDevice);
-        fragment.setArguments(args);
-        return fragment;
+    public static MarkerFragment newInstance() {
+        return new MarkerFragment();
     }
 
     @Override
