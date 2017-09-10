@@ -65,7 +65,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">notification</string>
-    <string name="title_manage_request">request manager</string>
+    <string name="title_manage_request">Manage Request</string>
     <string name="title_scan">scanner</string>
     <string name="title_device">Device</string>
     <string name="title_code">Device Code</string>
@@ -265,4 +265,18 @@
         dung yeu cau tren. Neu xay ra bat cu hong hoc hoac mat mat do loi cua nguoi su dung thi
         nguoi su dung hoan toan chiu trach nhiem truoc cong ty.</string>
     <string name="title_device_meeting_room">Is Device Meeting Room</string>
+    <string name="title_manage_cap">MANAGE</string>
+    <string name="title_set_up_profile">Set up profile</string>
+    <string name="title_profile_cap">PROFILE</string>
+    <string name="title_home_cap">HOME</string>
+    <string name="msg_open_drawer">open</string>
+    <string name="msg_close_drawer">close</string>
+    <string name="msg_no_name">No Name</string>
+    <string name="title_manage_device">Manage Device</string>
+    <string name="title_manage_vendor">Manage Vendor</string>
+    <string name="title_manage_maker">Manage Maker</string>
+    <string name="title_manage_meeting_room">Manage Meeting Room</string>
+    <string name="title_device_using_history">Device Using History</string>
+    <string name="title_logout_cap">LOGOUT</string>
+    <string name="title_scan_qrcode">SCAN QRCODE</string>
 </resources>
