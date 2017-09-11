@@ -103,6 +103,7 @@
             app:menu="@menu/menu_drawer"
             bind:currentItem="@{viewModel.currentItem}"
             bind:itemSelected="@{viewModel::onItemSelected}"
-            bind:model="@{viewModel}"/>
+            bind:model="@{viewModel}"
+            bind:staffType="@{viewModel.user.role}"/>
     </android.support.v4.widget.DrawerLayout>
 </layout>

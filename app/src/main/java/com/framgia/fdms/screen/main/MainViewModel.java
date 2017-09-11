@@ -20,6 +20,7 @@ import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.ViewPagerScroll;
+import com.framgia.fdms.screen.authenication.login.LoginActivity;
 import com.framgia.fdms.screen.dashboard.DashboardFragment;
 import com.framgia.fdms.screen.device.DeviceFragment;
 import com.framgia.fdms.screen.device.listdevice.ListDeviceFragment;
@@ -179,7 +180,10 @@ public class MainViewModel extends BaseObservable
                 onStartScannerQrCode();
                 break;
             case R.id.item_logout:
-                // TODO: 07/09/2017 action logout
+                // TODO: 07/09/2017 call api logout
+                mPresenter.logout();
+                mActivity.startActivity(LoginActivity.getInstance(mNavigator.getContext()));
+                mActivity.finish();
                 break;
             default:
                 break;
