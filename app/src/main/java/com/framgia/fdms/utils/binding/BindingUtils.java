@@ -31,6 +31,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -78,6 +79,11 @@ import static com.framgia.fdms.utils.Constant.DeviceStatus.DONE;
 import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_APPROVE;
 import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_DONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
+import static com.framgia.fdms.utils.Constant.Role.ACCOUNTANT;
+import static com.framgia.fdms.utils.Constant.Role.ADMIN;
+import static com.framgia.fdms.utils.Constant.Role.BO_MANAGER;
+import static com.framgia.fdms.utils.Constant.Role.BO_STAFF;
+import static com.framgia.fdms.utils.Constant.Role.DIVISION_MANAGER;
 
 /**
  * Created by Age on 4/3/2017.
@@ -603,10 +609,10 @@ public final class BindingUtils {
         });
     }
 
-    @BindingAdapter({"itemSelected", "currentItem", "model"})
+    @BindingAdapter({"itemSelected", "currentItem", "model", "staffType"})
     public static void setNavigationItemSelected(
         NavigationView navigationView, NavigationView.OnNavigationItemSelectedListener listen,
-        int currentItem, MainViewModel viewModel) {
+        int currentItem, MainViewModel viewModel, String staffType) {
         navigationView.setNavigationItemSelectedListener(listen);
         navigationView.setCheckedItem(currentItem);
         if (navigationView.getHeaderCount() == 0) {
@@ -615,6 +621,44 @@ public final class BindingUtils {
             binding.setViewModel(viewModel);
             binding.executePendingBindings();
             navigationView.addHeaderView(binding.getRoot());
+        }
+        if (staffType == null) {
+            return;
+        }
+        MenuItem manageDevice = navigationView.getMenu().findItem(R.id.item_manage_device);
+        MenuItem manageRequest = navigationView.getMenu().findItem(R.id.item_manage_request);
+        MenuItem manageVendor = navigationView.getMenu().findItem(R.id.item_manage_vendor);
+        MenuItem manageMaker = navigationView.getMenu().findItem(R.id.item_manage_maker);
+        MenuItem manageMeetingRoom =
+            navigationView.getMenu().findItem(R.id.item_manage_meeting_room);
+        MenuItem deviceUsingHistory =
+            navigationView.getMenu().findItem(R.id.item_device_using_history);
+        manageDevice.setVisible(false);
+        manageRequest.setVisible(false);
+        manageVendor.setVisible(false);
+        manageMaker.setVisible(false);
+        manageMeetingRoom.setVisible(false);
+        deviceUsingHistory.setVisible(false);
+        switch (staffType) {
+            case BO_MANAGER:
+            case BO_STAFF:
+            case ADMIN:
+                manageDevice.setVisible(true);
+                manageRequest.setVisible(true);
+                manageVendor.setVisible(true);
+                manageMaker.setVisible(true);
+                manageMeetingRoom.setVisible(true);
+                deviceUsingHistory.setVisible(true);
+                break;
+            case DIVISION_MANAGER:
+                manageDevice.setVisible(true);
+                manageRequest.setVisible(true);
+                break;
+            case ACCOUNTANT:
+                manageDevice.setVisible(true);
+                break;
+            default:
+                break;
         }
     }
 

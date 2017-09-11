@@ -85,4 +85,9 @@ public class MainPresenter implements MainContract.Presenter {
             });
         mSubscription.add(subscription);
     }
+
+    @Override
+    public void logout() {
+        mUserRepository.logout();
+    }
 }

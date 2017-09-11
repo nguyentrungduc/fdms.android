@@ -33,5 +33,6 @@ public interface MainContract {
     interface Presenter extends BasePresenter {
         void getDevice(String resultQrCode);
         void getCurrentUser();
+        void logout();
     }
 }

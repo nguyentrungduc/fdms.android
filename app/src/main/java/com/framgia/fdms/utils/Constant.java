@@ -110,6 +110,7 @@ public class Constant {
         public static final String BO_MANAGER = "manager";
         public static final String BO_STAFF = "bo_staff";
         public static final String ADMIN = "admin";
+        public static final String ACCOUNTANT = "accountant";
     }
 
     public class RequestAction {

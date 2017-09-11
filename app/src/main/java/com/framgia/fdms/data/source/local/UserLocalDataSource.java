@@ -4,6 +4,7 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.UserDataSource;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.google.gson.Gson;
+
 import rx.Observable;
 
 import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.USER_PREFS;
@@ -11,7 +12,6 @@ import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.US
 /**
  * Created by MyPC on 01/06/2017.
  */
-
 public class UserLocalDataSource implements UserDataSource.LocalDataSource {
     private SharePreferenceImp mSharePreference;
 
@@ -28,5 +28,10 @@ public class UserLocalDataSource implements UserDataSource.LocalDataSource {
         } else {
             return Observable.error(new NullPointerException());
         }
+    }
+
+    @Override
+    public void logout() {
+        mSharePreference.remove(USER_PREFS);
     }
 }

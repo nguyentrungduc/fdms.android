@@ -5,14 +5,14 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.api.request.RegisterRequest;
 import com.framgia.fdms.data.source.local.UserLocalDataSource;
 import com.framgia.fdms.data.source.remote.UserRemoteDataSource;
+
 import rx.Observable;
 
 /**
  * Created by levutantuan on 4/4/17.
  */
-
-public class UserRepository {
-
+public class UserRepository
+    implements UserDataSource.LocalDataSource, UserDataSource.RemoteDataSource {
     private UserRemoteDataSource mUserRemoteDataSource;
     private UserLocalDataSource mUserLocalDataSource;
 
@@ -34,5 +34,10 @@ public class UserRepository {
 
     public Observable<User> getCurrentUser() {
         return mUserLocalDataSource.getCurrentUser();
+    }
+
+    @Override
+    public void logout() {
+        mUserLocalDataSource.logout();
     }
 }
