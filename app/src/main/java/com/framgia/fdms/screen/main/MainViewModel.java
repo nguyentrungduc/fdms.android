@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
@@ -25,6 +24,7 @@ import com.framgia.fdms.screen.dashboard.DashboardFragment;
 import com.framgia.fdms.screen.device.DeviceFragment;
 import com.framgia.fdms.screen.device.listdevice.ListDeviceFragment;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
+import com.framgia.fdms.screen.meetingroom.listmeetingroom.ListMeetingRoomFragment;
 import com.framgia.fdms.screen.producer.marker.MarkerFragment;
 import com.framgia.fdms.screen.producer.vendor.VendorFragment;
 import com.framgia.fdms.screen.profile.ProfileFragment;
@@ -35,10 +35,8 @@ import com.framgia.fdms.screen.scanner.ScannerActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.utils.permission.PermissionUtil;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.app.Activity.RESULT_OK;
@@ -64,7 +62,7 @@ import static com.framgia.fdms.utils.permission.PermissionUtil.MY_PERMISSIONS_RE
  * Exposes the data to be used in the Newmain screen.
  */
 public class MainViewModel extends BaseObservable
-    implements MainContract.ViewModel, ViewPagerScroll {
+        implements MainContract.ViewModel, ViewPagerScroll {
     private static final int PAGE_LIMIT = 8;
     private MainContract.Presenter mPresenter;
     private ViewPagerAdapter mPagerAdapter;
@@ -94,6 +92,7 @@ public class MainViewModel extends BaseObservable
         fragments.add(MarkerFragment.newInstance());
         fragments.add(ListDeviceFragment.newInstance(TAB_MY_DEVICE));
         fragments.add(UserRequestFragment.newInstance());
+        fragments.add(ListMeetingRoomFragment.newInstance());
         mPagerAdapter = new ViewPagerAdapter(activity.getSupportFragmentManager(), fragments);
         mActivity = activity;
         mNavigator = new Navigator(activity);
@@ -171,7 +170,8 @@ public class MainViewModel extends BaseObservable
                 mActivity.setTitle(R.string.title_my_request);
                 break;
             case R.id.item_manage_meeting_room:
-                // TODO: 07/09/2017 show meeting room
+                setTab(TAB_MANAGE_MEETING_ROOM);
+                mActivity.setTitle(R.string.title_manage_meeting_room);
                 break;
             case R.id.item_device_using_history:
                 // TODO: 07/09/2017 show using history
@@ -194,8 +194,7 @@ public class MainViewModel extends BaseObservable
     }
 
     public void onDrawerIsOpen(View view) {
-        InputMethodManager inputMethodManager =
-            (InputMethodManager) mNavigator.getContext()
+        InputMethodManager inputMethodManager = (InputMethodManager) mNavigator.getContext()
                 .getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         setStatusDrawerLayout(DRAWER_IS_OPEN);
@@ -229,9 +228,9 @@ public class MainViewModel extends BaseObservable
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode != REQUEST_SCANNER
-            || resultCode != RESULT_OK
-            || data == null
-            || data.getExtras() == null) {
+                || resultCode != RESULT_OK
+                || data == null
+                || data.getExtras() == null) {
             return;
         }
         getResult(data.getExtras().getString(BUNDLE_CONTENT));
@@ -254,21 +253,21 @@ public class MainViewModel extends BaseObservable
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
+            int[] grantResults) {
         if (requestCode == MY_PERMISSIONS_REQUEST_CAMERA
-            && grantResults.length > 0
-            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             startScannerActivity();
         } else {
             Snackbar.make(mActivity.findViewById(android.R.id.content),
-                R.string.msg_denied_read_camera, Snackbar.LENGTH_LONG).show();
+                    R.string.msg_denied_read_camera, Snackbar.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void onGetDeviceError(String error) {
         Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG)
-            .show();
+                .show();
     }
 
     @Override
@@ -295,8 +294,7 @@ public class MainViewModel extends BaseObservable
     @Override
     public void setTabWithDevice(int tab, Device device) {
         setTab(tab);
-        ((DeviceFragment) mPagerAdapter.getItem(tab)).setTabWithDevice(
-            TAB_MANAGE_DEVICE, device);
+        ((DeviceFragment) mPagerAdapter.getItem(tab)).setTabWithDevice(TAB_MANAGE_DEVICE, device);
     }
 
     @Override
@@ -378,10 +376,11 @@ public class MainViewModel extends BaseObservable
     /**
      * Tabs for Navigation Drawer
      */
-    @IntDef(
-        {TAB_DASH_BOARD, TAB_REQUEST_MANAGER, TAB_DEVICE_MANAGER, TAB_PROFILE, TAB_VENDOR_MANAGE,
+    @IntDef({
+            TAB_DASH_BOARD, TAB_REQUEST_MANAGER, TAB_DEVICE_MANAGER, TAB_PROFILE, TAB_VENDOR_MANAGE,
             TAB_MAKER_MANAGE, TAB_MY_DEVICES, TAB_MY_REQUESTS, TAB_MANAGE_MEETING_ROOM,
-            TAB_DEVICE_USING_HISTORY})
+            TAB_DEVICE_USING_HISTORY
+    })
     public @interface Tab {
         int TAB_PROFILE = 0;
         int TAB_DASH_BOARD = 1;

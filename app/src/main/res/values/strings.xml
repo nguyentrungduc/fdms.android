@@ -221,6 +221,8 @@
     <string name="title_sign_name">\n(Ky va ghi ro hon ten)</string>
     <string name="title_vendor">Vendor</string>
     <string name="title_maker">Maker</string>
+    <string name="title_room_name">Room name</string>
+    <string name="title_list_device">List device:</string>
     <string name="title_skip">SKIP</string>
     <string name="title_intro_title">THIS IS TITLE</string>
     <string name="title_intro_header">This is header</string>

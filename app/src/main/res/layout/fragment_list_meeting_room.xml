@@ -12,11 +12,15 @@
             type="com.framgia.fdms.screen.meetingroom.listmeetingroom.ListMeetingRoomViewModel"
             />
 
+        <import type="android.view.View"/>
+
     </data>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:refreshAble="@{viewModel.refresh}"
+        app:swipeRefreshListener="@{viewModel.onRefreshListener}"
         >
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -123,15 +127,25 @@
                         app:layoutManager="LinearLayoutManager"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior"
                         app:recyclerAdapter="@{viewModel.listMeetingRoomAdapter}"
+                        app:scrollListenner="@{viewModel.scrollListener}"
                         />
 
                     <ProgressBar
                         android:id="@+id/progressBar"
-                        android:layout_width="@dimen/dp_40"
-                        android:layout_height="@dimen/dp_40"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:visibility="@{viewModel.progressBarVisibility}"
+                        />
+                    <ProgressBar
+                        android:id="@+id/progress_loading_bottom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/progressBar"
+                        android:layout_alignParentBottom="true"
+                        android:layout_gravity="center"
+                        android:visibility="@{viewModel.isLoadingMore ? View.VISIBLE : View.GONE}"
                         />
                 </RelativeLayout>
             </LinearLayout>
@@ -141,7 +155,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/dp_20"
+                android:layout_margin="@dimen/dp_16"
                 android:onClick="@{() -> viewModel.onAddMeetingRoomClick()}"
                 app:backgroundTint="@color/colorPrimaryDark"
                 app:srcCompat="@drawable/ic_add_white_24dp"
