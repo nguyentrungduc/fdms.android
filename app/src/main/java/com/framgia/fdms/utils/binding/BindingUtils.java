@@ -12,10 +12,14 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +30,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -41,12 +45,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Category;
+import com.framgia.fdms.databinding.NavHeaderMainBinding;
 import com.framgia.fdms.screen.ViewPagerScroll;
 import com.framgia.fdms.screen.dashboard.DashboardViewModel;
 import com.framgia.fdms.screen.device.listdevice.ListDeviceViewModel;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailViewModel;
 import com.framgia.fdms.screen.main.MainViewModel;
-import com.framgia.fdms.screen.requestcreation.RequestCreationViewModel;
 import com.framgia.fdms.screen.requestdetail.RequestDetailViewModel;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
 import com.framgia.fdms.widget.TopSheetBehavior;
@@ -66,10 +70,8 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 import static com.framgia.fdms.screen.dashboard.DashboardViewModel.Tab.TAB_DEVIVE_DASH_BOARD;
 import static com.framgia.fdms.screen.dashboard.DashboardViewModel.Tab.TAB_REQUEST_DASH_BOARD;
-import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_DASH_BOARD;
-import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_DEVICE_MANAGER;
-import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_PROFILE;
-import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_REQUEST_MANAGER;
+import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
+import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 import static com.framgia.fdms.utils.Constant.DeviceStatus.APPROVED;
 import static com.framgia.fdms.utils.Constant.DeviceStatus.CANCELLED;
 import static com.framgia.fdms.utils.Constant.DeviceStatus.DONE;
@@ -164,35 +166,6 @@ public final class BindingUtils {
             public void onPageScrollStateChanged(int state) {
             }
         });
-    }
-
-    @BindingAdapter("tabPostion")
-    public static void onChangeTint(ImageView image, int tab) {
-        changeImageColor(image, R.color.color_black);
-        switch (tab) {
-            case TAB_DASH_BOARD:
-                if (image.getId() == R.id.image_dash_board) {
-                    changeImageColor(image, R.color.colorPrimaryDark);
-                }
-                break;
-            case TAB_REQUEST_MANAGER:
-                if (image.getId() == R.id.image_request_manager) {
-                    changeImageColor(image, R.color.colorPrimaryDark);
-                }
-                break;
-            case TAB_DEVICE_MANAGER:
-                if (image.getId() == R.id.image_device_manager) {
-                    changeImageColor(image, R.color.colorPrimaryDark);
-                }
-                break;
-            case TAB_PROFILE:
-                if (image.getId() == R.id.image_profile) {
-                    changeImageColor(image, R.color.colorPrimaryDark);
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     private static void changeImageColor(ImageView image, int colorRes) {
@@ -628,5 +601,55 @@ public final class BindingUtils {
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
             }
         });
+    }
+
+    @BindingAdapter({"itemSelected", "currentItem", "model"})
+    public static void setNavigationItemSelected(
+        NavigationView navigationView, NavigationView.OnNavigationItemSelectedListener listen,
+        int currentItem, MainViewModel viewModel) {
+        navigationView.setNavigationItemSelectedListener(listen);
+        navigationView.setCheckedItem(currentItem);
+        if (navigationView.getHeaderCount() == 0) {
+            NavHeaderMainBinding binding =
+                NavHeaderMainBinding.inflate(LayoutInflater.from(navigationView.getContext()));
+            binding.setViewModel(viewModel);
+            binding.executePendingBindings();
+            navigationView.addHeaderView(binding.getRoot());
+        }
+    }
+
+    @BindingAdapter({"statusDrawerLayout"})
+    public static void setStatusDrawerLayout(DrawerLayout drawerLayout, final String status) {
+        if (status != null) {
+            if (status.equals(DRAWER_IS_CLOSE)) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+            if (status.equals(DRAWER_IS_OPEN)) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        }
+    }
+
+    @BindingAdapter("activity")
+    public static void setUpDrawerListener(final DrawerLayout drawlayout, final Activity activity) {
+        ActionBarDrawerToggle actionBarDrawerToggle =
+            new ActionBarDrawerToggle(activity, drawlayout, R.string.msg_open_drawer,
+                R.string.msg_close_drawer);
+        actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+        drawlayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+    }
+
+    @BindingAdapter("listener")
+    public static void setToolbarListener(Toolbar toolbar, View.OnClickListener listener) {
+        if (listener == null) {
+            return;
+        }
+        toolbar.setNavigationOnClickListener(listener);
+    }
+
+    @BindingAdapter("lockMode")
+    public static void setLockMode(DrawerLayout layout, int lockMode) {
+        layout.setDrawerLockMode(lockMode);
     }
 }

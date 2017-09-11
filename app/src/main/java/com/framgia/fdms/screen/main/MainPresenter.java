@@ -1,7 +1,9 @@
 package com.framgia.fdms.screen.main;
 
 import com.framgia.fdms.data.model.Device;
+import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceApi;
 
 import rx.Subscription;
@@ -23,15 +25,18 @@ public class MainPresenter implements MainContract.Presenter {
     private CompositeSubscription mSubscription;
     private DeviceRepository mDeviceRepository;
     private SharePreferenceApi mSharedPreferences;
+    private UserRepository mUserRepository;
 
     public MainPresenter(MainContract.ViewModel viewModel, DeviceRepository deviceRepository,
-                         SharePreferenceApi sharedPreferences) {
+                         SharePreferenceApi sharedPreferences, UserRepository userRepository) {
         mViewModel = viewModel;
         mSubscription = new CompositeSubscription();
         mDeviceRepository = deviceRepository;
         mSharedPreferences = sharedPreferences;
+        mUserRepository = userRepository;
         mViewModel.setShowCase(mSharedPreferences.get(IS_SHOW_CASE_MAIN, Boolean.class));
         mViewModel.setShowCaseRequest(mSharedPreferences.get(IS_SHOW_CASE_REQUEST, Boolean.class));
+        getCurrentUser();
     }
 
     @Override
@@ -57,6 +62,25 @@ public class MainPresenter implements MainContract.Presenter {
                 @Override
                 public void call(Throwable throwable) {
                     mViewModel.onGetDeviceError(throwable.getMessage());
+                }
+            });
+        mSubscription.add(subscription);
+    }
+
+    @Override
+    public void getCurrentUser() {
+        Subscription subscription = mUserRepository.getCurrentUser()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Action1<User>() {
+                @Override
+                public void call(User user) {
+                    mViewModel.onGetUserSuccess(user);
+                }
+            }, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    mViewModel.onError(throwable.getMessage());
                 }
             });
         mSubscription.add(subscription);

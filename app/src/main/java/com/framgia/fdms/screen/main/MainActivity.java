@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
+import com.framgia.fdms.data.source.local.UserLocalDataSource;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityNewmainBinding;
@@ -36,9 +38,15 @@ public class MainActivity extends AppCompatActivity {
             new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
         mViewModel = new MainViewModel(this);
         MainContract.Presenter presenter =
-            new MainPresenter(mViewModel, deviceRepository, new SharePreferenceImp(this));
+            new MainPresenter(mViewModel, deviceRepository, new SharePreferenceImp(this),
+                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))));
         mViewModel.setPresenter(presenter);
         binding.setViewModel((MainViewModel) mViewModel);
+        setSupportActionBar(binding.toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
     }
 
     @Override
