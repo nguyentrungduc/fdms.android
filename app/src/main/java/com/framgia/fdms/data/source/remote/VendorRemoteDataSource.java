@@ -39,8 +39,14 @@ public final class VendorRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<Void> addVendor(Producer producer) {
-        return Observable.just(null);
+    public Observable<Producer> addVendor(Producer producer) {
+        return mFDMSApi.addVendor(producer.getName(), producer.getDescription())
+                .flatMap(new Func1<Respone<Producer>, Observable<Producer>>() {
+                    @Override
+                    public Observable<Producer> call(Respone<Producer> stringRespone) {
+                        return Utils.getResponse(stringRespone);
+                    }
+                });
     }
 
     @Override

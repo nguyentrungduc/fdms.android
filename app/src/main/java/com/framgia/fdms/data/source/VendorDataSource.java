@@ -12,7 +12,7 @@ public class VendorDataSource {
     public interface RemoteDataSource {
         Observable<List<Producer>> getListVendor(int page, int perPage);
 
-        Observable<Void> addVendor(Producer producer);
+        Observable<Producer> addVendor(Producer producer);
 
         Observable<Void> deleteVendor(Producer producer);
 

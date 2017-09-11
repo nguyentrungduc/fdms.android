@@ -30,6 +30,7 @@ final class VendorPresenter implements VendorContract.Presenter {
 
     @Override
     public void onStart() {
+        mPage++;
         getVendors(mPage);
     }
 
@@ -50,10 +51,14 @@ final class VendorPresenter implements VendorContract.Presenter {
                     @Override
                     public void onError(Throwable e) {
                         mViewModel.onLoadVendorFailed();
+                        mPage--;
                     }
 
                     @Override
                     public void onNext(List<Producer> vendors) {
+                        if (vendors == null || vendors.size() == 0) {
+                            mPage--;
+                        }
                         mViewModel.onLoadVendorSuccess(vendors);
                     }
                 });
@@ -71,7 +76,7 @@ final class VendorPresenter implements VendorContract.Presenter {
         Subscription subscription = mRepository.addVendor(producer)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Void>() {
+                .subscribe(new Subscriber<Producer>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -82,7 +87,8 @@ final class VendorPresenter implements VendorContract.Presenter {
                     }
 
                     @Override
-                    public void onNext(Void object) {
+                    public void onNext(Producer vendor) {
+                        mViewModel.onAddVendorSuccess(vendor);
                     }
                 });
         mSubscription.add(subscription);

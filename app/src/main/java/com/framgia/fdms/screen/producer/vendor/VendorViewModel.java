@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.R;
@@ -20,7 +19,7 @@ import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.screen.producer.ProducerDialog;
 import com.framgia.fdms.screen.producer.ProducerDialogContract;
 import com.framgia.fdms.screen.producer.ProducerFunctionContract;
-
+import com.framgia.fdms.utils.navigator.Navigator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +45,11 @@ public class VendorViewModel extends BaseObservable
     private Producer mOldVendor;
     private boolean mIsLoadMore;
     private int mLoadingMoreVisibility;
+    private Navigator mNavigator;
 
     public VendorViewModel(Activity activity) {
         mActivity = (AppCompatActivity) activity;
+        mNavigator = new Navigator(mActivity);
         mAdapter = new ListVendorAdapter(FDMSApplication.getInstant(), this, mVendors);
         setLoadingMoreVisibility(View.GONE);
     }
@@ -115,10 +116,6 @@ public class VendorViewModel extends BaseObservable
         Toast.makeText(mActivity, mActivity.getString(R.string.error_opps), Toast.LENGTH_SHORT)
             .show();
         switch (mTypeAction) {
-            case ACTION_ADD_VENDOR:
-                mVendors.remove(0);
-                mAdapter.notifyItemRemoved(0);
-                break;
             case ACTION_DELETE_VENDOR:
                 mVendors.add(mPositionScroll, mVendorEdit);
                 mAdapter.notifyItemInserted(mPositionScroll);
@@ -133,9 +130,21 @@ public class VendorViewModel extends BaseObservable
     }
 
     @Override
+    public void onAddVendorFailed(String msg) {
+        mNavigator.showToast(msg);
+    }
+
+    @Override
+    public void onAddVendorSuccess(Producer vendor) {
+        mVendors.add(0, vendor);
+        mAdapter.notifyItemInserted(0);
+        setPositionScroll(0);
+    }
+
+    @Override
     public void onEditProducerClick(Producer vendor) {
-        mVendorDialog = ProducerDialog.newInstant(vendor, mActivity.getResources()
-            .getString(R.string.action_edit), this);
+        mVendorDialog = ProducerDialog.newInstant(vendor,
+            mActivity.getResources().getString(R.string.action_edit), this);
         mVendorDialog.show(mActivity.getSupportFragmentManager(), TAG_MAKER_DIALOG);
     }
 
@@ -145,38 +154,36 @@ public class VendorViewModel extends BaseObservable
         mVendors.remove(vendor);
         mAdapter.notifyItemRemoved(indexRemove);
         Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.title_vendor_delete,
-            Snackbar.LENGTH_LONG)
-            .setAction(R.string.title_undo, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mVendors.add(indexRemove, vendor);
-                    mAdapter.notifyItemInserted(indexRemove);
-                    setPositionScroll(indexRemove);
-                }
-            })
-            .addCallback(new Snackbar.Callback() {
-                @Override
-                public void onDismissed(Snackbar transientBottomBar, int event) {
-                    super.onDismissed(transientBottomBar, event);
-                    setPositionScroll(OUT_OF_INDEX);
-                    ((VendorPresenter) mPresenter).deleteVendor(vendor);
-                }
-            })
-            .show();
+            Snackbar.LENGTH_LONG).setAction(R.string.title_undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mVendors.add(indexRemove, vendor);
+                mAdapter.notifyItemInserted(indexRemove);
+                setPositionScroll(indexRemove);
+            }
+        }).addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                super.onDismissed(transientBottomBar, event);
+                setPositionScroll(OUT_OF_INDEX);
+                ((VendorPresenter) mPresenter).deleteVendor(vendor);
+            }
+        }).show();
     }
 
     @Override
     public void onAddProducerClick() {
-        mVendorDialog = ProducerDialog.newInstant(new Producer(), mActivity.getResources()
-            .getString(R.string.title_add_producer), this);
+        mVendorDialog = ProducerDialog.newInstant(new Producer(),
+            mActivity.getResources().getString(R.string.title_add_producer), this);
         mVendorDialog.show(mActivity.getSupportFragmentManager(), TAG_MAKER_DIALOG);
     }
 
     @Override
     public void onAddCallback(Producer producer) {
-        mVendors.add(0, producer);
-        mAdapter.notifyItemInserted(0);
-        setPositionScroll(0);
+        if (producer == null) {
+            return;
+        }
+        ((VendorPresenter) mPresenter).addVendor(producer);
     }
 
     @Override
@@ -211,7 +218,7 @@ public class VendorViewModel extends BaseObservable
         }
     };
 
-    @IntDef({ACTION_EDIT_VENDOR, ACTION_ADD_VENDOR, ACTION_DELETE_VENDOR})
+    @IntDef({ ACTION_EDIT_VENDOR, ACTION_ADD_VENDOR, ACTION_DELETE_VENDOR })
     public @interface Action {
         int ACTION_EDIT_VENDOR = 0;
         int ACTION_ADD_VENDOR = 1;
