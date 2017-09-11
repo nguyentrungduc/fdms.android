@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.source.MeetingRoomRepository;
+import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
+import com.framgia.fdms.data.source.remote.MeetingRoomRemoteDataSource;
 import com.framgia.fdms.databinding.FragmentListMeetingRoomBinding;
 
 /**
@@ -26,7 +29,9 @@ public class ListMeetingRoomFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mViewModel = new ListMeetingRoomViewModel(this.getActivity());
 
-        ListMeetingRoomContract.Presenter presenter = new ListMeetingRoomPresenter(mViewModel);
+        ListMeetingRoomContract.Presenter presenter = new ListMeetingRoomPresenter(mViewModel,
+                new MeetingRoomRepository(
+                        new MeetingRoomRemoteDataSource(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
     }
 
