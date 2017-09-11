@@ -1,46 +1,41 @@
 package com.framgia.fdms.data.source.remote;
 
 import com.framgia.fdms.data.model.Producer;
+import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.source.VendorDataSource;
-
-import java.util.ArrayList;
+import com.framgia.fdms.data.source.api.service.FDMSApi;
+import com.framgia.fdms.utils.Utils;
 import java.util.List;
-
 import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by framgia on 03/07/2017.
  */
-public final class VendorRemoteDataSource implements VendorDataSource.RemoteDataSource {
+public final class VendorRemoteDataSource extends BaseRemoteDataSource
+        implements VendorDataSource.RemoteDataSource {
     private static VendorRemoteDataSource sInstances;
 
-    private VendorRemoteDataSource() {
+    public VendorRemoteDataSource(FDMSApi api) {
+        super(api);
     }
 
-    public static VendorRemoteDataSource getInstances() {
+    public static VendorRemoteDataSource getInstances(FDMSApi api) {
         if (sInstances == null) {
-            sInstances = new VendorRemoteDataSource();
+            sInstances = new VendorRemoteDataSource(api);
         }
         return sInstances;
     }
 
     @Override
-    public Observable<List<Producer>> getListVendor() {
-        // // TODO: later
-        List<Producer> list = new ArrayList<>();
-        list.add(new Producer("laptop", "mini"));
-        list.add(new Producer("PC", "Cau hinh cao"));
-        list.add(new Producer("modern", "dat"));
-        list.add(new Producer("mobile", "re"));
-        list.add(new Producer("PC2", "Cau hinh cao1"));
-        list.add(new Producer("PC3", "Cau hinh cao2"));
-        list.add(new Producer("laptop4", "mini7"));
-        list.add(new Producer("PC5", "Cau hinh cao3"));
-        list.add(new Producer("PC6", "Cau hinh cao4"));
-        list.add(new Producer("laptop7", "mini2"));
-        list.add(new Producer("PC8", "Cau hinh cao5"));
-        list.add(new Producer("PC9", "Cau hinh cao6"));
-        return Observable.just(list);
+    public Observable<List<Producer>> getListVendor(int page, int perPage) {
+        return mFDMSApi.getListVendors(page, perPage)
+                .flatMap(new Func1<Respone<List<Producer>>, Observable<List<Producer>>>() {
+                    @Override
+                    public Observable<List<Producer>> call(Respone<List<Producer>> listRespone) {
+                        return Utils.getResponse(listRespone);
+                    }
+                });
     }
 
     @Override

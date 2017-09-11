@@ -2,7 +2,6 @@ package com.framgia.fdms.screen.producer.vendor;
 
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.screen.producer.ProducerFunctionContract;
-
 import java.util.List;
 
 /**
@@ -14,7 +13,9 @@ interface VendorContract {
      */
     interface ViewModel extends ProducerFunctionContract.ViewModel<Presenter> {
         void onLoadVendorSuccess(List<Producer> vendors);
+
         void onLoadVendorFailed();
+
         void onActionError();
     }
 
@@ -22,9 +23,14 @@ interface VendorContract {
      * Presenter.
      */
     interface Presenter extends ProducerFunctionContract.ProducerPresenter {
-        void getVendors();
+        void getVendors(int page);
+
+        void loadMorePage();
+
         void addVendor(Producer producer);
+
         void deleteVendor(Producer producer);
+
         void editVendor(Producer producer);
     }
 }
