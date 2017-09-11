@@ -21,6 +21,10 @@ interface VendorContract {
         void onAddVendorFailed(String msg);
 
         void onAddVendorSuccess(Producer vendor);
+
+        void onDeleteVendorFailed(String message);
+
+        void onDeleteVendorSuccess(Producer producer);
     }
 
     /**

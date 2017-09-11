@@ -95,22 +95,23 @@ final class VendorPresenter implements VendorContract.Presenter {
     }
 
     @Override
-    public void deleteVendor(Producer producer) {
+    public void deleteVendor(final Producer producer) {
         Subscription subscription = mRepository.deleteVendor(producer)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Void>() {
+                .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mViewModel.onActionError();
+                        mViewModel.onDeleteVendorFailed(e.getMessage());
                     }
 
                     @Override
-                    public void onNext(Void object) {
+                    public void onNext(String object) {
+                        mViewModel.onDeleteVendorSuccess(producer);
                     }
                 });
         mSubscription.add(subscription);

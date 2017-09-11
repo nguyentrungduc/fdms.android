@@ -13,7 +13,7 @@ import rx.functions.Func1;
  * Created by framgia on 03/07/2017.
  */
 public final class VendorRemoteDataSource extends BaseRemoteDataSource
-        implements VendorDataSource.RemoteDataSource {
+    implements VendorDataSource.RemoteDataSource {
     private static VendorRemoteDataSource sInstances;
 
     public VendorRemoteDataSource(FDMSApi api) {
@@ -30,12 +30,12 @@ public final class VendorRemoteDataSource extends BaseRemoteDataSource
     @Override
     public Observable<List<Producer>> getListVendor(int page, int perPage) {
         return mFDMSApi.getListVendors(page, perPage)
-                .flatMap(new Func1<Respone<List<Producer>>, Observable<List<Producer>>>() {
-                    @Override
-                    public Observable<List<Producer>> call(Respone<List<Producer>> listRespone) {
-                        return Utils.getResponse(listRespone);
-                    }
-                });
+            .flatMap(new Func1<Respone<List<Producer>>, Observable<List<Producer>>>() {
+                @Override
+                public Observable<List<Producer>> call(Respone<List<Producer>> listRespone) {
+                    return Utils.getResponse(listRespone);
+                }
+            });
     }
 
     @Override
@@ -50,8 +50,14 @@ public final class VendorRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<Void> deleteVendor(Producer producer) {
-        return Observable.just(null);
+    public Observable<String> deleteVendor(Producer producer) {
+        return mFDMSApi.deleteVendor(producer.getId())
+            .flatMap(new Func1<Respone<String>, Observable<String>>() {
+                @Override
+                public Observable<String> call(Respone<String> stringRespone) {
+                    return Utils.getResponse(stringRespone);
+                }
+            });
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.framgia.fdms.data.source.api.error;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import com.framgia.fdms.data.model.Respone;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -59,7 +60,9 @@ public final class BaseException extends RuntimeException {
                     e.printStackTrace();
                     return "Error";
                 }
-                if (errorResponse == null) return "Error";
+                if (TextUtils.isEmpty(errorResponse)){
+                    return "Error";
+                }
                 try {
                     Respone error = new Gson().fromJson(errorResponse, Respone.class);
                     return error.getMessage();

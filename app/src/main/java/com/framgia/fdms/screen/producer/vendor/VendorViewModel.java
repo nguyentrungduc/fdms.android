@@ -116,10 +116,6 @@ public class VendorViewModel extends BaseObservable
         Toast.makeText(mActivity, mActivity.getString(R.string.error_opps), Toast.LENGTH_SHORT)
             .show();
         switch (mTypeAction) {
-            case ACTION_DELETE_VENDOR:
-                mVendors.add(mPositionScroll, mVendorEdit);
-                mAdapter.notifyItemInserted(mPositionScroll);
-                break;
             case ACTION_EDIT_VENDOR:
                 mVendorEdit.setName(mOldVendor.getName());
                 mVendorEdit.setDescription(mOldVendor.getDescription());
@@ -141,6 +137,16 @@ public class VendorViewModel extends BaseObservable
         setPositionScroll(0);
     }
 
+    public void onDeleteVendorFailed(String message) {
+        mVendors.add(mPositionScroll, mVendorEdit);
+        mAdapter.notifyItemInserted(mPositionScroll);
+    }
+
+    @Override
+    public void onDeleteVendorSuccess(Producer producer) {
+        // no ops
+    }
+
     @Override
     public void onEditProducerClick(Producer vendor) {
         mVendorDialog = ProducerDialog.newInstant(vendor,
@@ -154,7 +160,7 @@ public class VendorViewModel extends BaseObservable
         mVendors.remove(vendor);
         mAdapter.notifyItemRemoved(indexRemove);
         Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.title_vendor_delete,
-            Snackbar.LENGTH_LONG).setAction(R.string.title_undo, new View.OnClickListener() {
+            Snackbar.LENGTH_SHORT).setAction(R.string.title_undo, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mVendors.add(indexRemove, vendor);
