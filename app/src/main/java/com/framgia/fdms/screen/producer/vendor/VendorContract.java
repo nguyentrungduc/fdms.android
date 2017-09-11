@@ -17,6 +17,10 @@ interface VendorContract {
         void onLoadVendorFailed();
 
         void onActionError();
+
+        void onAddVendorFailed(String msg);
+
+        void onAddVendorSuccess(Producer vendor);
     }
 
     /**

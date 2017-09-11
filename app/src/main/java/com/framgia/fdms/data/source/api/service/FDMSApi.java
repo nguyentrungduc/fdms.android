@@ -126,4 +126,8 @@ public interface FDMSApi {
     @GET("api/vendors")
     Observable<Respone<List<Producer>>> getListVendors(@Query("page") int page,
             @Query("per_page") int perPage);
+
+    @POST("api/vendors")
+    Observable<Respone<Producer>> addVendor(@Query("vendor[name]") String name,
+            @Query("vendor[description]") String description);
 }
