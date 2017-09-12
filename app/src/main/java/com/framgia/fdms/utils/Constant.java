@@ -50,6 +50,8 @@ public class Constant {
         public static final String BUNDLE_PRODUCER = "BUNDLE_PRODUCER";
         public static final String BUNDLE_TITLE = "BUNDLE_TITLE";
         public static final String BUNDLE_ACTION_CALLBACK = "BUNDLE_ACTION_CALLBACK";
+        public static final String BUNDLE_DEVICES = "BUNDLE_DEVICES";
+        public static final String BUNDLE_CATEGORY_ID = "BUNDLE_CATEGORY_ID";
     }
 
     public static final class RequestConstant {
