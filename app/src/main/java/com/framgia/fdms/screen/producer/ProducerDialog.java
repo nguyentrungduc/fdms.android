@@ -49,6 +49,7 @@ public class ProducerDialog extends DialogFragment implements ProducerDialogCont
         mActionCallback = bundle.getParcelable(BUNDLE_ACTION_CALLBACK);
         mTempProducer.setName(mProducer.getName());
         mTempProducer.setDescription(mProducer.getDescription());
+        mTempProducer.setId(mProducer.getId());
         mTitle.set(bundle.getString(BUNDLE_TITLE));
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),

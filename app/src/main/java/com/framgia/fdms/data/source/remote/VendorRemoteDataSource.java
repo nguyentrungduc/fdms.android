@@ -58,7 +58,8 @@ public final class VendorRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<Void> editVendor(Producer producer) {
-        return Observable.just(null);
+    public Observable<Respone<String>> editVendor(Producer producer) {
+        return mFDMSApi.updateVendor(producer.getId(), producer.getName(),
+            producer.getDescription());
     }
 }

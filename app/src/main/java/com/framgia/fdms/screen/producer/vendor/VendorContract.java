@@ -16,15 +16,17 @@ interface VendorContract {
 
         void onLoadVendorFailed();
 
-        void onActionError();
-
         void onAddVendorFailed(String msg);
 
         void onAddVendorSuccess(Producer vendor);
 
         void onDeleteVendorFailed(String message);
 
-        void onDeleteVendorSuccess(Producer producer);
+        void onDeleteVendorSuccess(Producer vendor);
+
+        void onUpdateVendorSuccess(Producer vendor);
+
+        void onUpdateVendorFailed(String message);
     }
 
     /**

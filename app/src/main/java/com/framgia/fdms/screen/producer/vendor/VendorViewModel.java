@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.R;
@@ -54,8 +53,6 @@ public class VendorViewModel extends BaseObservable
     private ProducerDialog mVendorDialog;
     private int mPositionScroll = OUT_OF_INDEX;
     private Producer mVendorEdit;
-    private int mTypeAction;
-    private Producer mOldVendor;
     private boolean mIsLoadMore;
     private int mLoadingMoreVisibility;
     private Navigator mNavigator;
@@ -158,20 +155,6 @@ public class VendorViewModel extends BaseObservable
     }
 
     @Override
-    public void onActionError() {
-        Toast.makeText(mActivity, mActivity.getString(R.string.error_opps), Toast.LENGTH_SHORT)
-            .show();
-        switch (mTypeAction) {
-            case ACTION_EDIT_VENDOR:
-                mVendorEdit.setName(mOldVendor.getName());
-                mVendorEdit.setDescription(mOldVendor.getDescription());
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
     public void onAddVendorFailed(String msg) {
         mNavigator.showToast(msg);
     }
@@ -192,6 +175,20 @@ public class VendorViewModel extends BaseObservable
         // no ops
         mVendors.remove(producer);
         mAdapter.notifyItemRemoved(mVendors.indexOf(producer));
+    }
+
+    @Override
+    public void onUpdateVendorSuccess(Producer vendor) {
+        if (vendor == null || mVendorEdit == null) {
+            return;
+        }
+        mVendorEdit.setName(vendor.getName());
+        mVendorEdit.setDescription(vendor.getDescription());
+    }
+
+    @Override
+    public void onUpdateVendorFailed(String message) {
+        mNavigator.showToast(message);
     }
 
     @Override
@@ -223,9 +220,11 @@ public class VendorViewModel extends BaseObservable
 
     @Override
     public void onEditCallback(Producer oldProducer, Producer newProducer) {
-        if (oldProducer == null || newProducer == null) return;
-        oldProducer.setDescription(newProducer.getDescription());
-        oldProducer.setName(newProducer.getName());
+        if (oldProducer == null || newProducer == null) {
+            return;
+        }
+        mVendorEdit = oldProducer;
+        ((VendorContract.Presenter) mPresenter).editVendor(newProducer);
     }
 
     @Bindable
