@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableField;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,9 @@ import android.widget.Toast;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.data.model.MeetingRoom;
+import com.framgia.fdms.screen.meetingroom.detailmeetingroom.DetailMeetingRoomActivity;
+import com.framgia.fdms.utils.Constant;
+import com.framgia.fdms.utils.navigator.Navigator;
 import java.util.List;
 
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
@@ -33,9 +37,11 @@ public class ListMeetingRoomViewModel extends BaseObservable
     private int mPage;
     private boolean mIsRefresh;
     private boolean mIsLoadingMore;
+    private Navigator mNavigator;
 
-    ListMeetingRoomViewModel(Context context) {
+    ListMeetingRoomViewModel(Context context, Navigator navigator) {
         mContext = context;
+        mNavigator = navigator;
         mListMeetingRoomAdapter = new ListMeetingRoomAdapter(mContext);
         mListMeetingRoomAdapter.setItemClickListener(this);
         mProgressBarVisibility = new ObservableField<>();
@@ -60,7 +66,9 @@ public class ListMeetingRoomViewModel extends BaseObservable
 
     @Override
     public void onItemRecyclerViewClick(MeetingRoom item) {
-        //TODO: Go to FragmentDetailMeetingRoom
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constant.BundleConstant.BUNDLE_MEETING_ROOM, item);
+        mNavigator.startActivity(DetailMeetingRoomActivity.class, bundle);
     }
 
     public ListMeetingRoomAdapter getListMeetingRoomAdapter() {
