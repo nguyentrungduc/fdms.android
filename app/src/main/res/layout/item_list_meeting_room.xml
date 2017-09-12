@@ -31,16 +31,16 @@
                 android:orientation="horizontal"
                 >
                 <ImageView
-                    android:layout_width="@dimen/dp_35"
-                    android:layout_height="@dimen/dp_35"
+                    android:layout_width="@dimen/dp_25"
+                    android:layout_height="@dimen/dp_25"
                     android:layout_margin="@dimen/dp_5"
                     android:onClick="@{()-> viewModel.onEditMeetingRoom()}"
                     app:srcCompat="@drawable/ic_edit"
                     tools:ignore="ContentDescription"
                     />
                 <ImageView
-                    android:layout_width="@dimen/dp_35"
-                    android:layout_height="@dimen/dp_35"
+                    android:layout_width="@dimen/dp_25"
+                    android:layout_height="@dimen/dp_25"
                     android:layout_margin="@dimen/dp_5"
                     android:onClick="@{()-> viewModel.onDeleteMeetingRoom()}"
                     app:srcCompat="@drawable/ic_x_button"
@@ -55,8 +55,8 @@
                 android:orientation="horizontal"
                 >
                 <ImageView
-                    android:layout_width="@dimen/dp_48"
-                    android:layout_height="@dimen/dp_48"
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/dp_10"
                     app:srcCompat="@drawable/ic_meeting"
@@ -81,7 +81,7 @@
                             android:layout_marginStart="@dimen/dp_3"
                             android:text="@{viewModel.roomName}"
                             android:textColor="@color/color_gray"
-                            android:textSize="@dimen/sp_25"
+                            android:textSize="@dimen/sp_16"
                             android:textStyle="bold"
                             />
                         <View
@@ -99,7 +99,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="@{viewModel.roomDescription}"
-                        android:textSize="@dimen/sp_15"
+                        android:textSize="@dimen/sp_12"
                         />
                 </LinearLayout>
             </LinearLayout>

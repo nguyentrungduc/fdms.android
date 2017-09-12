@@ -59,6 +59,11 @@ public class ListMeetingRoomAdapter
         mItemClickListener = itemClickListener;
     }
 
+    public void clear() {
+        mMeetingRooms.clear();
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private ItemListMeetingRoomBinding mBinding;
         private OnRecyclerViewItemClickListener<MeetingRoom> mItemClickListener;

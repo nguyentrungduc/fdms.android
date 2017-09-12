@@ -1,21 +1,29 @@
 package com.framgia.fdms.screen.meetingroom.listmeetingroom;
 
 import android.content.Context;
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.databinding.ObservableField;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
+import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.data.model.MeetingRoom;
 import java.util.List;
 
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
+import static com.framgia.fdms.utils.Constant.NOT_SEARCH;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
 /**
  * Exposes the data to be used in the ListMeetingRoom screen.
  */
 
-public class ListMeetingRoomViewModel implements ListMeetingRoomContract.ViewModel,
+public class ListMeetingRoomViewModel extends BaseObservable
+        implements ListMeetingRoomContract.ViewModel,
         BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom> {
 
     private Context mContext;
@@ -23,6 +31,8 @@ public class ListMeetingRoomViewModel implements ListMeetingRoomContract.ViewMod
     private ListMeetingRoomAdapter mListMeetingRoomAdapter;
     private ObservableField<Integer> mProgressBarVisibility;
     private int mPage;
+    private boolean mIsRefresh;
+    private boolean mIsLoadingMore;
 
     ListMeetingRoomViewModel(Context context) {
         mContext = context;
@@ -30,7 +40,6 @@ public class ListMeetingRoomViewModel implements ListMeetingRoomContract.ViewMod
         mListMeetingRoomAdapter.setItemClickListener(this);
         mProgressBarVisibility = new ObservableField<>();
         mPage = FIRST_PAGE;
-        mPresenter.getListMeetingRoom("", mPage, PER_PAGE);
     }
 
     @Override
@@ -46,6 +55,7 @@ public class ListMeetingRoomViewModel implements ListMeetingRoomContract.ViewMod
     @Override
     public void setPresenter(ListMeetingRoomContract.Presenter presenter) {
         mPresenter = presenter;
+        mPresenter.getListMeetingRoom(NOT_SEARCH, mPage, PER_PAGE);
     }
 
     @Override
@@ -59,7 +69,9 @@ public class ListMeetingRoomViewModel implements ListMeetingRoomContract.ViewMod
 
     @Override
     public void onGetListMeetingRoomSuccess(List<MeetingRoom> meetingRooms) {
+        setLoadingMore(false);
         mListMeetingRoomAdapter.onUpdatePage(meetingRooms);
+        setRefresh(false);
     }
 
     @Override
@@ -79,6 +91,69 @@ public class ListMeetingRoomViewModel implements ListMeetingRoomContract.ViewMod
 
     public ObservableField<Integer> getProgressBarVisibility() {
         return mProgressBarVisibility;
+    }
+
+    @Bindable
+    public boolean isLoadingMore() {
+        return mIsLoadingMore;
+    }
+
+    public void setLoadingMore(boolean loadingMore) {
+        mIsLoadingMore = loadingMore;
+        notifyPropertyChanged(BR.loadingMore);
+    }
+
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
+            new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    mPage = FIRST_PAGE;
+                    mListMeetingRoomAdapter.clear();
+                    mPresenter.getListMeetingRoom(NOT_SEARCH, mPage, PER_PAGE);
+                }
+            };
+
+    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if (dy <= 0) {
+                return;
+            }
+            LinearLayoutManager layoutManager =
+                    (LinearLayoutManager) recyclerView.getLayoutManager();
+            int visibleItemCount = layoutManager.getChildCount();
+            int totalItemCount = layoutManager.getItemCount();
+            int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+            if (!isLoadingMore() && (visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                setLoadingMore(true);
+                loadMore();
+            }
+        }
+    };
+
+    @Bindable
+    public SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
+        return mOnRefreshListener;
+    }
+
+    @Bindable
+    public boolean isRefresh() {
+        return mIsRefresh;
+    }
+
+    public void setRefresh(boolean refresh) {
+        mIsRefresh = refresh;
+        notifyPropertyChanged(BR.refresh);
+    }
+
+    public RecyclerView.OnScrollListener getScrollListener() {
+        return mScrollListener;
+    }
+
+    private void loadMore() {
+        mPage++;
+        mPresenter.getListMeetingRoom(NOT_SEARCH, mPage, PER_PAGE);
     }
 
     public void onAddMeetingRoomClick() {

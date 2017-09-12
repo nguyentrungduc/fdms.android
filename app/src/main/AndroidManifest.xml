@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.framgia.fdms"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.framgia.fdms">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -79,9 +79,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".screen.meetingroom.detailmeetingroom.DetailMeetingRoomActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="731ae80443a5d1005298e4d8934ce1bc9b4de457" />
+            android:value="731ae80443a5d1005298e4d8934ce1bc9b4de457"/>
     </application>
 
 </manifest>
