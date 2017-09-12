@@ -3,12 +3,14 @@ package com.framgia.fdms.screen.authenication.register;
 import android.text.TextUtils;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.UserRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.data.source.api.request.RegisterRequest;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Listens to user actions from the UI ({@link RegisterActivity}), retrieves the data and updates
@@ -17,7 +19,7 @@ import rx.subscriptions.CompositeSubscription;
 final class RegisterPresenter implements RegisterContract.Presenter {
 
     private final RegisterContract.ViewModel mViewModel;
-    private CompositeSubscription mCompositeSubscription;
+    private CompositeDisposable mCompositeSubscription;
     private UserRepository mUserRepository;
     private RegisterRequest mRequest;
 
@@ -25,7 +27,7 @@ final class RegisterPresenter implements RegisterContract.Presenter {
         mViewModel = viewModel;
         mUserRepository = repository;
         mRequest = new RegisterRequest();
-        mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription = new CompositeDisposable();
     }
 
     @Override
@@ -43,20 +45,20 @@ final class RegisterPresenter implements RegisterContract.Presenter {
         if (!validateDataInput(request)) {
             return;
         }
-        Subscription subscription = mUserRepository.register(mRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<User>() {
-                    @Override
-                    public void call(User request) {
-                        mViewModel.onRegisterSuccess();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.onRegisterError();
-                    }
-                });
+        Disposable subscription = mUserRepository.register(mRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<User>() {
+                @Override
+                public void accept(User user) throws Exception {
+                    mViewModel.onRegisterSuccess();
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onRegisterError();
+                }
+            });
         mCompositeSubscription.add(subscription);
     }
 

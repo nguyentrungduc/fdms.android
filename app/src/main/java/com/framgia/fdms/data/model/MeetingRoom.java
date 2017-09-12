@@ -12,6 +12,17 @@ import com.google.gson.annotations.SerializedName;
 
 public class MeetingRoom extends BaseObservable implements Parcelable {
 
+    public static final Creator<MeetingRoom> CREATOR = new Creator<MeetingRoom>() {
+        @Override
+        public MeetingRoom createFromParcel(Parcel in) {
+            return new MeetingRoom(in);
+        }
+
+        @Override
+        public MeetingRoom[] newArray(int size) {
+            return new MeetingRoom[size];
+        }
+    };
     @Expose
     @SerializedName("id")
     private int mId;
@@ -49,18 +60,6 @@ public class MeetingRoom extends BaseObservable implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<MeetingRoom> CREATOR = new Creator<MeetingRoom>() {
-        @Override
-        public MeetingRoom createFromParcel(Parcel in) {
-            return new MeetingRoom(in);
-        }
-
-        @Override
-        public MeetingRoom[] newArray(int size) {
-            return new MeetingRoom[size];
-        }
-    };
 
     public int getId() {
         return mId;

@@ -5,9 +5,7 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.UserDataSource;
 import com.framgia.fdms.data.source.api.request.RegisterRequest;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
-import com.framgia.fdms.utils.Utils;
-import rx.Observable;
-import rx.functions.Func1;
+import io.reactivex.Observable;
 
 /**
  * Created by levutantuan on 4/4/17.

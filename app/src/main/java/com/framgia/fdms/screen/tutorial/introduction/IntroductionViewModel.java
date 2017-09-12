@@ -10,7 +10,7 @@ import com.framgia.fdms.data.model.Introduction;
  */
 
 public class IntroductionViewModel extends BaseObservable
-        implements IntroductionContract.ViewModel {
+    implements IntroductionContract.ViewModel {
 
     private IntroductionContract.Presenter mPresenter;
     private Introduction mIntroduction;

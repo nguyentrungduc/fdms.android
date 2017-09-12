@@ -9,17 +9,25 @@ import com.framgia.fdms.BaseViewModel;
 public interface LoginContract {
     interface ViewModel extends BaseViewModel<Presenter> {
         void onLoginError(String msg);
+
         void onLoginSuccess();
+
         void onInputUserNameError();
+
         void onInputPasswordError();
+
         void showProgressbar();
+
         void hideProgressbar();
+
         void onCachedAccountLoaded(String user, String passWord);
+
         boolean isRememberAccount();
     }
 
     interface Presenter extends BasePresenter {
         void login(String userName, String passWord);
+
         boolean validateDataInput(String username, String password);
     }
 }

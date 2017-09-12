@@ -42,9 +42,9 @@ public class ReturnDeviceActivity extends AppCompatActivity {
         mViewModel = new ReturnDeviceViewModel(this);
 
         ReturnDeviceContract.Presenter presenter = new ReturnDevicePresenter(mViewModel,
-                new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance())),
-                new DeviceReturnRepository(),
-                new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())));
+            new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance())),
+            new DeviceReturnRepository(),
+            new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_return_device);
@@ -92,7 +92,7 @@ public class ReturnDeviceActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
+        @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (mViewModel != null) {
             mViewModel.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -101,7 +101,7 @@ public class ReturnDeviceActivity extends AppCompatActivity {
 
     public void show(String name, Device device) {
         Snackbar.make(mBinding.coordinatorLayout,
-                getString(R.string.msg_not_device_in_device_brorows, name,
-                        device.getUser().getName()), Snackbar.LENGTH_LONG).show();
+            getString(R.string.msg_not_device_in_device_brorows, name, device.getUser().getName()),
+            Snackbar.LENGTH_LONG).show();
     }
 }

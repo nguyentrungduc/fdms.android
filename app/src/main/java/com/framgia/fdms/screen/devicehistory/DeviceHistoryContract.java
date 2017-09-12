@@ -3,7 +3,6 @@ package com.framgia.fdms.screen.devicehistory;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
-
 import java.util.List;
 
 /**
@@ -15,6 +14,7 @@ interface DeviceHistoryContract {
      */
     interface ViewModel extends BaseViewModel<Presenter> {
         void onLoadDeviceHistorySuccess(List<DeviceUsingHistory> deviceUsingHistories);
+
         void onLoadDeviceHistoryFailed();
     }
 

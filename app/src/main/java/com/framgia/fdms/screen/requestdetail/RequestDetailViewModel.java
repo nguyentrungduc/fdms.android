@@ -11,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Category;
@@ -24,7 +23,6 @@ import com.framgia.fdms.screen.selection.StatusSelectionType;
 import com.framgia.fdms.utils.Constant;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,9 +63,8 @@ public class RequestDetailViewModel extends BaseObservable
     private int mActionMenuVisibility;
 
     public RequestDetailViewModel(AppCompatActivity activity, List<Request.DeviceRequest> request,
-                                  List<Request.RequestAction> actions, String statusRequest,
-                                  Request actionRequest,
-                                  FloatingActionMenu floatingActionsMenu) {
+        List<Request.RequestAction> actions, String statusRequest, Request actionRequest,
+        FloatingActionMenu floatingActionsMenu) {
         mContext = activity;
         mActivity = activity;
         setRequest(actionRequest);

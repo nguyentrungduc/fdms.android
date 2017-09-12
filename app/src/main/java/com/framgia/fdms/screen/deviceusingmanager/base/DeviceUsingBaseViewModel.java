@@ -2,7 +2,6 @@ package com.framgia.fdms.screen.deviceusingmanager.base;
 
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.screen.deviceusingmanager.DeviceUsingManagerContract;
-
 import java.util.List;
 
 /**

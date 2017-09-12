@@ -3,13 +3,15 @@ package com.framgia.fdms.screen.requestcreation;
 import android.text.TextUtils;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.source.RequestRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Listens to user actions from the UI ({@link RequestCreationActivity}), retrieves the data and
@@ -18,45 +20,45 @@ import rx.subscriptions.CompositeSubscription;
  */
 public final class RequestCreationPresenter implements RequestCreationContract.Presenter {
     private final RequestCreationContract.ViewModel mViewModel;
-    private CompositeSubscription mSubscription;
+    private CompositeDisposable mSubscription;
     private RequestRepository mRequestRepository;
 
     public RequestCreationPresenter(RequestCreationContract.ViewModel viewModel,
-            RequestRepository requestRepository) {
+        RequestRepository requestRepository) {
         mViewModel = viewModel;
-        mSubscription = new CompositeSubscription();
+        mSubscription = new CompositeDisposable();
         mRequestRepository = requestRepository;
     }
 
     @Override
     public void registerRequest(RequestCreatorRequest request) {
         if (!validateDataInput(request)) return;
-        Subscription subscription = mRequestRepository.registerRequest(request)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        mViewModel.showProgressbar();
-                    }
-                })
-                .subscribe(new Subscriber<Request>() {
-                    @Override
-                    public void onCompleted() {
-                        mViewModel.hideProgressbar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mViewModel.hideProgressbar();
-                        mViewModel.onLoadError(e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Request request) {
-                        mViewModel.onGetRequestSuccess(request);
-                    }
-                });
+        Disposable subscription = mRequestRepository.registerRequest(request)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgressbar();
+                }
+            })
+            .subscribe(new Consumer<Request>() {
+                @Override
+                public void accept(Request request) throws Exception {
+                    mViewModel.onGetRequestSuccess(request);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.hideProgressbar();
+                    mViewModel.onLoadError(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            });
         mSubscription.add(subscription);
     }
 

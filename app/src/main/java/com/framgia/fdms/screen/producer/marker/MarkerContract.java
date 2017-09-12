@@ -2,7 +2,6 @@ package com.framgia.fdms.screen.producer.marker;
 
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.screen.producer.ProducerFunctionContract;
-
 import java.util.List;
 
 /**
@@ -14,6 +13,7 @@ interface MarkerContract {
      */
     interface ViewModel extends ProducerFunctionContract.ViewModel<Presenter> {
         void onLoadMakerFail();
+
         void onLoadMakerSucessfully(List<Producer> producers);
     }
 

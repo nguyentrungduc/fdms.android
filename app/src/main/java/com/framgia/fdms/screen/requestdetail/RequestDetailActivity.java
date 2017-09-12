@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.source.UserRepository;
@@ -40,9 +39,9 @@ public class RequestDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getRequestFromIntent();
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_request_detail);
-        mViewModel = new RequestDetailViewModel(this, mRequest.getDevices(),
-            mRequest.getRequestActionList(), mRequest.getRequestStatus(), mRequest,
-            mBinding.floatActionMenu);
+        mViewModel =
+            new RequestDetailViewModel(this, mRequest.getDevices(), mRequest.getRequestActionList(),
+                mRequest.getRequestStatus(), mRequest, mBinding.floatActionMenu);
         mBinding.setViewModel((RequestDetailViewModel) mViewModel);
         RequestDetailContract.Presenter presenter = new RequestDetailPresenter(mViewModel,
             new UserRepository(

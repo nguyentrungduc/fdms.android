@@ -2,10 +2,12 @@ package com.framgia.fdms.screen.devicedetail.history;
 
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Listens to user actions from the UI ({@link DeviceDetailHistoryFragment}), retrieves the data and
@@ -20,7 +22,7 @@ public final class DeviceDetailHistoryPresenter implements DeviceDetailHistoryCo
     private int mDeviceId = -1;
 
     public DeviceDetailHistoryPresenter(DeviceDetailHistoryContract.ViewModel viewModel,
-            DeviceRepository repository, int deviceId) {
+        DeviceRepository repository, int deviceId) {
         mViewModel = viewModel;
         mRepository = repository;
         mDeviceId = deviceId;
@@ -38,23 +40,19 @@ public final class DeviceDetailHistoryPresenter implements DeviceDetailHistoryCo
     @Override
     public void getDetailHistory(int deviceId) {
         mRepository.getDeviceDetailHistory(deviceId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<DeviceHistoryDetail>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mViewModel.onGetDeviceHistoryFailed(e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(List<DeviceHistoryDetail> deviceHistoryDetails) {
-                        mViewModel.onGetDeviceHistorySuccess(deviceHistoryDetails);
-                    }
-                });
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<List<DeviceHistoryDetail>>() {
+                @Override
+                public void accept(List<DeviceHistoryDetail> deviceHistoryDetails)
+                    throws Exception {
+                    mViewModel.onGetDeviceHistorySuccess(deviceHistoryDetails);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onGetDeviceHistoryFailed(error.getMessage());
+                }
+            });
     }
 }

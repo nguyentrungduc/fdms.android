@@ -13,7 +13,6 @@ import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Dashboard;
@@ -29,13 +28,14 @@ import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment.DEVICE_DASHBOARD;
-import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment.REQUEST_DASHBOARD;
+import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
+    .DEVICE_DASHBOARD;
+import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
+    .REQUEST_DASHBOARD;
 import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_DEVICE_MANAGER;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
@@ -44,8 +44,7 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
  * Exposes the data to be used in the Scanner screen.
  */
 public class DashBoardDetailViewModel extends BaseObservable
-    implements DashBoardDetailContract.ViewModel, OnRequestClickListenner,
-    OnDeviceClickListenner {
+    implements DashBoardDetailContract.ViewModel, OnRequestClickListenner, OnDeviceClickListenner {
     private static final float PIE_DATA_SLICE_SPACE = 3f;
     private static final float PIE_DATA_SLECTION_SHIFT = 5f;
     private DashBoardDetailContract.Presenter mPresenter;
@@ -59,6 +58,15 @@ public class DashBoardDetailViewModel extends BaseObservable
     private int mDashboardType;
     private Fragment mFragment;
     private boolean mIsRefresh;
+    private SwipeRefreshLayout.OnRefreshListener mRefreshLayout =
+        new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mAdapterTopDevice.clear();
+                mAdapterTopRequest.clear();
+                getData();
+            }
+        };
 
     public DashBoardDetailViewModel(Fragment fragment, int dashboardType) {
         mFragment = fragment;
@@ -201,14 +209,14 @@ public class DashBoardDetailViewModel extends BaseObservable
         // TODO: 08/06/2017
     }
 
-    public void setTotal(int total) {
-        mTotal = total;
-        notifyPropertyChanged(BR.total);
-    }
-
     @Bindable
     public int getTotal() {
         return mTotal;
+    }
+
+    public void setTotal(int total) {
+        mTotal = total;
+        notifyPropertyChanged(BR.total);
     }
 
     public UserRequestAdapter getAdapterTopRequest() {
@@ -289,23 +297,12 @@ public class DashBoardDetailViewModel extends BaseObservable
         notifyPropertyChanged(BR.refresh);
     }
 
-    private SwipeRefreshLayout.OnRefreshListener mRefreshLayout =
-        new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mAdapterTopDevice.clear();
-                mAdapterTopRequest.clear();
-                getData();
-            }
-        };
-
     public SwipeRefreshLayout.OnRefreshListener getRefreshLayout() {
         return mRefreshLayout;
     }
 
     @Override
     public void onDeviceDashBoardClick(Device device) {
-        ((MainActivity) mFragment.getActivity())
-            .setTabWithDevice(TAB_DEVICE_MANAGER, device);
+        ((MainActivity) mFragment.getActivity()).setTabWithDevice(TAB_DEVICE_MANAGER, device);
     }
 }

@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.framgia.fdms.screen.devicedetail.DeviceDetailPagerAdapter.DeviceDetailPage
-        .DEVICE_INFOMATION;
+    .DEVICE_INFOMATION;
 
 /**
  * Exposes the data to be used in the Devicedetail screen.
  */
 
 public class DeviceDetailViewModel extends BaseObservable
-        implements DeviceDetailContract.ViewModel {
+    implements DeviceDetailContract.ViewModel {
 
     private DeviceDetailContract.Presenter mPresenter;
     private DeviceDetailPagerAdapter mAdapter;
@@ -44,8 +44,9 @@ public class DeviceDetailViewModel extends BaseObservable
         fragments.add(mInfomationFragment);
         fragments.add(DeviceDetailHistoryFragment.newInstance(mDevice.getId()));
         fragments.add(DeviceUsingHistoryFragment.newInstance(mDevice.getId()));
-        mAdapter = new DeviceDetailPagerAdapter(mContext, mActivity.getSupportFragmentManager(),
-                fragments, mDevice.getId());
+        mAdapter =
+            new DeviceDetailPagerAdapter(mContext, mActivity.getSupportFragmentManager(), fragments,
+                mDevice.getId());
     }
 
     @Override

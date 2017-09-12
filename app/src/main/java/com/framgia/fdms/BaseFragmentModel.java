@@ -6,19 +6,15 @@ package com.framgia.fdms;
 
 import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import java.util.List;
 
 public abstract class BaseFragmentModel extends BaseObservable
-        implements BaseFragmentContract.ViewModel {
+    implements BaseFragmentContract.ViewModel {
     protected ObservableField<Boolean> mIsLoadMore = new ObservableField<>(false);
-    private ObservableField<Integer> mProgressBarVisibility = new ObservableField<>();
     protected BaseFragmentContract.Presenter mPresenter;
-
+    private ObservableField<Integer> mProgressBarVisibility = new ObservableField<>();
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -28,7 +24,7 @@ public abstract class BaseFragmentModel extends BaseObservable
             }
 
             LinearLayoutManager layoutManager =
-                    (LinearLayoutManager) recyclerView.getLayoutManager();
+                (LinearLayoutManager) recyclerView.getLayoutManager();
 
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
@@ -49,7 +45,6 @@ public abstract class BaseFragmentModel extends BaseObservable
     public void showProgressbar() {
         mProgressBarVisibility.set(View.VISIBLE);
     }
-
 
     @Override
     public void hideProgressbar() {
@@ -74,5 +69,4 @@ public abstract class BaseFragmentModel extends BaseObservable
     public ObservableField<Integer> getProgressBarVisibility() {
         return mProgressBarVisibility;
     }
-
 }

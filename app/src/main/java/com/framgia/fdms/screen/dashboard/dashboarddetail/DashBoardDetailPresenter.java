@@ -8,18 +8,20 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.RequestRepository;
 import com.framgia.fdms.data.source.UserRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
-        .DEVICE_DASHBOARD;
+    .DEVICE_DASHBOARD;
 import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
-        .REQUEST_DASHBOARD;
+    .REQUEST_DASHBOARD;
 
 /**
  * Listens to user actions from the UI ({@link DashBoardDetailFragment}), retrieves the data and
@@ -27,23 +29,23 @@ import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailF
  * the UI as required.
  */
 public final class DashBoardDetailPresenter implements DashBoardDetailContract.Presenter {
-    private CompositeSubscription mCompositeSubscriptions = new CompositeSubscription();
-
+    public static final int top = 1;
     private final DashBoardDetailContract.ViewModel mViewModel;
+    private CompositeDisposable mCompositeSubscriptions;
     private DeviceRepository mDeviceRepository;
     private RequestRepository mRequestRepository;
     private UserRepository mUserRepository;
     private int mDashboardType;
-    public static final int top = 1;
 
     public DashBoardDetailPresenter(DashBoardDetailContract.ViewModel viewModel,
-            DeviceRepository deviceRepository, RequestRepository requestRepository,
-            int dashboardType, UserRepository userRepository) {
+        DeviceRepository deviceRepository, RequestRepository requestRepository, int dashboardType,
+        UserRepository userRepository) {
         mViewModel = viewModel;
         mDeviceRepository = deviceRepository;
         mRequestRepository = requestRepository;
         mDashboardType = dashboardType;
         mUserRepository = userRepository;
+        mCompositeSubscriptions = new CompositeDisposable();
         getCurrentUser();
     }
 
@@ -58,41 +60,41 @@ public final class DashBoardDetailPresenter implements DashBoardDetailContract.P
 
     @Override
     public void getDeviceDashboard() {
-        Subscription subscription = mDeviceRepository.getDashboardDevice()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Dashboard>>() {
-                    @Override
-                    public void call(List<Dashboard> dashboards) {
-                        mViewModel.onDashBoardLoaded(dashboards);
-                        mViewModel.setRefresh(false);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.onDashBoardError(throwable.getMessage());
-                    }
-                });
+        Disposable subscription = mDeviceRepository.getDashboardDevice()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<List<Dashboard>>() {
+                @Override
+                public void accept(List<Dashboard> dashboards) throws Exception {
+                    mViewModel.onDashBoardLoaded(dashboards);
+                    mViewModel.setRefresh(false);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onDashBoardError(error.getMessage());
+                }
+            });
         mCompositeSubscriptions.add(subscription);
     }
 
     @Override
     public void getRequestDashboard() {
-        Subscription subscription = mRequestRepository.getDashboardRequest()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Dashboard>>() {
-                    @Override
-                    public void call(List<Dashboard> dashboards) {
-                        mViewModel.onDashBoardLoaded(dashboards);
-                        mViewModel.setRefresh(false);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.onDashBoardError(throwable.getMessage());
-                    }
-                });
+        Disposable subscription = mRequestRepository.getDashboardRequest()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<List<Dashboard>>() {
+                @Override
+                public void accept(List<Dashboard> dashboards) throws Exception {
+                    mViewModel.onDashBoardLoaded(dashboards);
+                    mViewModel.setRefresh(false);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onDashBoardError(error.getMessage());
+                }
+            });
         mCompositeSubscriptions.add(subscription);
     }
 
@@ -110,92 +112,92 @@ public final class DashBoardDetailPresenter implements DashBoardDetailContract.P
 
     @Override
     public void getTopRequest() {
-        Subscription subscription = mRequestRepository.getTopRequest(top)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Request>>() {
-                    @Override
-                    public void call(List<Request> requests) {
-                        mViewModel.onGetTopRequestSuccess(requests);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.onDashBoardError(throwable.getMessage());
-                    }
-                });
+        Disposable subscription = mRequestRepository.getTopRequest(top)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<List<Request>>() {
+                @Override
+                public void accept(List<Request> requests) throws Exception {
+                    mViewModel.onGetTopRequestSuccess(requests);
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    mViewModel.onDashBoardError(throwable.getMessage());
+                }
+            });
         mCompositeSubscriptions.add(subscription);
     }
 
     @Override
     public void getTopDevice() {
-        Subscription subscription = mDeviceRepository.getTopDevice(top)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Device>>() {
-                    @Override
-                    public void call(List<Device> devices) {
-                        mViewModel.onGetTopDeviceSuccess(devices);
-                        mViewModel.setRefresh(false);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.onDashBoardError(throwable.getMessage());
-                        mViewModel.setRefresh(false);
-                    }
-                });
+        Disposable subscription = mDeviceRepository.getTopDevice(top)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<List<Device>>() {
+                @Override
+                public void accept(List<Device> devices) throws Exception {
+                    mViewModel.onGetTopDeviceSuccess(devices);
+                    mViewModel.setRefresh(false);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onDashBoardError(error.getMessage());
+                    mViewModel.setRefresh(false);
+                }
+            });
         mCompositeSubscriptions.add(subscription);
     }
 
     @Override
     public void updateActionRequest(int requestId, int actionId) {
-        Subscription subscription = mRequestRepository.updateActionRequest(requestId, actionId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        mViewModel.showProgressbar();
-                    }
-                })
-                .subscribe(new Action1<Respone<Request>>() {
-                    @Override
-                    public void call(Respone<Request> requestRespone) {
-                        mViewModel.onUpdateActionSuccess(requestRespone);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.hideProgressbar();
-                        mViewModel.onDashBoardError(throwable.getMessage());
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        mViewModel.hideProgressbar();
-                    }
-                });
+        Disposable subscription = mRequestRepository.updateActionRequest(requestId, actionId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgressbar();
+                }
+            })
+            .subscribe(new Consumer<Respone<Request>>() {
+                @Override
+                public void accept(Respone<Request> requestRespone) throws Exception {
+                    mViewModel.onUpdateActionSuccess(requestRespone);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.hideProgressbar();
+                    mViewModel.onDashBoardError(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() {
+                    mViewModel.hideProgressbar();
+                }
+            });
 
         mCompositeSubscriptions.add(subscription);
     }
 
     @Override
     public void getCurrentUser() {
-        Subscription subscription = mUserRepository.getCurrentUser()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<User>() {
-                    @Override
-                    public void call(User user) {
-                        mViewModel.setCurrentUser(user);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.onDashBoardError(throwable.getMessage());
-                    }
-                });
+        Disposable subscription = mUserRepository.getCurrentUser()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<User>() {
+                @Override
+                public void accept(User user) throws Exception {
+                    mViewModel.setCurrentUser(user);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onDashBoardError(error.getMessage());
+                }
+            });
         mCompositeSubscriptions.add(subscription);
     }
 }

@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 public class RequestDetailAdapter
-        extends BaseRecyclerViewAdapter<Request.DeviceRequest, RequestDetailAdapter.ViewHolder> {
+    extends BaseRecyclerViewAdapter<Request.DeviceRequest, RequestDetailAdapter.ViewHolder> {
     private List<Request.DeviceRequest> mDeviceRequests = new ArrayList<>();
     private RequestDetailViewModel mViewModel;
 
@@ -36,7 +36,7 @@ public class RequestDetailAdapter
         notifyDataSetChanged();
     }
 
-    public void clear(){
+    public void clear() {
         mDeviceRequests.clear();
         notifyDataSetChanged();
     }
@@ -54,8 +54,8 @@ public class RequestDetailAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemRequesDetailDeviceBinding binding =
-                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                        R.layout.item_reques_detail_device, parent, false);
+            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.item_reques_detail_device, parent, false);
         binding.setViewModel(mViewModel);
         return new ViewHolder(binding);
     }

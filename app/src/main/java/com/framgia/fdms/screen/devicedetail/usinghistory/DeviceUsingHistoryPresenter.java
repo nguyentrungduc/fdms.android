@@ -3,12 +3,15 @@ package com.framgia.fdms.screen.devicedetail.usinghistory;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Listens to user actions from the UI ({@link DeviceUsingHistoryFragment}), retrieves the data and
@@ -19,13 +22,13 @@ final class DeviceUsingHistoryPresenter implements DeviceUsingHistoryContract.Pr
 
     private final DeviceUsingHistoryContract.ViewModel mViewModel;
     private DeviceRepository mRepository;
-    private CompositeSubscription mCompositeSubscription;
+    private CompositeDisposable mCompositeSubscription;
     private int mDeviceId = -1;
 
     public DeviceUsingHistoryPresenter(DeviceUsingHistoryContract.ViewModel viewModel,
-            DeviceRepository repository, int deviceId) {
+        DeviceRepository repository, int deviceId) {
         mViewModel = viewModel;
-        mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription = new CompositeDisposable();
         mRepository = repository;
         mDeviceId = deviceId;
         getUsingHistoryDevice(mDeviceId);
@@ -43,26 +46,26 @@ final class DeviceUsingHistoryPresenter implements DeviceUsingHistoryContract.Pr
     @Override
     public void getUsingHistoryDevice(int deviceID) {
         mViewModel.showProgressbar();
-        Subscription subscription = mRepository.getDeviceUsingHistory(deviceID)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<DeviceUsingHistory>>() {
-                    @Override
-                    public void onCompleted() {
-                        mViewModel.hideProgressbar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mViewModel.onGetUsingHistoryDeviceFailed(e.getMessage());
-                        mViewModel.hideProgressbar();
-                    }
-
-                    @Override
-                    public void onNext(List<DeviceUsingHistory> histories) {
-                        mViewModel.onGetUsingHistoryDeviceSuccess(histories);
-                    }
-                });
+        Disposable subscription = mRepository.getDeviceUsingHistory(deviceID)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<List<DeviceUsingHistory>>() {
+                @Override
+                public void accept(List<DeviceUsingHistory> deviceUsingHistories) throws Exception {
+                    mViewModel.onGetUsingHistoryDeviceSuccess(deviceUsingHistories);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onGetUsingHistoryDeviceFailed(error.getMessage());
+                    mViewModel.hideProgressbar();
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            });
         mCompositeSubscription.add(subscription);
     }
 

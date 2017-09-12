@@ -36,10 +36,10 @@ public class DeviceUsingHistoryFragment extends Fragment {
         mViewModel = new DeviceUsingHistoryViewModel(getContext());
 
         DeviceRepository repository =
-                new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
+            new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
         DeviceUsingHistoryContract.Presenter presenter =
-                new DeviceUsingHistoryPresenter(mViewModel, repository,
-                        getArguments().getInt(EXTRA_DEVICE_ID));
+            new DeviceUsingHistoryPresenter(mViewModel, repository,
+                getArguments().getInt(EXTRA_DEVICE_ID));
 
         mViewModel.setPresenter(presenter);
     }
@@ -47,11 +47,11 @@ public class DeviceUsingHistoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
 
         FragmentDeviceUsingHistoryBinding binding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_device_using_history, container,
-                        false);
+            DataBindingUtil.inflate(inflater, R.layout.fragment_device_using_history, container,
+                false);
         binding.setViewModel((DeviceUsingHistoryViewModel) mViewModel);
         return binding.getRoot();
     }

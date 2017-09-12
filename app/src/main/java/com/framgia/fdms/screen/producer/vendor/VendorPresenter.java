@@ -1,13 +1,16 @@
 package com.framgia.fdms.screen.producer.vendor;
 
 import com.framgia.fdms.data.model.Producer;
+import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.source.VendorDataSource;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
@@ -18,14 +21,14 @@ import static com.framgia.fdms.utils.Constant.PER_PAGE;
 final class VendorPresenter implements VendorContract.Presenter {
     private final VendorContract.ViewModel mViewModel;
     private VendorDataSource.RemoteDataSource mRepository;
-    private CompositeSubscription mSubscription;
+    private CompositeDisposable mSubscription;
     private int mPage;
 
     VendorPresenter(VendorContract.ViewModel viewModel,
-            VendorDataSource.RemoteDataSource repository) {
+        VendorDataSource.RemoteDataSource repository) {
         mViewModel = viewModel;
         mRepository = repository;
-        mSubscription = new CompositeSubscription();
+        mSubscription = new CompositeDisposable();
     }
 
     @Override
@@ -40,28 +43,24 @@ final class VendorPresenter implements VendorContract.Presenter {
 
     @Override
     public void getVendors(int page) {
-        Subscription subscription = mRepository.getListVendor(page, PER_PAGE)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Producer>>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mViewModel.onLoadVendorFailed();
+        Disposable subscription = mRepository.getListVendor(page, PER_PAGE)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<List<Producer>>() {
+                @Override
+                public void accept(List<Producer> producers) throws Exception {
+                    if (producers == null || producers.size() == 0) {
                         mPage--;
                     }
-
-                    @Override
-                    public void onNext(List<Producer> vendors) {
-                        if (vendors == null || vendors.size() == 0) {
-                            mPage--;
-                        }
-                        mViewModel.onLoadVendorSuccess(vendors);
-                    }
-                });
+                    mViewModel.onLoadVendorSuccess(producers);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onLoadVendorFailed();
+                    mPage--;
+                }
+            });
         mSubscription.add(subscription);
     }
 
@@ -73,69 +72,61 @@ final class VendorPresenter implements VendorContract.Presenter {
 
     @Override
     public void addVendor(Producer producer) {
-        Subscription subscription = mRepository.addVendor(producer)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Producer>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mViewModel.onActionError();
-                    }
-
-                    @Override
-                    public void onNext(Producer vendor) {
-                        mViewModel.onAddVendorSuccess(vendor);
-                    }
-                });
+        Disposable subscription = mRepository.addVendor(producer)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<Producer>() {
+                @Override
+                public void accept(Producer producer) throws Exception {
+                    mViewModel.onAddVendorSuccess(producer);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onActionError();
+                }
+            });
         mSubscription.add(subscription);
     }
 
     @Override
     public void deleteVendor(final Producer producer) {
-        Subscription subscription = mRepository.deleteVendor(producer)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mViewModel.onDeleteVendorFailed(e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(String object) {
+        Disposable subscription = mRepository.deleteVendor(producer)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<Respone<String>>() {
+                @Override
+                public void accept(Respone<String> respone) throws Exception {
+                    if (!respone.isError()) {
                         mViewModel.onDeleteVendorSuccess(producer);
                     }
-                });
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onDeleteVendorFailed(error.getMessage());
+                }
+            });
+
         mSubscription.add(subscription);
     }
 
     @Override
     public void editVendor(Producer producer) {
-        Subscription subscription = mRepository.editVendor(producer)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Void>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+        Disposable subscription = mRepository.editVendor(producer)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<Void>() {
+                @Override
+                public void accept(Void aVoid) throws Exception {
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mViewModel.onActionError();
-                    }
-
-                    @Override
-                    public void onNext(Void object) {
-                    }
-                });
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onActionError();
+                }
+            });
         mSubscription.add(subscription);
     }
 }

@@ -5,13 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.databinding.ItemDeviceHistoryBinding;
 import com.framgia.fdms.databinding.ItemGroupDeviceHistoryBinding;
-
 import java.util.List;
 
 /**
@@ -21,8 +19,8 @@ public class ListUserAdapter extends BaseExpandableListAdapter {
     private List<DeviceUsingHistory> mDeviceUsingHistories;
     private DeviceHistoryContract.ViewModel mViewModel;
 
-    public ListUserAdapter(DeviceHistoryContract.ViewModel viewModel, List<DeviceUsingHistory>
-        deviceUsingHistoryList) {
+    public ListUserAdapter(DeviceHistoryContract.ViewModel viewModel,
+        List<DeviceUsingHistory> deviceUsingHistoryList) {
         mViewModel = viewModel;
         mDeviceUsingHistories = deviceUsingHistoryList;
     }
@@ -34,8 +32,7 @@ public class ListUserAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int i) {
-        List<Device> deviceUsingHistories = mDeviceUsingHistories.get(i)
-            .getUsingDevices();
+        List<Device> deviceUsingHistories = mDeviceUsingHistories.get(i).getUsingDevices();
         return deviceUsingHistories == null ? 0 : deviceUsingHistories.size();
     }
 
@@ -46,8 +43,7 @@ public class ListUserAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int i, int i1) {
-        List<Device> deviceUsingHistories = mDeviceUsingHistories.get(i)
-            .getUsingDevices();
+        List<Device> deviceUsingHistories = mDeviceUsingHistories.get(i).getUsingDevices();
         return deviceUsingHistories.get(i1);
     }
 
@@ -70,9 +66,8 @@ public class ListUserAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int i, boolean isExpanded, View view, ViewGroup viewGroup) {
         ItemGroupDeviceHistoryBinding binding;
         if (view == null) {
-            binding =
-                DataBindingUtil.inflate(LayoutInflater.from(viewGroup.getContext()),
-                    R.layout.item_group_device_history, viewGroup, false);
+            binding = DataBindingUtil.inflate(LayoutInflater.from(viewGroup.getContext()),
+                R.layout.item_group_device_history, viewGroup, false);
             binding.setViewModel((DeviceHistoryViewModel) mViewModel);
             ((DeviceHistoryViewModel) mViewModel).setExpanded(isExpanded);
             view = binding.getRoot();
@@ -88,9 +83,9 @@ public class ListUserAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-        ItemDeviceHistoryBinding binding = DataBindingUtil
-            .inflate(LayoutInflater.from(viewGroup.getContext()), R.layout.item_device_history,
-                viewGroup, false);
+        ItemDeviceHistoryBinding binding =
+            DataBindingUtil.inflate(LayoutInflater.from(viewGroup.getContext()),
+                R.layout.item_device_history, viewGroup, false);
         binding.setDevice(mDeviceUsingHistories.get(i).getUsingDevices().get(i1));
         return binding.getRoot();
     }

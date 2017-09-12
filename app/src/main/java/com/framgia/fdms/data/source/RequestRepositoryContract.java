@@ -5,8 +5,8 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
+import io.reactivex.Observable;
 import java.util.List;
-import rx.Observable;
 
 /**
  * Created by beepi on 11/05/2017.
@@ -17,7 +17,7 @@ public interface RequestRepositoryContract {
      * Use on remote request to get list request
      */
     Observable<List<Request>> getRequests(int requestType, int requestStatusId, int relativeId,
-            int perPage, int page);
+        int perPage, int page);
 
     Observable<List<Status>> getStatus();
 

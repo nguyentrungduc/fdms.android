@@ -24,19 +24,20 @@ import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_DONE;
  */
 
 public class UserRequestAdapter
-        extends BaseRecyclerViewAdapter<Request, UserRequestAdapter.ViewHolder> {
+    extends BaseRecyclerViewAdapter<Request, UserRequestAdapter.ViewHolder> {
+    private static final int FIRST_ITEM = 0;
     private List<Request> mRequests = new ArrayList<>();
     private OnRequestClickListenner mListenner;
-    private static final int FIRST_ITEM = 0;
     private User mUser;
 
     public UserRequestAdapter(Context context, List<Request> requests,
-            OnRequestClickListenner listenner, User user) {
+        OnRequestClickListenner listenner, User user) {
         super(context);
         mRequests = requests;
         mListenner = listenner;
         mUser = user;
     }
+
     @Override
     public void onUpdatePage(List<Request> datas) {
         if (datas != null) {
@@ -64,8 +65,8 @@ public class UserRequestAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemRequestManagerAdapterBinding binding =
-                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                        R.layout.item_request_manager_adapter, parent, false);
+            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.item_request_manager_adapter, parent, false);
         return new ViewHolder(binding);
     }
 
@@ -110,7 +111,7 @@ public class UserRequestAdapter
         public RequestModel(Request request) {
             mRequest = request;
             mIsShowAddDevice =
-                    mUser.isBoStaff() && mRequest.getRequestStatus().equals(WAITING_DONE);
+                mUser.isBoStaff() && mRequest.getRequestStatus().equals(WAITING_DONE);
         }
 
         @Bindable

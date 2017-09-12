@@ -25,7 +25,7 @@ public class Dashboard {
     private String mHoverBackgroundColor;
 
     public Dashboard(String title, int count, String color, String backgroundColor,
-            String hoverBackgroundColor) {
+        String hoverBackgroundColor) {
         mTitle = title;
         mCount = count;
         mColor = color;

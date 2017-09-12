@@ -22,7 +22,7 @@ public class DeviceUsingAdapter extends RecyclerView.Adapter<DeviceUsingAdapter.
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (mContext == null) mContext = parent.getContext();
         ItemDeviceUsingBinding binding =
-                ItemDeviceUsingBinding.inflate(LayoutInflater.from(mContext), parent, false);
+            ItemDeviceUsingBinding.inflate(LayoutInflater.from(mContext), parent, false);
         return new ViewHolder(binding);
     }
 

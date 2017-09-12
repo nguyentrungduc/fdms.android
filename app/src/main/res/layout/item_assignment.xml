@@ -9,7 +9,8 @@
 
         <variable
             name="viewHolderModel"
-            type="com.framgia.fdms.screen.assignment.AssignmentAdapter.ViewHolderModel"/>
+            type="com.framgia.fdms.screen.assignment.AssignmentAdapter.ViewHolderModel"
+            />
 
     </data>
 

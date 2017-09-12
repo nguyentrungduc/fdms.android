@@ -15,7 +15,7 @@ public class TutorialPresenter implements TutorialContract.Presenter {
     private SharePreferenceApi mSharedPreferences;
 
     public TutorialPresenter(TutorialContract.ViewModel viewModel,
-            SharePreferenceApi sharedPreferences) {
+        SharePreferenceApi sharedPreferences) {
         mViewModel = viewModel;
         mSharedPreferences = sharedPreferences;
     }

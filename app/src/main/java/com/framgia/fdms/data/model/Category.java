@@ -13,6 +13,17 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Category extends BaseObservable implements Parcelable {
+    public static final Creator<Category> CREATOR = new Creator<Category>() {
+        @Override
+        public Category createFromParcel(Parcel in) {
+            return new Category(in);
+        }
+
+        @Override
+        public Category[] newArray(int size) {
+            return new Category[size];
+        }
+    };
     @Expose
     @SerializedName("id")
     private int mId;
@@ -29,18 +40,6 @@ public class Category extends BaseObservable implements Parcelable {
         mId = in.readInt();
         mName = in.readString();
     }
-
-    public static final Creator<Category> CREATOR = new Creator<Category>() {
-        @Override
-        public Category createFromParcel(Parcel in) {
-            return new Category(in);
-        }
-
-        @Override
-        public Category[] newArray(int size) {
-            return new Category[size];
-        }
-    };
 
     public int getId() {
         return mId;

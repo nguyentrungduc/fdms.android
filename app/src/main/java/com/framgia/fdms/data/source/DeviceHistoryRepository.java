@@ -2,17 +2,15 @@ package com.framgia.fdms.data.source;
 
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.source.remote.DeviceUsingHistoryDataSource;
-
+import io.reactivex.Observable;
 import java.util.List;
-
-import rx.Observable;
 
 /**
  * Created by framgia on 14/07/2017.
  */
 public class DeviceHistoryRepository {
-    private DeviceUsingHistoryDataSource mDeviceUsingHistoryDataSource;
     private static DeviceHistoryRepository sInstances;
+    private DeviceUsingHistoryDataSource mDeviceUsingHistoryDataSource;
 
     public DeviceHistoryRepository(DeviceUsingHistoryDataSource deviceUsingHistoryDataSource) {
         mDeviceUsingHistoryDataSource = deviceUsingHistoryDataSource;

@@ -5,7 +5,6 @@ import android.databinding.Bindable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.User;
@@ -14,7 +13,6 @@ import com.framgia.fdms.screen.device.listdevice.ListDeviceAdapter;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.profile.export.ExportDialogFragment;
 import com.framgia.fdms.utils.navigator.Navigator;
-
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -83,6 +81,11 @@ public class ChooseExportViewModel extends BaseObservable
         return mAdapter;
     }
 
+    public void setAdapter(ListDeviceAdapter adapter) {
+        mAdapter = adapter;
+        notifyPropertyChanged(BR.adapter);
+    }
+
     public void initToolbar(Toolbar toolbar) {
         mActivity.setSupportActionBar(toolbar);
         if (mActivity.getSupportActionBar() == null) return;
@@ -91,8 +94,7 @@ public class ChooseExportViewModel extends BaseObservable
 
     @Override
     public void onDeviceClick(Device device) {
-        mNavigator.startActivity(
-            DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
+        mNavigator.startActivity(DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
     }
 
     public void exportData() {
@@ -111,11 +113,6 @@ public class ChooseExportViewModel extends BaseObservable
         notifyPropertyChanged(BR.progressBarVisible);
     }
 
-    public void setAdapter(ListDeviceAdapter adapter) {
-        mAdapter = adapter;
-        notifyPropertyChanged(BR.adapter);
-    }
-
     @Bindable
     public int getEmptyViewVisible() {
         return mEmptyViewVisible;
@@ -128,9 +125,6 @@ public class ChooseExportViewModel extends BaseObservable
 
     @Override
     public void onItemDeviceClick(Device device) {
-        mNavigator.startActivity(
-            DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
+        mNavigator.startActivity(DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
     }
-
-
 }

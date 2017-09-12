@@ -61,8 +61,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onCheckedChanged="@{(switch, selected) -> viewModel.onCheckedChanged(selected, device, position)}"
                 android:checked="@{device.selected}"
+                android:onCheckedChanged="@{(switch, selected) -> viewModel.onCheckedChanged(selected, device, position)}"
                 app:buttonTint="@color/state_check_box"
                 />
         </LinearLayout>

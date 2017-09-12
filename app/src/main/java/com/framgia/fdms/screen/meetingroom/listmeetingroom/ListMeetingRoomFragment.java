@@ -30,19 +30,19 @@ public class ListMeetingRoomFragment extends Fragment {
         mViewModel = new ListMeetingRoomViewModel(this.getActivity());
 
         ListMeetingRoomContract.Presenter presenter = new ListMeetingRoomPresenter(mViewModel,
-                new MeetingRoomRepository(
-                        new MeetingRoomRemoteDataSource(FDMSServiceClient.getInstance())));
+            new MeetingRoomRepository(
+                new MeetingRoomRemoteDataSource(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
 
         FragmentListMeetingRoomBinding binding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_list_meeting_room, container,
-                        false);
+            DataBindingUtil.inflate(inflater, R.layout.fragment_list_meeting_room, container,
+                false);
         binding.setViewModel((ListMeetingRoomViewModel) mViewModel);
         return binding.getRoot();
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <data>
 
@@ -8,37 +9,43 @@
 
         <variable
             name="device"
-            type="com.framgia.fdms.data.model.Device"/>
+            type="com.framgia.fdms.data.model.Device"
+            />
 
         <variable
             name="deviceUsingHistory"
-            type="com.framgia.fdms.data.model.DeviceUsingHistory"/>
+            type="com.framgia.fdms.data.model.DeviceUsingHistory"
+            />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_5"
                 android:contentDescription="@string/action_user_return_device"
-                android:src="@drawable/ic_devices_black_24dp"/>
+                android:src="@drawable/ic_devices_black_24dp"
+                />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_5"
                 android:text="@{device.productionName}"
-                android:textSize="@dimen/sp_16"/>
+                android:textSize="@dimen/sp_16"
+                />
 
         </LinearLayout>
 
@@ -46,21 +53,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_10"
                 android:contentDescription="@string/action_user_return_device"
-                app:srcCompat="@drawable/ic_timer"/>
+                app:srcCompat="@drawable/ic_timer"
+                />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_5"
                 android:text="@{@string/using_device_time(Utils.getStringDate(deviceUsingHistory.startDate), Utils.getStringDate(deviceUsingHistory.endDate))}"
-                android:textSize="@dimen/sp_14"/>
+                android:textSize="@dimen/sp_14"
+                />
         </LinearLayout>
     </LinearLayout>
 </layout>

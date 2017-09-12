@@ -2,11 +2,13 @@ package com.framgia.fdms.screen.profile;
 
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.UserRepository;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Listens to user actions from the UI ({@link ProfileFragment}), retrieves the data and updates
@@ -17,12 +19,12 @@ final class ProfilePresenter implements ProfileContract.Presenter {
 
     private final ProfileContract.ViewModel mViewModel;
     private UserRepository mRepository;
-    private CompositeSubscription mCompositeSubscription;
+    private CompositeDisposable mCompositeSubscription;
 
     public ProfilePresenter(ProfileContract.ViewModel viewModel, UserRepository repository) {
         mViewModel = viewModel;
         mRepository = repository;
-        mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription = new CompositeDisposable();
         getCurrentUser();
     }
 
@@ -37,20 +39,20 @@ final class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public void getCurrentUser() {
-        Subscription subscription = mRepository.getCurrentUser()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<User>() {
-                    @Override
-                    public void call(User user) {
-                        mViewModel.setCurrentUser(user);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.onError(throwable.getMessage());
-                    }
-                });
+        Disposable subscription = mRepository.getCurrentUser()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<User>() {
+                @Override
+                public void accept(User user) throws Exception {
+                    mViewModel.setCurrentUser(user);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onError(error.getMessage());
+                }
+            });
         mCompositeSubscription.add(subscription);
     }
 }

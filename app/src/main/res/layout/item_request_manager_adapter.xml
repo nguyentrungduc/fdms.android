@@ -48,7 +48,7 @@
                 <ImageView
                     android:layout_width="@dimen/dp_20"
                     android:layout_height="@dimen/dp_20"
-                    android:src="@drawable/ic_title"
+                    bind:srcCompat="@drawable/ic_title"
                     />
 
                 <TextView
@@ -80,7 +80,7 @@
                     android:layout_height="@dimen/dp_30"
                     android:onClick="@{()-> listenner.onAddDeviceClick(requestModel.request.id)}"
                     android:padding="@dimen/dp_3"
-                    android:src="@drawable/ic_add_device_24dp"
+                    bind:srcCompat="@drawable/ic_add_device_24dp"
                     android:visibility="@{requestModel.showAddDevice? View.VISIBLE : View.GONE}"
                     />
 
@@ -98,7 +98,7 @@
                     android:layout_width="@dimen/dp_20"
                     android:layout_height="@dimen/dp_20"
                     android:padding="@dimen/dp_3"
-                    android:src="@drawable/ic_profile_grey"
+                    bind:srcCompat="@drawable/ic_profile_grey"
                     />
 
                 <TextView
@@ -125,7 +125,7 @@
                     android:layout_width="@dimen/dp_20"
                     android:layout_height="@dimen/dp_20"
                     android:padding="@dimen/dp_3"
-                    android:src="@drawable/ic_timer"
+                    bind:srcCompat="@drawable/ic_timer"
                     />
 
                 <TextView

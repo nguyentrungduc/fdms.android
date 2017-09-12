@@ -2,11 +2,9 @@ package com.framgia.fdms.data.model;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-
 import com.framgia.fdms.BR;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Date;
 import java.util.List;
 
@@ -25,8 +23,8 @@ public class DeviceUsingHistory extends BaseObservable {
     private Date mEndDate;
     private List<Device> mUsingDevices;
 
-    public DeviceUsingHistory(String staffName, Date startDate, Date endDate, List<Device>
-        usingDevices) {
+    public DeviceUsingHistory(String staffName, Date startDate, Date endDate,
+        List<Device> usingDevices) {
         mStaffName = staffName;
         mStartDate = startDate;
         mEndDate = endDate;

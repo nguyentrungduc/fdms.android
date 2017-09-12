@@ -13,14 +13,14 @@ import java.util.List;
  */
 
 public class NotificationAdapter
-        extends RecyclerView.Adapter<NotificationAdapter.NotificationHolder> {
+    extends RecyclerView.Adapter<NotificationAdapter.NotificationHolder> {
 
     private final NotificationContract.ViewModel mViewModel;
     private List<Notification> mNotifications;
     private LayoutInflater mInflater;
 
     public NotificationAdapter(NotificationContract.ViewModel viewModel,
-            List<Notification> notifications) {
+        List<Notification> notifications) {
         mViewModel = viewModel;
         mNotifications = notifications;
     }

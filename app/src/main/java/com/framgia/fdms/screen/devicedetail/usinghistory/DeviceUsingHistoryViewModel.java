@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 public class DeviceUsingHistoryViewModel extends BaseFragmentModel
-        implements DeviceUsingHistoryContract.ViewModel {
+    implements DeviceUsingHistoryContract.ViewModel {
 
     private BaseFragmentContract.Presenter mPresenter;
     private DeviceUsingAdapter mAdapter;

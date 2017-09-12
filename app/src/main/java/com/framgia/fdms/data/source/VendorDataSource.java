@@ -1,8 +1,9 @@
 package com.framgia.fdms.data.source;
 
 import com.framgia.fdms.data.model.Producer;
+import com.framgia.fdms.data.model.Respone;
+import io.reactivex.Observable;
 import java.util.List;
-import rx.Observable;
 
 /**
  * Created by framgia on 03/07/2017.
@@ -14,7 +15,7 @@ public class VendorDataSource {
 
         Observable<Producer> addVendor(Producer producer);
 
-        Observable<String> deleteVendor(Producer producer);
+        Observable<Respone<String>> deleteVendor(Producer producer);
 
         Observable<Void> editVendor(Producer producer);
     }

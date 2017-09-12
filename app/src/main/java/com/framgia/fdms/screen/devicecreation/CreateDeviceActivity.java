@@ -66,19 +66,19 @@ public class CreateDeviceActivity extends AppCompatActivity {
         mViewModel = new CreateDeviceViewModel(this, mDevice, mDeviceStatusType);
 
         DeviceRepository deviceRepository =
-                new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
+            new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
         StatusRepository statusRepository =
-                new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
-        CategoryRepository categoryRepository = new CategoryRepository(
-                new CategoryRemoteDataSource(FDMSServiceClient.getInstance()));
+            new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
+        CategoryRepository categoryRepository =
+            new CategoryRepository(new CategoryRemoteDataSource(FDMSServiceClient.getInstance()));
         CreateDeviceContract.Presenter presenter =
-                new CreateDevicePresenter(mViewModel, deviceRepository, statusRepository,
-                        categoryRepository, new BranchRepository(
-                        new BranchRemoteDataSource(FDMSServiceClient.getInstance())));
+            new CreateDevicePresenter(mViewModel, deviceRepository, statusRepository,
+                categoryRepository,
+                new BranchRepository(new BranchRemoteDataSource(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
 
         ActivityCreatedeviceBinding binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_createdevice);
+            DataBindingUtil.setContentView(this, R.layout.activity_createdevice);
         binding.setViewModel((CreateDeviceViewModel) mViewModel);
         setTitle(R.string.title_create_device);
     }

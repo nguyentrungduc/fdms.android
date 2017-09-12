@@ -33,17 +33,17 @@ public class ProfileFragment extends Fragment {
         mViewModel = new ProfileViewModel((AppCompatActivity) getActivity(), this);
 
         ProfileContract.Presenter presenter = new ProfilePresenter(mViewModel,
-                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
+            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
         mViewModel.setPresenter(presenter);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
 
         FragmentProfileBinding binding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);
+            DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);
         binding.setViewModel((ProfileViewModel) mViewModel);
         mView = binding.coordinatorLayout;
         return binding.getRoot();

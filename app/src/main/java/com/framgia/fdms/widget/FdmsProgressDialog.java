@@ -10,11 +10,11 @@ import android.widget.ProgressBar;
  * Created by tuanbg on 3/1/17.
  */
 public class FdmsProgressDialog extends ProgressDialog {
+    private static FdmsProgressDialog sFdmsProgressDialog;
+
     public FdmsProgressDialog(Context context) {
         super(context);
     }
-
-    private static FdmsProgressDialog sFdmsProgressDialog;
 
     public static FdmsProgressDialog getInstance(Context context) {
         if (sFdmsProgressDialog == null) sFdmsProgressDialog = new FdmsProgressDialog(context);

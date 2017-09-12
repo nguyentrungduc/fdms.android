@@ -38,20 +38,20 @@ public class DeviceDetailHistoryFragment extends Fragment {
         mViewModel = new DeviceDetailHistoryViewModel();
 
         DeviceRepository repository =
-                new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
+            new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
         DeviceDetailHistoryContract.Presenter presenter =
-                new DeviceDetailHistoryPresenter(mViewModel, repository,
-                        getArguments().getInt(EXTRA_DEVICE_ID));
+            new DeviceDetailHistoryPresenter(mViewModel, repository,
+                getArguments().getInt(EXTRA_DEVICE_ID));
         mViewModel.setPresenter(presenter);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
 
         FragmentHistoryDetailBinding binding =
-                FragmentHistoryDetailBinding.inflate(inflater, container, false);
+            FragmentHistoryDetailBinding.inflate(inflater, container, false);
         binding.setViewModel((DeviceDetailHistoryViewModel) mViewModel);
         return binding.getRoot();
     }

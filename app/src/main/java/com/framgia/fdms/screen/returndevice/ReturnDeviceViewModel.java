@@ -103,20 +103,20 @@ public class ReturnDeviceViewModel implements ReturnDeviceContract.ViewModel {
     @Override
     public void onSelectedUserReturn() {
         mActivity.startActivityForResult(
-                StatusSelectionActivity.getInstance(mActivity.getApplicationContext(), null,
-                        mAssigners, StatusSelectionType.STATUS), REQUEST_SELECTION);
+            StatusSelectionActivity.getInstance(mActivity.getApplicationContext(), null, mAssigners,
+                StatusSelectionType.STATUS), REQUEST_SELECTION);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            int[] grantResults) {
+        int[] grantResults) {
         if (requestCode == MY_PERMISSIONS_REQUEST_CAMERA
-                && grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            && grantResults.length > 0
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             startScannerActivity();
         } else {
             Snackbar.make(mActivity.findViewById(android.R.id.content),
-                    R.string.msg_denied_read_camera, Snackbar.LENGTH_LONG).show();
+                R.string.msg_denied_read_camera, Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -129,7 +129,7 @@ public class ReturnDeviceViewModel implements ReturnDeviceContract.ViewModel {
 
     private void startScannerActivity() {
         mActivity.startActivityForResult(
-                ScannerActivity.newIntent(mActivity.getApplicationContext()), REQUEST_SCANNER);
+            ScannerActivity.newIntent(mActivity.getApplicationContext()), REQUEST_SCANNER);
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 public class DeviceDetailHistoryAdapter
-        extends RecyclerView.Adapter<DeviceDetailHistoryAdapter.HistoryDetailHolder> {
+    extends RecyclerView.Adapter<DeviceDetailHistoryAdapter.HistoryDetailHolder> {
     private List<DeviceHistoryDetail> mDeviceHistoryDetails = new ArrayList<>();
     private LayoutInflater mInflater;
 
@@ -28,7 +28,7 @@ public class DeviceDetailHistoryAdapter
     public HistoryDetailHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (mInflater == null) mInflater = LayoutInflater.from(parent.getContext());
         ItemHistoryDetailBinding binding =
-                ItemHistoryDetailBinding.inflate(mInflater, parent, false);
+            ItemHistoryDetailBinding.inflate(mInflater, parent, false);
         return new HistoryDetailHolder(binding);
     }
 

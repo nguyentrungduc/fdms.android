@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public class DeviceDetailHistoryViewModel extends BaseObservable
-        implements DeviceDetailHistoryContract.ViewModel {
+    implements DeviceDetailHistoryContract.ViewModel {
 
     private DeviceDetailHistoryContract.Presenter mPresenter;
     private DeviceDetailHistoryAdapter mAdapter;

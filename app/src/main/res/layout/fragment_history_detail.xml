@@ -27,8 +27,8 @@
 
         <include
             layout="@layout/empty_state"
-            bind:text="@{@string/title_no_history}"
             bind:image="@{@drawable/ic_history_24dp}"
+            bind:text="@{@string/title_no_history}"
             bind:visibleState="@{viewModel.emptyViewVisible}"
             />
     </RelativeLayout>

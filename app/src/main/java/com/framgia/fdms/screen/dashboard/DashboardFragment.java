@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.local.UserLocalDataSource;
@@ -30,14 +29,14 @@ public class DashboardFragment extends Fragment {
         mViewModel = new DashboardViewModel(this);
         DashboardContract.Presenter presenter = new DashboardPresenter(mViewModel,
             new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))),
-        new SharePreferenceImp(getContext()));
+            new SharePreferenceImp(getContext()));
         mViewModel.setPresenter(presenter);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         FragmentDashboardBinding binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard, container, false);
         binding.setViewModel((DashboardViewModel) mViewModel);

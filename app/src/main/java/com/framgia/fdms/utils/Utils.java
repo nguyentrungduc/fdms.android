@@ -7,11 +7,11 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.inputmethod.InputMethodManager;
 import com.framgia.fdms.data.model.Respone;
+import io.reactivex.Observable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import rx.Observable;
 
 import static com.framgia.fdms.utils.Constant.PERCENT;
 import static com.framgia.fdms.utils.Constant.TITLE_NOW;
@@ -88,7 +88,7 @@ public class Utils {
     public static void hideSoftKeyboard(Activity activity) {
         if (activity == null) return;
         InputMethodManager inputMethodManager =
-                (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 }

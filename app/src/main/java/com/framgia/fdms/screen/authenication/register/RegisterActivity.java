@@ -23,11 +23,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         setTitle(getString(R.string.title_register));
         UserRepository repository =
-                new UserRepository(new UserRemoteDataSource(FDMSServiceClient.getInstance()));
+            new UserRepository(new UserRemoteDataSource(FDMSServiceClient.getInstance()));
         RegisterContract.Presenter presenter = new RegisterPresenter(mViewModel, repository);
         mViewModel.setPresenter(presenter);
         ActivityRegisterBinding binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_register);
+            DataBindingUtil.setContentView(this, R.layout.activity_register);
         binding.setViewModel((RegisterViewModel) mViewModel);
     }
 

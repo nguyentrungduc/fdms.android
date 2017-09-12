@@ -23,7 +23,7 @@ public class ScannerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityScannerBinding binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_scanner);
+            DataBindingUtil.setContentView(this, R.layout.activity_scanner);
         mViewModel = new ScannerViewModel(this);
 
         ScannerContract.Presenter presenter = new ScannerPresenter(mViewModel);

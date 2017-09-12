@@ -10,13 +10,12 @@ import com.framgia.fdms.data.model.MeetingRoom;
  */
 
 public class ItemListMeetingRoomViewModel extends BaseObservable {
-    private MeetingRoom mMeetingRoom;
     private final BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom>
-            mItemClickListener;
+        mItemClickListener;
+    private MeetingRoom mMeetingRoom;
 
     public ItemListMeetingRoomViewModel(MeetingRoom meetingRoom,
-            BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom>
-                    itemClickListener) {
+        BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom> itemClickListener) {
         mMeetingRoom = meetingRoom;
         mItemClickListener = itemClickListener;
     }
@@ -29,7 +28,7 @@ public class ItemListMeetingRoomViewModel extends BaseObservable {
     }
 
     public void onEditMeetingRoom() {
-       // TODO: Open Edit form
+        // TODO: Open Edit form
     }
 
     public void onDeleteMeetingRoom() {

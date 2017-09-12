@@ -6,13 +6,14 @@ import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.screen.authenication.login.LoginPresenter;
 
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import rx.Observable;
-import rx.functions.Func1;
+import io.reactivex.Observable;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -48,9 +49,9 @@ public class LoginMockTest {
          */
         Observable<Respone<User>> observable = mUserRepository.login(usename, password);
         assertNotNull(observable);
-        observable.flatMap(new Func1<Respone<User>, Observable<User>>() {
+        observable.flatMap(new Function<Respone<User>, ObservableSource<User>>() {
             @Override
-            public Observable<User> call(Respone<User> userRespone) {
+            public ObservableSource<User> apply(Respone<User> userRespone) throws Exception {
                 assertNotNull(userRespond.getData());
                 userRespond.getMessage();
                 return null;

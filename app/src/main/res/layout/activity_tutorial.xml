@@ -73,8 +73,8 @@
                 android:padding="@dimen/dp_25"
                 android:text="@string/title_intro_finish"
                 android:textColor="@color/color_white"
-                android:textStyle="bold"
                 android:textSize="@dimen/sp_20"
+                android:textStyle="bold"
                 android:visibility="@{viewModel.tab == viewModel.size ? View.VISIBLE : View.GONE}"
                 />
 

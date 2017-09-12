@@ -5,13 +5,15 @@ import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.DeviceReturnRepository;
 import com.framgia.fdms.data.source.StatusRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Listens to user actions from the UI ({@link ReturnDeviceActivity}), retrieves the data and
@@ -22,114 +24,114 @@ public final class ReturnDevicePresenter implements ReturnDeviceContract.Present
     private static final String TAG = ReturnDevicePresenter.class.getName();
 
     private final ReturnDeviceContract.ViewModel mViewModel;
-    private CompositeSubscription mSubscription;
+    private CompositeDisposable mSubscription;
     private StatusRepository mRepository;
     private DeviceRepository mDeviceRepository;
     private DeviceReturnRepository mDeviceReturnRepository;
 
     public ReturnDevicePresenter(ReturnDeviceContract.ViewModel viewModel,
-            StatusRepository repository, DeviceReturnRepository deviceReturnRepository,
-            DeviceRepository deviceRepository) {
+        StatusRepository repository, DeviceReturnRepository deviceReturnRepository,
+        DeviceRepository deviceRepository) {
         mViewModel = viewModel;
         mRepository = repository;
         mDeviceReturnRepository = deviceReturnRepository;
         mDeviceRepository = deviceRepository;
-        mSubscription = new CompositeSubscription();
+        mSubscription = new CompositeDisposable();
         getListAssign();
     }
 
     @Override
     public void getListAssign() {
-        Subscription subscription = mDeviceReturnRepository.getBorrowers()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        mViewModel.showProgressbar();
-                    }
-                })
-                .subscribe(new Subscriber<List<Status>>() {
-                    @Override
-                    public void onCompleted() {
-                        mViewModel.hideProgressbar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mViewModel.hideProgressbar();
-                        mViewModel.onLoadError(e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(List<Status> statuses) {
-                        mViewModel.onGetAssignedSuccess(statuses);
-                    }
-                });
+        Disposable subscription = mDeviceReturnRepository.getBorrowers()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgressbar();
+                }
+            })
+            .subscribe(new Consumer<List<Status>>() {
+                @Override
+                public void accept(List<Status> statuses) throws Exception {
+                    mViewModel.onGetAssignedSuccess(statuses);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.hideProgressbar();
+                    mViewModel.onLoadError(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            });
         mSubscription.add(subscription);
     }
 
     @Override
     public void getDevicesOfBorrower() {
-        Subscription subscription = mDeviceReturnRepository.devicesOfBorrower()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        mViewModel.showProgressbar();
-                    }
-                })
-                .subscribe(new Subscriber<List<Device>>() {
-                    @Override
-                    public void onCompleted() {
-                        mViewModel.hideProgressbar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mViewModel.onError(e.getCause().getMessage());
-                    }
-
-                    @Override
-                    public void onNext(List<Device> devices) {
-                        mViewModel.onDeviceLoaded(devices);
-                    }
-                });
+        Disposable subscription = mDeviceReturnRepository.devicesOfBorrower()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgressbar();
+                }
+            })
+            .subscribe(new Consumer<List<Device>>() {
+                @Override
+                public void accept(List<Device> devices) throws Exception {
+                    mViewModel.onDeviceLoaded(devices);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onError(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            });
         mSubscription.add(subscription);
     }
 
     @Override
     public void getDeviceByCode(String codeDevice, final boolean isUserOther) {
-        Subscription subscription = mDeviceRepository.getDeviceByQrCode(codeDevice)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        mViewModel.showProgressbar();
+        Disposable subscription = mDeviceRepository.getDeviceByQrCode(codeDevice)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgressbar();
+                }
+            })
+            .subscribe(new Consumer<Device>() {
+                @Override
+                public void accept(Device device) throws Exception {
+                    if (isUserOther) {
+                        mViewModel.onGetDeviceUserOtherSuccess(device);
+                    } else {
+                        mViewModel.onGetDeviceSuccess(device);
                     }
-                })
-                .subscribe(new Subscriber<Device>() {
-                    @Override
-                    public void onCompleted() {
-                        mViewModel.hideProgressbar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mViewModel.hideProgressbar();
-                    }
-
-                    @Override
-                    public void onNext(Device device) {
-                        if (isUserOther) {
-                            mViewModel.onGetDeviceUserOtherSuccess(device);
-                        } else {
-                            mViewModel.onGetDeviceSuccess(device);
-                        }
-                    }
-                });
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.hideProgressbar();
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            });
         mSubscription.add(subscription);
     }
 

@@ -23,6 +23,14 @@ public class FAMSInterceptor implements Interceptor {
     public FAMSInterceptor() {
     }
 
+    public static String getToken() {
+        SharePreferenceImp sharePreferenceImp =
+            new SharePreferenceImp(FDMSApplication.getInstant());
+        String json = sharePreferenceImp.get(USER_PREFS, String.class);
+        User user = new Gson().fromJson(json, User.class);
+        return user != null ? user.getToken() : null;
+    }
+
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
@@ -32,13 +40,5 @@ public class FAMSInterceptor implements Interceptor {
             builder.header(HEADER_AUTHORIZE, token);
         }
         return chain.proceed(builder.build());
-    }
-
-    public static String getToken() {
-        SharePreferenceImp sharePreferenceImp =
-                new SharePreferenceImp(FDMSApplication.getInstant());
-        String json = sharePreferenceImp.get(USER_PREFS, String.class);
-        User user = new Gson().fromJson(json, User.class);
-        return user != null ? user.getToken() : null;
     }
 }

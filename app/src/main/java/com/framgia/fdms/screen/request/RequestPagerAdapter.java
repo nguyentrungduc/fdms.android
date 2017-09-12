@@ -23,7 +23,8 @@ public class RequestPagerAdapter extends FragmentPagerAdapter {
     private List<BaseRequestFragment> mFragments;
     private List<String> mTitles = new ArrayList<>();
 
-    public RequestPagerAdapter(Context context, FragmentManager fm, List<BaseRequestFragment> fragments) {
+    public RequestPagerAdapter(Context context, FragmentManager fm,
+        List<BaseRequestFragment> fragments) {
         super(fm);
         mContext = context;
         mFragments = fragments;
@@ -47,7 +48,7 @@ public class RequestPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void refreshData() {
-        for (BaseRequestFragment fragment : mFragments){
+        for (BaseRequestFragment fragment : mFragments) {
             fragment.refreshData();
         }
     }

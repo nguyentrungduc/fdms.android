@@ -12,6 +12,18 @@ import com.google.gson.annotations.SerializedName;
  * Created by framgia on 03/07/2017.
  */
 public class Producer extends BaseObservable implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Producer> CREATOR = new Parcelable.Creator<Producer>() {
+        @Override
+        public Producer createFromParcel(Parcel in) {
+            return new Producer(in);
+        }
+
+        @Override
+        public Producer[] newArray(int size) {
+            return new Producer[size];
+        }
+    };
     @SerializedName("id")
     @Expose
     private int mId;
@@ -28,6 +40,12 @@ public class Producer extends BaseObservable implements Parcelable {
     public Producer(String name, String description) {
         mName = name;
         mDescription = description;
+    }
+
+    protected Producer(Parcel in) {
+        mName = in.readString();
+        mDescription = in.readString();
+        mId = in.readInt();
     }
 
     @Bindable
@@ -60,12 +78,6 @@ public class Producer extends BaseObservable implements Parcelable {
         notifyPropertyChanged(BR.id);
     }
 
-    protected Producer(Parcel in) {
-        mName = in.readString();
-        mDescription = in.readString();
-        mId = in.readInt();
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -77,17 +89,4 @@ public class Producer extends BaseObservable implements Parcelable {
         dest.writeInt(mId);
         dest.writeString(mDescription);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Producer> CREATOR = new Parcelable.Creator<Producer>() {
-        @Override
-        public Producer createFromParcel(Parcel in) {
-            return new Producer(in);
-        }
-
-        @Override
-        public Producer[] newArray(int size) {
-            return new Producer[size];
-        }
-    };
 }

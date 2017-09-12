@@ -3,13 +3,11 @@ package com.framgia.fdms.data.source.remote;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.source.MakerDataSource;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
-
+import io.reactivex.Observable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import rx.Observable;
 
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;

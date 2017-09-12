@@ -7,11 +7,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +24,21 @@ public class DeviceHistoryViewModel extends BaseObservable
     private AppCompatActivity mActivity;
     private boolean mIsLoadMore;
     private boolean mIsExpanded;
+    private ExpandableListView.OnScrollListener mScrollListener =
+        new ExpandableListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                int visibleItemCount, int totalItemCount) {
+                if (!mIsLoadMore && firstVisibleItem + visibleItemCount >= totalItemCount) {
+                    setLoadMore(true);
+                    mPresenter.getDeviceUsingHistory();
+                }
+            }
+        };
 
     public DeviceHistoryViewModel(Activity activity) {
         mActivity = (AppCompatActivity) activity;
@@ -98,20 +111,4 @@ public class DeviceHistoryViewModel extends BaseObservable
     public ExpandableListView.OnScrollListener getScrollListener() {
         return mScrollListener;
     }
-
-    private ExpandableListView.OnScrollListener mScrollListener =
-        new ExpandableListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
-                if (!mIsLoadMore && firstVisibleItem + visibleItemCount >= totalItemCount) {
-                    setLoadMore(true);
-                    mPresenter.getDeviceUsingHistory();
-                }
-            }
-        };
 }

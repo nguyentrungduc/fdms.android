@@ -9,14 +9,15 @@ import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.DeviceReturnRepository;
 import com.framgia.fdms.data.source.StatusRepository;
 import com.framgia.fdms.data.source.UserRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.NOT_SEARCH;
@@ -28,10 +29,9 @@ import static com.framgia.fdms.utils.Constant.PER_PAGE;
  * the UI as required.
  */
 final class ListDevicePresenter implements ListDeviceContract.Presenter {
-    private CompositeSubscription mCompositeSubscriptions = new CompositeSubscription();
-    private int mPage = FIRST_PAGE;
-
     private final ListDeviceContract.ViewModel mViewModel;
+    private CompositeDisposable mCompositeSubscriptions = new CompositeDisposable();
+    private int mPage = FIRST_PAGE;
     private DeviceRepository mDeviceRepository;
     private DeviceReturnRepository mReturnRepository;
     private CategoryRepository mCategoryRepository;
@@ -42,9 +42,9 @@ final class ListDevicePresenter implements ListDeviceContract.Presenter {
     private UserRepository mUserRepository;
 
     public ListDevicePresenter(ListDeviceContract.ViewModel viewModel,
-            DeviceRepository deviceRepository, CategoryRepository categoryRepository,
-            StatusRepository statusRepository, UserRepository userRepository,
-            DeviceReturnRepository returnRepository) {
+        DeviceRepository deviceRepository, CategoryRepository categoryRepository,
+        StatusRepository statusRepository, UserRepository userRepository,
+        DeviceReturnRepository returnRepository) {
         mViewModel = viewModel;
         mDeviceRepository = deviceRepository;
         mCategoryRepository = categoryRepository;
@@ -64,121 +64,121 @@ final class ListDevicePresenter implements ListDeviceContract.Presenter {
 
     @Override
     public void getDevicesBorrow() {
-        Subscription subscription = mReturnRepository.devicesOfBorrower()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        mViewModel.showProgressbar();
-                    }
-                })
-                .subscribe(new Subscriber<List<Device>>() {
-                    @Override
-                    public void onCompleted() {
-                        mViewModel.hideProgressbar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mViewModel.onError(e.getCause().getMessage());
-                    }
-
-                    @Override
-                    public void onNext(List<Device> devices) {
-                        mViewModel.onDeviceLoaded(devices);
-                    }
-                });
+        Disposable subscription = mReturnRepository.devicesOfBorrower()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgressbar();
+                }
+            })
+            .subscribe(new Consumer<List<Device>>() {
+                @Override
+                public void accept(List<Device> devices) throws Exception {
+                    mViewModel.onDeviceLoaded(devices);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onError(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            });
         mCompositeSubscriptions.add(subscription);
     }
 
     @Override
     public void getListDevice(String deviceName, int categoryId, int statusId, int page,
-            int perPage) {
-        Subscription subscription =
-                mDeviceRepository.getListDevices(deviceName, categoryId, statusId, page, perPage)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe(new Action0() {
-                            @Override
-                            public void call() {
-                                mViewModel.showProgressbar();
-                            }
-                        })
-                        .subscribe(new Subscriber<List<Device>>() {
-                            @Override
-                            public void onCompleted() {
-                                mViewModel.hideProgressbar();
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                mViewModel.onError(e.getCause().getMessage());
-                            }
-
-                            @Override
-                            public void onNext(List<Device> devices) {
-                                mViewModel.onDeviceLoaded(devices);
-                            }
-                        });
+        int perPage) {
+        Disposable subscription =
+            mDeviceRepository.getListDevices(deviceName, categoryId, statusId, page, perPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mViewModel.showProgressbar();
+                    }
+                })
+                .subscribe(new Consumer<List<Device>>() {
+                    @Override
+                    public void accept(List<Device> devices) throws Exception {
+                        mViewModel.onDeviceLoaded(devices);
+                    }
+                }, new RequestError() {
+                    @Override
+                    public void onRequestError(BaseException error) {
+                        mViewModel.onError(error.getMessage());
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mViewModel.hideProgressbar();
+                    }
+                });
         mCompositeSubscriptions.add(subscription);
     }
 
     public void getListCategories() {
-        Subscription subscription = mCategoryRepository.getListCategory()
-                .subscribeOn(Schedulers.io())
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        mViewModel.showProgressbar();
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Category>>() {
-                    @Override
-                    public void call(List<Category> categories) {
-                        mViewModel.onDeviceCategoryLoaded(categories);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.onError(throwable.getCause().getMessage());
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        mViewModel.hideProgressbar();
-                    }
-                });
+        Disposable subscription = mCategoryRepository.getListCategory()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgressbar();
+                }
+            })
+            .subscribe(new Consumer<List<Category>>() {
+                @Override
+                public void accept(List<Category> categories) throws Exception {
+                    mViewModel.onDeviceCategoryLoaded(categories);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onError(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            });
         mCompositeSubscriptions.add(subscription);
     }
 
     public void getListStatuses() {
-        Subscription subscription = mStatusRepository.getListStatus()
-                .subscribeOn(Schedulers.io())
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        mViewModel.showProgressbar();
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Status>>() {
-                    @Override
-                    public void call(List<Status> statuses) {
-                        mViewModel.onDeviceStatusLoaded(statuses);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.onError(throwable.getCause().getMessage());
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        mViewModel.hideProgressbar();
-                    }
-                });
+        Disposable subscription = mStatusRepository.getListStatus()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgressbar();
+                }
+            })
+            .subscribe(new Consumer<List<Status>>() {
+                @Override
+                public void accept(List<Status> statuses) throws Exception {
+                    mViewModel.onDeviceStatusLoaded(statuses);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onError(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            });
         mCompositeSubscriptions.add(subscription);
     }
 
@@ -208,20 +208,20 @@ final class ListDevicePresenter implements ListDeviceContract.Presenter {
 
     @Override
     public void getCurrentUser() {
-        Subscription subscription = mUserRepository.getCurrentUser()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<User>() {
-                    @Override
-                    public void call(User user) {
-                        mViewModel.setupFloatingActionsMenu(user);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.onError(throwable.getMessage());
-                    }
-                });
+        Disposable subscription = mUserRepository.getCurrentUser()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<User>() {
+                @Override
+                public void accept(User user) throws Exception {
+                    mViewModel.setupFloatingActionsMenu(user);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onError(error.getMessage());
+                }
+            });
         mCompositeSubscriptions.add(subscription);
     }
 }

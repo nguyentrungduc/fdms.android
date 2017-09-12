@@ -4,11 +4,9 @@ import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.databinding.ItemMakerBinding;
-
 import java.util.List;
 
 /**
@@ -27,8 +25,8 @@ public class MakerApdater extends RecyclerView.Adapter<MakerApdater.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemMakerBinding binding =
-            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                R.layout.item_maker, parent, false);
+            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_maker,
+                parent, false);
         return new ViewHolder(binding);
     }
 

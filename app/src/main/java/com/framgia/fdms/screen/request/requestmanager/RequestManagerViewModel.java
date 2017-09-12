@@ -44,7 +44,7 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
  */
 
 public class RequestManagerViewModel extends BaseFragmentModel
-        implements RequestManagerContract.ViewModel, OnRequestClickListenner {
+    implements RequestManagerContract.ViewModel, OnRequestClickListenner {
 
     private final Fragment mFragment;
     private Context mContext;
@@ -56,6 +56,14 @@ public class RequestManagerViewModel extends BaseFragmentModel
     private Status mRelative;
     private boolean mIsRefresh;
     private int mEmptyViewVisible = View.GONE; // show empty state when no date
+    private SwipeRefreshLayout.OnRefreshListener mRefreshLayout =
+        new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mAdapter.clear();
+                getData();
+            }
+        };
 
     public RequestManagerViewModel(Fragment fragment) {
         mFragment = fragment;
@@ -80,12 +88,12 @@ public class RequestManagerViewModel extends BaseFragmentModel
         mPresenter = presenter;
     }
 
-    public void setAdapter(UserRequestAdapter adapter) {
-        mAdapter = adapter;
-    }
-
     public UserRequestAdapter getAdapter() {
         return mAdapter;
+    }
+
+    public void setAdapter(UserRequestAdapter adapter) {
+        mAdapter = adapter;
     }
 
     @Override
@@ -150,7 +158,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 break;
             case REQUEST_DETAIL:
                 Respone<Request> requestRespone =
-                        (Respone<Request>) bundle.getSerializable(BUNDLE_RESPONE);
+                    (Respone<Request>) bundle.getSerializable(BUNDLE_RESPONE);
                 if (requestRespone != null) {
                     onUpdateActionSuccess(requestRespone);
                 }
@@ -165,7 +173,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
         if (requestRespone == null || requestRespone.getData() == null) return;
         mAdapter.updateItem(requestRespone.getData());
         Snackbar.make(mFragment.getView(), requestRespone.getMessage(), Snackbar.LENGTH_LONG)
-                .show();
+            .show();
     }
 
     @Override
@@ -183,15 +191,15 @@ public class RequestManagerViewModel extends BaseFragmentModel
     public void onSelectStatusClick() {
         if (mStatuses == null) return;
         mFragment.startActivityForResult(
-                StatusSelectionActivity.getInstance(mContext, null, mStatuses,
-                        StatusSelectionType.STATUS), REQUEST_STATUS);
+            StatusSelectionActivity.getInstance(mContext, null, mStatuses,
+                StatusSelectionType.STATUS), REQUEST_STATUS);
     }
 
     public void onSelectRelativeClick() {
         if (mRelatives == null) return;
         mFragment.startActivityForResult(
-                StatusSelectionActivity.getInstance(mContext, null, mRelatives,
-                        StatusSelectionType.STATUS), REQUEST_SELECTION);
+            StatusSelectionActivity.getInstance(mContext, null, mRelatives,
+                StatusSelectionType.STATUS), REQUEST_SELECTION);
     }
 
     public void updateStatus(List<Status> list) {
@@ -233,8 +241,8 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void onMenuClick(View v, final UserRequestAdapter.RequestModel request) {
         if (request == null
-                || request.getRequest() == null
-                || request.getRequest().getRequestActionList() == null) {
+            || request.getRequest() == null
+            || request.getRequest().getRequestActionList() == null) {
             return;
         }
 
@@ -243,15 +251,15 @@ public class RequestManagerViewModel extends BaseFragmentModel
         for (int i = 0; i < requestModel.getRequestActionList().size(); i++) {
             final Request.RequestAction action = requestModel.getRequestActionList().get(i);
             popupMenu.getMenu()
-                    .add(action.getName())
-                    .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
-                            ((RequestManagerContract.Presenter) mPresenter).updateActionRequest(
-                                    request.getRequest().getId(), action.getId());
-                            return false;
-                        }
-                    });
+                .add(action.getName())
+                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        ((RequestManagerContract.Presenter) mPresenter).updateActionRequest(
+                            request.getRequest().getId(), action.getId());
+                        return false;
+                    }
+                });
         }
         popupMenu.show();
     }
@@ -259,13 +267,13 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void onDetailRequestClick(Request request) {
         mFragment.startActivityForResult(RequestDetailActivity.newInstance(mContext, request),
-                REQUEST_DETAIL);
+            REQUEST_DETAIL);
     }
 
     @Override
     public void onAddDeviceClick(int requestId) {
         mFragment.startActivityForResult(AssignmentActivity.getInstance(mContext, requestId),
-                REQUEST_CREATE_ASSIGNMENT);
+            REQUEST_CREATE_ASSIGNMENT);
     }
 
     @Bindable
@@ -278,15 +286,6 @@ public class RequestManagerViewModel extends BaseFragmentModel
         mIsRefresh = isRefresh;
         notifyPropertyChanged(BR.isRefresh);
     }
-
-    private SwipeRefreshLayout.OnRefreshListener mRefreshLayout =
-            new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    mAdapter.clear();
-                    getData();
-                }
-            };
 
     public SwipeRefreshLayout.OnRefreshListener getRefreshLayout() {
         return mRefreshLayout;

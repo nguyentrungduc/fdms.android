@@ -53,8 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_30"
             android:layout_marginStart="@dimen/dp_30"
-            android:onClick="@{() -> viewModel.onExportWordClick()}"
             android:layout_marginTop="@dimen/dp_10"
+            android:onClick="@{() -> viewModel.onExportWordClick()}"
             >
             <ImageView
                 android:layout_width="@dimen/dp_30"
@@ -76,8 +76,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginBottom="@dimen/dp_10"
-            android:text="@string/mdtp_cancel"
             android:onClick="@{() -> viewModel.onCancelClick()}"
+            android:text="@string/mdtp_cancel"
             android:textAllCaps="true"
             style="@style/Widget.AppCompat.Button.Borderless"
             />

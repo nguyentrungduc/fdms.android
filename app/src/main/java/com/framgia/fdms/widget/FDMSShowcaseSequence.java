@@ -2,7 +2,6 @@ package com.framgia.fdms.widget;
 
 import android.app.Activity;
 import android.view.View;
-
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -23,7 +22,7 @@ public class FDMSShowcaseSequence extends MaterialShowcaseSequence {
 
     @Override
     public MaterialShowcaseSequence addSequenceItem(View targetView, String content,
-                                                    String dismissText) {
+        String dismissText) {
         mCount++;
         return super.addSequenceItem(targetView, content, dismissText);
     }

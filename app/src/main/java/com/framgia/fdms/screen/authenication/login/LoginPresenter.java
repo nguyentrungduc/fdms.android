@@ -2,19 +2,19 @@ package com.framgia.fdms.screen.authenication.login;
 
 import android.databinding.BaseObservable;
 import android.text.TextUtils;
-
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.UserRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceApi;
 import com.google.gson.Gson;
-
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.PASS_WORD_PREFS;
 import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.USER_NAME_PREFS;
@@ -27,11 +27,11 @@ import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.US
 public class LoginPresenter extends BaseObservable implements LoginContract.Presenter {
     private LoginContract.ViewModel mView;
     private UserRepository mUserRepository;
-    private CompositeSubscription mCompositeSubscriptions = new CompositeSubscription();
+    private CompositeDisposable mCompositeSubscriptions = new CompositeDisposable();
     private SharePreferenceApi mSharedPreferences;
 
     public LoginPresenter(LoginContract.ViewModel view, UserRepository userRepository,
-                          SharePreferenceApi sharedPreferences) {
+        SharePreferenceApi sharedPreferences) {
         this.mView = view;
         mUserRepository = userRepository;
         mSharedPreferences = sharedPreferences;
@@ -56,18 +56,18 @@ public class LoginPresenter extends BaseObservable implements LoginContract.Pres
 
     @Override
     public void login(final String userName, final String passWord) {
-        Subscription subscription = mUserRepository.login(userName, passWord)
+        Disposable subscription = mUserRepository.login(userName, passWord)
             .subscribeOn(Schedulers.io())
-            .doOnSubscribe(new Action0() {
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
                 @Override
-                public void call() {
+                public void accept(Disposable disposable) throws Exception {
                     mView.showProgressbar();
                 }
             })
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<Respone<User>>() {
+            .subscribe(new Consumer<Respone<User>>() {
                 @Override
-                public void call(Respone<User> userRespone) {
+                public void accept(Respone<User> userRespone) throws Exception {
                     User user = userRespone.getData();
                     user.setToken(userRespone.getToken());
                     saveUser(user);
@@ -78,14 +78,14 @@ public class LoginPresenter extends BaseObservable implements LoginContract.Pres
                     }
                     mView.onLoginSuccess();
                 }
-            }, new Action1<Throwable>() {
+            }, new RequestError() {
                 @Override
-                public void call(Throwable throwable) {
-                    mView.onLoginError(throwable.getMessage());
+                public void onRequestError(BaseException error) {
+                    mView.onLoginError(error.getMessage());
                 }
-            }, new Action0() {
+            }, new Action() {
                 @Override
-                public void call() {
+                public void run() throws Exception {
                     mView.hideProgressbar();
                 }
             });

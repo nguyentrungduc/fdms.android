@@ -10,8 +10,8 @@ import android.text.TextUtils;
 final class ForgetpasswordPresenter implements ForgetpasswordContract.Presenter {
     private static final String TAG = ForgetpasswordPresenter.class.getName();
     private static final String EMAIL_REGEX =
-            "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)"
-                    + "+[a-zA-Z]{2,6}$";
+        "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)"
+            + "+[a-zA-Z]{2,6}$";
     private final ForgetpasswordContract.ViewModel mViewModel;
 
     public ForgetpasswordPresenter(ForgetpasswordContract.ViewModel viewModel) {

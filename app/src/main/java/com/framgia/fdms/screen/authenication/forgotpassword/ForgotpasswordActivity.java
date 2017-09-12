@@ -30,7 +30,7 @@ public class ForgotpasswordActivity extends AppCompatActivity {
         mViewModel.setPresenter(presenter);
 
         ActivityForgotpasswordBinding binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_forgotpassword);
+            DataBindingUtil.setContentView(this, R.layout.activity_forgotpassword);
         binding.setViewModel((ForgotpasswordViewModel) mViewModel);
     }
 

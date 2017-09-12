@@ -2,12 +2,13 @@ package com.framgia.fdms.screen.device;
 
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.UserRepository;
-
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Listens to user actions from the UI ({@link DeviceFragment}), retrieves the data and updates
@@ -17,12 +18,12 @@ final class DevicePresenter implements DeviceContract.Presenter {
     private static final String TAG = DevicePresenter.class.getName();
     private final DeviceContract.ViewModel mViewModel;
     private UserRepository mUserRepository;
-    private CompositeSubscription mCompositeSubscription;
+    private CompositeDisposable mCompositeSubscription;
 
     public DevicePresenter(DeviceContract.ViewModel viewModel, UserRepository userRepository) {
         mViewModel = viewModel;
         mUserRepository = userRepository;
-        mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription = new CompositeDisposable();
         getCurrentUser();
     }
 
@@ -37,18 +38,18 @@ final class DevicePresenter implements DeviceContract.Presenter {
 
     @Override
     public void getCurrentUser() {
-        Subscription subscription = mUserRepository.getCurrentUser()
+        Disposable subscription = mUserRepository.getCurrentUser()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<User>() {
+            .subscribe(new Consumer<User>() {
                 @Override
-                public void call(User user) {
+                public void accept(User user) throws Exception {
                     mViewModel.setupViewPager(user);
                 }
-            }, new Action1<Throwable>() {
+            }, new RequestError() {
                 @Override
-                public void call(Throwable throwable) {
-                    mViewModel.onError(throwable.getMessage());
+                public void onRequestError(BaseException error) {
+                    mViewModel.onError(error.getMessage());
                 }
             });
         mCompositeSubscription.add(subscription);

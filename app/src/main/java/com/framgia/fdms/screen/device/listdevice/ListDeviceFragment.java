@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.source.CategoryRepository;
@@ -47,8 +46,7 @@ public class ListDeviceFragment extends Fragment {
         mViewModel = new ListDeviceViewModel(this, getArguments().getInt(BUNDLE_TAB));
         ListDeviceContract.Presenter presenter = new ListDevicePresenter(mViewModel,
             new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
-            new CategoryRepository(
-                new CategoryRemoteDataSource(FDMSServiceClient.getInstance())),
+            new CategoryRepository(new CategoryRemoteDataSource(FDMSServiceClient.getInstance())),
             new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance())),
             new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))),
             new DeviceReturnRepository());
@@ -58,7 +56,7 @@ public class ListDeviceFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         FragmentListDeviceBinding binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_list_device, container, false);
         binding.setViewModel((ListDeviceViewModel) mViewModel);

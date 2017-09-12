@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Category;
@@ -27,7 +26,6 @@ import com.framgia.fdms.screen.returndevice.ReturnDeviceActivity;
 import com.framgia.fdms.screen.selection.StatusSelectionActivity;
 import com.framgia.fdms.screen.selection.StatusSelectionType;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,11 +60,6 @@ public class ListDeviceViewModel extends BaseObservable
     private int mEmptyViewVisible = View.GONE; // show empty state ui when not data
     private Producer mVendor, mMaker;
     private boolean mIsTopSheetExpand;
-
-    public ObservableBoolean getIsLoadingMore() {
-        return mIsLoadingMore;
-    }
-
     private boolean mIsRefresh;
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
         new SwipeRefreshLayout.OnRefreshListener() {
@@ -76,6 +69,24 @@ public class ListDeviceViewModel extends BaseObservable
                 loadData();
             }
         };
+    private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if (dy <= 0) {
+                return;
+            }
+            LinearLayoutManager layoutManager =
+                (LinearLayoutManager) recyclerView.getLayoutManager();
+            int visibleItemCount = layoutManager.getChildCount();
+            int totalItemCount = layoutManager.getItemCount();
+            int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+            if (!mIsLoadingMore.get() && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                mIsLoadingMore.set(true);
+                mPresenter.loadMoreData();
+            }
+        }
+    };
 
     public ListDeviceViewModel(ListDeviceFragment fragment, int tabDevice) {
         mFragment = fragment;
@@ -88,6 +99,10 @@ public class ListDeviceViewModel extends BaseObservable
         setMaker(new Producer());
         mMaker.setName(mContext.getString(R.string.title_maker));
         mTab = tabDevice;
+    }
+
+    public ObservableBoolean getIsLoadingMore() {
+        return mIsLoadingMore;
     }
 
     public void loadData() {
@@ -252,8 +267,9 @@ public class ListDeviceViewModel extends BaseObservable
 
     @Override
     public void getDataWithDevice(Device device) {
-        if (device == null || device.getDeviceCategoryId() <= 0 || device.getDeviceCategoryName()
-            == null) {
+        if (device == null
+            || device.getDeviceCategoryId() <= 0
+            || device.getDeviceCategoryName() == null) {
             return;
         }
         setCategory(new Category(device.getDeviceCategoryId(), device.getDeviceCategoryName()));
@@ -282,25 +298,6 @@ public class ListDeviceViewModel extends BaseObservable
     public ObservableField<Integer> getProgressBarVisibility() {
         return mProgressBarVisibility;
     }
-
-    private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            if (dy <= 0) {
-                return;
-            }
-            LinearLayoutManager layoutManager =
-                (LinearLayoutManager) recyclerView.getLayoutManager();
-            int visibleItemCount = layoutManager.getChildCount();
-            int totalItemCount = layoutManager.getItemCount();
-            int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-            if (!mIsLoadingMore.get() && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                mIsLoadingMore.set(true);
-                mPresenter.loadMoreData();
-            }
-        }
-    };
 
     public RecyclerView.OnScrollListener getScrollListenner() {
         return mScrollListenner;

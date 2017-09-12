@@ -28,17 +28,17 @@ public class VendorFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mViewModel = new VendorViewModel(getActivity());
         VendorContract.Presenter presenter = new VendorPresenter(mViewModel,
-                VendorRepository.getInstances(
-                        new VendorRemoteDataSource(FDMSServiceClient.getInstance())));
+            VendorRepository.getInstances(
+                new VendorRemoteDataSource(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         FragmentVendorBinding binding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_vendor, container, false);
+            DataBindingUtil.inflate(inflater, R.layout.fragment_vendor, container, false);
         binding.setViewModel((VendorViewModel) mViewModel);
         return binding.getRoot();
     }

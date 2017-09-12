@@ -2,13 +2,14 @@ package com.framgia.fdms.screen.request;
 
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.UserRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceApi;
-
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.IS_SHOW_CASE_REQUEST;
 
@@ -20,14 +21,14 @@ public class RequestPresenter implements RequestContract.Presenter {
     private static final String TAG = RequestPresenter.class.getName();
     private final RequestContract.ViewModel mViewModel;
     private UserRepository mRepository;
-    private CompositeSubscription mCompositeSubscription;
+    private CompositeDisposable mCompositeSubscription;
     private SharePreferenceApi mSharedPreferences;
 
     public RequestPresenter(RequestContract.ViewModel viewModel, UserRepository repository,
-                            SharePreferenceApi sharedPreferences) {
+        SharePreferenceApi sharedPreferences) {
         mViewModel = viewModel;
         mRepository = repository;
-        mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription = new CompositeDisposable();
         getCurrentUser();
         mSharedPreferences = sharedPreferences;
     }
@@ -43,20 +44,21 @@ public class RequestPresenter implements RequestContract.Presenter {
 
     @Override
     public void getCurrentUser() {
-        Subscription subscription = mRepository.getCurrentUser()
+        Disposable subscription = mRepository.getCurrentUser()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<User>() {
+            .subscribe(new Consumer<User>() {
                 @Override
-                public void call(User user) {
+                public void accept(User user) throws Exception {
                     mViewModel.onGetCurrentUserSuccess(user);
                 }
-            }, new Action1<Throwable>() {
+            }, new RequestError() {
                 @Override
-                public void call(Throwable throwable) {
-                    mViewModel.onError(throwable.getMessage());
+                public void onRequestError(BaseException error) {
+                    mViewModel.onError(error.getMessage());
                 }
             });
+
         mCompositeSubscription.add(subscription);
     }
 

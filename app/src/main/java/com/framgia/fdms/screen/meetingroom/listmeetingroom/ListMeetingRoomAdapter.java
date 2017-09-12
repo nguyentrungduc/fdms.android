@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 public class ListMeetingRoomAdapter
-        extends BaseRecyclerViewAdapter<MeetingRoom, ListMeetingRoomAdapter.ViewHolder> {
+    extends BaseRecyclerViewAdapter<MeetingRoom, ListMeetingRoomAdapter.ViewHolder> {
 
     private OnRecyclerViewItemClickListener<MeetingRoom> mItemClickListener;
     private List<MeetingRoom> mMeetingRooms;
@@ -40,8 +40,8 @@ public class ListMeetingRoomAdapter
     @Override
     public ListMeetingRoomAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemListMeetingRoomBinding binding =
-                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                        R.layout.item_list_meeting_room, parent, false);
+            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.item_list_meeting_room, parent, false);
         return new ListMeetingRoomAdapter.ViewHolder(binding, mItemClickListener);
     }
 
@@ -69,7 +69,7 @@ public class ListMeetingRoomAdapter
         private OnRecyclerViewItemClickListener<MeetingRoom> mItemClickListener;
 
         public ViewHolder(ItemListMeetingRoomBinding binding,
-                BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom> listener) {
+            BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom> listener) {
             super(binding.getRoot());
             mBinding = binding;
             mItemClickListener = listener;
@@ -80,7 +80,7 @@ public class ListMeetingRoomAdapter
                 return;
             }
             mBinding.setViewModel(
-                    new ItemListMeetingRoomViewModel(meetingRoom, mItemClickListener));
+                new ItemListMeetingRoomViewModel(meetingRoom, mItemClickListener));
             mBinding.executePendingBindings();
         }
     }

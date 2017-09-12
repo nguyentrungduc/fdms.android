@@ -14,18 +14,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class Picture extends BaseObservable implements Parcelable {
 
-    @Expose
-    @SerializedName("url")
-    private String mUrl;
-
-    public Picture(String url) {
-        mUrl = url;
-    }
-
-    protected Picture(Parcel in) {
-        mUrl = in.readString();
-    }
-
     public static final Creator<Picture> CREATOR = new Creator<Picture>() {
         @Override
         public Picture createFromParcel(Parcel in) {
@@ -37,6 +25,17 @@ public class Picture extends BaseObservable implements Parcelable {
             return new Picture[size];
         }
     };
+    @Expose
+    @SerializedName("url")
+    private String mUrl;
+
+    public Picture(String url) {
+        mUrl = url;
+    }
+
+    protected Picture(Parcel in) {
+        mUrl = in.readString();
+    }
 
     @Bindable
     public String getUrl() {

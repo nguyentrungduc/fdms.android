@@ -14,7 +14,7 @@ public interface StatusSelectionContract {
      */
     interface ViewModel extends BaseViewModel<Presenter> {
         void onSelectedItem(Category category, Status status, StatusSelectionType type,
-                int position);
+            int position);
 
         void onSearchData(String newText);
     }

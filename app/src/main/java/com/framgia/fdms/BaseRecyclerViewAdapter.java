@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public abstract class BaseRecyclerViewAdapter<T, V extends RecyclerView.ViewHolder>
-        extends RecyclerView.Adapter<V> {
+    extends RecyclerView.Adapter<V> {
 
     private final Context mContext;
 

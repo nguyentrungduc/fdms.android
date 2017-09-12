@@ -113,11 +113,11 @@
                                 android:layout_marginRight="@dimen/dp_16"
                                 android:background="?editTextBackground"
                                 android:enabled="@{viewModel.edit}"
+                                android:imeOptions="actionDone"
+                                android:inputType="text"
                                 android:text="@{viewModel.user.lastName != null ? viewModel.user.lastName : ``}"
                                 android:textColor="@color/color_grey_757575"
                                 android:textSize="@dimen/sp_16"
-                                android:inputType="text"
-                                android:imeOptions="actionDone"
                                 />
                         </LinearLayout>
 
@@ -143,11 +143,11 @@
                                 android:layout_marginRight="@dimen/dp_16"
                                 android:background="?editTextBackground"
                                 android:enabled="@{viewModel.edit}"
+                                android:imeOptions="actionDone"
+                                android:inputType="text"
                                 android:text="@{viewModel.user.email}"
                                 android:textColor="@color/color_grey_757575"
                                 android:textSize="@dimen/sp_16"
-                                android:inputType="text"
-                                android:imeOptions="actionDone"
                                 />
                         </LinearLayout>
 
