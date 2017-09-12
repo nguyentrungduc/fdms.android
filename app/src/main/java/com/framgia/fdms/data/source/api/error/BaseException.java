@@ -61,7 +61,6 @@ public final class BaseException extends RuntimeException {
             case Type.SERVER:
                 if (errorResponse != null) {
                     return errorResponse.getMessage();
-
                 }
                 return "";
             case Type.NETWORK:
@@ -82,7 +81,7 @@ public final class BaseException extends RuntimeException {
         }
 
         if (throwable instanceof UnknownHostException) {
-            return throwable.getMessage();
+            return "Please check your internet connection and try again!";
         }
 
         if (throwable instanceof IOException) {
