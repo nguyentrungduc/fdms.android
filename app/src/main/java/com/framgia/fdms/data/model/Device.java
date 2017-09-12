@@ -84,12 +84,6 @@ public class Device extends BaseObservable implements Parcelable {
     private boolean mIsDeviceMeetingRoom;
     @SerializedName("user")
     private UserBorrow mUser;
-    @Expose
-    @SerializedName("device_category_group_id")
-    private String mDeviceCategoryGroupId;
-    @Expose
-    @SerializedName("device_id")
-    private String mDeviceId;
     private Status mVendor;
     private Status mMaker;
     private String mWarranty;
@@ -115,8 +109,6 @@ public class Device extends BaseObservable implements Parcelable {
         setStatus(device.getStatus());
         setSummary(device.getSummary());
         setUser(device.getUser());
-        setDeviceCategoryGroupId(device.getDeviceCategoryGroupId());
-        setDeviceId(device.getDeviceId());
         setVendor(device.getVendor());
         setMaker(device.getMaker());
         setWarranty(device.getWarranty());
@@ -326,22 +318,6 @@ public class Device extends BaseObservable implements Parcelable {
 
     public void setSummary(Summary summary) {
         mSummary = summary;
-    }
-
-    public String getDeviceCategoryGroupId() {
-        return mDeviceCategoryGroupId;
-    }
-
-    public void setDeviceCategoryGroupId(String deviceCategoryGroupId) {
-        mDeviceCategoryGroupId = deviceCategoryGroupId;
-    }
-
-    public String getDeviceId() {
-        return mDeviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        mDeviceId = deviceId;
     }
 
     @Bindable

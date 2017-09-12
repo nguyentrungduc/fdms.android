@@ -284,4 +284,5 @@
     <string name="fragment_all_device_using">All</string>
     <string name="fragment_using_device_using">Using</string>
     <string name="fragment_returned_device_using">Returned</string>
+    <string name="action_x">X</string>
 </resources>
