@@ -12,6 +12,7 @@ import com.framgia.fdms.data.source.MeetingRoomRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.remote.MeetingRoomRemoteDataSource;
 import com.framgia.fdms.databinding.FragmentListMeetingRoomBinding;
+import com.framgia.fdms.utils.navigator.Navigator;
 
 /**
  * ListMeetingRoom Screen.
@@ -27,7 +28,8 @@ public class ListMeetingRoomFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new ListMeetingRoomViewModel(this.getActivity());
+        Navigator navigator = new Navigator(this);
+        mViewModel = new ListMeetingRoomViewModel(this.getActivity(), navigator);
 
         ListMeetingRoomContract.Presenter presenter = new ListMeetingRoomPresenter(mViewModel,
             new MeetingRoomRepository(

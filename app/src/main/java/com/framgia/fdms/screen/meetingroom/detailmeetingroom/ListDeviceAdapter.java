@@ -59,6 +59,11 @@ public class ListDeviceAdapter
         mItemClickListener = itemClickListener;
     }
 
+    public void clear() {
+        mDevices.clear();
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private ItemListDeviceRoomDetailBinding mBinding;
         private OnRecyclerViewItemClickListener<Device> mItemClickListener;
