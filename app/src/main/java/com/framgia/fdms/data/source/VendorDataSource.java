@@ -17,6 +17,6 @@ public class VendorDataSource {
 
         Observable<Respone<String>> deleteVendor(Producer producer);
 
-        Observable<Void> editVendor(Producer producer);
+        Observable<Respone<String>> editVendor(Producer producer);
     }
 }

@@ -134,4 +134,8 @@ public interface FDMSApi {
 
     @DELETE("api/vendors/{vendor_id}")
     Observable<Respone<String>> deleteVendor(@Path("vendor_id") int vendorId);
+
+    @PATCH("api/vendors/{vendor_id}")
+    Observable<Respone<String>> updateVendor(@Path("vendor_id") int vendorId,
+        @Query("vendor[name]") String name, @Query("vendor[description]") String description);
 }

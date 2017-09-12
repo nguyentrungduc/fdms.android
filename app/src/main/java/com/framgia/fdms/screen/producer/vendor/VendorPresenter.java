@@ -83,7 +83,7 @@ final class VendorPresenter implements VendorContract.Presenter {
             }, new RequestError() {
                 @Override
                 public void onRequestError(BaseException error) {
-                    mViewModel.onActionError();
+                    mViewModel.onAddVendorFailed(error.getMessage());
                 }
             });
         mSubscription.add(subscription);
@@ -112,19 +112,21 @@ final class VendorPresenter implements VendorContract.Presenter {
     }
 
     @Override
-    public void editVendor(Producer producer) {
+    public void editVendor(final Producer producer) {
         Disposable subscription = mRepository.editVendor(producer)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<Void>() {
+            .subscribe(new Consumer<Respone<String>>() {
                 @Override
-                public void accept(Void aVoid) throws Exception {
-
+                public void accept(Respone<String> respone) throws Exception {
+                    if (!respone.isError()) {
+                        mViewModel.onUpdateVendorSuccess(producer);
+                    }
                 }
             }, new RequestError() {
                 @Override
                 public void onRequestError(BaseException error) {
-                    mViewModel.onActionError();
+                    mViewModel.onUpdateVendorFailed(error.getMessage());
                 }
             });
         mSubscription.add(subscription);
