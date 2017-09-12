@@ -245,7 +245,7 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
                 @Override
                 public ObservableSource<List<Device>> apply(Respone<List<Device>> listRespone)
                     throws Exception {
-                    return null;
+                    return Utils.getResponse(listRespone);
                 }
             });
     }
