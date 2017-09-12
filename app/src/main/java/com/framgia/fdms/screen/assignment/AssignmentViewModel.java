@@ -65,7 +65,7 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     @Override
     public void onAddItemClick() {
         hideSoftKeyboard(mActivity);
-        mAdapter.addItem();
+        // TODO: 12/09/2017  mAdapter.addItem(request);
     }
 
     @Override
