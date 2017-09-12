@@ -124,6 +124,11 @@ public interface FDMSApi {
     Observable<Respone<List<Producer>>> getMakers(@Query("name") String name,
         @Query("page") int page, @Query("per_page") int perPage);
 
+    @GET("api/devices?")
+    Observable<Respone<List<Device>>> getListDeviceByMeetingRoomId(
+        @Query("meeting_room_id") int meetingRoomId, @Query("page") int page,
+        @Query("per_page") int perPage);
+
     @GET("api/vendors")
     Observable<Respone<List<Producer>>> getListVendors(@Query("page") int page,
         @Query("per_page") int perPage);

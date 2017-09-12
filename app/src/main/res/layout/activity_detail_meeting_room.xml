@@ -142,40 +142,69 @@
                     android:textColor="@color/color_gray"
                     android:textSize="@dimen/sp_18"
                     />
-                <RelativeLayout
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     >
-                    <android.support.v7.widget.RecyclerView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="@dimen/dp_70"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="@{viewModel.visibleLayoutDataNotFound ? View.VISIBLE : View.GONE}"
+                        tools:ignore="UseCompoundDrawables"
+                        >
+                        <ImageView
+                            android:layout_width="@dimen/dp_70"
+                            android:layout_height="@dimen/dp_70"
+                            app:srcCompat="@drawable/ic_not_found_data"
+                            tools:ignore="ContentDescription"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:text="@={viewModel.notificationLoadData}"
+                            android:textSize="@dimen/sp_17"
+                            />
+                    </LinearLayout>
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_above="@+id/progressBar"
-                        android:clipToPadding="false"
-                        android:paddingBottom="@dimen/dp_10"
-                        app:layoutManager="LinearLayoutManager"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                        app:recyclerAdapter="@{viewModel.listDeviceAdapter}"
-                        app:scrollListenner="@{viewModel.scrollListener}"
-                        />
-
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:visibility="@{viewModel.progressBarVisibility ? View.VISIBLE : View.GONE}"
-                        />
-                    <ProgressBar
-                        android:id="@+id/progress_loading_bottom"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignEnd="@+id/progressBar"
-                        android:layout_alignParentBottom="true"
-                        android:layout_gravity="center"
-                        android:visibility="@{viewModel.isLoadingMore ? View.VISIBLE : View.GONE}"
-                        />
-                </RelativeLayout>
+                        >
+                        <android.support.v7.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_above="@+id/progressBar"
+                            android:clipToPadding="false"
+                            android:paddingBottom="@dimen/dp_10"
+                            app:layoutManager="LinearLayoutManager"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                            app:recyclerAdapter="@{viewModel.listDeviceAdapter}"
+                            app:scrollListenner="@{viewModel.scrollListener}"
+                            />
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:visibility="@{viewModel.progressBarVisibility ? View.VISIBLE : View.GONE}"
+                            />
+                        <ProgressBar
+                            android:id="@+id/progress_loading_bottom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignEnd="@+id/progressBar"
+                            android:layout_alignParentBottom="true"
+                            android:layout_gravity="center"
+                            android:visibility="@{viewModel.isLoadingMore ? View.VISIBLE : View.GONE}"
+                            />
+                    </RelativeLayout>
+                </FrameLayout>
             </LinearLayout>
         </android.support.design.widget.CoordinatorLayout>
     </android.support.v4.widget.SwipeRefreshLayout>

@@ -66,4 +66,9 @@ public class DeviceRepository {
     public Observable<Device> getDeviceCode(int deviceCategoryId, int branchId) {
         return mDeviceRemoteDataSource.getDeviceCode(deviceCategoryId, branchId);
     }
+
+    public Observable<List<Device>> getListDeviceByMeetingRoomId(int meetingRoomId, int page,
+        int perPage) {
+        return mDeviceRemoteDataSource.getListDeviceByMeetingRoomId(meetingRoomId, page, perPage);
+    }
 }
