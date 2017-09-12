@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -31,7 +32,7 @@ import rx.Observable;
 public interface FDMSApi {
     @POST("api/sessions")
     Observable<Respone<User>> login(@Query("user[email]") String userName,
-            @Query("user[password]") String passWord);
+        @Query("user[password]") String passWord);
 
     @GET("api/devices")
     Observable<Respone<List<Device>>> getListDevices(@QueryMap Map<String, String> parrams);
@@ -48,12 +49,12 @@ public interface FDMSApi {
     @Multipart
     @POST("api/devices")
     Observable<Respone<Device>> uploadDevice(@PartMap Map<String, RequestBody> parrams,
-            @Part MultipartBody.Part picture);
+        @Part MultipartBody.Part picture);
 
     @Multipart
     @PATCH("api/devices/{id}")
     Observable<Respone<Device>> updateDevice(@Path("id") int id,
-            @PartMap Map<String, RequestBody> params, @Part MultipartBody.Part picture);
+        @PartMap Map<String, RequestBody> params, @Part MultipartBody.Part picture);
 
     @GET("/api/request_dashboards")
     Observable<Respone<List<Dashboard>>> getDashboardRequest();
@@ -88,7 +89,7 @@ public interface FDMSApi {
     @PATCH("/api/requests/{id}")
     @FormUrlEncoded
     Observable<Respone<Request>> updateActionRequest(@Path("id") int requestId,
-            @Field("request[request_status_id]") int actionId);
+        @Field("request[request_status_id]") int actionId);
 
     @GET("api/device_historys/{id}")
     Observable<Respone<List<DeviceHistoryDetail>>> getDeviceDetailHistory(@Path("id") int deviceId);
@@ -101,14 +102,14 @@ public interface FDMSApi {
 
     @GET("api/device_codes/show")
     Observable<Respone<Device>> getDeviceCode(@Query("device_category_id") int deviceCategoryId,
-            @Query("branch") int branchId);
+        @Query("branch") int branchId);
 
     @GET("api/user_borrows")
     Observable<Respone<List<Device>>> getDevicesBorrow();
 
     @PATCH("/api/requests/{id}")
     Observable<Respone<Request>> updateRequest(@Path("id") int requestId,
-            @QueryMap Map<String, String> params);
+        @QueryMap Map<String, String> params);
 
     @POST("api/assignments")
     Observable<Respone<Request>> registerAssignment(@QueryMap Map<String, String> params);
@@ -125,9 +126,12 @@ public interface FDMSApi {
 
     @GET("api/vendors")
     Observable<Respone<List<Producer>>> getListVendors(@Query("page") int page,
-            @Query("per_page") int perPage);
+        @Query("per_page") int perPage);
 
     @POST("api/vendors")
     Observable<Respone<Producer>> addVendor(@Query("vendor[name]") String name,
-            @Query("vendor[description]") String description);
+        @Query("vendor[description]") String description);
+
+    @DELETE("api/vendors/{vendor_id}")
+    Observable<Respone<String>> deleteVendor(@Path("vendor_id") int vendorId);
 }

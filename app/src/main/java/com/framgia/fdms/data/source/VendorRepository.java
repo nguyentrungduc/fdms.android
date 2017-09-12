@@ -34,7 +34,7 @@ public class VendorRepository implements VendorDataSource.RemoteDataSource {
     }
 
     @Override
-    public Observable<Void> deleteVendor(Producer vendor) {
+    public Observable<String> deleteVendor(Producer vendor) {
         return mVendorRemoteDataSource.deleteVendor(vendor);
     }
 
