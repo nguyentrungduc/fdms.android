@@ -34,6 +34,47 @@ public class Constant {
         // No-op
     }
 
+    public static final class BundleConstant {
+        public static final String BUNDLE_CATEGORIES = "BUNDLE_CATEGORIES";
+        public static final String BUNDLE_STATUSES = "BUNDLE_STATUSES";
+        public static final String BUNDLE_TYPE = "BUNDLE_TYPE";
+        public static final String BUNDLE_CATEGORY = "BUNDLE_CATEGORY";
+        public static final String BUNDLE_STATUE = "BUNDLE_STATUE";
+        public static final String BUNDLE_DEVICE = "BUNDLE_DEVICE";
+        public static final String BUNDLE_CONTENT = "BUNDLE_CONTENT";
+        public static final String BUNDLE_RESPONE = "BUNDLE_RESPONE";
+        public static final String EXTRA_DEVICE_ID = "EXTRA_DEVICE_ID";
+        public static final String BUNDLE_TAB = "BUNDLE_TAB";
+        public static final String BUNDLE_USER = "USER_BUND";
+        public static final String BUNDLE_PRODUCER = "BUNDLE_PRODUCER";
+        public static final String BUNDLE_TITLE = "BUNDLE_TITLE";
+        public static final String BUNDLE_ACTION_CALLBACK = "BUNDLE_ACTION_CALLBACK";
+    }
+
+    public static final class RequestConstant {
+        public static final int REQUEST_SELECTION = 1;
+        public static final int REQUEST_STATUS = 2;
+        public static final int REQUEST_CATEGORY = 3;
+        public static final int REQUEST_RELATIVE = 4;
+        public static final int REQUEST_ASSIGNER = 5;
+        public static final int REQUEST_DETAIL = 6;
+        public static final int REQUEST_SCANNER = 7;
+        public static final int REQUEST_CREATE_REQUEST = 8;
+        public static final int REQUEST_CREATE_ASSIGNMENT = 9;
+        public static final int REQUEST_BRANCH = 10;
+        public static final int REQUEST_VENDOR = 11;
+        public static final int REQUEST_MAKER = 12;
+    }
+
+    public static final class Role {
+        public static final String STAFF = "staff";
+        public static final String DIVISION_MANAGER = "division_manager";
+        public static final String BO_MANAGER = "manager";
+        public static final String BO_STAFF = "bo_staff";
+        public static final String ADMIN = "admin";
+        public static final String ACCOUNTANT = "accountant";
+    }
+
     public class ApiParram {
         public static final String CATEGORY_ID = "category_id";
         public static final String STATUS_ID = "status_id";
@@ -68,49 +109,8 @@ public class Constant {
         public static final String DONE = "done";
     }
 
-    public static final class BundleConstant {
-        public static final String BUNDLE_CATEGORIES = "BUNDLE_CATEGORIES";
-        public static final String BUNDLE_STATUSES = "BUNDLE_STATUSES";
-        public static final String BUNDLE_TYPE = "BUNDLE_TYPE";
-        public static final String BUNDLE_CATEGORY = "BUNDLE_CATEGORY";
-        public static final String BUNDLE_STATUE = "BUNDLE_STATUE";
-        public static final String BUNDLE_DEVICE = "BUNDLE_DEVICE";
-        public static final String BUNDLE_CONTENT = "BUNDLE_CONTENT";
-        public static final String BUNDLE_RESPONE = "BUNDLE_RESPONE";
-        public static final String EXTRA_DEVICE_ID = "EXTRA_DEVICE_ID";
-        public static final String BUNDLE_TAB = "BUNDLE_TAB";
-        public static final String BUNDLE_USER = "USER_BUND";
-        public static final String BUNDLE_PRODUCER = "BUNDLE_PRODUCER";
-        public static final String BUNDLE_TITLE = "BUNDLE_TITLE";
-        public static final String BUNDLE_ACTION_CALLBACK = "BUNDLE_ACTION_CALLBACK";
-    }
-
-    public static final class RequestConstant {
-        public static final int REQUEST_SELECTION = 1;
-        public static final int REQUEST_STATUS = 2;
-        public static final int REQUEST_CATEGORY = 3;
-        public static final int REQUEST_RELATIVE = 4;
-        public static final int REQUEST_ASSIGNER = 5;
-        public static final int REQUEST_DETAIL = 6;
-        public static final int REQUEST_SCANNER = 7;
-        public static final int REQUEST_CREATE_REQUEST = 8;
-        public static final int REQUEST_CREATE_ASSIGNMENT = 9;
-        public static final int REQUEST_BRANCH = 10;
-        public static final int REQUEST_VENDOR = 11;
-        public static final int REQUEST_MAKER = 12;
-    }
-
     public class BundleRequest {
         public static final String BUND_REQUEST = "BUND_REQUEST";
-    }
-
-    public static final class Role {
-        public static final String STAFF = "staff";
-        public static final String DIVISION_MANAGER = "division_manager";
-        public static final String BO_MANAGER = "manager";
-        public static final String BO_STAFF = "bo_staff";
-        public static final String ADMIN = "admin";
-        public static final String ACCOUNTANT = "accountant";
     }
 
     public class RequestAction {

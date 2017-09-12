@@ -45,9 +45,10 @@
                     >
 
                     <include
-                        android:id="@+id/layout_top_sheet"
                         layout="@layout/top_sheet_search_content"
-                        bind:viewModel="@{viewModel}"/>
+                        android:id="@+id/layout_top_sheet"
+                        bind:viewModel="@{viewModel}"
+                        />
                 </LinearLayout>
 
 

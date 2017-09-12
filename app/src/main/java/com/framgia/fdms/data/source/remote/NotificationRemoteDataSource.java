@@ -2,10 +2,10 @@ package com.framgia.fdms.data.source.remote;
 
 import com.framgia.fdms.data.model.Notification;
 import com.framgia.fdms.data.source.NotificationDataSource;
+import io.reactivex.Observable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import rx.Observable;
 
 /**
  * Created by Nhahv0902 on 6/1/2017.
@@ -34,7 +34,7 @@ public class NotificationRemoteDataSource implements NotificationDataSource {
         notifications.add(new Notification("Để làm ứng dụng WEB", "Nguyễn Hà Phan", new Date()));
         notifications.add(new Notification("Để làm ứng dụng Ruby", "Tran Hiếu", new Date()));
         notifications.add(
-                new Notification("Để làm ứng dụng Test Android", "Tran Dinh Sang", new Date()));
+            new Notification("Để làm ứng dụng Test Android", "Tran Dinh Sang", new Date()));
         notifications.add(new Notification("Để làm ứng dụng Android", "Hoang Van Nha", new Date()));
         notifications.add(new Notification("Để làm ứng dụng Android", "Hoang Van Nha", new Date()));
         return Observable.just(notifications);

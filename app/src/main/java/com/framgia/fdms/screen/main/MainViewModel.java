@@ -62,7 +62,7 @@ import static com.framgia.fdms.utils.permission.PermissionUtil.MY_PERMISSIONS_RE
  * Exposes the data to be used in the Newmain screen.
  */
 public class MainViewModel extends BaseObservable
-        implements MainContract.ViewModel, ViewPagerScroll {
+    implements MainContract.ViewModel, ViewPagerScroll {
     private static final int PAGE_LIMIT = 8;
     private MainContract.Presenter mPresenter;
     private ViewPagerAdapter mPagerAdapter;
@@ -195,7 +195,7 @@ public class MainViewModel extends BaseObservable
 
     public void onDrawerIsOpen(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) mNavigator.getContext()
-                .getSystemService(Activity.INPUT_METHOD_SERVICE);
+            .getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         setStatusDrawerLayout(DRAWER_IS_OPEN);
     }
@@ -228,9 +228,9 @@ public class MainViewModel extends BaseObservable
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode != REQUEST_SCANNER
-                || resultCode != RESULT_OK
-                || data == null
-                || data.getExtras() == null) {
+            || resultCode != RESULT_OK
+            || data == null
+            || data.getExtras() == null) {
             return;
         }
         getResult(data.getExtras().getString(BUNDLE_CONTENT));
@@ -253,21 +253,21 @@ public class MainViewModel extends BaseObservable
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            int[] grantResults) {
+        int[] grantResults) {
         if (requestCode == MY_PERMISSIONS_REQUEST_CAMERA
-                && grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            && grantResults.length > 0
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             startScannerActivity();
         } else {
             Snackbar.make(mActivity.findViewById(android.R.id.content),
-                    R.string.msg_denied_read_camera, Snackbar.LENGTH_LONG).show();
+                R.string.msg_denied_read_camera, Snackbar.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void onGetDeviceError(String error) {
         Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG)
-                .show();
+            .show();
     }
 
     @Override
@@ -377,9 +377,9 @@ public class MainViewModel extends BaseObservable
      * Tabs for Navigation Drawer
      */
     @IntDef({
-            TAB_DASH_BOARD, TAB_REQUEST_MANAGER, TAB_DEVICE_MANAGER, TAB_PROFILE, TAB_VENDOR_MANAGE,
-            TAB_MAKER_MANAGE, TAB_MY_DEVICES, TAB_MY_REQUESTS, TAB_MANAGE_MEETING_ROOM,
-            TAB_DEVICE_USING_HISTORY
+        TAB_DASH_BOARD, TAB_REQUEST_MANAGER, TAB_DEVICE_MANAGER, TAB_PROFILE, TAB_VENDOR_MANAGE,
+        TAB_MAKER_MANAGE, TAB_MY_DEVICES, TAB_MY_REQUESTS, TAB_MANAGE_MEETING_ROOM,
+        TAB_DEVICE_USING_HISTORY
     })
     public @interface Tab {
         int TAB_PROFILE = 0;

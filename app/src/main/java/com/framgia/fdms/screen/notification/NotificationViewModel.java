@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 public class NotificationViewModel extends BaseObservable
-        implements NotificationContract.ViewModel {
+    implements NotificationContract.ViewModel {
 
     private final AppCompatActivity mActivity;
     private NotificationContract.Presenter mPresenter;
@@ -57,7 +57,7 @@ public class NotificationViewModel extends BaseObservable
     @Override
     public void onLoadNotificationFails() {
         Toast.makeText(mActivity.getApplicationContext(), R.string.msg_load_data_fails,
-                Toast.LENGTH_SHORT).show();
+            Toast.LENGTH_SHORT).show();
     }
 
     @Bindable

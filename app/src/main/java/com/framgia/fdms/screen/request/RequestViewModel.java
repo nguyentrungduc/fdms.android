@@ -7,7 +7,6 @@ import android.databinding.Bindable;
 import android.support.annotation.IntDef;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.User;
@@ -16,10 +15,8 @@ import com.framgia.fdms.screen.request.requestmanager.RequestManagerFragment;
 import com.framgia.fdms.screen.request.userrequest.UserRequestFragment;
 import com.framgia.fdms.screen.requestcreation.RequestCreationActivity;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
@@ -94,8 +91,7 @@ public class RequestViewModel extends BaseObservable
     @Override
     public void onRegisterRequestClick() {
         mFragment.startActivityForResult(
-            RequestCreationActivity.getInstance(mFragment.getActivity()),
-            REQUEST_CREATE_REQUEST);
+            RequestCreationActivity.getInstance(mFragment.getActivity()), REQUEST_CREATE_REQUEST);
     }
 
     @Override
@@ -154,12 +150,6 @@ public class RequestViewModel extends BaseObservable
         notifyPropertyChanged(BR.tab);
     }
 
-    @IntDef({TAB_MY_REQUEST, TAB_MANAGER_REQUEST})
-    public @interface Tab {
-        int TAB_MY_REQUEST = 0;
-        int TAB_MANAGER_REQUEST = 1;
-    }
-
     @Bindable
     public FDMSShowcaseSequence getSequence() {
         return mSequence;
@@ -168,5 +158,11 @@ public class RequestViewModel extends BaseObservable
     public void setSequence(FDMSShowcaseSequence sequence) {
         mSequence = sequence;
         notifyPropertyChanged(BR.sequence);
+    }
+
+    @IntDef({ TAB_MY_REQUEST, TAB_MANAGER_REQUEST })
+    public @interface Tab {
+        int TAB_MY_REQUEST = 0;
+        int TAB_MANAGER_REQUEST = 1;
     }
 }

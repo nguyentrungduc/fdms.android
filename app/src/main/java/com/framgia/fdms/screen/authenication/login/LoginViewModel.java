@@ -8,7 +8,6 @@ import android.databinding.Bindable;
 import android.databinding.ObservableField;
 import android.support.design.widget.Snackbar;
 import android.view.View;
-
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.screen.authenication.forgotpassword.ForgotpasswordActivity;
@@ -19,6 +18,7 @@ import com.framgia.fdms.screen.main.MainActivity;
  * Exposes the data to be used in the Login screen.
  */
 public class LoginViewModel extends BaseObservable implements LoginContract.ViewModel {
+    public final ObservableField<Integer> progressBarVisibility = new ObservableField<>();
     private Context mContext;
     private LoginContract.Presenter mPresenter;
     private String mUsername;
@@ -27,7 +27,6 @@ public class LoginViewModel extends BaseObservable implements LoginContract.View
     private String mPasswordError;
     private boolean isValid;
     private Activity mActivity;
-    public final ObservableField<Integer> progressBarVisibility = new ObservableField<>();
     private boolean mIsRememberAccount;
 
     public LoginViewModel(Context context, Activity activity) {

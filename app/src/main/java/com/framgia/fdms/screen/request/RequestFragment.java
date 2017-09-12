@@ -8,12 +8,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.local.UserLocalDataSource;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.databinding.FragmentRequestBinding;
+
 ;
 
 /**
@@ -39,7 +39,7 @@ public class RequestFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         FragmentRequestBinding binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_request, container, false);
         binding.setViewModel((RequestViewModel) mViewModel);

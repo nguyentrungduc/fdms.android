@@ -23,8 +23,8 @@ import static com.framgia.fdms.utils.Constant.PER_PAGE;
  */
 
 public class ListMeetingRoomViewModel extends BaseObservable
-        implements ListMeetingRoomContract.ViewModel,
-        BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom> {
+    implements ListMeetingRoomContract.ViewModel,
+    BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom> {
 
     private Context mContext;
     private ListMeetingRoomContract.Presenter mPresenter;
@@ -104,14 +104,14 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
-            new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    mPage = FIRST_PAGE;
-                    mListMeetingRoomAdapter.clear();
-                    mPresenter.getListMeetingRoom(NOT_SEARCH, mPage, PER_PAGE);
-                }
-            };
+        new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPage = FIRST_PAGE;
+                mListMeetingRoomAdapter.clear();
+                mPresenter.getListMeetingRoom(NOT_SEARCH, mPage, PER_PAGE);
+            }
+        };
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -121,7 +121,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
                 return;
             }
             LinearLayoutManager layoutManager =
-                    (LinearLayoutManager) recyclerView.getLayoutManager();
+                (LinearLayoutManager) recyclerView.getLayoutManager();
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();

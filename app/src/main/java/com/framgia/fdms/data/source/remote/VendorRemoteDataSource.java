@@ -5,9 +5,10 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.source.VendorDataSource;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.utils.Utils;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
 import java.util.List;
-import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by framgia on 03/07/2017.
@@ -30,9 +31,10 @@ public final class VendorRemoteDataSource extends BaseRemoteDataSource
     @Override
     public Observable<List<Producer>> getListVendor(int page, int perPage) {
         return mFDMSApi.getListVendors(page, perPage)
-            .flatMap(new Func1<Respone<List<Producer>>, Observable<List<Producer>>>() {
+            .flatMap(new Function<Respone<List<Producer>>, ObservableSource<List<Producer>>>() {
                 @Override
-                public Observable<List<Producer>> call(Respone<List<Producer>> listRespone) {
+                public ObservableSource<List<Producer>> apply(Respone<List<Producer>> listRespone)
+                    throws Exception {
                     return Utils.getResponse(listRespone);
                 }
             });
@@ -41,23 +43,18 @@ public final class VendorRemoteDataSource extends BaseRemoteDataSource
     @Override
     public Observable<Producer> addVendor(Producer producer) {
         return mFDMSApi.addVendor(producer.getName(), producer.getDescription())
-                .flatMap(new Func1<Respone<Producer>, Observable<Producer>>() {
-                    @Override
-                    public Observable<Producer> call(Respone<Producer> stringRespone) {
-                        return Utils.getResponse(stringRespone);
-                    }
-                });
+            .flatMap(new Function<Respone<Producer>, ObservableSource<Producer>>() {
+                @Override
+                public ObservableSource<Producer> apply(Respone<Producer> producerRespone)
+                    throws Exception {
+                    return Utils.getResponse(producerRespone);
+                }
+            });
     }
 
     @Override
-    public Observable<String> deleteVendor(Producer producer) {
-        return mFDMSApi.deleteVendor(producer.getId())
-            .flatMap(new Func1<Respone<String>, Observable<String>>() {
-                @Override
-                public Observable<String> call(Respone<String> stringRespone) {
-                    return Utils.getResponse(stringRespone);
-                }
-            });
+    public Observable<Respone<String>> deleteVendor(Producer producer) {
+        return mFDMSApi.deleteVendor(producer.getId());
     }
 
     @Override

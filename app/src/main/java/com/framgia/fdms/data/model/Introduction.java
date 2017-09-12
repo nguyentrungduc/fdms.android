@@ -5,7 +5,6 @@ import android.databinding.Bindable;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.framgia.fdms.BR;
 
 /**

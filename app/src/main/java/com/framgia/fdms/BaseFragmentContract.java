@@ -6,10 +6,10 @@ package com.framgia.fdms;
 
 import android.support.v7.widget.RecyclerView;
 import com.framgia.fdms.data.model.Status;
-import java.util.List;
 
 /**
- * This contract defines all method in {@link BaseFragmentModel} and {@link BaseFragmentContract.Presenter}
+ * This contract defines all method in {@link BaseFragmentModel} and {@link
+ * BaseFragmentContract.Presenter}
  * to get all data from server into {@link RecyclerView} with load more
  */
 public interface BaseFragmentContract {

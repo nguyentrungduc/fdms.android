@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
@@ -16,7 +15,6 @@ import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.screen.producer.ProducerDialog;
 import com.framgia.fdms.screen.producer.ProducerDialogContract;
 import com.framgia.fdms.screen.producer.ProducerFunctionContract;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +33,31 @@ public class MarkerViewModel extends BaseObservable
     private ProducerDialog mDialog;
     private List<Producer> mMakers = new ArrayList<>();
     private int mPositionScroll = OUT_OF_INDEX;
+    private boolean mIsLoadMore;
+    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if (dy <= 0) {
+                return;
+            }
+            LinearLayoutManager layoutManager =
+                (LinearLayoutManager) recyclerView.getLayoutManager();
+            int visibleItemCount = layoutManager.getChildCount();
+            int totalItemCount = layoutManager.getItemCount();
+            int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+            if (!mIsLoadMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                setLoadMore(true);
+                ((MarkerPresenter) mPresenter).getMakers(0, 0);
+            }
+        }
+    };
+
+    public MarkerViewModel(FragmentActivity activity) {
+        mActivity = activity;
+        setAdapter(new MakerApdater(mMakers, this));
+        setLoadMore(false);
+    }
 
     @Bindable
     public boolean isLoadMore() {
@@ -44,14 +67,6 @@ public class MarkerViewModel extends BaseObservable
     public void setLoadMore(boolean loadMore) {
         mIsLoadMore = loadMore;
         notifyPropertyChanged(BR.loadMore);
-    }
-
-    private boolean mIsLoadMore;
-
-    public MarkerViewModel(FragmentActivity activity) {
-        mActivity = activity;
-        setAdapter(new MakerApdater(mMakers, this));
-        setLoadMore(false);
     }
 
     @Override
@@ -102,8 +117,8 @@ public class MarkerViewModel extends BaseObservable
 
     @Override
     public void onEditProducerClick(Producer maker) {
-        mDialog = ProducerDialog.newInstant(maker, mActivity.getResources()
-            .getString(R.string.action_edit), this);
+        mDialog = ProducerDialog.newInstant(maker,
+            mActivity.getResources().getString(R.string.action_edit), this);
         mDialog.show(mActivity.getSupportFragmentManager(), TAG_MAKER_DIALOG);
     }
 
@@ -116,30 +131,27 @@ public class MarkerViewModel extends BaseObservable
         mMakers.remove(maker);
         mAdapter.notifyItemRemoved(indexRemove);
         Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.title_vendor_delete,
-            Snackbar.LENGTH_LONG)
-            .setAction(R.string.title_undo, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mMakers.add(indexRemove, maker);
-                    mAdapter.notifyItemInserted(indexRemove);
-                    setPositionScroll(indexRemove);
-                }
-            })
-            .addCallback(new Snackbar.Callback() {
-                @Override
-                public void onDismissed(Snackbar transientBottomBar, int event) {
-                    super.onDismissed(transientBottomBar, event);
-                    setPositionScroll(OUT_OF_INDEX);
-                    // TODO: next task
-                }
-            })
-            .show();
+            Snackbar.LENGTH_LONG).setAction(R.string.title_undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMakers.add(indexRemove, maker);
+                mAdapter.notifyItemInserted(indexRemove);
+                setPositionScroll(indexRemove);
+            }
+        }).addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                super.onDismissed(transientBottomBar, event);
+                setPositionScroll(OUT_OF_INDEX);
+                // TODO: next task
+            }
+        }).show();
     }
 
     @Override
     public void onAddProducerClick() {
-        mDialog = ProducerDialog.newInstant(new Producer(), mActivity.getResources()
-            .getString(R.string.title_add_producer), this);
+        mDialog = ProducerDialog.newInstant(new Producer(),
+            mActivity.getResources().getString(R.string.title_add_producer), this);
         mDialog.show(mActivity.getSupportFragmentManager(), TAG_MAKER_DIALOG);
     }
 
@@ -171,25 +183,6 @@ public class MarkerViewModel extends BaseObservable
     public RecyclerView.OnScrollListener getScrollListener() {
         return mScrollListener;
     }
-
-    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            if (dy <= 0) {
-                return;
-            }
-            LinearLayoutManager layoutManager =
-                (LinearLayoutManager) recyclerView.getLayoutManager();
-            int visibleItemCount = layoutManager.getChildCount();
-            int totalItemCount = layoutManager.getItemCount();
-            int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-            if (!mIsLoadMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                setLoadMore(true);
-                ((MarkerPresenter) mPresenter).getMakers(0, 0);
-            }
-        }
-    };
 
     @Override
     public int describeContents() {

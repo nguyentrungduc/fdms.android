@@ -17,7 +17,7 @@ import java.util.List;
  * Created by beepi on 09/05/2017.
  */
 
-public class Request extends BaseObservable implements Serializable, Cloneable{
+public class Request extends BaseObservable implements Serializable, Cloneable {
     @Expose
     @SerializedName("id")
     private int mId;
@@ -195,7 +195,7 @@ public class Request extends BaseObservable implements Serializable, Cloneable{
             nameDevice = getDevices().get(0).getCategoryName();
         }
         return String.format(FDMSApplication.getInstant().getString(R.string.title_request),
-                getCreater(), nameDevice, getRequestFor());
+            getCreater(), nameDevice, getRequestFor());
     }
 
     public static class DeviceRequest extends BaseObservable implements Serializable, Cloneable {

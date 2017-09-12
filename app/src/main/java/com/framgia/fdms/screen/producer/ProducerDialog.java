@@ -9,7 +9,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-
 import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Producer;
@@ -23,16 +22,16 @@ import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_TITLE;
  * Created by framgia on 04/07/2017.
  */
 public class ProducerDialog extends DialogFragment implements ProducerDialogContract {
+    private static final String TITLE_EDIT = "Edit";
+    private static final String TITLE_ADD = "Add";
     private ObservableField<String> mMessageError = new ObservableField<>();
     private Producer mProducer, mTempProducer = new Producer();
     private ObservableField<String> mTitle = new ObservableField<>();
     private ProducerDialogContract.ActionCallback mActionCallback;
     private DialogConfirmProducerBinding mBinding;
-    private static final String TITLE_EDIT = "Edit";
-    private static final String TITLE_ADD = "Add";
 
     public static ProducerDialog newInstant(Producer producer, String title,
-                                            ProducerDialogContract.ActionCallback callback) {
+        ProducerDialogContract.ActionCallback callback) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(BUNDLE_PRODUCER, producer);
         bundle.putString(BUNDLE_TITLE, title);
@@ -52,9 +51,8 @@ public class ProducerDialog extends DialogFragment implements ProducerDialogCont
         mTempProducer.setDescription(mProducer.getDescription());
         mTitle.set(bundle.getString(BUNDLE_TITLE));
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        mBinding =
-            DataBindingUtil.inflate(LayoutInflater.from(getContext()),
-                R.layout.dialog_confirm_producer, null, false);
+        mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
+            R.layout.dialog_confirm_producer, null, false);
         mBinding.setProducer(mTempProducer);
         mBinding.setDialog(this);
         builder.setView(mBinding.getRoot());

@@ -12,10 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.framgia.fdms.utils.Constant.AVAIABLE;
-import static com.framgia.fdms.utils.Constant.BROKEN;
-import static com.framgia.fdms.utils.Constant.USING;
-
 /**
  * Created by Hoang Van Nha on 5/23/2017.
  * <></>

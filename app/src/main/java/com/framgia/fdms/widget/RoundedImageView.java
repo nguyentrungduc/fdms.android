@@ -35,26 +35,13 @@ public class RoundedImageView extends AppCompatImageView {
         super(context, attrs, defStyle);
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        Drawable drawable = getDrawable();
-        if (drawable == null || getWidth() == 0 || getHeight() == 0) {
-            return;
-        }
-        Bitmap b = ((BitmapDrawable) drawable).getBitmap();
-        Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
-        int w = getWidth();
-        Bitmap roundBitmap = getCroppedBitmap(bitmap, w);
-        canvas.drawBitmap(roundBitmap, MARGIN_LEFT, MARGIN_TOP, null);
-    }
-
     public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
         Bitmap bitmap;
         if (bmp.getWidth() != radius || bmp.getHeight() != radius) {
             float smallest = Math.min(bmp.getWidth(), bmp.getHeight());
             float factor = smallest / radius;
             bitmap = Bitmap.createScaledBitmap(bmp, (int) (bmp.getWidth() / factor),
-                    (int) (bmp.getHeight() / factor), false);
+                (int) (bmp.getHeight() / factor), false);
         } else {
             bitmap = bmp;
         }
@@ -74,5 +61,18 @@ public class RoundedImageView extends AppCompatImageView {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        Drawable drawable = getDrawable();
+        if (drawable == null || getWidth() == 0 || getHeight() == 0) {
+            return;
+        }
+        Bitmap b = ((BitmapDrawable) drawable).getBitmap();
+        Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
+        int w = getWidth();
+        Bitmap roundBitmap = getCroppedBitmap(bitmap, w);
+        canvas.drawBitmap(roundBitmap, MARGIN_LEFT, MARGIN_TOP, null);
     }
 }

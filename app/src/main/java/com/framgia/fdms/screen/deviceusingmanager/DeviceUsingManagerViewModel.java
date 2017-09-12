@@ -2,13 +2,11 @@ package com.framgia.fdms.screen.deviceusingmanager;
 
 import android.databinding.BaseObservable;
 import android.support.v4.app.FragmentActivity;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.screen.device.ViewPagerAdapter;
 import com.framgia.fdms.screen.deviceusingmanager.base.DeviceUsingBaseFragment;
-
 import java.util.List;
 
 /**
@@ -16,11 +14,27 @@ import java.util.List;
  */
 
 public class DeviceUsingManagerViewModel extends BaseObservable
-        implements DeviceUsingManagerContract.ViewModel {
+    implements DeviceUsingManagerContract.ViewModel {
 
     private DeviceUsingManagerContract.Presenter mPresenter;
 
     private ViewPagerAdapter mAdapter;
+
+    public DeviceUsingManagerViewModel(FragmentActivity activity) {
+        mAdapter = new ViewPagerAdapter(activity.getSupportFragmentManager());
+        setAdapter(mAdapter);
+
+        mAdapter.addFragment(DeviceUsingBaseFragment.newInstance(
+            activity.getString(R.string.fragment_all_device_using)),
+            activity.getString(R.string.fragment_all_device_using));
+        mAdapter.addFragment(DeviceUsingBaseFragment.newInstance(
+            activity.getString(R.string.fragment_using_device_using)),
+            activity.getString(R.string.fragment_using_device_using));
+        mAdapter.addFragment(DeviceUsingBaseFragment.newInstance(
+            activity.getString(R.string.fragment_returned_device_using)),
+            activity.getString(R.string.fragment_returned_device_using));
+        notifyPropertyChanged(BR.adapter);
+    }
 
     public ViewPagerAdapter getAdapter() {
         return mAdapter;
@@ -28,22 +42,6 @@ public class DeviceUsingManagerViewModel extends BaseObservable
 
     public void setAdapter(ViewPagerAdapter adapter) {
         mAdapter = adapter;
-        notifyPropertyChanged(BR.adapter);
-    }
-
-    public DeviceUsingManagerViewModel(FragmentActivity activity) {
-        mAdapter = new ViewPagerAdapter(activity.getSupportFragmentManager());
-        setAdapter(mAdapter);
-
-        mAdapter.addFragment(DeviceUsingBaseFragment.newInstance(
-                activity.getString(R.string.fragment_all_device_using)),
-                activity.getString(R.string.fragment_all_device_using));
-        mAdapter.addFragment(DeviceUsingBaseFragment.newInstance(
-                activity.getString(R.string.fragment_using_device_using)),
-                activity.getString(R.string.fragment_using_device_using));
-        mAdapter.addFragment(DeviceUsingBaseFragment.newInstance(
-                activity.getString(R.string.fragment_returned_device_using)),
-                activity.getString(R.string.fragment_returned_device_using));
         notifyPropertyChanged(BR.adapter);
     }
 
@@ -61,7 +59,6 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     public void setPresenter(DeviceUsingManagerContract.Presenter presenter) {
         mPresenter = presenter;
     }
-
 
     @Override
     public void onGetDeviceUsingHistorySuccess(List<DeviceUsingHistory> deviceUsingHistories) {

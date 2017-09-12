@@ -21,6 +21,7 @@ import static com.framgia.fdms.FDMSApplication.sUpdatedDevice;
 public class DeviceDetailActivity extends AppCompatActivity {
 
     private DeviceDetailContract.ViewModel mViewModel;
+
     public static Intent getInstance(Context context, Device device) {
         sUpdatedDevice = device;
         return new Intent(context, DeviceDetailActivity.class);
@@ -33,12 +34,12 @@ public class DeviceDetailActivity extends AppCompatActivity {
         mViewModel = new DeviceDetailViewModel(this, device);
 
         DeviceDetailContract.Presenter presenter = new DeviceDetailPresenter(mViewModel,
-                new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
-                device);
+            new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
+            device);
         mViewModel.setPresenter(presenter);
 
         ActivityDeviceDetailBinding binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_device_detail);
+            DataBindingUtil.setContentView(this, R.layout.activity_device_detail);
         binding.setViewModel((DeviceDetailViewModel) mViewModel);
     }
 

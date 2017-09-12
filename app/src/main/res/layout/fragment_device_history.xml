@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.framgia.fdms.screen.devicehistory.DeviceHistoryViewModel"/>
+            type="com.framgia.fdms.screen.devicehistory.DeviceHistoryViewModel"
+            />
         <import type="android.view.View"/>
 
     </data>
@@ -15,7 +17,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
         <com.arlib.floatingsearchview.FloatingSearchView
             android:id="@+id/floating_search_view"
             android:layout_width="match_parent"
@@ -23,7 +26,8 @@
             app:floatingSearch_leftActionMode="showHamburger"
             app:floatingSearch_menu="@menu/menu_search"
             app:floatingSearch_searchHint="@string/title_searching"
-            app:floatingSearch_showSearchKey="true"/>
+            app:floatingSearch_showSearchKey="true"
+            />
         <ExpandableListView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -31,12 +35,14 @@
             android:divider="@null"
             android:groupIndicator="@null"
             app:expandableAdapter="@{viewModel.adapter}"
-            app:scrollListener="@{viewModel.scrollListener}"/>
+            app:scrollListener="@{viewModel.scrollListener}"
+            />
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:indeterminateDrawable="@drawable/rotate_progressbar"
-            android:visibility="@{viewModel.loadMore ? View.VISIBLE : View.GONE}"/>
+            android:visibility="@{viewModel.loadMore ? View.VISIBLE : View.GONE}"
+            />
     </LinearLayout>
 </layout>

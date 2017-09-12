@@ -36,21 +36,20 @@ public class RequestManagerFragment extends BaseRequestFragment {
         mViewModel = new RequestManagerViewModel(this);
 
         RequestManagerContract.Presenter presenter = new RequestManagerPresenter(mViewModel,
-                RequestRepository.getInstant(
-                        new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
-                new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance())),
-                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
+            RequestRepository.getInstant(
+                new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
+            new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance())),
+            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
         mViewModel.setPresenter(presenter);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
 
         FragmentRequestManagerBinding binding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_request_manager, container,
-                        false);
+            DataBindingUtil.inflate(inflater, R.layout.fragment_request_manager, container, false);
         binding.setViewModel((RequestManagerViewModel) mViewModel);
         return binding.getRoot();
     }

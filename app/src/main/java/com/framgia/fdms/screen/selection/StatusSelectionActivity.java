@@ -25,7 +25,7 @@ import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_TYPE;
  * StatusSelection Screen.
  */
 public class StatusSelectionActivity extends AppCompatActivity
-        implements SearchView.OnQueryTextListener {
+    implements SearchView.OnQueryTextListener {
 
     private StatusSelectionContract.ViewModel mViewModel;
     private List<Category> mCategories;
@@ -33,7 +33,7 @@ public class StatusSelectionActivity extends AppCompatActivity
     private StatusSelectionType mSelectionType;
 
     public static Intent getInstance(Context context, List<Category> categories,
-            List<Status> statuses, StatusSelectionType type) {
+        List<Status> statuses, StatusSelectionType type) {
         Intent intent = new Intent(context, StatusSelectionActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(BUNDLE_CATEGORIES, (ArrayList<Category>) categories);
@@ -54,7 +54,7 @@ public class StatusSelectionActivity extends AppCompatActivity
         mViewModel.setPresenter(presenter);
 
         ActivityStatusSelectionBinding binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_status_selection);
+            DataBindingUtil.setContentView(this, R.layout.activity_status_selection);
         binding.setViewModel((StatusSelectionViewModel) mViewModel);
     }
 

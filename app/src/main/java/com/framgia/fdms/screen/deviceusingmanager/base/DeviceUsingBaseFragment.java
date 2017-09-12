@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.framgia.fdms.R;
 import com.framgia.fdms.databinding.FragmentBaseDeviceUsingBinding;
 import com.framgia.fdms.screen.deviceusingmanager.DeviceUsingManagerContract;
@@ -42,9 +41,10 @@ public class DeviceUsingBaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        FragmentBaseDeviceUsingBinding binding = DataBindingUtil.inflate(inflater,
-                R.layout.fragment_base_device_using, container, false);
+        @Nullable Bundle savedInstanceState) {
+        FragmentBaseDeviceUsingBinding binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_base_device_using, container,
+                false);
         binding.setViewModel((DeviceUsingBaseViewModel) mViewModel);
         return binding.getRoot();
     }

@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.framgia.fdms.R;
 import com.framgia.fdms.databinding.FragmentDeviceHistoryBinding;
 
@@ -25,15 +24,14 @@ public class DeviceHistoryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = new DeviceHistoryViewModel(getActivity());
-        DeviceHistoryContract.Presenter presenter =
-            new DeviceHistoryPresenter(mViewModel);
+        DeviceHistoryContract.Presenter presenter = new DeviceHistoryPresenter(mViewModel);
         mViewModel.setPresenter(presenter);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         FragmentDeviceHistoryBinding binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_device_history, container, false);
         binding.setViewModel((DeviceHistoryViewModel) mViewModel);

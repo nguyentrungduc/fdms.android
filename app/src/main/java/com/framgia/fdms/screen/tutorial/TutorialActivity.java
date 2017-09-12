@@ -21,11 +21,11 @@ public class TutorialActivity extends AppCompatActivity {
         mViewModel = new TutorialViewModel(this);
 
         TutorialContract.Presenter presenter =
-                new TutorialPresenter(mViewModel, new SharePreferenceImp(getApplicationContext()));
+            new TutorialPresenter(mViewModel, new SharePreferenceImp(getApplicationContext()));
         mViewModel.setPresenter(presenter);
 
         ActivityTutorialBinding binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_tutorial);
+            DataBindingUtil.setContentView(this, R.layout.activity_tutorial);
         binding.setViewModel((TutorialViewModel) mViewModel);
     }
 

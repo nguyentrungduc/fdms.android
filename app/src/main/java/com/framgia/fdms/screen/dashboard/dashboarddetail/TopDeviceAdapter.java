@@ -6,13 +6,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.databinding.ItemDashBoardTopDeviceBinding;
 import com.framgia.fdms.screen.device.OnDeviceClickListenner;
-
 import java.util.List;
 
 /**
@@ -23,7 +21,7 @@ public class TopDeviceAdapter extends BaseRecyclerViewAdapter<Device, TopDeviceA
     private OnDeviceClickListenner mListenner;
 
     protected TopDeviceAdapter(@NonNull Context context, OnDeviceClickListenner listenner,
-                               @NonNull List<Device> devices) {
+        @NonNull List<Device> devices) {
         super(context);
         mDevices = devices;
         mListenner = listenner;
@@ -56,6 +54,11 @@ public class TopDeviceAdapter extends BaseRecyclerViewAdapter<Device, TopDeviceA
         return mDevices == null ? 0 : mDevices.size();
     }
 
+    public void clear() {
+        if (mDevices != null) mDevices.clear();
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ItemDashBoardTopDeviceBinding mBinding;
 
@@ -72,10 +75,5 @@ public class TopDeviceAdapter extends BaseRecyclerViewAdapter<Device, TopDeviceA
             mBinding.setListenner(mListenner);
             mBinding.executePendingBindings();
         }
-    }
-
-    public void clear() {
-        if (mDevices != null) mDevices.clear();
-        notifyDataSetChanged();
     }
 }

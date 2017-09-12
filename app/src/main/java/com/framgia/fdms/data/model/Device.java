@@ -4,13 +4,11 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Date;
 
 import static com.framgia.fdms.utils.Constant.AVAIABLE;

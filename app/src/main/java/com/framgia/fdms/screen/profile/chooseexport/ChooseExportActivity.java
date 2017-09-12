@@ -38,11 +38,11 @@ public class ChooseExportActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityChooseExportBinding binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_choose_export);
+            DataBindingUtil.setContentView(this, R.layout.activity_choose_export);
         getDataFromIntent();
         mViewModel = new ChooseExportViewModel(this, mUser);
         ChooseExportContract.Presenter presenter =
-                new ChooseExportPresenter(mViewModel, new DeviceReturnRepository());
+            new ChooseExportPresenter(mViewModel, new DeviceReturnRepository());
         mViewModel.setPresenter(presenter);
         binding.setViewModel(mViewModel);
         mViewModel.initToolbar(binding.toolbar);

@@ -20,7 +20,7 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class RequestCreationViewModel extends BaseObservable
-        implements RequestCreationContract.ViewModel {
+    implements RequestCreationContract.ViewModel {
 
     private ArrayAdapter<Category> mAdapterCategory;
     private RequestCreationContract.Presenter mPresenter;
@@ -39,7 +39,7 @@ public class RequestCreationViewModel extends BaseObservable
         mContext = activity.getApplicationContext();
         mRequest = new RequestCreatorRequest();
         mAdapterCategory =
-                new ArrayAdapter<>(mActivity, R.layout.support_simple_spinner_dropdown_item);
+            new ArrayAdapter<>(mActivity, R.layout.support_simple_spinner_dropdown_item);
     }
 
     @Override

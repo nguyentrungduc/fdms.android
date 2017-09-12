@@ -2,14 +2,14 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
->
+    >
 
     <data>
 
         <variable
             name="viewModel"
             type="com.framgia.fdms.screen.producer.marker.MarkerViewModel"
-        />
+            />
         <import type="android.view.View"/>
 
     </data>
@@ -17,12 +17,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <com.arlib.floatingsearchview.FloatingSearchView
                 android:id="@+id/floating_search_view"
@@ -31,12 +33,14 @@
                 app:floatingSearch_leftActionMode="showHamburger"
                 app:floatingSearch_menu="@menu/menu_search"
                 app:floatingSearch_searchHint="@string/title_searching"
-                app:floatingSearch_showSearchKey="true"/>
+                app:floatingSearch_showSearchKey="true"
+                />
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                >
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -45,7 +49,7 @@
                     app:recyclerAdapter="@{viewModel.adapter}"
                     app:scrollListenner="@{viewModel.scrollListener}"
                     app:scrollPosition="@{viewModel.positionScroll}"
-                />
+                    />
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/float_add_button"
                     android:layout_width="wrap_content"
@@ -55,7 +59,7 @@
                     android:onClick="@{()->viewModel.onAddProducerClick()}"
                     android:src="@drawable/ic_add_white_24dp"
                     app:backgroundTint="@color/colorPrimary"
-                />
+                    />
 
             </FrameLayout>
 
@@ -65,7 +69,7 @@
                 android:layout_gravity="center"
                 android:indeterminateDrawable="@drawable/rotate_progressbar"
                 android:visibility="@{viewModel.loadMore ? View.VISIBLE : View.GONE}"
-            />
+                />
         </LinearLayout>
 
     </LinearLayout>

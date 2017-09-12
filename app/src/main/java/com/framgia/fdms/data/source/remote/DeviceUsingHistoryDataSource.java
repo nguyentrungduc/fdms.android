@@ -3,12 +3,10 @@ package com.framgia.fdms.data.source.remote;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.source.DeviceHistoryDataSource;
-
+import io.reactivex.Observable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import rx.Observable;
 
 /**
  * Created by framgia on 14/07/2017.

@@ -100,9 +100,9 @@
                 android:layout_alignParentTop="true"
                 android:onClick="@{ () -> viewModel.onStartNotificationView()}"
                 android:src="@drawable/ic_notifications_black_24dp"
-                bind:showcaseSequence="@{viewModel.sequence}"
                 bind:contentShowCase="@{@string/show_case_notification_description}"
                 bind:dismissText="@{@string/action_close_show_case}"
+                bind:showcaseSequence="@{viewModel.sequence}"
                 />
 
             <TextView

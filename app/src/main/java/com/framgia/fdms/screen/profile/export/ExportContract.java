@@ -1,11 +1,9 @@
 package com.framgia.fdms.screen.profile.export;
 
 import android.graphics.drawable.Drawable;
-
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Device;
-
 import java.io.File;
 import java.util.List;
 

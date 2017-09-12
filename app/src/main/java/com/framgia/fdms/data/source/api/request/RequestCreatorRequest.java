@@ -1,8 +1,6 @@
 package com.framgia.fdms.data.source.api.request;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.util.List;
 
 /**
  * Created by MyPC on 18/05/2017.
@@ -13,7 +11,6 @@ public class RequestCreatorRequest extends BaseRequest {
     private String mTitle;
     @SerializedName("request[description]")
     private String mDescription;
-
 
     public String getTitle() {
         return mTitle;

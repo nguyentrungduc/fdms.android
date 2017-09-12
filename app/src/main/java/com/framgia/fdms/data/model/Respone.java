@@ -3,13 +3,12 @@ package com.framgia.fdms.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by MyPC on 26/04/2017.
  */
 
-public class Respone<T> implements Serializable{
+public class Respone<T> implements Serializable {
     @Expose
     @SerializedName("status")
     private int mStatus;

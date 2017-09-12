@@ -2,13 +2,15 @@ package com.framgia.fdms.screen.meetingroom.listmeetingroom;
 
 import com.framgia.fdms.data.model.MeetingRoom;
 import com.framgia.fdms.data.source.MeetingRoomRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Listens to user actions from the UI ({@link ListMeetingRoomFragment}), retrieves the data and
@@ -20,13 +22,13 @@ final class ListMeetingRoomPresenter implements ListMeetingRoomContract.Presente
 
     private final ListMeetingRoomContract.ViewModel mViewModel;
     private MeetingRoomRepository mMeetingRoomRepository;
-    private CompositeSubscription mCompositeSubscriptions;
+    private CompositeDisposable mCompositeSubscriptions;
 
     ListMeetingRoomPresenter(ListMeetingRoomContract.ViewModel viewModel,
-            MeetingRoomRepository meetingRoomRepository) {
+        MeetingRoomRepository meetingRoomRepository) {
         mViewModel = viewModel;
         mMeetingRoomRepository = meetingRoomRepository;
-        mCompositeSubscriptions = new CompositeSubscription();
+        mCompositeSubscriptions = new CompositeDisposable();
     }
 
     @Override
@@ -40,32 +42,31 @@ final class ListMeetingRoomPresenter implements ListMeetingRoomContract.Presente
 
     @Override
     public void getListMeetingRoom(String roomName, int page, int perPage) {
-        Subscription subscription =
-                mMeetingRoomRepository.getListMeetingRoom(roomName, page, perPage)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe(new Action0() {
-                            @Override
-                            public void call() {
-                                mViewModel.showProgressbar();
-                            }
-                        })
-                        .subscribe(new Subscriber<List<MeetingRoom>>() {
-                            @Override
-                            public void onCompleted() {
-                                mViewModel.hideProgressbar();
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                mViewModel.onGetListMeetingRoomError(e.getCause().getMessage());
-                            }
-
-                            @Override
-                            public void onNext(List<MeetingRoom> meetingRooms) {
-                                mViewModel.onGetListMeetingRoomSuccess(meetingRooms);
-                            }
-                        });
+        Disposable subscription = mMeetingRoomRepository.getListMeetingRoom(roomName, page, perPage)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgressbar();
+                }
+            })
+            .subscribe(new Consumer<List<MeetingRoom>>() {
+                @Override
+                public void accept(List<MeetingRoom> meetingRooms) throws Exception {
+                    mViewModel.onGetListMeetingRoomSuccess(meetingRooms);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onGetListMeetingRoomError(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            });
         mCompositeSubscriptions.add(subscription);
     }
 }

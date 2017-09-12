@@ -1,30 +1,38 @@
 package com.framgia.fdms.data.source.api.error;
 
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import com.framgia.fdms.data.model.Respone;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.framgia.fdms.data.source.api.response.ErrorResponse;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import retrofit2.Response;
-import retrofit2.adapter.rxjava.HttpException;
+
+/**
+ * Created by le.quang.dao on 10/03/2017.
+ */
 
 public final class BaseException extends RuntimeException {
+
     @Type
-    private final String mType;
+    private final String type;
     @Nullable
-    private Response mResponse;
+    private Response response;
+    @Nullable
+    private ErrorResponse errorResponse;
 
     private BaseException(@Type String type, Throwable cause) {
         super(cause.getMessage(), cause);
-        this.mType = type;
+        this.type = type;
     }
 
     private BaseException(@Type String type, @Nullable Response response) {
-        this.mType = type;
-        this.mResponse = response;
+        this.type = type;
+        this.response = response;
+    }
+
+    public BaseException(@Type String type, @Nullable ErrorResponse response) {
+        this.type = type;
+        this.errorResponse = response;
     }
 
     public static BaseException toNetworkError(Throwable cause) {
@@ -39,42 +47,28 @@ public final class BaseException extends RuntimeException {
         return new BaseException(Type.UNEXPECTED, cause);
     }
 
-    public static BaseException toServerError(Throwable cause) {
-        return new BaseException(Type.SERVER, cause);
+    public static BaseException toServerError(ErrorResponse response) {
+        return new BaseException(Type.SERVER, response);
     }
 
     @Type
     public String getErrorType() {
-        return mType;
+        return type;
     }
 
     public String getMessage() {
-        switch (mType) {
+        switch (type) {
             case Type.SERVER:
-                HttpException httpException = (HttpException) getCause();
-                Response response = httpException.response();
-                String errorResponse;
-                try {
-                    errorResponse = response.errorBody().string();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return "Error";
+                if (errorResponse != null) {
+                    return errorResponse.getMessage();
+
                 }
-                if (TextUtils.isEmpty(errorResponse)){
-                    return "Error";
-                }
-                try {
-                    Respone error = new Gson().fromJson(errorResponse, Respone.class);
-                    return error.getMessage();
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
-                return "Error";
+                return "";
             case Type.NETWORK:
                 return getNetworkErrorMessage(getCause());
             case Type.HTTP:
-                if (mResponse != null) {
-                    return getHttpErrorMessage(mResponse.code());
+                if (response != null) {
+                    return getHttpErrorMessage(response.code());
                 }
                 return "Error";
             default:
@@ -86,12 +80,15 @@ public final class BaseException extends RuntimeException {
         if (throwable instanceof SocketTimeoutException) {
             return throwable.getMessage();
         }
+
         if (throwable instanceof UnknownHostException) {
             return throwable.getMessage();
         }
+
         if (throwable instanceof IOException) {
             return throwable.getMessage();
         }
+
         return throwable.getMessage();
     }
 
@@ -108,6 +105,7 @@ public final class BaseException extends RuntimeException {
             // Server error
             return "A server error occurred. Please try again later!";
         }
+
         // Unofficial error
         return "An error occurred. Please try again later!";
     }

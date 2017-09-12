@@ -22,7 +22,6 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
-
 import com.framgia.fdms.R;
 
 /**
@@ -75,8 +74,8 @@ public class CircleImageView extends AppCompatImageView {
             DEFAULT_BORDER_WIDTH);
         mBorderColor =
             a.getColor(R.styleable.CircleImageView_civ_border_color, DEFAULT_BORDER_COLOR);
-        mBorderOverlay = a.getBoolean(R.styleable.CircleImageView_civ_border_overlay,
-            DEFAULT_BORDER_OVERLAY);
+        mBorderOverlay =
+            a.getBoolean(R.styleable.CircleImageView_civ_border_overlay, DEFAULT_BORDER_OVERLAY);
         mFillColor = a.getColor(R.styleable.CircleImageView_civ_fill_color, DEFAULT_FILL_COLOR);
         a.recycle();
         init();
@@ -204,7 +203,7 @@ public class CircleImageView extends AppCompatImageView {
      * this has no effect if the drawable is opaque or no drawable is set.
      *
      * @param fillColorRes The color resource to be resolved to a color and
-     *                     drawn behind the drawable
+     * drawn behind the drawable
      * @deprecated Fill color support is going to be removed in the future
      */
     @Deprecated
@@ -273,6 +272,11 @@ public class CircleImageView extends AppCompatImageView {
     }
 
     @Override
+    public ColorFilter getColorFilter() {
+        return mColorFilter;
+    }
+
+    @Override
     public void setColorFilter(ColorFilter cf) {
         if (cf == mColorFilter) {
             return;
@@ -280,11 +284,6 @@ public class CircleImageView extends AppCompatImageView {
         mColorFilter = cf;
         applyColorFilter();
         invalidate();
-    }
-
-    @Override
-    public ColorFilter getColorFilter() {
-        return mColorFilter;
     }
 
     private void applyColorFilter() {
@@ -306,8 +305,9 @@ public class CircleImageView extends AppCompatImageView {
                 bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION,
                     BITMAP_CONFIG);
             } else {
-                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
-                    drawable.getIntrinsicHeight(), BITMAP_CONFIG);
+                bitmap =
+                    Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
+                        BITMAP_CONFIG);
             }
             Canvas canvas = new Canvas(bitmap);
             drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());

@@ -31,7 +31,7 @@ import static com.framgia.fdms.utils.Constant.PICK_IMAGE_REQUEST;
  */
 
 public class ProfileViewModel extends BaseObservable
-        implements ProfileContract.ViewModel, DatePickerDialog.OnDateSetListener {
+    implements ProfileContract.ViewModel, DatePickerDialog.OnDateSetListener {
 
     private final AppCompatActivity mActivity;
     private final Context mContext;
@@ -45,12 +45,12 @@ public class ProfileViewModel extends BaseObservable
     private boolean mIsRefresh;
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
-            new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    mPresenter.getCurrentUser();
-                }
-            };
+        new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.getCurrentUser();
+            }
+        };
 
     public ProfileViewModel(AppCompatActivity activity, ProfileFragment fragment) {
         mActivity = activity;
@@ -104,8 +104,8 @@ public class ProfileViewModel extends BaseObservable
     public void onPickDateTime() {
         if (mCalendar == null) mCalendar = Calendar.getInstance();
         DatePickerDialog datePicker =
-                DatePickerDialog.newInstance(this, mCalendar.get(Calendar.YEAR),
-                        mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+            DatePickerDialog.newInstance(this, mCalendar.get(Calendar.YEAR),
+                mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
         datePicker.show(mActivity.getFragmentManager(), "");
     }
 
@@ -115,8 +115,8 @@ public class ProfileViewModel extends BaseObservable
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         mFragment.startActivityForResult(
-                Intent.createChooser(intent, mContext.getString(R.string.title_select_file_upload)),
-                PICK_IMAGE_REQUEST);
+            Intent.createChooser(intent, mContext.getString(R.string.title_select_file_upload)),
+            PICK_IMAGE_REQUEST);
     }
 
     @Override

@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 public class TutorialViewModel extends BaseObservable
-        implements TutorialContract.ViewModel, ViewPagerScroll {
+    implements TutorialContract.ViewModel, ViewPagerScroll {
 
     private TutorialContract.Presenter mPresenter;
     private TutorialPagerAdapter mAdapter;
@@ -35,19 +35,19 @@ public class TutorialViewModel extends BaseObservable
         Resources res = mActivity.getResources();
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(IntroductionFragment.newInstance(
-                new Introduction.Builder().setTitle(res.getString(R.string.title_intro_title))
-                        .setHeader(res.getString(R.string.title_intro_header))
-                        .setContent(res.getString(R.string.title_intro_contet))
-                        .setImage(ContextCompat.getDrawable(mActivity, R.drawable.ic_device_200dp))
-                        .setColor(ContextCompat.getColor(mActivity, R.color.color_blue_170))
-                        .create()));
+            new Introduction.Builder().setTitle(res.getString(R.string.title_intro_title))
+                .setHeader(res.getString(R.string.title_intro_header))
+                .setContent(res.getString(R.string.title_intro_contet))
+                .setImage(ContextCompat.getDrawable(mActivity, R.drawable.ic_device_200dp))
+                .setColor(ContextCompat.getColor(mActivity, R.color.color_blue_170))
+                .create()));
         fragments.add(IntroductionFragment.newInstance(
-                new Introduction.Builder().setTitle(res.getString(R.string.title_intro_title))
-                        .setHeader(res.getString(R.string.title_intro_header))
-                        .setContent(res.getString(R.string.title_intro_contet))
-                        .setImage(ContextCompat.getDrawable(mActivity, R.drawable.ic_device_200dp))
-                        .setColor(ContextCompat.getColor(mActivity, R.color.color_blue_170))
-                        .create()));
+            new Introduction.Builder().setTitle(res.getString(R.string.title_intro_title))
+                .setHeader(res.getString(R.string.title_intro_header))
+                .setContent(res.getString(R.string.title_intro_contet))
+                .setImage(ContextCompat.getDrawable(mActivity, R.drawable.ic_device_200dp))
+                .setColor(ContextCompat.getColor(mActivity, R.color.color_blue_170))
+                .create()));
         mAdapter = new TutorialPagerAdapter(activity.getSupportFragmentManager(), fragments);
         setAdapter(mAdapter);
         setSize(fragments.size() - 1);

@@ -6,13 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.databinding.ItemDeviceUsingHistoryBinding;
 import com.framgia.fdms.databinding.ItemGroupUserDeviceBinding;
-
 import java.util.List;
 
 /**
@@ -68,9 +66,10 @@ public class DeviceUsingHistoryAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) viewGroup.getContext()
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            ItemGroupUserDeviceBinding binding = DataBindingUtil.inflate(inflater,
-                    R.layout.item_group_user_device, viewGroup, false);
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            ItemGroupUserDeviceBinding binding =
+                DataBindingUtil.inflate(inflater, R.layout.item_group_user_device, viewGroup,
+                    false);
             view = binding.getRoot();
         }
         return view;
@@ -80,9 +79,10 @@ public class DeviceUsingHistoryAdapter extends BaseExpandableListAdapter {
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) viewGroup.getContext()
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            ItemDeviceUsingHistoryBinding binding = DataBindingUtil.inflate(inflater,
-                    R.layout.item_device_using_history, viewGroup, false);
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            ItemDeviceUsingHistoryBinding binding =
+                DataBindingUtil.inflate(inflater, R.layout.item_device_using_history, viewGroup,
+                    false);
             view = binding.getRoot();
         }
         return view;

@@ -8,10 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.RequestRepository;
+import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
+import com.framgia.fdms.data.source.local.UserLocalDataSource;
+import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.data.source.remote.RequestRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityAssignmentBinding;
-import com.framgia.fdms.utils.Utils;
 
 import static com.framgia.fdms.utils.Utils.hideSoftKeyboard;
 
@@ -20,12 +22,12 @@ import static com.framgia.fdms.utils.Utils.hideSoftKeyboard;
  */
 public class AssignmentActivity extends AppCompatActivity {
 
-    private AssignmentContract.ViewModel mViewModel;
     private static final String EXTRA_REQUEST_ID = "EXTRA_REQUEST_ID";
+    private AssignmentContract.ViewModel mViewModel;
 
     public static Intent getInstance(Context context, int requestId) {
         Intent intent =
-                new Intent(context, AssignmentActivity.class).putExtra(EXTRA_REQUEST_ID, requestId);
+            new Intent(context, AssignmentActivity.class).putExtra(EXTRA_REQUEST_ID, requestId);
         return intent;
     }
 
@@ -38,12 +40,12 @@ public class AssignmentActivity extends AppCompatActivity {
         mViewModel = new AssignmentViewModel(this);
 
         AssignmentContract.Presenter presenter = new AssignmentPresenter(mViewModel, deviceId,
-                new RequestRepository(
-                        new RequestRemoteDataSource(FDMSServiceClient.getInstance())));
+            new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
+            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))));
         mViewModel.setPresenter(presenter);
 
         ActivityAssignmentBinding binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_assignment);
+            DataBindingUtil.setContentView(this, R.layout.activity_assignment);
         binding.setViewModel((AssignmentViewModel) mViewModel);
         setTitle(getString(R.string.title_assignment));
     }

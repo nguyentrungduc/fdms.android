@@ -16,8 +16,8 @@ import com.framgia.fdms.databinding.FragmentIntroductionBinding;
  */
 public class IntroductionFragment extends Fragment {
 
-    private IntroductionContract.ViewModel mViewModel;
     private static final String BUNDLE_INTRO = "BUNDLE_INTRO";
+    private IntroductionContract.ViewModel mViewModel;
 
     public static IntroductionFragment newInstance() {
         return new IntroductionFragment();
@@ -34,8 +34,8 @@ public class IntroductionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new IntroductionViewModel(
-                (Introduction) getArguments().getParcelable(BUNDLE_INTRO));
+        mViewModel =
+            new IntroductionViewModel((Introduction) getArguments().getParcelable(BUNDLE_INTRO));
 
         IntroductionContract.Presenter presenter = new IntroductionPresenter(mViewModel);
         mViewModel.setPresenter(presenter);
@@ -44,10 +44,10 @@ public class IntroductionFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
 
         FragmentIntroductionBinding binding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_introduction, container, false);
+            DataBindingUtil.inflate(inflater, R.layout.fragment_introduction, container, false);
         binding.setViewModel((IntroductionViewModel) mViewModel);
         return binding.getRoot();
     }

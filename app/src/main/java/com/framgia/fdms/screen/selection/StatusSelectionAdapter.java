@@ -16,8 +16,9 @@ import java.util.List;
  */
 
 public class StatusSelectionAdapter
-        extends RecyclerView.Adapter<StatusSelectionAdapter.SelectionHolder> {
+    extends RecyclerView.Adapter<StatusSelectionAdapter.SelectionHolder> {
 
+    public static final int FIRST_INDEX = 0;
     private StatusSelectionContract.ViewModel mViewModel;
     private StatusSelectionType mStatusType = StatusSelectionType.STATUS;
     private LayoutInflater mInflater;
@@ -25,10 +26,9 @@ public class StatusSelectionAdapter
     private List<Category> mCategoriesTemp = new ArrayList<>();
     private List<Status> mStatuses;
     private List<Status> mStatusesTemp = new ArrayList<>();
-    public static final int FIRST_INDEX = 0;
 
     public StatusSelectionAdapter(StatusSelectionContract.ViewModel viewModel,
-            List<Category> categories, StatusSelectionType type) {
+        List<Category> categories, StatusSelectionType type) {
         mViewModel = viewModel;
         mCategories = categories;
         mCategoriesTemp.addAll(categories);
@@ -36,7 +36,7 @@ public class StatusSelectionAdapter
     }
 
     public StatusSelectionAdapter(StatusSelectionContract.ViewModel viewModel,
-            List<Status> statuses) {
+        List<Status> statuses) {
         mViewModel = viewModel;
         mStatuses = statuses;
         mStatusesTemp.addAll(statuses);
@@ -46,7 +46,7 @@ public class StatusSelectionAdapter
     public SelectionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (mInflater == null) mInflater = LayoutInflater.from(parent.getContext());
         ItemStatusSelectionBinding binding =
-                ItemStatusSelectionBinding.inflate(mInflater, parent, false);
+            ItemStatusSelectionBinding.inflate(mInflater, parent, false);
         binding.setViewModel(mViewModel);
         binding.setType(mStatusType);
         return new SelectionHolder(binding);

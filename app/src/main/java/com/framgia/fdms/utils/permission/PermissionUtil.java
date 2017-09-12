@@ -21,24 +21,24 @@ public class PermissionUtil {
 
     public static boolean checkCameraPermission(final AppCompatActivity activity) {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+            != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
-                    Manifest.permission.CAMERA)) {
+                Manifest.permission.CAMERA)) {
                 new AlertDialog.Builder(activity).setMessage(R.string.msg_request_read_camera)
-                        .setPositiveButton(R.string.action_agree,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        ActivityCompat.requestPermissions(activity,
-                                                new String[] { Manifest.permission.CAMERA },
-                                                MY_PERMISSIONS_REQUEST_CAMERA);
-                                    }
-                                })
-                        .setNegativeButton(R.string.action_dis_agree, null)
-                        .show();
+                    .setPositiveButton(R.string.action_agree,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(activity,
+                                    new String[] { Manifest.permission.CAMERA },
+                                    MY_PERMISSIONS_REQUEST_CAMERA);
+                            }
+                        })
+                    .setNegativeButton(R.string.action_dis_agree, null)
+                    .show();
             } else {
                 ActivityCompat.requestPermissions(activity,
-                        new String[] { Manifest.permission.CAMERA }, MY_PERMISSIONS_REQUEST_CAMERA);
+                    new String[] { Manifest.permission.CAMERA }, MY_PERMISSIONS_REQUEST_CAMERA);
             }
             return false;
         }
@@ -47,25 +47,25 @@ public class PermissionUtil {
 
     public static boolean checkWritePermission(final AppCompatActivity activity) {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+            != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 new AlertDialog.Builder(activity).setMessage(R.string.msg_request_write_file)
-                        .setPositiveButton(R.string.action_agree,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        ActivityCompat.requestPermissions(activity, new String[] {
-                                                Manifest.permission.WRITE_EXTERNAL_STORAGE
-                                        }, MY_PERMISSIONS_REQUEST_WRITE);
-                                    }
-                                })
-                        .setNegativeButton(R.string.action_dis_agree, null)
-                        .show();
+                    .setPositiveButton(R.string.action_agree,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(activity, new String[] {
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                }, MY_PERMISSIONS_REQUEST_WRITE);
+                            }
+                        })
+                    .setNegativeButton(R.string.action_dis_agree, null)
+                    .show();
             } else {
                 ActivityCompat.requestPermissions(activity,
-                        new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                        MY_PERMISSIONS_REQUEST_WRITE);
+                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                    MY_PERMISSIONS_REQUEST_WRITE);
             }
             return false;
         }

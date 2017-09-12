@@ -1,6 +1,6 @@
 package com.framgia.fdms.data.source.api.request;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Created by levutantuan on 4/5/17.
@@ -15,10 +15,10 @@ public class RegisterRequest extends BaseRequest {
     public String mAddress;
     public String mRole;
     public String mDepartment;
-    private CompositeSubscription mCompositeSubscription = new CompositeSubscription();
+    private CompositeDisposable mCompositeSubscription = new CompositeDisposable();
 
     public RegisterRequest(String userName, String passWord, String confirmPassword,
-            String firstName, String lastName, String address, String role, String department) {
+        String firstName, String lastName, String address, String role, String department) {
         mUserName = userName;
         mPassWord = passWord;
         mConfirmPassword = confirmPassword;

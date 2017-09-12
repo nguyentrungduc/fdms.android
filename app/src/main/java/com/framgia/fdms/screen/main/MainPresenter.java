@@ -4,13 +4,14 @@ import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.UserRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceApi;
-
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.IS_SHOW_CASE_MAIN;
 import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.IS_SHOW_CASE_REQUEST;
@@ -22,15 +23,15 @@ import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.IS
 public class MainPresenter implements MainContract.Presenter {
     private static final String TAG = MainPresenter.class.getName();
     private final MainContract.ViewModel mViewModel;
-    private CompositeSubscription mSubscription;
+    private CompositeDisposable mSubscription;
     private DeviceRepository mDeviceRepository;
     private SharePreferenceApi mSharedPreferences;
     private UserRepository mUserRepository;
 
     public MainPresenter(MainContract.ViewModel viewModel, DeviceRepository deviceRepository,
-                         SharePreferenceApi sharedPreferences, UserRepository userRepository) {
+        SharePreferenceApi sharedPreferences, UserRepository userRepository) {
         mViewModel = viewModel;
-        mSubscription = new CompositeSubscription();
+        mSubscription = new CompositeDisposable();
         mDeviceRepository = deviceRepository;
         mSharedPreferences = sharedPreferences;
         mUserRepository = userRepository;
@@ -50,37 +51,38 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void getDevice(String resultQrCode) {
-        Subscription subscription = mDeviceRepository.getDeviceByQrCode(resultQrCode)
+        Disposable subscription = mDeviceRepository.getDeviceByQrCode(resultQrCode)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(new Action1<Device>() {
+            .subscribe(new Consumer<Device>() {
                 @Override
-                public void call(Device device) {
+                public void accept(Device device) throws Exception {
                     mViewModel.onGetDecodeSuccess(device);
                 }
-            }, new Action1<Throwable>() {
+            }, new RequestError() {
                 @Override
-                public void call(Throwable throwable) {
-                    mViewModel.onGetDeviceError(throwable.getMessage());
+                public void onRequestError(BaseException error) {
+                    mViewModel.onGetDeviceError(error.getMessage());
                 }
             });
+
         mSubscription.add(subscription);
     }
 
     @Override
     public void getCurrentUser() {
-        Subscription subscription = mUserRepository.getCurrentUser()
+        Disposable subscription = mUserRepository.getCurrentUser()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<User>() {
+            .subscribe(new Consumer<User>() {
                 @Override
-                public void call(User user) {
+                public void accept(User user) throws Exception {
                     mViewModel.onGetUserSuccess(user);
                 }
-            }, new Action1<Throwable>() {
+            }, new RequestError() {
                 @Override
-                public void call(Throwable throwable) {
-                    mViewModel.onError(throwable.getMessage());
+                public void onRequestError(BaseException error) {
+                    mViewModel.onError(error.getMessage());
                 }
             });
         mSubscription.add(subscription);

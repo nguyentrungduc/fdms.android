@@ -3,14 +3,14 @@ package com.framgia.fdms.screen.producer.marker;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.source.MakerRepository;
 import com.framgia.fdms.data.source.MakerRepositoryContract;
-
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
@@ -23,12 +23,12 @@ import static com.framgia.fdms.utils.Constant.PER_PAGE;
 public class MarkerPresenter implements MarkerContract.Presenter {
     private final MarkerContract.ViewModel mViewModel;
     private MakerRepositoryContract mRepository;
-    private CompositeSubscription mSubscription;
+    private CompositeDisposable mSubscription;
 
     public MarkerPresenter(MarkerContract.ViewModel viewModel, MakerRepository repository) {
         mViewModel = viewModel;
         mRepository = repository;
-        mSubscription = new CompositeSubscription();
+        mSubscription = new CompositeDisposable();
         getMakers(FIRST_PAGE, PER_PAGE);
     }
 
@@ -43,22 +43,18 @@ public class MarkerPresenter implements MarkerContract.Presenter {
 
     @Override
     public void getMakers(int page, int perPage) {
-        Subscription subscription = mRepository.getMakers(page, perPage)
+        Disposable subscription = mRepository.getMakers(page, perPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<List<Producer>>() {
+            .subscribe(new Consumer<List<Producer>>() {
                 @Override
-                public void onCompleted() {
+                public void accept(List<Producer> producers) throws Exception {
+                    mViewModel.onLoadMakerSucessfully(producers);
                 }
-
+            }, new RequestError() {
                 @Override
-                public void onError(Throwable e) {
+                public void onRequestError(BaseException error) {
                     mViewModel.onLoadMakerFail();
-                }
-
-                @Override
-                public void onNext(List<Producer> makers) {
-                    mViewModel.onLoadMakerSucessfully(makers);
                 }
             });
         mSubscription.add(subscription);

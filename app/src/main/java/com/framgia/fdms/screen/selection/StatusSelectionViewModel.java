@@ -26,7 +26,7 @@ public class StatusSelectionViewModel implements StatusSelectionContract.ViewMod
     private ObservableField<StatusSelectionAdapter> mAdapter = new ObservableField<>();
 
     public StatusSelectionViewModel(AppCompatActivity activity, List<Category> categories,
-            List<Status> statuses, StatusSelectionType selectionType) {
+        List<Status> statuses, StatusSelectionType selectionType) {
         mActivity = activity;
         mCategories = categories;
         mSelectionType = selectionType;
@@ -57,7 +57,7 @@ public class StatusSelectionViewModel implements StatusSelectionContract.ViewMod
 
     @Override
     public void onSelectedItem(Category category, Status status, StatusSelectionType type,
-            int position) {
+        int position) {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putParcelable(BUNDLE_CATEGORY, category);

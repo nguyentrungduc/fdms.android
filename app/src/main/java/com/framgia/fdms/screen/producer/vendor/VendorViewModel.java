@@ -34,6 +34,19 @@ import static com.framgia.fdms.utils.Constant.TAG_MAKER_DIALOG;
  */
 public class VendorViewModel extends BaseObservable
     implements VendorContract.ViewModel, ProducerDialogContract.ActionCallback {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<VendorViewModel> CREATOR =
+        new Parcelable.Creator<VendorViewModel>() {
+            @Override
+            public VendorViewModel createFromParcel(Parcel in) {
+                return new VendorViewModel(in);
+            }
+
+            @Override
+            public VendorViewModel[] newArray(int size) {
+                return new VendorViewModel[size];
+            }
+        };
     private ProducerFunctionContract.ProducerPresenter mPresenter;
     private ListVendorAdapter mAdapter;
     private List<Producer> mVendors = new ArrayList<>();
@@ -46,6 +59,25 @@ public class VendorViewModel extends BaseObservable
     private boolean mIsLoadMore;
     private int mLoadingMoreVisibility;
     private Navigator mNavigator;
+    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if (dy <= 0) {
+                return;
+            }
+            LinearLayoutManager layoutManager =
+                (LinearLayoutManager) recyclerView.getLayoutManager();
+            int visibleItemCount = layoutManager.getChildCount();
+            int totalItemCount = layoutManager.getItemCount();
+            int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+            if (!mIsLoadMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                mIsLoadMore = true;
+                setLoadingMoreVisibility(View.VISIBLE);
+                ((VendorPresenter) mPresenter).loadMorePage();
+            }
+        }
+    };
 
     public VendorViewModel(Activity activity) {
         mActivity = (AppCompatActivity) activity;
@@ -54,14 +86,28 @@ public class VendorViewModel extends BaseObservable
         setLoadingMoreVisibility(View.GONE);
     }
 
-    public void setLoadingMoreVisibility(int visibility) {
-        mLoadingMoreVisibility = visibility;
-        notifyPropertyChanged(BR.loadingMoreVisibility);
+    protected VendorViewModel(Parcel in) {
+        mPresenter = (VendorContract.Presenter) in.readValue(
+            VendorContract.Presenter.class.getClassLoader());
+        mAdapter = (ListVendorAdapter) in.readValue(ListVendorAdapter.class.getClassLoader());
+        if (in.readByte() == 0x01) {
+            mVendors = new ArrayList<Producer>();
+            in.readList(mVendors, Producer.class.getClassLoader());
+        } else {
+            mVendors = null;
+        }
+        mActivity = (AppCompatActivity) in.readValue(AppCompatActivity.class.getClassLoader());
+        mVendorDialog = (ProducerDialog) in.readValue(ProducerDialog.class.getClassLoader());
     }
 
     @Bindable
     public int getLoadingMoreVisibility() {
         return mLoadingMoreVisibility;
+    }
+
+    public void setLoadingMoreVisibility(int visibility) {
+        mLoadingMoreVisibility = visibility;
+        notifyPropertyChanged(BR.loadingMoreVisibility);
     }
 
     @Override
@@ -138,13 +184,14 @@ public class VendorViewModel extends BaseObservable
     }
 
     public void onDeleteVendorFailed(String message) {
-        mVendors.add(mPositionScroll, mVendorEdit);
-        mAdapter.notifyItemInserted(mPositionScroll);
+        mNavigator.showToast(message);
     }
 
     @Override
     public void onDeleteVendorSuccess(Producer producer) {
         // no ops
+        mVendors.remove(producer);
+        mAdapter.notifyItemRemoved(mVendors.indexOf(producer));
     }
 
     @Override
@@ -155,26 +202,8 @@ public class VendorViewModel extends BaseObservable
     }
 
     @Override
-    public void onDeleteProducerClick(final Producer vendor) {
-        final int indexRemove = mVendors.indexOf(vendor);
-        mVendors.remove(vendor);
-        mAdapter.notifyItemRemoved(indexRemove);
-        Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.title_vendor_delete,
-            Snackbar.LENGTH_SHORT).setAction(R.string.title_undo, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mVendors.add(indexRemove, vendor);
-                mAdapter.notifyItemInserted(indexRemove);
-                setPositionScroll(indexRemove);
-            }
-        }).addCallback(new Snackbar.Callback() {
-            @Override
-            public void onDismissed(Snackbar transientBottomBar, int event) {
-                super.onDismissed(transientBottomBar, event);
-                setPositionScroll(OUT_OF_INDEX);
-                ((VendorPresenter) mPresenter).deleteVendor(vendor);
-            }
-        }).show();
+    public void onDeleteProducerClick(Producer vendor) {
+        ((VendorPresenter) mPresenter).deleteVendor(vendor);
     }
 
     @Override
@@ -204,47 +233,6 @@ public class VendorViewModel extends BaseObservable
         return mScrollListener;
     }
 
-    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            if (dy <= 0) {
-                return;
-            }
-            LinearLayoutManager layoutManager =
-                (LinearLayoutManager) recyclerView.getLayoutManager();
-            int visibleItemCount = layoutManager.getChildCount();
-            int totalItemCount = layoutManager.getItemCount();
-            int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-            if (!mIsLoadMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                mIsLoadMore = true;
-                setLoadingMoreVisibility(View.VISIBLE);
-                ((VendorPresenter) mPresenter).loadMorePage();
-            }
-        }
-    };
-
-    @IntDef({ ACTION_EDIT_VENDOR, ACTION_ADD_VENDOR, ACTION_DELETE_VENDOR })
-    public @interface Action {
-        int ACTION_EDIT_VENDOR = 0;
-        int ACTION_ADD_VENDOR = 1;
-        int ACTION_DELETE_VENDOR = 2;
-    }
-
-    protected VendorViewModel(Parcel in) {
-        mPresenter = (VendorContract.Presenter) in.readValue(
-            VendorContract.Presenter.class.getClassLoader());
-        mAdapter = (ListVendorAdapter) in.readValue(ListVendorAdapter.class.getClassLoader());
-        if (in.readByte() == 0x01) {
-            mVendors = new ArrayList<Producer>();
-            in.readList(mVendors, Producer.class.getClassLoader());
-        } else {
-            mVendors = null;
-        }
-        mActivity = (AppCompatActivity) in.readValue(AppCompatActivity.class.getClassLoader());
-        mVendorDialog = (ProducerDialog) in.readValue(ProducerDialog.class.getClassLoader());
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -264,17 +252,10 @@ public class VendorViewModel extends BaseObservable
         dest.writeValue(mVendorDialog);
     }
 
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<VendorViewModel> CREATOR =
-        new Parcelable.Creator<VendorViewModel>() {
-            @Override
-            public VendorViewModel createFromParcel(Parcel in) {
-                return new VendorViewModel(in);
-            }
-
-            @Override
-            public VendorViewModel[] newArray(int size) {
-                return new VendorViewModel[size];
-            }
-        };
+    @IntDef({ ACTION_EDIT_VENDOR, ACTION_ADD_VENDOR, ACTION_DELETE_VENDOR })
+    public @interface Action {
+        int ACTION_EDIT_VENDOR = 0;
+        int ACTION_ADD_VENDOR = 1;
+        int ACTION_DELETE_VENDOR = 2;
+    }
 }

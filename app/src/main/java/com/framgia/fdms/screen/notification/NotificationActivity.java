@@ -30,7 +30,7 @@ public class NotificationActivity extends AppCompatActivity {
         mViewModel.setPresenter(presenter);
 
         ActivityNotificationBinding binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_notification);
+            DataBindingUtil.setContentView(this, R.layout.activity_notification);
         binding.setViewModel((NotificationViewModel) mViewModel);
     }
 

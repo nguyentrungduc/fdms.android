@@ -11,6 +11,7 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
+import io.reactivex.Observable;
 import java.util.List;
 import java.util.Map;
 import okhttp3.MultipartBody;
@@ -27,7 +28,6 @@ import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
-import rx.Observable;
 
 public interface FDMSApi {
     @POST("api/sessions")

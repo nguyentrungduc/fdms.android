@@ -1,22 +1,23 @@
 package com.framgia.fdms.data.source;
 
 import com.framgia.fdms.data.model.Producer;
+import com.framgia.fdms.data.model.Respone;
+import io.reactivex.Observable;
 import java.util.List;
-import rx.Observable;
 
 /**
  * Created by framgia on 03/07/2017.
  */
 public class VendorRepository implements VendorDataSource.RemoteDataSource {
-    private VendorDataSource.RemoteDataSource mVendorRemoteDataSource;
     private static VendorRepository sInstances;
+    private VendorDataSource.RemoteDataSource mVendorRemoteDataSource;
 
     public VendorRepository(VendorDataSource.RemoteDataSource vendorRemoteDataSource) {
         mVendorRemoteDataSource = vendorRemoteDataSource;
     }
 
     public static VendorRepository getInstances(
-            VendorDataSource.RemoteDataSource vendorRemoteDataSource) {
+        VendorDataSource.RemoteDataSource vendorRemoteDataSource) {
         if (sInstances == null) {
             sInstances = new VendorRepository(vendorRemoteDataSource);
         }
@@ -34,7 +35,7 @@ public class VendorRepository implements VendorDataSource.RemoteDataSource {
     }
 
     @Override
-    public Observable<String> deleteVendor(Producer vendor) {
+    public Observable<Respone<String>> deleteVendor(Producer vendor) {
         return mVendorRemoteDataSource.deleteVendor(vendor);
     }
 

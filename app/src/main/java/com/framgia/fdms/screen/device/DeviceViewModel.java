@@ -6,7 +6,6 @@ import android.support.annotation.IntDef;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.User;
@@ -14,7 +13,6 @@ import com.framgia.fdms.screen.ViewPagerScroll;
 import com.framgia.fdms.screen.device.listdevice.ListDeviceFragment;
 import com.framgia.fdms.screen.producer.marker.MarkerFragment;
 import com.framgia.fdms.screen.producer.vendor.VendorFragment;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,7 +120,7 @@ public class DeviceViewModel extends BaseObservable
         notifyPropertyChanged(BR.adapter);
     }
 
-    @IntDef({TAB_MY_DEVICE, TAB_MANAGE_DEVICE, TAB_VENDOR, TAB_MAKER})
+    @IntDef({ TAB_MY_DEVICE, TAB_MANAGE_DEVICE, TAB_VENDOR, TAB_MAKER })
     public @interface Tab {
         int TAB_MY_DEVICE = 0;
         int TAB_MANAGE_DEVICE = 1;

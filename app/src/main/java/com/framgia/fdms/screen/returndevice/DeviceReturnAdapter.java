@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 public class DeviceReturnAdapter
-        extends RecyclerView.Adapter<DeviceReturnAdapter.DeviceReturnHolder> {
+    extends RecyclerView.Adapter<DeviceReturnAdapter.DeviceReturnHolder> {
 
     private final ReturnDeviceContract.ViewModel mViewModel;
     private List<Device> mDevices;

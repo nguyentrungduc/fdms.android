@@ -17,12 +17,12 @@ import java.util.List;
  */
 
 public class ListDeviceAdapter
-        extends BaseRecyclerViewAdapter<Device, ListDeviceAdapter.ViewHolder> {
+    extends BaseRecyclerViewAdapter<Device, ListDeviceAdapter.ViewHolder> {
     private List<Device> mDevices;
     private ItemDeviceClickListenner mListenner;
 
     public ListDeviceAdapter(@NonNull Context context, @NonNull List<Device> devices,
-            @NonNull ItemDeviceClickListenner listenner) {
+        @NonNull ItemDeviceClickListenner listenner) {
         super(context);
         mDevices = devices;
         mListenner = listenner;
@@ -31,8 +31,8 @@ public class ListDeviceAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemListDataBinding binding =
-                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                        R.layout.item_listdevice, parent, false);
+            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.item_listdevice, parent, false);
         return new ViewHolder(binding, mListenner);
     }
 

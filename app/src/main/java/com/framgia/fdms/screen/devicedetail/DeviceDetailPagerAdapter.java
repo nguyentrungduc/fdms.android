@@ -9,11 +9,11 @@ import com.framgia.fdms.R;
 import java.util.List;
 
 import static com.framgia.fdms.screen.devicedetail.DeviceDetailPagerAdapter.DeviceDetailPage
-        .DEVICE_HISTORY;
+    .DEVICE_HISTORY;
 import static com.framgia.fdms.screen.devicedetail.DeviceDetailPagerAdapter.DeviceDetailPage
-        .DEVICE_INFOMATION;
+    .DEVICE_INFOMATION;
 import static com.framgia.fdms.screen.devicedetail.DeviceDetailPagerAdapter.DeviceDetailPage
-        .DEVICE_USING_HISTORY;
+    .DEVICE_USING_HISTORY;
 
 /**
  * Created by MyPC on 23/05/2017.
@@ -27,7 +27,7 @@ public class DeviceDetailPagerAdapter extends FragmentPagerAdapter {
     private int mPosition;
 
     public DeviceDetailPagerAdapter(Context context, FragmentManager fm, List<Fragment> fragments,
-            int deviceId) {
+        int deviceId) {
         super(fm);
         mContext = context;
         mDeviceId = deviceId;

@@ -17,7 +17,7 @@ import com.framgia.fdms.screen.devicecreation.DeviceStatusType;
  */
 
 public class DeviceInfomationViewModel extends BaseObservable
-        implements DeviceInfomationContract.ViewModel {
+    implements DeviceInfomationContract.ViewModel {
 
     private DeviceInfomationContract.Presenter mPresenter;
     private Device mDevice;
@@ -55,13 +55,13 @@ public class DeviceInfomationViewModel extends BaseObservable
     @Override
     public void onEditDevice() {
         mContext.startActivity(
-                CreateDeviceActivity.getInstance(mContext, mDevice, DeviceStatusType.EDIT));
+            CreateDeviceActivity.getInstance(mContext, mDevice, DeviceStatusType.EDIT));
     }
 
     @Override
     public void onError() {
         Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.error_device_detail,
-                Snackbar.LENGTH_SHORT).show();
+            Snackbar.LENGTH_SHORT).show();
     }
 
     public ObservableField<Integer> getProgressBarVisibility() {

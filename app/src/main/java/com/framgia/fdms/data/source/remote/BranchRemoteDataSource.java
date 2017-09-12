@@ -5,10 +5,10 @@ import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.BranchDataSource;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.utils.Utils;
-import java.util.ArrayList;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
 import java.util.List;
-import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by MyPC on 13/06/2017.
@@ -21,11 +21,13 @@ public class BranchRemoteDataSource extends BaseRemoteDataSource implements Bran
 
     @Override
     public Observable<List<Status>> getListBranch() {
-        return mFDMSApi.getListBranch().flatMap(new Func1<Respone<List<Status>>, Observable<List<Status>>>() {
-            @Override
-            public Observable<List<Status>> call(Respone<List<Status>> listRespone) {
-                return Utils.getResponse(listRespone);
-            }
-        });
+        return mFDMSApi.getListBranch()
+            .flatMap(new Function<Respone<List<Status>>, ObservableSource<List<Status>>>() {
+                @Override
+                public ObservableSource<List<Status>> apply(Respone<List<Status>> listRespone)
+                    throws Exception {
+                    return Utils.getResponse(listRespone);
+                }
+            });
     }
 }

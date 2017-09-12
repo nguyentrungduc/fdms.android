@@ -48,11 +48,10 @@ public class DashBoardDetailFragment extends Fragment {
 
         mViewModel = new DashBoardDetailViewModel(this, dashboradType);
         DashBoardDetailContract.Presenter presenter = new DashBoardDetailPresenter(mViewModel,
-                new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
-                RequestRepository.getInstant(
-                        new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
-                dashboradType,
-                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
+            new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
+            RequestRepository.getInstant(
+                new RequestRemoteDataSource(FDMSServiceClient.getInstance())), dashboradType,
+            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
         mViewModel.setPresenter(presenter);
         mViewModel.getData();
     }
@@ -60,11 +59,11 @@ public class DashBoardDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
 
         FragmentDashBoardDetailBinding binding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_dash_board_detail, container,
-                        false);
+            DataBindingUtil.inflate(inflater, R.layout.fragment_dash_board_detail, container,
+                false);
         binding.setViewModel((DashBoardDetailViewModel) mViewModel);
         return binding.getRoot();
     }

@@ -11,7 +11,8 @@ import com.framgia.fdms.screen.main.MainActivity;
  * Exposes the data to be used in the Forgetpassword screen.
  */
 
-public class ForgotpasswordViewModel extends BaseObservable implements ForgetpasswordContract.ViewModel {
+public class ForgotpasswordViewModel extends BaseObservable
+    implements ForgetpasswordContract.ViewModel {
 
     private Context mContext;
     private ForgetpasswordContract.Presenter mPresenter;
@@ -39,13 +40,13 @@ public class ForgotpasswordViewModel extends BaseObservable implements Forgetpas
 
     @Override
     public void onInputEmailError() {
-        mEmailError =mContext.getString(R.string.error_text_email);
+        mEmailError = mContext.getString(R.string.error_text_email);
         notifyPropertyChanged(BR.emailError);
     }
 
     @Override
     public void onInputFormatEmailError() {
-        mEmailError =mContext.getString(R.string.error_text_format_email);
+        mEmailError = mContext.getString(R.string.error_text_format_email);
         notifyPropertyChanged(BR.emailError);
     }
 

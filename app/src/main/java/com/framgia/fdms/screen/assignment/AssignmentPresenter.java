@@ -1,12 +1,16 @@
 package com.framgia.fdms.screen.assignment;
 
 import com.framgia.fdms.data.model.Request;
+import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.RequestRepository;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import com.framgia.fdms.data.source.UserRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Listens to user actions from the UI ({@link AssignmentActivity}), retrieves the data and updates
@@ -18,14 +22,16 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
     private final AssignmentContract.ViewModel mViewModel;
     private int mRequestId;
     private RequestRepository mRequestRepository;
-    private CompositeSubscription mSubscription;
+    private UserRepository mUserRepository;
+    private CompositeDisposable mSubscription;
 
     public AssignmentPresenter(AssignmentContract.ViewModel viewModel, int requestId,
-            RequestRepository requestRepository) {
+        RequestRepository requestRepository, UserRepository userRepository) {
         mViewModel = viewModel;
         mRequestId = requestId;
         mRequestRepository = requestRepository;
-        mSubscription = new CompositeSubscription();
+        mUserRepository = userRepository;
+        mSubscription = new CompositeDisposable();
         getRequest(mRequestId);
     }
 
@@ -40,39 +46,58 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
 
     @Override
     public void registerAssignment(Request request) {
-        Subscription subscription = mRequestRepository.getRequest(mRequestId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Action1<Request>() {
-                    @Override
-                    public void call(Request request) {
-                        mViewModel.onGetRequestSuccess(request);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.onLoadError(throwable.getMessage());
-                    }
-                });
+        Disposable subscription = mRequestRepository.getRequest(mRequestId)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(new Consumer<Request>() {
+                @Override
+                public void accept(Request request) throws Exception {
+                    mViewModel.onGetRequestSuccess(request);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onLoadError(error.getMessage());
+                }
+            });
         mSubscription.add(subscription);
     }
 
     @Override
     public void getRequest(int requestId) {
-        Subscription subscription = mRequestRepository.getRequest(requestId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Action1<Request>() {
-                    @Override
-                    public void call(Request request) {
-                        mViewModel.onGetRequestSuccess(request);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.onLoadError(throwable.getMessage());
-                    }
-                });
+        Disposable subscription = mRequestRepository.getRequest(requestId)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(new Consumer<Request>() {
+                @Override
+                public void accept(Request request) throws Exception {
+                    mViewModel.onGetRequestSuccess(request);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onLoadError(error.getMessage());
+                }
+            });
+        mSubscription.add(subscription);
+    }
+
+    @Override
+    public void chooseExportActivity() {
+        Disposable subscription = mUserRepository.getCurrentUser()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<User>() {
+                @Override
+                public void accept(User user) throws Exception {
+                    mViewModel.openChooseExportActivitySuccess(user);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onChooseExportActivityFailed();
+                }
+            });
         mSubscription.add(subscription);
     }
 }

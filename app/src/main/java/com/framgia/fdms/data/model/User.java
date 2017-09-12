@@ -6,10 +6,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.StringDef;
 import com.android.databinding.library.baseAdapters.BR;
-import com.framgia.fdms.utils.Constant;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.io.Serializable;
 import java.util.Date;
 
 import static com.framgia.fdms.data.model.User.Role.STAFF;
@@ -20,6 +18,17 @@ import static com.framgia.fdms.utils.Constant.Role.BO_STAFF;
  * Created by levutantuan on 3/31/17.
  */
 public class User extends BaseObservable implements Parcelable {
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
     @Expose
     @SerializedName("id")
     private int mId;
@@ -116,18 +125,6 @@ public class User extends BaseObservable implements Parcelable {
         mToken = in.readString();
         mCardNumber = in.readString();
     }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
 
     @Bindable
     public String getCardNumber() {
@@ -396,11 +393,6 @@ public class User extends BaseObservable implements Parcelable {
         dest.writeString(mCardNumber);
     }
 
-    @StringDef({ STAFF })
-    public @interface Role {
-        String STAFF = "staff";
-    }
-
     public boolean isBo() {
         if (mRole == null) return false;
         return mRole.equals(BO_MANAGER) || mRole.equals(BO_STAFF);
@@ -409,5 +401,10 @@ public class User extends BaseObservable implements Parcelable {
     public boolean isBoStaff() {
         if (mRole == null) return false;
         return mRole.equals(BO_STAFF) || mRole.equals(BO_MANAGER);
+    }
+
+    @StringDef({ STAFF })
+    public @interface Role {
+        String STAFF = "staff";
     }
 }

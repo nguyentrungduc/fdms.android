@@ -1,28 +1,25 @@
 package com.framgia.fdms.data.source;
 
 import com.framgia.fdms.data.model.Producer;
-
+import io.reactivex.Observable;
 import java.util.List;
-
-import rx.Observable;
 
 /**
  * Created by beepi on 05/07/2017.
  */
 public class MakerRepository implements MakerRepositoryContract {
-    private MakerDataSource.RemoteDataSource mRemoteDataSource;
     private static MakerRepository sMakerRepository;
+    private MakerDataSource.RemoteDataSource mRemoteDataSource;
 
-    public static MakerRepository getInstant(
-        MakerDataSource.RemoteDataSource remoteDataSource) {
+    public MakerRepository(MakerDataSource.RemoteDataSource remoteDataSource) {
+        mRemoteDataSource = remoteDataSource;
+    }
+
+    public static MakerRepository getInstant(MakerDataSource.RemoteDataSource remoteDataSource) {
         if (sMakerRepository == null) {
             sMakerRepository = new MakerRepository(remoteDataSource);
         }
         return sMakerRepository;
-    }
-
-    public MakerRepository(MakerDataSource.RemoteDataSource remoteDataSource) {
-        mRemoteDataSource = remoteDataSource;
     }
 
     @Override

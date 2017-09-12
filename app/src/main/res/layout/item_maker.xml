@@ -64,9 +64,9 @@
                 <ImageView
                     android:layout_width="@dimen/dp_30"
                     android:layout_height="@dimen/dp_30"
+                    android:onClick="@{()->viewModel.onDeleteProducerClick(maker)}"
                     android:padding="@dimen/dp_5"
                     android:src="@drawable/ic_delete"
-                    android:onClick="@{()->viewModel.onDeleteProducerClick(maker)}"
                     />
             </LinearLayout>
 

@@ -6,6 +6,10 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 
+/**
+ * Created by le.quang.dao on 10/03/2017.
+ */
+
 public class BooleanAdapter extends TypeAdapter<Boolean> {
     @Override
     public void write(JsonWriter out, Boolean value) throws IOException {

@@ -2,11 +2,8 @@ package com.framgia.fdms.data.source.api.request;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.graphics.Color;
-import android.widget.NumberPicker;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.data.model.Category;
-import com.framgia.fdms.screen.requestcreation.RequestCreationViewModel;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

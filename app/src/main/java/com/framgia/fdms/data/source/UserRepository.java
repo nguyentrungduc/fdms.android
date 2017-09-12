@@ -5,8 +5,7 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.api.request.RegisterRequest;
 import com.framgia.fdms.data.source.local.UserLocalDataSource;
 import com.framgia.fdms.data.source.remote.UserRemoteDataSource;
-
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * Created by levutantuan on 4/4/17.

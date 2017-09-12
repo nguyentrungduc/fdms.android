@@ -19,8 +19,8 @@ import com.framgia.fdms.databinding.FragmentDeviceInfomationBinding;
  */
 public class DeviceInfomationFragment extends Fragment {
 
-    private DeviceInfomationContract.ViewModel mViewModel;
     public static final String EXTRA_DEVIVE = "EXTRA_DEVIVE";
+    private DeviceInfomationContract.ViewModel mViewModel;
     private Device mDevice;
 
     public static DeviceInfomationFragment newInstance() {
@@ -42,19 +42,19 @@ public class DeviceInfomationFragment extends Fragment {
         mViewModel = new DeviceInfomationViewModel(getContext(), getActivity(), mDevice);
 
         DeviceInfomationContract.Presenter presenter = new DeviceInfomationPresenter(mViewModel,
-                new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
-                mDevice);
+            new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
+            mDevice);
         mViewModel.setPresenter(presenter);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
 
         FragmentDeviceInfomationBinding binding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_device_infomation, container,
-                        false);
+            DataBindingUtil.inflate(inflater, R.layout.fragment_device_infomation, container,
+                false);
         binding.setViewModel((DeviceInfomationViewModel) mViewModel);
         return binding.getRoot();
     }

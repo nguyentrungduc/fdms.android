@@ -14,7 +14,6 @@ import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
-
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Category;
@@ -30,7 +29,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -100,7 +98,7 @@ public class CreateDeviceViewModel extends BaseObservable
     private int mProgressBarVisibility = GONE;
 
     public CreateDeviceViewModel(CreateDeviceActivity activity, Device device,
-                                 DeviceStatusType type) {
+        DeviceStatusType type) {
         mContext = activity.getApplicationContext();
         mActivity = activity;
         if (device == null) {
@@ -534,15 +532,15 @@ public class CreateDeviceViewModel extends BaseObservable
         return mCategory;
     }
 
-    @Bindable
-    public String getStatusError() {
-        return mStatusError;
-    }
-
     public void setCategory(Category category) {
         mDevice.setDeviceCategoryId(category.getId());
         mCategory = category;
         notifyPropertyChanged(BR.category);
+    }
+
+    @Bindable
+    public String getStatusError() {
+        return mStatusError;
     }
 
     @Bindable

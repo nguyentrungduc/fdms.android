@@ -2,13 +2,14 @@ package com.framgia.fdms.screen.notification;
 
 import com.framgia.fdms.data.model.Notification;
 import com.framgia.fdms.data.source.NotificationRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Listens to user actions from the UI ({@link NotificationActivity}), retrieves the data and
@@ -20,11 +21,11 @@ public final class NotificationPresenter implements NotificationContract.Present
 
     private final NotificationContract.ViewModel mViewModel;
     private NotificationRepository mRepository = NotificationRepository.getInstances();
-    private CompositeSubscription mSubscription;
+    private CompositeDisposable mSubscription;
 
     public NotificationPresenter(NotificationContract.ViewModel viewModel) {
         mViewModel = viewModel;
-        mSubscription = new CompositeSubscription();
+        mSubscription = new CompositeDisposable();
     }
 
     @Override
@@ -39,29 +40,20 @@ public final class NotificationPresenter implements NotificationContract.Present
 
     @Override
     public void getNotifications() {
-        Subscription subscription = mRepository.getNotifications()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                    }
-                })
-                .subscribe(new Subscriber<List<Notification>>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mViewModel.onLoadNotificationFails();
-                    }
-
-                    @Override
-                    public void onNext(List<Notification> notifications) {
-                        mViewModel.onLoadNotificationSuccess(notifications);
-                    }
-                });
+        Disposable subscription = mRepository.getNotifications()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<List<Notification>>() {
+                @Override
+                public void accept(List<Notification> notifications) throws Exception {
+                    mViewModel.onLoadNotificationSuccess(notifications);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onLoadNotificationFails();
+                }
+            });
         mSubscription.add(subscription);
     }
 }

@@ -3,6 +3,7 @@ package com.framgia.fdms.screen.assignment;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Request;
+import com.framgia.fdms.data.model.User;
 
 /**
  * This specifies the contract between the view and the presenter.
@@ -21,6 +22,10 @@ interface AssignmentContract {
         void onGetRequestSuccess(Request request);
 
         void openChooseExportActivity();
+
+        void openChooseExportActivitySuccess(User user);
+
+        void onChooseExportActivityFailed();
     }
 
     /**
@@ -30,5 +35,7 @@ interface AssignmentContract {
         void registerAssignment(Request request);
 
         void getRequest(int requestId);
+
+        void chooseExportActivity();
     }
 }

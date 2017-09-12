@@ -4,10 +4,11 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
-
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.User;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.utils.Utils;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Chunk;
@@ -23,7 +24,11 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,12 +38,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 import static com.framgia.fdms.utils.Constant.FOLDER_NAME_FAMS;
 import static com.itextpdf.text.Font.BOLD;
@@ -58,9 +57,9 @@ public class ExportPresenter implements ExportContract.Presenter {
     private static final int INDENT_LEFT = 10;
     private static final int HEADER_FONT_SIZE = 16;
     private static final int NORMAL_FONT_SIZE = 13;
-    private static final float[] COLUMN_WIDTH_TABLE_HEADER = {2, 3, 3};
-    private static final float[] COLUMN_WIDTH_TABLE_INFO = {2, 1};
-    private static final float[] COLUMN_WIDTH_TABLE_DEVICE = {1, 3, 3, 3};
+    private static final float[] COLUMN_WIDTH_TABLE_HEADER = { 2, 3, 3 };
+    private static final float[] COLUMN_WIDTH_TABLE_INFO = { 2, 1 };
+    private static final float[] COLUMN_WIDTH_TABLE_DEVICE = { 1, 3, 3, 3 };
     private static final int COLUMN_TABLE_SIGNATURE = 2;
     private static final int COL_SPAN = 2;
     private static final float THINKNESS = 0.7f;
@@ -76,7 +75,7 @@ public class ExportPresenter implements ExportContract.Presenter {
     private Image mImage;
     private Paragraph mParagraph;
     private User mUser;
-    private CompositeSubscription mCompositeSubscription;
+    private CompositeDisposable mCompositeSubscription;
     private ExportContract.ViewModel mViewModel;
     private PdfPTable mTableHeader;
     private PdfPTable mTableInfo;
@@ -87,7 +86,7 @@ public class ExportPresenter implements ExportContract.Presenter {
 
     public ExportPresenter(User user, ExportContract.ViewModel viewModel) {
         mUser = user;
-        mCompositeSubscription = new CompositeSubscription();
+        mCompositeSubscription = new CompositeDisposable();
         mViewModel = viewModel;
     }
 
@@ -333,9 +332,9 @@ public class ExportPresenter implements ExportContract.Presenter {
         Observable.just(createPdfAssinment(list))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<Object>() {
+            .subscribe(new Consumer<Object>() {
                 @Override
-                public void call(Object o) {
+                public void accept(Object o) throws Exception {
                     if (o instanceof String) {
                         String filePath = (String) o;
                         mViewModel.onExportPdfSuccess(filePath);
@@ -345,9 +344,9 @@ public class ExportPresenter implements ExportContract.Presenter {
                         }
                     }
                 }
-            }, new Action1<Throwable>() {
+            }, new RequestError() {
                 @Override
-                public void call(Throwable throwable) {
+                public void onRequestError(BaseException error) {
                     mViewModel.showMessage(R.string.message_export_error);
                 }
             });
@@ -360,7 +359,7 @@ public class ExportPresenter implements ExportContract.Presenter {
 
     @Override
     public void onDestroy() {
-        mCompositeSubscription.unsubscribe();
+        mCompositeSubscription.clear();
     }
 
     @Override

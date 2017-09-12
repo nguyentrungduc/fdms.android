@@ -9,13 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.databinding.ItemAssignmentBinding;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +23,7 @@ import java.util.List;
 public class AssignmentAdapter
     extends BaseRecyclerViewAdapter<AssignmentRequest, AssignmentAdapter.ViewHolder> {
     private List<AssignmentRequest> mRequests;
+
     private AssignmentViewModel mViewModel;
 
     protected AssignmentAdapter(@NonNull Context context, @NonNull AssignmentViewModel viewModel) {
@@ -109,7 +108,7 @@ public class AssignmentAdapter
         private int mPosition;
 
         public ViewHolderModel(AssignmentRequest request, AssignmentViewModel viewModel,
-                               View.OnClickListener onDelteClick, int position) {
+            View.OnClickListener onDelteClick, int position) {
             mRequest = request;
             mViewModel = viewModel;
             mOnDeleteClick = onDelteClick;

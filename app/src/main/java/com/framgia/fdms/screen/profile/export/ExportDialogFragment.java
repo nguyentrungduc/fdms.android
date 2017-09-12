@@ -39,7 +39,7 @@ public class ExportDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         mBinding = DialogExportBinding.inflate(inflater, container, false);
         getDataFromIntent();

@@ -6,11 +6,12 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.source.MeetingRoomDataSource;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.utils.Utils;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import rx.Observable;
-import rx.functions.Func1;
 
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
@@ -22,7 +23,7 @@ import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
  */
 
 public class MeetingRoomRemoteDataSource extends BaseRemoteDataSource
-        implements MeetingRoomDataSource.RemoteDataSource {
+    implements MeetingRoomDataSource.RemoteDataSource {
 
     public MeetingRoomRemoteDataSource(FDMSApi fdmsApi) {
         super(fdmsApi);
@@ -30,12 +31,13 @@ public class MeetingRoomRemoteDataSource extends BaseRemoteDataSource
 
     @Override
     public Observable<List<MeetingRoom>> getListMeetingRoom(String roomName, int page,
-            int perPage) {
+        int perPage) {
         return mFDMSApi.getListMeetingRoom(getRoomParams(roomName, page, perPage))
-                .flatMap(new Func1<Respone<List<MeetingRoom>>, Observable<List<MeetingRoom>>>() {
+            .flatMap(
+                new Function<Respone<List<MeetingRoom>>, ObservableSource<List<MeetingRoom>>>() {
                     @Override
-                    public Observable<List<MeetingRoom>> call(
-                            Respone<List<MeetingRoom>> listRespone) {
+                    public ObservableSource<List<MeetingRoom>> apply(
+                        Respone<List<MeetingRoom>> listRespone) {
                         return Utils.getResponse(listRespone);
                     }
                 });

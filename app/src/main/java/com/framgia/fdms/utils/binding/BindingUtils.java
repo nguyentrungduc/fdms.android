@@ -43,7 +43,6 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Category;
@@ -62,10 +61,8 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-
 import java.util.Calendar;
 import java.util.Date;
-
 import uk.co.deanwild.materialshowcaseview.IShowcaseListener;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -101,20 +98,20 @@ public final class BindingUtils {
         // No-op
     }
 
-    @BindingAdapter({"recyclerAdapter"})
+    @BindingAdapter({ "recyclerAdapter" })
     public static void setAdapterForRecyclerView(RecyclerView recyclerView,
-                                                 RecyclerView.Adapter adapter) {
+        RecyclerView.Adapter adapter) {
         recyclerView.setAdapter(adapter);
     }
 
-    @BindingAdapter(value = {"app:imageUrl", "app:error"}, requireAll = false)
+    @BindingAdapter(value = { "app:imageUrl", "app:error" }, requireAll = false)
     public static void loadImage(ImageView view, String imageUrl, Drawable error) {
         if (error == null) {
             Glide.with(view.getContext())
-                    .load(imageUrl)
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_no_image)
-                    .into(view);
+                .load(imageUrl)
+                .centerCrop()
+                .placeholder(R.drawable.ic_no_image)
+                .into(view);
         } else {
             Glide.with(view.getContext()).load(imageUrl).centerCrop().placeholder(error).into(view);
         }
@@ -125,33 +122,33 @@ public final class BindingUtils {
         layout.setError(text);
     }
 
-    @BindingAdapter({"spinnerAdapter"})
+    @BindingAdapter({ "spinnerAdapter" })
     public static void setAdapterForSpinner(AppCompatSpinner spinner,
-                                            ArrayAdapter<String> adapter) {
+        ArrayAdapter<String> adapter) {
         spinner.setAdapter(adapter);
     }
 
-    @BindingAdapter({"bind:font"})
+    @BindingAdapter({ "bind:font" })
     public static void setFont(TextView textView, String fontName) {
         textView.setTypeface(Typeface.createFromAsset(textView.getContext().getAssets(), fontName));
     }
 
-    @BindingAdapter({"scrollListenner"})
+    @BindingAdapter({ "scrollListenner" })
     public static void setScrollListenner(RecyclerView recyclerView,
-                                          RecyclerView.OnScrollListener listener) {
+        RecyclerView.OnScrollListener listener) {
         recyclerView.addOnScrollListener(listener);
     }
 
-    @BindingAdapter(value = {"bind:adapter", "model", "linearDot"}, requireAll = false)
+    @BindingAdapter(value = { "bind:adapter", "model", "linearDot" }, requireAll = false)
     public static void setupViewPager(final ViewPager viewPager, FragmentPagerAdapter adapter,
-                                      final ViewPagerScroll viewModel, final LinearLayout layout) {
+        final ViewPagerScroll viewModel, final LinearLayout layout) {
         viewPager.setAdapter(adapter);
         if (viewModel == null) return;
         if (adapter != null) viewPager.setOffscreenPageLimit(adapter.getCount());
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
+                int positionOffsetPixels) {
             }
 
             @Override
@@ -164,7 +161,7 @@ public final class BindingUtils {
                             continue;
                         }
                         view.setBackgroundResource(position == i ? R.drawable.ic_circle_white
-                                : R.drawable.ic_circle_border_white);
+                            : R.drawable.ic_circle_border_white);
                     }
                 }
             }
@@ -177,17 +174,17 @@ public final class BindingUtils {
 
     private static void changeImageColor(ImageView image, int colorRes) {
         image.getDrawable()
-                .setColorFilter(image.getContext().getResources().getColor(colorRes),
-                        PorterDuff.Mode.SRC_IN);
+            .setColorFilter(image.getContext().getResources().getColor(colorRes),
+                PorterDuff.Mode.SRC_IN);
     }
 
-    @BindingAdapter({"bind:activity"})
+    @BindingAdapter({ "bind:activity" })
     public static void setupViewPager(Toolbar view, AppCompatActivity activity) {
         activity.setSupportActionBar(view);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    @BindingAdapter({"pieData", "totalValue", "description"})
+    @BindingAdapter({ "pieData", "totalValue", "description" })
     public static void setData(PieChart pieChart, PieData pieData, int total, String description) {
         Resources resources = pieChart.getContext().getResources();
         if (pieData.getDataSetCount() > 0) {
@@ -225,7 +222,7 @@ public final class BindingUtils {
     * set Toolbar Activity device return
     * */
 
-    @BindingAdapter({"view", "titleToolbar"})
+    @BindingAdapter({ "view", "titleToolbar" })
     public static void bindToolbar(Toolbar view, AppCompatActivity activity, String resTitle) {
         if (activity == null) return;
         activity.setSupportActionBar(view);
@@ -235,13 +232,13 @@ public final class BindingUtils {
         activity.setTitle(resTitle);
     }
 
-    @BindingAdapter({"model"})
+    @BindingAdapter({ "model" })
     public static void setupViewPagerDashBorad(final ViewPager viewPager,
-                                               final DashboardViewModel viewModel) {
+        final DashboardViewModel viewModel) {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
+                int positionOffsetPixels) {
             }
 
             @Override
@@ -286,7 +283,7 @@ public final class BindingUtils {
             return;
         }
         String niceDateStr = String.valueOf(DateUtils.getRelativeTimeSpanString(dateTime.getTime(),
-                Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS));
+            Calendar.getInstance().getTimeInMillis(), DateUtils.MINUTE_IN_MILLIS));
         view.setText(niceDateStr);
     }
 
@@ -313,7 +310,7 @@ public final class BindingUtils {
         }
     }
 
-    @BindingAdapter({"model"})
+    @BindingAdapter({ "model" })
     public static void onSearch(final SearchView view, final ListDeviceViewModel viewModel) {
         view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -337,7 +334,7 @@ public final class BindingUtils {
         });
     }
 
-    @BindingAdapter({"resourceId"})
+    @BindingAdapter({ "resourceId" })
     public static void setImage(ImageView view, int resource) {
         view.setImageResource(resource);
     }
@@ -349,10 +346,10 @@ public final class BindingUtils {
     }
 
     @BindingAdapter(value = {
-            "deviceCategoryId", "deviceCategoryIdAttrChanged"
+        "deviceCategoryId", "deviceCategoryIdAttrChanged"
     }, requireAll = false)
     public static void setCategoryId(AppCompatSpinner view, int newSelectedValue,
-                                     final InverseBindingListener bindingListener) {
+        final InverseBindingListener bindingListener) {
         AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -386,7 +383,7 @@ public final class BindingUtils {
         view.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
+                int positionOffsetPixels) {
             }
 
             @Override
@@ -416,7 +413,7 @@ public final class BindingUtils {
 
     @BindingAdapter("swipeRefreshListener")
     public static void setOnRefreshUserRequest(SwipeRefreshLayout view,
-                                               SwipeRefreshLayout.OnRefreshListener listener) {
+        SwipeRefreshLayout.OnRefreshListener listener) {
         view.setOnRefreshListener(listener);
     }
 
@@ -427,10 +424,9 @@ public final class BindingUtils {
 
     @BindingAdapter("setVisibility")
     public static void setVisibility(com.github.clans.fab.FloatingActionButton view,
-                                     RequestDetailViewModel viewModel) {
-        int visibility = viewModel.getStatusRequest().equals(DONE)
-                || viewModel.getStatusRequest().equals(APPROVED) ? View.GONE
-                : View.VISIBLE;
+        RequestDetailViewModel viewModel) {
+        int visibility = viewModel.getStatusRequest().equals(DONE) || viewModel.getStatusRequest()
+            .equals(APPROVED) ? View.GONE : View.VISIBLE;
         view.setVisibility(visibility);
     }
 
@@ -440,12 +436,12 @@ public final class BindingUtils {
         for (int i = 0; i <= total; i++) {
             ImageView imageView = new ImageView(layout.getContext());
             LinearLayout.LayoutParams lp =
-                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT);
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins((int) resources.getDimension(R.dimen.dp_0),
-                    (int) resources.getDimension(R.dimen.dp_0),
-                    (int) resources.getDimension(R.dimen.dp_10),
-                    (int) resources.getDimension(R.dimen.dp_0));
+                (int) resources.getDimension(R.dimen.dp_0),
+                (int) resources.getDimension(R.dimen.dp_10),
+                (int) resources.getDimension(R.dimen.dp_0));
             imageView.setLayoutParams(lp);
             layout.addView(imageView);
             layout.getChildAt(i).setBackgroundResource(R.drawable.ic_circle_border_white);
@@ -462,7 +458,7 @@ public final class BindingUtils {
 
     @BindingAdapter("hideButton")
     public static void hideFloatButton(RecyclerView recyclerView,
-                                       final FloatingActionButton button) {
+        final FloatingActionButton button) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -502,9 +498,9 @@ public final class BindingUtils {
         });
     }
 
-    @BindingAdapter({"showcaseSequence", "contentShowCase", "dismissText"})
-    public static void setTooltip(final View view, final FDMSShowcaseSequence sequence, String
-            content, String dismissText) {
+    @BindingAdapter({ "showcaseSequence", "contentShowCase", "dismissText" })
+    public static void setTooltip(final View view, final FDMSShowcaseSequence sequence,
+        String content, String dismissText) {
         sequence.addSequenceItem(view, content, dismissText);
     }
 
@@ -516,36 +512,36 @@ public final class BindingUtils {
         Activity activity = viewModel.getActivity();
         final FDMSShowcaseSequence sequence = viewModel.getSequence();
         new MaterialShowcaseView.Builder(activity).setTarget(view)
-                .withoutShape()
-                .setMaskColour(R.color.color_black_transprarent)
-                .setDismissText(R.string.title_ok)
-                .setContentText(R.string.title_welcome)
-                .setListener(new IShowcaseListener() {
-                    @Override
-                    public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {
-                    }
+            .withoutShape()
+            .setMaskColour(R.color.color_black_transprarent)
+            .setDismissText(R.string.title_ok)
+            .setContentText(R.string.title_welcome)
+            .setListener(new IShowcaseListener() {
+                @Override
+                public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {
+                }
 
-                    @Override
-                    public void onShowcaseDismissed(MaterialShowcaseView materialShowcaseView) {
-                        sequence.start();
-                    }
-                })
-                .show();
+                @Override
+                public void onShowcaseDismissed(MaterialShowcaseView materialShowcaseView) {
+                    sequence.start();
+                }
+            })
+            .show();
         sequence.setOnItemDismissedListener(
-                new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
-                    @Override
-                    public void onDismiss(MaterialShowcaseView materialShowcaseView, int i) {
-                        sequence.setCount(sequence.getCount() - 1);
-                        if (sequence.getCount() == 0) {
-                            viewModel.onShowCaseDashBoard();
-                        }
+            new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
+                @Override
+                public void onDismiss(MaterialShowcaseView materialShowcaseView, int i) {
+                    sequence.setCount(sequence.getCount() - 1);
+                    if (sequence.getCount() == 0) {
+                        viewModel.onShowCaseDashBoard();
                     }
-                });
+                }
+            });
     }
 
     @BindingAdapter("hideMenuButton")
     public static void hideFloatMenuButton(RecyclerView recyclerView,
-                                           final FloatingActionsMenu button) {
+        final FloatingActionsMenu button) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -566,19 +562,19 @@ public final class BindingUtils {
 
     @BindingAdapter("expandableAdapter")
     public static void setExpandableAdapter(ExpandableListView expandableListView,
-                                            BaseExpandableListAdapter baseExpandableListAdapter) {
+        BaseExpandableListAdapter baseExpandableListAdapter) {
         expandableListView.setAdapter(baseExpandableListAdapter);
     }
 
     @BindingAdapter("scrollListener")
-    public static void setOnScrollListener(ExpandableListView expandableListView, AbsListView
-            .OnScrollListener listener) {
+    public static void setOnScrollListener(ExpandableListView expandableListView,
+        AbsListView.OnScrollListener listener) {
         expandableListView.setOnScrollListener(listener);
     }
 
-    @BindingAdapter({"iconClick", "viewModel"})
+    @BindingAdapter({ "iconClick", "viewModel" })
     public static void setTopSheet(View topSheet, View imageIcon,
-                                   final ListDeviceViewModel viewModel) {
+        final ListDeviceViewModel viewModel) {
         final TopSheetBehavior behavior = TopSheetBehavior.from(topSheet);
         if (behavior == null) return;
         imageIcon.setOnClickListener(new View.OnClickListener() {
@@ -596,7 +592,7 @@ public final class BindingUtils {
         behavior.setTopSheetCallback(new TopSheetBehavior.TopSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet,
-                                       @TopSheetBehavior.State int newState) {
+                @TopSheetBehavior.State int newState) {
                 if (newState == TopSheetBehavior.STATE_EXPANDED) {
                     viewModel.setTopSheetExpand(true);
                 } else if (newState == TopSheetBehavior.STATE_COLLAPSED) {
@@ -610,10 +606,10 @@ public final class BindingUtils {
         });
     }
 
-    @BindingAdapter({"itemSelected", "currentItem", "model", "staffType"})
-    public static void setNavigationItemSelected(
-        NavigationView navigationView, NavigationView.OnNavigationItemSelectedListener listen,
-        int currentItem, MainViewModel viewModel, String staffType) {
+    @BindingAdapter({ "itemSelected", "currentItem", "model", "staffType" })
+    public static void setNavigationItemSelected(NavigationView navigationView,
+        NavigationView.OnNavigationItemSelectedListener listen, int currentItem,
+        MainViewModel viewModel, String staffType) {
         navigationView.setNavigationItemSelectedListener(listen);
         navigationView.setCheckedItem(currentItem);
         if (navigationView.getHeaderCount() == 0) {
@@ -663,7 +659,7 @@ public final class BindingUtils {
         }
     }
 
-    @BindingAdapter({"statusDrawerLayout"})
+    @BindingAdapter({ "statusDrawerLayout" })
     public static void setStatusDrawerLayout(DrawerLayout drawerLayout, final String status) {
         if (status != null) {
             if (status.equals(DRAWER_IS_CLOSE)) {
@@ -697,6 +693,7 @@ public final class BindingUtils {
     public static void setLockMode(DrawerLayout layout, int lockMode) {
         layout.setDrawerLockMode(lockMode);
     }
+
     @BindingAdapter("bind:pagerAdapter")
     public static void setAdapter(ViewPager viewPager, FragmentPagerAdapter pagerAdapter) {
         viewPager.setAdapter(pagerAdapter);

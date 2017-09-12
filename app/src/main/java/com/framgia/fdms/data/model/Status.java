@@ -10,6 +10,17 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Status implements Parcelable {
+    public static final Creator<Status> CREATOR = new Creator<Status>() {
+        @Override
+        public Status createFromParcel(Parcel in) {
+            return new Status(in);
+        }
+
+        @Override
+        public Status[] newArray(int size) {
+            return new Status[size];
+        }
+    };
     public static String USING_STATUS = "using";
     @Expose
     @SerializedName("id")
@@ -27,18 +38,6 @@ public class Status implements Parcelable {
         mId = in.readInt();
         mName = in.readString();
     }
-
-    public static final Creator<Status> CREATOR = new Creator<Status>() {
-        @Override
-        public Status createFromParcel(Parcel in) {
-            return new Status(in);
-        }
-
-        @Override
-        public Status[] newArray(int size) {
-            return new Status[size];
-        }
-    };
 
     public int getId() {
         return mId;

@@ -5,34 +5,34 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
+import io.reactivex.Observable;
 import java.util.List;
-import rx.Observable;
 
 /**
  * Created by beepi on 11/05/2017.
  */
 
 public class RequestRepository implements RequestRepositoryContract {
-    private RequestDataSource.RemoteDataSource mRemoteDataSource;
     private static RequestRepository sRequestRepository;
+    private RequestDataSource.RemoteDataSource mRemoteDataSource;
+
+    public RequestRepository(RequestDataSource.RemoteDataSource remoteDataSource) {
+        mRemoteDataSource = remoteDataSource;
+    }
 
     public static RequestRepository getInstant(
-            RequestDataSource.RemoteDataSource remoteDataSource) {
+        RequestDataSource.RemoteDataSource remoteDataSource) {
         if (sRequestRepository == null) {
             sRequestRepository = new RequestRepository(remoteDataSource);
         }
         return sRequestRepository;
     }
 
-    public RequestRepository(RequestDataSource.RemoteDataSource remoteDataSource) {
-        mRemoteDataSource = remoteDataSource;
-    }
-
     @Override
     public Observable<List<Request>> getRequests(int requestType, int requestStatusId,
-            int relativeId, int perPage, int page) {
+        int relativeId, int perPage, int page) {
         return mRemoteDataSource.getRequests(requestType, requestStatusId, relativeId, perPage,
-                page);
+            page);
     }
 
     @Override

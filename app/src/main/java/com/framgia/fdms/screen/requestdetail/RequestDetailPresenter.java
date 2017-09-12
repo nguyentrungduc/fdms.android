@@ -7,19 +7,18 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.RequestRepository;
 import com.framgia.fdms.data.source.UserRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.remote.CategoryRemoteDataSource;
 import com.framgia.fdms.data.source.remote.RequestRemoteDataSource;
-
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 import static com.framgia.fdms.utils.Constant.DeviceStatus.APPROVED;
 
@@ -29,16 +28,16 @@ import static com.framgia.fdms.utils.Constant.DeviceStatus.APPROVED;
 public class RequestDetailPresenter implements RequestDetailContract.Presenter {
     private RequestDetailContract.ViewModel mViewModel;
     private CategoryRepository mCategoryRepository;
-    private CompositeSubscription mSubscription;
+    private CompositeDisposable mSubscription;
     private RequestRepository mRequestRepository;
     private UserRepository mUserRepository;
 
     public RequestDetailPresenter(RequestDetailContract.ViewModel viewModel,
-                                  UserRepository userRepository) {
+        UserRepository userRepository) {
         mViewModel = viewModel;
-        mSubscription = new CompositeSubscription();
-        mCategoryRepository = new CategoryRepository(
-            new CategoryRemoteDataSource(FDMSServiceClient.getInstance()));
+        mSubscription = new CompositeDisposable();
+        mCategoryRepository =
+            new CategoryRepository(new CategoryRemoteDataSource(FDMSServiceClient.getInstance()));
         mRequestRepository =
             new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance()));
         mUserRepository = userRepository;
@@ -47,59 +46,54 @@ public class RequestDetailPresenter implements RequestDetailContract.Presenter {
     }
 
     public void getListCategory() {
-        Subscription subscription = mCategoryRepository.getListCategory()
+        Disposable subscription = mCategoryRepository.getListCategory()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(new Action0() {
+            .doOnSubscribe(new Consumer<Disposable>() {
                 @Override
-                public void call() {
+                public void accept(Disposable disposable) throws Exception {
                     mViewModel.showProgressbar();
                 }
             })
-            .subscribe(new Subscriber<List<Category>>() {
+            .subscribe(new Consumer<List<Category>>() {
                 @Override
-                public void onCompleted() {
-                    mViewModel.hideProgressbar();
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    mViewModel.hideProgressbar();
-                    mViewModel.onLoadError(e.getMessage());
-                }
-
-                @Override
-                public void onNext(List<Category> categories) {
+                public void accept(List<Category> categories) throws Exception {
                     mViewModel.onGetCategorySuccess(categories);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.hideProgressbar();
+                    mViewModel.onLoadError(error.getMessage());
                 }
             });
         mSubscription.add(subscription);
     }
 
     public void updateActionRequest(int requestId, int actionId) {
-        Subscription subscription = mRequestRepository.updateActionRequest(requestId, actionId)
+        Disposable subscription = mRequestRepository.updateActionRequest(requestId, actionId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(new Action0() {
+            .doOnSubscribe(new Consumer<Disposable>() {
                 @Override
-                public void call() {
+                public void accept(Disposable disposable) throws Exception {
                     mViewModel.showProgressbar();
                 }
             })
-            .subscribe(new Action1<Respone<Request>>() {
+            .subscribe(new Consumer<Respone<Request>>() {
                 @Override
-                public void call(Respone<Request> requestRespone) {
+                public void accept(Respone<Request> requestRespone) throws Exception {
                     mViewModel.onGetReponeSuccess(requestRespone);
                 }
-            }, new Action1<Throwable>() {
+            }, new RequestError() {
                 @Override
-                public void call(Throwable throwable) {
+                public void onRequestError(BaseException error) {
                     mViewModel.hideProgressbar();
-                    mViewModel.onLoadError(throwable.getMessage());
+                    mViewModel.onLoadError(error.getMessage());
                 }
-            }, new Action0() {
+            }, new Action() {
                 @Override
-                public void call() {
+                public void run() throws Exception {
                     mViewModel.hideProgressbar();
                 }
             });
@@ -108,49 +102,50 @@ public class RequestDetailPresenter implements RequestDetailContract.Presenter {
 
     @Override
     public void updateRequest(Request request) {
-        Subscription subscription = mRequestRepository.updateRequest(request)
+        Disposable subscription = mRequestRepository.updateRequest(request)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(new Action0() {
+            .doOnSubscribe(new Consumer<Disposable>() {
                 @Override
-                public void call() {
+                public void accept(Disposable disposable) throws Exception {
                     mViewModel.showProgressbar();
                 }
             })
-            .subscribe(new Action1<Respone<Request>>() {
+            .subscribe(new Consumer<Respone<Request>>() {
                 @Override
-                public void call(Respone<Request> requestRespone) {
+                public void accept(Respone<Request> requestRespone) throws Exception {
                     mViewModel.onGetReponeSuccess(requestRespone);
                 }
-            }, new Action1<Throwable>() {
+            }, new RequestError() {
                 @Override
-                public void call(Throwable throwable) {
+                public void onRequestError(BaseException error) {
                     mViewModel.hideProgressbar();
-                    mViewModel.onUploadRequestError(throwable.getMessage());
+                    mViewModel.onUploadRequestError(error.getMessage());
                 }
-            }, new Action0() {
+            }, new Action() {
                 @Override
-                public void call() {
+                public void run() throws Exception {
                     mViewModel.hideProgressbar();
                 }
             });
+
         mSubscription.add(subscription);
     }
 
     @Override
     public void getCurrentUser() {
-        Subscription subscription = mUserRepository.getCurrentUser()
+        Disposable subscription = mUserRepository.getCurrentUser()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<User>() {
+            .subscribe(new Consumer<User>() {
                 @Override
-                public void call(User user) {
+                public void accept(User user) throws Exception {
                     mViewModel.setCurrentUser(user);
                 }
-            }, new Action1<Throwable>() {
+            }, new RequestError() {
                 @Override
-                public void call(Throwable throwable) {
-                    mViewModel.onLoadError(throwable.getMessage());
+                public void onRequestError(BaseException error) {
+                    mViewModel.onLoadError(error.getMessage());
                 }
             });
         mSubscription.add(subscription);

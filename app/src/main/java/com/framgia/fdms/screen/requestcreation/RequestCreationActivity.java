@@ -30,12 +30,11 @@ public class RequestCreationActivity extends AppCompatActivity {
         mViewModel = new RequestCreationViewModel(this);
 
         RequestCreationContract.Presenter presenter = new RequestCreationPresenter(mViewModel,
-                new RequestRepository(
-                        new RequestRemoteDataSource(FDMSServiceClient.getInstance())));
+            new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
 
         ActivityRequestCreationBinding binding =
-                DataBindingUtil.setContentView(this, R.layout.activity_request_creation);
+            DataBindingUtil.setContentView(this, R.layout.activity_request_creation);
         binding.setViewModel((RequestCreationViewModel) mViewModel);
         setTitle(getString(R.string.title_create_request));
     }

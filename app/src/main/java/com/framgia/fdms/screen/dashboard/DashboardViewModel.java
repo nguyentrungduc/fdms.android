@@ -7,25 +7,24 @@ import android.support.annotation.IntDef;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment;
 import com.framgia.fdms.screen.notification.NotificationActivity;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static com.framgia.fdms.screen.dashboard.DashboardViewModel.Tab.TAB_DEVIVE_DASH_BOARD;
 import static com.framgia.fdms.screen.dashboard.DashboardViewModel.Tab.TAB_REQUEST_DASH_BOARD;
-import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment.DEVICE_DASHBOARD;
-import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment.REQUEST_DASHBOARD;
+import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
+    .DEVICE_DASHBOARD;
+import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
+    .REQUEST_DASHBOARD;
 
 /**
  * Exposes the data to be used in the Dashboard screen.
