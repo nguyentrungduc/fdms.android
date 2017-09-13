@@ -276,6 +276,19 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
             });
     }
 
+    @Override
+    public Observable<List<Status>> getDeviceGroups() {
+        return mFDMSApi.getDeviceGroups()
+            .flatMap(new Function<Respone<List<Status>>, ObservableSource<List<Status>>>() {
+
+                @Override
+                public ObservableSource<List<Status>> apply(
+                    @NonNull Respone<List<Status>> listRespone) throws Exception {
+                    return Utils.getResponse(listRespone);
+                }
+            });
+    }
+
     public Map<String, String> getDeviceParams(String deviceName, int categoryId, int statusId,
         int page, int perPage) {
         Map<String, String> parrams = new HashMap<>();

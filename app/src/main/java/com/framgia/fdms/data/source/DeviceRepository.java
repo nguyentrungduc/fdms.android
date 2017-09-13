@@ -10,7 +10,7 @@ import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import io.reactivex.Observable;
 import java.util.List;
 
-public class DeviceRepository {
+public class DeviceRepository implements DeviceDataSource.RemoteDataSource{
     private DeviceRemoteDataSource mDeviceRemoteDataSource;
 
     public DeviceRepository(DeviceRemoteDataSource remoteDataSource) {
@@ -70,5 +70,10 @@ public class DeviceRepository {
     public Observable<List<Device>> getListDeviceByMeetingRoomId(int meetingRoomId, int page,
         int perPage) {
         return mDeviceRemoteDataSource.getListDeviceByMeetingRoomId(meetingRoomId, page, perPage);
+    }
+
+    @Override
+    public Observable<List<Status>> getDeviceGroups() {
+        return mDeviceRemoteDataSource.getDeviceGroups();
     }
 }

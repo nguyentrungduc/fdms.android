@@ -1,5 +1,6 @@
 package com.framgia.fdms.data.source.remote;
 
+import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
@@ -10,6 +11,7 @@ import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.utils.Utils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +21,10 @@ import java.util.Map;
 import static com.framgia.fdms.screen.request.RequestPagerAdapter.RequestPage.USER_REQUEST;
 import static com.framgia.fdms.utils.Constant.ALL_RELATIVE_ID;
 import static com.framgia.fdms.utils.Constant.ALL_REQUEST_STATUS_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_ASSIGNEE_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_ASSIGNMENT_DETAILS;
+import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_DESCRIPTION;
+import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_REQUEST_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.RELATIVE_ID;
@@ -120,10 +126,32 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<Request> registerAssignment(Request request) {
-        // TODO: later
-        Request requestTemp = new Request();
-        return Observable.just(requestTemp);
+    public Observable<Request> registerAssignment(AssignmentRequest request) {
+        Map<String, String> parrams = new HashMap<>();
+        if (request.getRequestId() <= 0) {
+            parrams.put(ASSIGNMENT_REQUEST_ID, String.valueOf(request.getRequestId()));
+        }
+
+        if (request.getAssigneeId() <= 0) {
+            parrams.put(ASSIGNMENT_ASSIGNEE_ID, String.valueOf(request.getAssigneeId()));
+        }
+
+        if (request.getDescription() != null) {
+            parrams.put(ASSIGNMENT_DESCRIPTION, request.getDescription());
+        }
+
+        if (request.getItemRequests() != null && request.getItemRequests().size() > 0) {
+            parrams.put(ASSIGNMENT_ASSIGNMENT_DETAILS, request.getItemRequests().toString());
+        }
+
+        return mFDMSApi.registerAssignment(parrams)
+            .flatMap(new Function<Respone<Request>, ObservableSource<Request>>() {
+                @Override
+                public ObservableSource<Request> apply(@NonNull Respone<Request> requestRespone)
+                    throws Exception {
+                    return Utils.getResponse(requestRespone);
+                }
+            });
     }
 
     @Override

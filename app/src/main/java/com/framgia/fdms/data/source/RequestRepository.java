@@ -1,5 +1,6 @@
 package com.framgia.fdms.data.source;
 
+import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
@@ -71,7 +72,7 @@ public class RequestRepository implements RequestRepositoryContract {
     }
 
     @Override
-    public Observable<Request> registerAssignment(Request request) {
+    public Observable<Request> registerAssignment(AssignmentRequest request) {
         return mRemoteDataSource.registerAssignment(request);
     }
 }

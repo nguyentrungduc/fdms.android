@@ -44,5 +44,7 @@ public class DeviceDataSource {
 
         Observable<List<Device>> getListDeviceByMeetingRoomId(int meetingRoomId, int page,
             int perPage);
+
+        Observable<List<Status>> getDeviceGroups();
     }
 }
