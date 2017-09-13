@@ -10,6 +10,8 @@ import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 import java.util.List;
 
+import static com.framgia.fdms.utils.Utils.getStringFromList;
+
 /**
  * Created by framgia on 03/07/2017.
  */
@@ -76,16 +78,5 @@ public final class VendorRemoteDataSource extends BaseRemoteDataSource
                     return Observable.just(getStringFromList(listRespone.getData()));
                 }
             });
-    }
-
-    public String getStringFromList(List<String> strings) {
-        if (strings == null || strings.size() == 0) {
-            return "";
-        }
-        String result = "";
-        for (String str : strings) {
-            result += str + "\n";
-        }
-        return result;
     }
 }

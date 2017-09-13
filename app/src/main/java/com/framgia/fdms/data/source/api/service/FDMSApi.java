@@ -125,6 +125,13 @@ public interface FDMSApi {
     Observable<Respone<Producer>> addMarker(@Query("maker[name]") String name,
         @Query("maker[description]") String description);
 
+    @DELETE("api/makers/{marker_id}")
+    Observable<Respone<String>> deleteMarker(@Path("marker_id") int markerId);
+
+    @PATCH("api/makers/{marker_id}")
+    Observable<Respone<List<String>>> updateMarker(@Path("marker_id") int vendorId,
+        @Query("maker[name]") String name, @Query("maker[description]") String description);
+
     @GET("api/devices?")
     Observable<Respone<List<Device>>> getListDeviceByMeetingRoomId(
         @Query("meeting_room_id") int meetingRoomId, @Query("page") int page,

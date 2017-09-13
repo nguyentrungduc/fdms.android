@@ -10,6 +10,8 @@ import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 import java.util.List;
 
+import static com.framgia.fdms.utils.Utils.getStringFromList;
+
 /**
  * Created by framgia on 9/13/17.
  */
@@ -54,11 +56,26 @@ public class MarkerRemoteDataSource extends BaseRemoteDataSource implements Mark
 
     @Override
     public Observable<Respone<String>> deleteMarker(Producer marker) {
-        return null;
+        return mFDMSApi.deleteMarker(marker.getId());
     }
 
     @Override
     public Observable<String> editMarker(Producer marker) {
-        return null;
+        return mFDMSApi.updateMarker(marker.getId(), marker.getName(), marker.getDescription())
+            .flatMap(
+                new Function<Respone<List<String>>, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(Respone<List<String>> listRespone)
+                        throws Exception {
+                        if (listRespone == null) {
+                            return Observable.error(new NullPointerException());
+                        }
+                        if (listRespone.isError()) {
+                            return Observable.error(
+                                new NullPointerException("ERROR" + listRespone.getStatus()));
+                        }
+                        return Observable.just(getStringFromList(listRespone.getData()));
+                    }
+                });
     }
 }
