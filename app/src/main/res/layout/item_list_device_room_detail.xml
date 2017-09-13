@@ -27,9 +27,9 @@
                 android:layout_width="@dimen/dp_5"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/dp_3"
-                android:layout_marginTop="@dimen/dp_3"
-                android:background="@color/colorPrimary"
+                android:layout_marginBottom="@dimen/dp_8"
+                android:layout_marginTop="@dimen/dp_8"
+                android:background="@color/color_green_600"
                 tools:ignore="ContentDescription,UnusedAttribute"
                 />
             <LinearLayout
@@ -58,7 +58,7 @@
                             android:layout_marginBottom="@dimen/dp_3"
                             android:layout_marginStart="@dimen/dp_3"
                             android:layout_marginTop="@dimen/dp_3"
-                            app:srcCompat="@drawable/ic_device"
+                            app:srcCompat="@drawable/ic_device_24dp"
                             tools:ignore="ContentDescription,UnusedAttribute"
                             />
                         <TextView
@@ -67,7 +67,7 @@
                             android:layout_marginStart="@dimen/dp_3"
                             android:text="@{viewModel.deviceName}"
                             android:textColor="@color/color_gray"
-                            android:textSize="@dimen/sp_25"
+                            android:textSize="@dimen/sp_16"
                             android:textStyle="bold"
                             />
                     </LinearLayout>
@@ -91,7 +91,7 @@
                         android:maxLines="1"
                         android:maxWidth="@dimen/dp_170"
                         android:text="@{viewModel.deviceCode}"
-                        android:textSize="@dimen/sp_15"
+                        android:textSize="@dimen/sp_14"
                         />
                     <TextView
                         android:layout_width="wrap_content"
@@ -105,7 +105,6 @@
                         tools:ignore="RelativeOverlap"
                         />
                 </RelativeLayout>
-
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>

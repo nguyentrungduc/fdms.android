@@ -14,6 +14,7 @@ public class Constant {
     public static final int ALL_RELATIVE_ID = -1;
     public static final String PERCENT = " %";
     public static final String NOT_SEARCH = "NOT_SEARCH";
+    public static final String BLANK = "";
     public static final int USING = 1;
     public static final int AVAIABLE = 2;
     public static final int BROKEN = 3;
@@ -96,7 +97,7 @@ public class Constant {
         public static final String REQUEST_STATUS_ID = "request_status_id";
         public static final String RELATIVE_ID = "relative_id";
         public static final String DEVICE_NAME = "device_name";
-        public static final String ROOM_NAME = "room_name";
+        public static final String ROOM_NAME = "name";
         public static final String REQUEST_TITLE = "request[title]";
         public static final String REQUEST_DESCRIPTION = "request[description]";
         public static final String REQUEST_FOR_USER_ID = "request[for_user_id]";
