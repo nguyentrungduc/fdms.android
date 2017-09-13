@@ -43,6 +43,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.arlib.floatingsearchview.FloatingSearchView;
 import com.bumptech.glide.Glide;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Category;
@@ -182,6 +183,14 @@ public final class BindingUtils {
     public static void setupViewPager(Toolbar view, AppCompatActivity activity) {
         activity.setSupportActionBar(view);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @BindingAdapter({ "bind:searchListenner", "bind:clearListenner" })
+    public static void setOnQueryChangeListenner(FloatingSearchView searchView,
+        FloatingSearchView.OnSearchListener onSearchListener,
+        FloatingSearchView.OnClearSearchActionListener clearSearchActionListener) {
+        searchView.setOnSearchListener(onSearchListener);
+        searchView.setOnClearSearchActionListener(clearSearchActionListener);
     }
 
     @BindingAdapter({ "pieData", "totalValue", "description" })

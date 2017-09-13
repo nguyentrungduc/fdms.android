@@ -2,6 +2,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools"
     >
 
     <data>
@@ -22,10 +23,12 @@
             android:id="@+id/floating_search_view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
-            app:floatingSearch_leftActionMode="showHamburger"
+            app:floatingSearch_leftActionMode="noLeftAction"
             app:floatingSearch_menu="@menu/menu_search"
             app:floatingSearch_searchHint="@string/title_searching"
             app:floatingSearch_showSearchKey="true"
+            bind:searchListenner="@{viewModel}"
+            bind:clearListenner="@{viewModel}"
             />
         <FrameLayout
             android:layout_width="match_parent"

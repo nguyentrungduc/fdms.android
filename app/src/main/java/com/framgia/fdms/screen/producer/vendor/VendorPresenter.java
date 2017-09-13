@@ -10,11 +10,13 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
 import static com.framgia.fdms.screen.producer.vendor.VendorFragment.ProductType;
+import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
 /**
@@ -43,7 +45,7 @@ final class VendorPresenter implements VendorContract.Presenter {
     @Override
     public void onStart() {
         mPage++;
-        getVendors(mPage);
+        getVendors();
     }
 
     @Override
@@ -51,21 +53,27 @@ final class VendorPresenter implements VendorContract.Presenter {
     }
 
     @Override
-    public void getVendors(int page) {
+    public void getVendors() {
         Observable<List<Producer>> observable;
         switch (mType) {
             case ProductType.VENDOR:
-                observable = mVendorRepository.getListVendor(mName, page, PER_PAGE);
+                observable = mVendorRepository.getListVendor(mName, mPage, PER_PAGE);
                 break;
 
             default:
             case ProductType.MARKER:
-                observable = mMarkerRepository.getListMarker(mName, page, PER_PAGE);
+                observable = mMarkerRepository.getListMarker(mName, mPage, PER_PAGE);
                 break;
         }
 
         Disposable subscription = observable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgress();
+                }
+            })
             .subscribe(new Consumer<List<Producer>>() {
                 @Override
                 public void accept(List<Producer> producers) throws Exception {
@@ -80,6 +88,11 @@ final class VendorPresenter implements VendorContract.Presenter {
                     mViewModel.onLoadVendorFailed();
                     mPage--;
                 }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
+                }
             });
         mSubscription.add(subscription);
     }
@@ -87,7 +100,7 @@ final class VendorPresenter implements VendorContract.Presenter {
     @Override
     public void loadMorePage() {
         mPage++;
-        getVendors(mPage);
+        getVendors();
     }
 
     @Override
@@ -180,5 +193,12 @@ final class VendorPresenter implements VendorContract.Presenter {
                 }
             });
         mSubscription.add(subscription);
+    }
+
+    @Override
+    public void getVendors(String name) {
+        mName = name;
+        mPage = FIRST_PAGE;
+        getVendors();
     }
 }

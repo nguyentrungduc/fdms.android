@@ -30,7 +30,8 @@ public final class VendorRemoteDataSource extends BaseRemoteDataSource
 
     @Override
     public Observable<List<Producer>> getListVendor(String name, int page, int perPage) {
-        return mFDMSApi.getListVendors(page, perPage)
+        return mFDMSApi.getListVendors(name, page, perPage)
+
             .flatMap(new Function<Respone<List<Producer>>, ObservableSource<List<Producer>>>() {
                 @Override
                 public ObservableSource<List<Producer>> apply(Respone<List<Producer>> listRespone)
