@@ -117,9 +117,6 @@ public interface FDMSApi {
     @GET("api/requests/{id}")
     Observable<Respone<Request>> getRequest(@Path("id") int requetsId);
 
-    @GET("api/meeting_rooms")
-    Observable<Respone<List<MeetingRoom>>> getListMeetingRoom(@QueryMap Map<String, String> params);
-
     @GET("api/makers")
     Observable<Respone<List<Producer>>> getMakers(@Query("name") String name,
         @Query("page") int page, @Query("per_page") int perPage);
@@ -128,6 +125,9 @@ public interface FDMSApi {
     Observable<Respone<List<Device>>> getListDeviceByMeetingRoomId(
         @Query("meeting_room_id") int meetingRoomId, @Query("page") int page,
         @Query("per_page") int perPage);
+
+    @GET("api/meeting_rooms")
+    Observable<Respone<List<MeetingRoom>>> getListMeetingRoom(@QueryMap Map<String, String> params);
 
     @GET("api/vendors")
     Observable<Respone<List<Producer>>> getListVendors(@Query("page") int page,
