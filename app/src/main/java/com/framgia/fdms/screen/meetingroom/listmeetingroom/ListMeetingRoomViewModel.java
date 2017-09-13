@@ -10,6 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.data.model.MeetingRoom;
@@ -19,7 +21,6 @@ import com.framgia.fdms.utils.navigator.Navigator;
 import java.util.List;
 
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
-import static com.framgia.fdms.utils.Constant.NOT_SEARCH;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
 /**
@@ -28,7 +29,8 @@ import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
 public class ListMeetingRoomViewModel extends BaseObservable
     implements ListMeetingRoomContract.ViewModel,
-    BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom> {
+    BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom>,
+    FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener {
 
     private Context mContext;
     private ListMeetingRoomContract.Presenter mPresenter;
@@ -38,6 +40,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
     private boolean mIsRefresh;
     private boolean mIsLoadingMore;
     private Navigator mNavigator;
+    private String mRoomName;
 
     ListMeetingRoomViewModel(Context context, Navigator navigator) {
         mContext = context;
@@ -61,7 +64,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
     @Override
     public void setPresenter(ListMeetingRoomContract.Presenter presenter) {
         mPresenter = presenter;
-        mPresenter.getListMeetingRoom(NOT_SEARCH, mPage, PER_PAGE);
+        mPresenter.getListMeetingRoom(Constant.BLANK, mPage, PER_PAGE);
     }
 
     @Override
@@ -117,7 +120,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
             public void onRefresh() {
                 mPage = FIRST_PAGE;
                 mListMeetingRoomAdapter.clear();
-                mPresenter.getListMeetingRoom(NOT_SEARCH, mPage, PER_PAGE);
+                mPresenter.getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
             }
         };
 
@@ -159,12 +162,43 @@ public class ListMeetingRoomViewModel extends BaseObservable
         return mScrollListener;
     }
 
+    @Bindable
+    public String getRoomName() {
+        return mRoomName;
+    }
+
+    public void setRoomName(String roomName) {
+        mRoomName = roomName;
+        notifyPropertyChanged(BR.roomName);
+    }
+
     private void loadMore() {
         mPage++;
-        mPresenter.getListMeetingRoom(NOT_SEARCH, mPage, PER_PAGE);
+        mPresenter.getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
     }
 
     public void onAddMeetingRoomClick() {
         // TODO: Open meeting room form
+    }
+
+    @Override
+    public void onClearSearchClicked() {
+        mPage = FIRST_PAGE;
+        mListMeetingRoomAdapter.clear();
+        setRoomName(Constant.BLANK);
+        mPresenter.getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
+    }
+
+    @Override
+    public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+        //No ops
+    }
+
+    @Override
+    public void onSearchAction(String currentQuery) {
+        mPage = FIRST_PAGE;
+        mListMeetingRoomAdapter.clear();
+        setRoomName(currentQuery);
+        mPresenter.getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
     }
 }

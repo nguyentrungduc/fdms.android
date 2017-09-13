@@ -31,6 +31,35 @@
                 android:background="@color/color_white_light"
                 android:orientation="vertical"
                 >
+                <android.support.design.widget.AppBarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:elevation="@dimen/dp_0"
+                    >
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                        app:theme="@style/ToolbarTheme"
+                        >
+                        <ImageView
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_30"
+                            android:onClick="@{viewModel::onClickArrowBack}"
+                            app:srcCompat="@drawable/ic_arrow_back_white_24dp"
+                            tools:ignore="@null,ContentDescription"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_30"
+                            android:text="@{viewModel.titleToolbar}"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/sp_20"
+                            />
+                    </android.support.v7.widget.Toolbar>
+                </android.support.design.widget.AppBarLayout>
                 <LinearLayout
                     android:id="@+id/linearLayout"
                     android:layout_width="match_parent"
@@ -38,8 +67,8 @@
                     android:orientation="horizontal"
                     >
                     <ImageView
-                        android:layout_width="@dimen/dp_48"
-                        android:layout_height="@dimen/dp_48"
+                        android:layout_width="@dimen/dp_35"
+                        android:layout_height="@dimen/dp_35"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/dp_5"
                         app:srcCompat="@drawable/ic_title"
@@ -58,11 +87,11 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/title_room_name"
-                            android:textColor="@color/color_gray"
-                            android:textSize="@dimen/sp_18"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/sp_16"
                             />
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/dp_30"
                             android:layout_marginStart="@dimen/dp_5"
@@ -70,7 +99,7 @@
                             android:maxLines="1"
                             android:text="@{viewModel.meetingRoom.name}"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/sp_25"
+                            android:textSize="@dimen/sp_18"
                             />
                         <View
                             android:layout_width="match_parent"
@@ -88,8 +117,8 @@
                     android:orientation="horizontal"
                     >
                     <ImageView
-                        android:layout_width="@dimen/dp_48"
-                        android:layout_height="@dimen/dp_48"
+                        android:layout_width="@dimen/dp_35"
+                        android:layout_height="@dimen/dp_35"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/dp_5"
                         app:srcCompat="@drawable/ic_description"
@@ -108,11 +137,11 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/title_description"
-                            android:textColor="@color/color_gray"
-                            android:textSize="@dimen/sp_18"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/sp_16"
                             />
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/dp_30"
                             android:layout_marginStart="@dimen/dp_5"
@@ -120,7 +149,7 @@
                             android:maxLines="1"
                             android:text="@{viewModel.meetingRoom.description}"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/sp_25"
+                            android:textSize="@dimen/sp_18"
                             />
                         <View
                             android:layout_width="match_parent"
@@ -132,15 +161,17 @@
                     </LinearLayout>
                 </LinearLayout>
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_30"
-                    android:layout_marginStart="@dimen/dp_5"
+                    android:background="@color/color_green_600"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:paddingStart="@dimen/dp_5"
                     android:text="@string/title_list_device"
-                    android:textColor="@color/color_gray"
-                    android:textSize="@dimen/sp_18"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="italic"
+                    tools:ignore="RtlSymmetry"
                     />
                 <FrameLayout
                     android:layout_width="match_parent"

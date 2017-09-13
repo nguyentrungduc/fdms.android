@@ -6,13 +6,16 @@ import android.databinding.Bindable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Toast;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.MeetingRoom;
+import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.utils.Constant;
+import com.framgia.fdms.utils.navigator.Navigator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +32,7 @@ public class DetailMeetingRoomViewModel extends BaseObservable
     private Context mContext;
     private DetailMeetingRoomContract.Presenter mPresenter;
     private MeetingRoom mMeetingRoom;
+    private Navigator mNavigator;
     private ListDeviceAdapter mListDeviceAdapter;
     private int mPage;
     private boolean mIsRefresh;
@@ -38,13 +42,14 @@ public class DetailMeetingRoomViewModel extends BaseObservable
     private String mNotificationLoadData;
     private List<Device> mDevices;
 
-    DetailMeetingRoomViewModel(Context context, MeetingRoom meetingRoom) {
+    DetailMeetingRoomViewModel(Context context, MeetingRoom meetingRoom, Navigator navigator) {
         mContext = context;
         mDevices = new ArrayList<>();
         if (meetingRoom == null) {
             return;
         }
         mMeetingRoom = meetingRoom;
+        mNavigator = navigator;
         mListDeviceAdapter = new ListDeviceAdapter(context);
         mListDeviceAdapter.setItemClickListener(this);
         mPage = FIRST_PAGE;
@@ -71,8 +76,8 @@ public class DetailMeetingRoomViewModel extends BaseObservable
     }
 
     @Override
-    public void onItemRecyclerViewClick(Device item) {
-        //TODO: Open Detail Device Page
+    public void onItemRecyclerViewClick(Device device) {
+        mContext.startActivity(DeviceDetailActivity.getInstance(mContext, device));
     }
 
     public ListDeviceAdapter getListDeviceAdapter() {
@@ -201,5 +206,13 @@ public class DetailMeetingRoomViewModel extends BaseObservable
     public void setNotificationLoadData(String notificationLoadData) {
         mNotificationLoadData = notificationLoadData;
         notifyPropertyChanged(BR.notificationLoadData);
+    }
+
+    public String getTitleToolbar() {
+        return mContext.getString(R.string.title_meeting_room_info);
+    }
+
+    public void onClickArrowBack(View view) {
+        mNavigator.finishActivity();
     }
 }
