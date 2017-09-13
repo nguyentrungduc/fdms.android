@@ -287,4 +287,6 @@
     <string name="fragment_using_device_using">Using</string>
     <string name="fragment_returned_device_using">Returned</string>
     <string name="action_x">X</string>
+    <string name="title_delete">Confirm Delete</string>
+    <string name="msg_delete_producer">Do you want to delete</string>
 </resources>
