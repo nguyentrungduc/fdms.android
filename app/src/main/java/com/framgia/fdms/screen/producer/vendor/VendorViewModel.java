@@ -178,12 +178,13 @@ public class VendorViewModel extends BaseObservable
     }
 
     @Override
-    public void onUpdateVendorSuccess(Producer vendor) {
+    public void onUpdateVendorSuccess(Producer vendor, String message) {
         if (vendor == null || mVendorEdit == null) {
             return;
         }
         mVendorEdit.setName(vendor.getName());
         mVendorEdit.setDescription(vendor.getDescription());
+        mNavigator.showToast(message);
     }
 
     @Override

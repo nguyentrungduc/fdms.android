@@ -58,8 +58,33 @@ public final class VendorRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<Respone<String>> editVendor(Producer producer) {
+    public Observable<String> editVendor(Producer producer) {
         return mFDMSApi.updateVendor(producer.getId(), producer.getName(),
-            producer.getDescription());
+            producer.getDescription())
+            .flatMap(new Function<Respone<List<String>>, ObservableSource<String>>() {
+                @Override
+                public ObservableSource<String> apply(Respone<List<String>> listRespone)
+                    throws Exception {
+                    if (listRespone == null) {
+                        return Observable.error(new NullPointerException());
+                    }
+                    if (listRespone.isError()) {
+                        return Observable.error(
+                            new NullPointerException("ERROR" + listRespone.getStatus()));
+                    }
+                    return Observable.just(getStringFromList(listRespone.getData()));
+                }
+            });
+    }
+
+    public String getStringFromList(List<String> strings) {
+        if (strings == null || strings.size() == 0) {
+            return "";
+        }
+        String result = "";
+        for (String str : strings) {
+            result += str + "\n";
+        }
+        return result;
     }
 }

@@ -116,12 +116,10 @@ final class VendorPresenter implements VendorContract.Presenter {
         Disposable subscription = mRepository.editVendor(producer)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<Respone<String>>() {
+            .subscribe(new Consumer<String>() {
                 @Override
-                public void accept(Respone<String> respone) throws Exception {
-                    if (!respone.isError()) {
-                        mViewModel.onUpdateVendorSuccess(producer);
-                    }
+                public void accept(String respone) throws Exception {
+                    mViewModel.onUpdateVendorSuccess(producer, respone);
                 }
             }, new RequestError() {
                 @Override

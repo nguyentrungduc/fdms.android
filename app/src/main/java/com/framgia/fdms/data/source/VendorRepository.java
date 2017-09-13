@@ -40,7 +40,7 @@ public class VendorRepository implements VendorDataSource.RemoteDataSource {
     }
 
     @Override
-    public Observable<Respone<String>> editVendor(Producer vendor) {
+    public Observable<String> editVendor(Producer vendor) {
         return mVendorRemoteDataSource.editVendor(vendor);
     }
 }
