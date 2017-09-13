@@ -102,6 +102,11 @@ public class Constant {
         public static final String REQUEST_FOR_USER_ID = "request[for_user_id]";
         public static final String REQUEST_ASSIGNEE_ID = "request[assignee_id]";
         public static final String REQUEST_REQUEST_DETAILS = "request[request_details_attributes]";
+        public static final String ASSIGNMENT_REQUEST_ID = "assignment[request_id]";
+        public static final String ASSIGNMENT_ASSIGNEE_ID = "assignment[assignee_id]";
+        public static final String ASSIGNMENT_DESCRIPTION = "assignment[description]";
+        public static final String ASSIGNMENT_ASSIGNMENT_DETAILS =
+            "assignment[assignment_details_attributes]";
     }
 
     public class DeviceStatus {

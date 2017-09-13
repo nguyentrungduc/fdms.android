@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.AssignmentRequest;
+import com.framgia.fdms.data.model.AssignmentItemRequest;
 import com.framgia.fdms.databinding.ItemAssignmentBinding;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +21,8 @@ import java.util.List;
  * Created by MyPC on 09/06/2017.
  */
 public class AssignmentAdapter
-    extends BaseRecyclerViewAdapter<AssignmentRequest, AssignmentAdapter.ViewHolder> {
-    private List<AssignmentRequest> mRequests;
+    extends BaseRecyclerViewAdapter<AssignmentItemRequest, AssignmentAdapter.ViewHolder> {
+    private List<AssignmentItemRequest> mRequests;
 
     private AssignmentViewModel mViewModel;
 
@@ -32,17 +32,17 @@ public class AssignmentAdapter
         mRequests = new ArrayList<>();
     }
 
-    public List<AssignmentRequest> getData() {
-        return mRequests == null ? new ArrayList<AssignmentRequest>() : mRequests;
+    public List<AssignmentItemRequest> getData() {
+        return mRequests == null ? new ArrayList<AssignmentItemRequest>() : mRequests;
     }
 
-    public void addItem(AssignmentRequest request) {
+    public void addItem(AssignmentItemRequest request) {
         mRequests.add(request);
         notifyDataSetChanged();
     }
 
     @Override
-    public void onUpdatePage(List<AssignmentRequest> data) {
+    public void onUpdatePage(List<AssignmentItemRequest> data) {
         if (data == null) {
             return;
         }
@@ -81,7 +81,7 @@ public class AssignmentAdapter
             mViewModel = viewModel;
         }
 
-        void bindData(AssignmentRequest request) {
+        void bindData(AssignmentItemRequest request) {
             if (request == null) {
                 return;
             }
@@ -102,12 +102,12 @@ public class AssignmentAdapter
     }
 
     public class ViewHolderModel extends BaseObservable {
-        private AssignmentRequest mRequest;
+        private AssignmentItemRequest mRequest;
         private AssignmentViewModel mViewModel;
         private View.OnClickListener mOnDeleteClick;
         private int mPosition;
 
-        public ViewHolderModel(AssignmentRequest request, AssignmentViewModel viewModel,
+        public ViewHolderModel(AssignmentItemRequest request, AssignmentViewModel viewModel,
             View.OnClickListener onDelteClick, int position) {
             mRequest = request;
             mViewModel = viewModel;
@@ -115,11 +115,11 @@ public class AssignmentAdapter
             mPosition = position;
         }
 
-        public AssignmentRequest getRequest() {
+        public AssignmentItemRequest getRequest() {
             return mRequest;
         }
 
-        public void setRequest(AssignmentRequest request) {
+        public void setRequest(AssignmentItemRequest request) {
             mRequest = request;
         }
 
