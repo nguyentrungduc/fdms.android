@@ -11,6 +11,7 @@ import io.reactivex.Observable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static com.framgia.fdms.utils.Constant.PERCENT;
@@ -90,5 +91,16 @@ public class Utils {
         InputMethodManager inputMethodManager =
             (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    public static String getStringFromList(List<String> strings) {
+        if (strings == null || strings.size() == 0) {
+            return "";
+        }
+        String result = "";
+        for (String str : strings) {
+            result += str + "\n";
+        }
+        return result;
     }
 }
