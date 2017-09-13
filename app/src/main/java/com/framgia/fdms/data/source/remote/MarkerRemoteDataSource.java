@@ -30,7 +30,7 @@ public class MarkerRemoteDataSource extends BaseRemoteDataSource implements Mark
 
     @Override
     public Observable<List<Producer>> getListMarker(String name, int page, int perPage) {
-        return mFDMSApi.getMakers(name, page, perPage)
+        return mFDMSApi.getMarkers(name, page, perPage)
             .flatMap(new Function<Respone<List<Producer>>, ObservableSource<List<Producer>>>() {
                 @Override
                 public ObservableSource<List<Producer>> apply(Respone<List<Producer>> listRespone)
@@ -42,7 +42,14 @@ public class MarkerRemoteDataSource extends BaseRemoteDataSource implements Mark
 
     @Override
     public Observable<Producer> addMarker(Producer marker) {
-        return null;
+        return mFDMSApi.addMarker(marker.getName(), marker.getDescription())
+            .flatMap(new Function<Respone<Producer>, ObservableSource<Producer>>() {
+                @Override
+                public ObservableSource<Producer> apply(Respone<Producer> producerRespone)
+                    throws Exception {
+                    return Utils.getResponse(producerRespone);
+                }
+            });
     }
 
     @Override
