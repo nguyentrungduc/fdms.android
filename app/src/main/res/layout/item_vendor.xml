@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     >
     <data>
+        <import type="android.text.TextUtils"/>
         <import type="android.view.View"/>
         <variable
             name="viewModel"
@@ -71,7 +72,7 @@
                 android:paddingBottom="@dimen/dp_10"
                 android:text='@{vendor.description}'
                 android:textSize="@dimen/sp_14"
-                android:visibility="@{vendor.description != null? View.VISIBLE : View.GONE}"
+                android:visibility="@{TextUtils.isEmpty(vendor.description)? View.GONE : View.VISIBLE}"
                 />
         </LinearLayout>
     </android.support.v7.widget.CardView>

@@ -117,12 +117,12 @@ public interface FDMSApi {
     @GET("api/requests/{id}")
     Observable<Respone<Request>> getRequest(@Path("id") int requetsId);
 
-    // TODO: 05/07/2017  later
-    @GET("api/makers")
-    Observable<Respone<List<Producer>>> getMakers(@QueryMap Map<String, Integer> params);
-
     @GET("api/meeting_rooms")
     Observable<Respone<List<MeetingRoom>>> getListMeetingRoom(@QueryMap Map<String, String> params);
+
+    @GET("api/makers")
+    Observable<Respone<List<Producer>>> getMakers(@Query("name") String name,
+        @Query("page") int page, @Query("per_page") int perPage);
 
     @GET("api/vendors")
     Observable<Respone<List<Producer>>> getListVendors(@Query("page") int page,
@@ -136,6 +136,6 @@ public interface FDMSApi {
     Observable<Respone<String>> deleteVendor(@Path("vendor_id") int vendorId);
 
     @PATCH("api/vendors/{vendor_id}")
-    Observable<Respone<String>> updateVendor(@Path("vendor_id") int vendorId,
+    Observable<Respone<List<String>>> updateVendor(@Path("vendor_id") int vendorId,
         @Query("vendor[name]") String name, @Query("vendor[description]") String description);
 }
