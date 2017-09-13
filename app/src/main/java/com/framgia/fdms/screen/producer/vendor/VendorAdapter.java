@@ -15,12 +15,12 @@ import java.util.List;
 /**
  * Created by framgia on 03/07/2017.
  */
-public class ListVendorAdapter
-    extends BaseRecyclerViewAdapter<Producer, ListVendorAdapter.ViewHolder> {
+public class VendorAdapter
+    extends BaseRecyclerViewAdapter<Producer, VendorAdapter.ViewHolder> {
     private List<Producer> mVendors;
     private VendorContract.ViewModel mViewModel;
 
-    protected ListVendorAdapter(@NonNull Context context,
+    public VendorAdapter(@NonNull Context context,
         @NonNull VendorContract.ViewModel viewModel, @NonNull List<Producer> vendors) {
         super(context);
         mViewModel = viewModel;
@@ -37,7 +37,7 @@ public class ListVendorAdapter
     }
 
     @Override
-    public ListVendorAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public VendorAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemVendorBinding binding =
             DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_vendor,
                 parent, false);
@@ -46,7 +46,7 @@ public class ListVendorAdapter
     }
 
     @Override
-    public void onBindViewHolder(ListVendorAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(VendorAdapter.ViewHolder holder, int position) {
         holder.bindData(mVendors.get(position));
     }
 

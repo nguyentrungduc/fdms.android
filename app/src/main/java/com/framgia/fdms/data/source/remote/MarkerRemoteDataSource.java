@@ -46,7 +46,7 @@ public class MarkerRemoteDataSource extends BaseRemoteDataSource implements Mark
     }
 
     @Override
-    public Observable<String> deleteMarker(Producer marker) {
+    public Observable<Respone<String>> deleteMarker(Producer marker) {
         return null;
     }
 

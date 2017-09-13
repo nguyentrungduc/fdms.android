@@ -1,6 +1,7 @@
 package com.framgia.fdms.data.source;
 
 import com.framgia.fdms.data.model.Producer;
+import com.framgia.fdms.data.model.Respone;
 import io.reactivex.Observable;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  */
 
 public final class MarkerRepository implements MarkerDataSource {
+
     private static MarkerRepository sInstance;
     private MarkerDataSource mRemoteDataSource;
 
@@ -34,7 +36,7 @@ public final class MarkerRepository implements MarkerDataSource {
     }
 
     @Override
-    public Observable<String> deleteMarker(Producer marker) {
+    public Observable<Respone<String>> deleteMarker(Producer marker) {
         return mRemoteDataSource.deleteMarker(marker);
     }
 
