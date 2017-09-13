@@ -5,12 +5,13 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.IntDef;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.R;
@@ -22,6 +23,8 @@ import com.framgia.fdms.utils.navigator.Navigator;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.TAG_MAKER_DIALOG;
 
@@ -29,7 +32,8 @@ import static com.framgia.fdms.utils.Constant.TAG_MAKER_DIALOG;
  * Exposes the data to be used in the Vendor screen.
  */
 public class VendorViewModel extends BaseObservable
-    implements VendorContract.ViewModel, ProducerDialogContract.ActionCallback {
+    implements VendorContract.ViewModel, ProducerDialogContract.ActionCallback,
+    FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<VendorViewModel> CREATOR =
         new Parcelable.Creator<VendorViewModel>() {
@@ -45,7 +49,6 @@ public class VendorViewModel extends BaseObservable
         };
     private ProducerFunctionContract.ProducerPresenter mPresenter;
     private VendorAdapter mAdapter;
-    private List<Producer> mVendors = new ArrayList<>();
     private AppCompatActivity mActivity;
     private ProducerDialog mVendorDialog;
     private int mPositionScroll = OUT_OF_INDEX;
@@ -53,6 +56,7 @@ public class VendorViewModel extends BaseObservable
     private boolean mIsLoadMore;
     private int mLoadingMoreVisibility;
     private Navigator mNavigator;
+
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -76,20 +80,14 @@ public class VendorViewModel extends BaseObservable
     public VendorViewModel(Activity activity) {
         mActivity = (AppCompatActivity) activity;
         mNavigator = new Navigator(mActivity);
-        mAdapter = new VendorAdapter(FDMSApplication.getInstant(), this, mVendors);
-        setLoadingMoreVisibility(View.GONE);
+        mAdapter = new VendorAdapter(FDMSApplication.getInstant(), this, new ArrayList<Producer>());
+        setLoadingMoreVisibility(GONE);
     }
 
     protected VendorViewModel(Parcel in) {
         mPresenter = (VendorContract.Presenter) in.readValue(
             VendorContract.Presenter.class.getClassLoader());
         mAdapter = (VendorAdapter) in.readValue(VendorAdapter.class.getClassLoader());
-        if (in.readByte() == 0x01) {
-            mVendors = new ArrayList<Producer>();
-            in.readList(mVendors, Producer.class.getClassLoader());
-        } else {
-            mVendors = null;
-        }
         mActivity = (AppCompatActivity) in.readValue(AppCompatActivity.class.getClassLoader());
         mVendorDialog = (ProducerDialog) in.readValue(ProducerDialog.class.getClassLoader());
     }
@@ -136,19 +134,16 @@ public class VendorViewModel extends BaseObservable
 
     @Override
     public void onLoadVendorSuccess(List<Producer> vendors) {
-        if (vendors != null) {
-            mVendors.addAll(vendors);
-            mAdapter.notifyDataSetChanged();
-        }
+        mAdapter.onUpdatePage(vendors);
         mIsLoadMore = false;
-        setLoadingMoreVisibility(View.GONE);
+        setLoadingMoreVisibility(GONE);
     }
 
     @Override
     public void onLoadVendorFailed() {
         Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.msg_load_data_fails,
             Snackbar.LENGTH_SHORT).show();
-        setLoadingMoreVisibility(View.GONE);
+        setLoadingMoreVisibility(GONE);
     }
 
     @Override
@@ -158,8 +153,7 @@ public class VendorViewModel extends BaseObservable
 
     @Override
     public void onAddVendorSuccess(Producer vendor) {
-        mVendors.add(0, vendor);
-        mAdapter.notifyItemInserted(0);
+        mAdapter.addData(0, vendor);
         setPositionScroll(0);
     }
 
@@ -170,8 +164,7 @@ public class VendorViewModel extends BaseObservable
     @Override
     public void onDeleteVendorSuccess(Producer producer) {
         // no ops
-        mVendors.remove(producer);
-        mAdapter.notifyItemRemoved(mVendors.indexOf(producer));
+        mAdapter.removeData(producer);
     }
 
     @Override
@@ -187,6 +180,16 @@ public class VendorViewModel extends BaseObservable
     @Override
     public void onUpdateVendorFailed(String message) {
         mNavigator.showToast(message);
+    }
+
+    @Override
+    public void showProgress() {
+        setLoadingMoreVisibility(VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        setLoadingMoreVisibility(GONE);
     }
 
     @Override
@@ -231,6 +234,23 @@ public class VendorViewModel extends BaseObservable
     }
 
     @Override
+    public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+        // no ops
+    }
+
+    @Override
+    public void onSearchAction(String currentQuery) {
+        mAdapter.clearData();
+        ((VendorPresenter) mPresenter).getVendors(currentQuery);
+    }
+
+    @Override
+    public void onClearSearchClicked() {
+        mAdapter.clearData();
+        ((VendorPresenter) mPresenter).getVendors("");
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -239,14 +259,7 @@ public class VendorViewModel extends BaseObservable
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(mPresenter);
         dest.writeValue(mAdapter);
-        if (mVendors == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(mVendors);
-        }
         dest.writeValue(mActivity);
         dest.writeValue(mVendorDialog);
     }
-
 }

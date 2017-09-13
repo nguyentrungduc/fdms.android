@@ -15,13 +15,13 @@ import java.util.List;
 /**
  * Created by framgia on 03/07/2017.
  */
-public class VendorAdapter
-    extends BaseRecyclerViewAdapter<Producer, VendorAdapter.ViewHolder> {
+
+public class VendorAdapter extends BaseRecyclerViewAdapter<Producer, VendorAdapter.ViewHolder> {
     private List<Producer> mVendors;
     private VendorContract.ViewModel mViewModel;
 
-    public VendorAdapter(@NonNull Context context,
-        @NonNull VendorContract.ViewModel viewModel, @NonNull List<Producer> vendors) {
+    public VendorAdapter(@NonNull Context context, @NonNull VendorContract.ViewModel viewModel,
+        @NonNull List<Producer> vendors) {
         super(context);
         mViewModel = viewModel;
         mVendors = vendors;
@@ -34,6 +34,30 @@ public class VendorAdapter
         }
         mVendors.addAll(datas);
         notifyDataSetChanged();
+    }
+
+    public void clearData() {
+        if (mVendors == null) {
+            return;
+        }
+        mVendors.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addData(int position, Producer producer) {
+        if (producer == null || position < 0 || position > mVendors.size()) {
+            return;
+        }
+        mVendors.add(position, producer);
+        notifyItemInserted(position);
+    }
+
+    public void removeData(Producer producer) {
+        if (mVendors == null || mVendors.size() == 0 || producer == null) {
+            return;
+        }
+        mVendors.remove(producer);
+        notifyItemRemoved(mVendors.indexOf(producer));
     }
 
     @Override

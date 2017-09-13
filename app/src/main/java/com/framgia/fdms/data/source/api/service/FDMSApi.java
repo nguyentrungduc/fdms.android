@@ -130,8 +130,8 @@ public interface FDMSApi {
     Observable<Respone<List<MeetingRoom>>> getListMeetingRoom(@QueryMap Map<String, String> params);
 
     @GET("api/vendors")
-    Observable<Respone<List<Producer>>> getListVendors(@Query("page") int page,
-        @Query("per_page") int perPage);
+    Observable<Respone<List<Producer>>> getListVendors(@Query("name") String name,
+        @Query("page") int page, @Query("per_page") int perPage);
 
     @POST("api/vendors")
     Observable<Respone<Producer>> addVendor(@Query("vendor[name]") String name,

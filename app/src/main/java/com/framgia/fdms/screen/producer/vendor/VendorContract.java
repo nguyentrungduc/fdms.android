@@ -27,13 +27,17 @@ interface VendorContract {
         void onUpdateVendorSuccess(Producer vendor, String message);
 
         void onUpdateVendorFailed(String message);
+
+        void showProgress();
+
+        void hideProgress();
     }
 
     /**
      * Presenter.
      */
     interface Presenter extends ProducerFunctionContract.ProducerPresenter {
-        void getVendors(int page);
+        void getVendors();
 
         void loadMorePage();
 
@@ -42,5 +46,7 @@ interface VendorContract {
         void deleteVendor(Producer producer);
 
         void editVendor(Producer producer);
+
+        void getVendors(String name);
     }
 }
