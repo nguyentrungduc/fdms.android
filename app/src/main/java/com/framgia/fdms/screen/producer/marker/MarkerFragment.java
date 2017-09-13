@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.source.MakerRepository;
+import com.framgia.fdms.data.source.MarkerRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
-import com.framgia.fdms.data.source.remote.MakerRemoteDataSource;
+import com.framgia.fdms.data.source.remote.MarkerRemoteDataSource;
 import com.framgia.fdms.databinding.FragmentMarkerBinding;
 
 /**
@@ -28,7 +28,8 @@ public class MarkerFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mViewModel = new MarkerViewModel(getActivity());
         MarkerContract.Presenter presenter = new MarkerPresenter(mViewModel,
-            MakerRepository.getInstant(new MakerRemoteDataSource(FDMSServiceClient.getInstance())));
+            MarkerRepository.getInstance(
+                MarkerRemoteDataSource.getInstance(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
     }
 
