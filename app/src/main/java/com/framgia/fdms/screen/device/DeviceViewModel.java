@@ -11,7 +11,7 @@ import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.ViewPagerScroll;
 import com.framgia.fdms.screen.device.listdevice.ListDeviceFragment;
-import com.framgia.fdms.screen.producer.vendor.VendorFragment;
+import com.framgia.fdms.screen.producer.ProducerFragment;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +19,8 @@ import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MAKER;
 import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MANAGE_DEVICE;
 import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MY_DEVICE;
 import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_VENDOR;
-import static com.framgia.fdms.screen.producer.vendor.VendorFragment.ProductType.MARKER;
-import static com.framgia.fdms.screen.producer.vendor.VendorFragment.ProductType.VENDOR;
+import static com.framgia.fdms.screen.producer.ProducerFragment.ProductType.MARKER;
+import static com.framgia.fdms.screen.producer.ProducerFragment.ProductType.VENDOR;
 
 /**
  * Exposes the data to be used in the Device screen.
@@ -61,8 +61,8 @@ public class DeviceViewModel extends BaseObservable
         fragments.add(ListDeviceFragment.newInstance(TAB_MY_DEVICE));
         if (mIsBo) {
             fragments.add(ListDeviceFragment.newInstance(TAB_MANAGE_DEVICE));
-            fragments.add(VendorFragment.newInstance(VENDOR));
-            fragments.add(VendorFragment.newInstance(MARKER));
+            fragments.add(ProducerFragment.newInstance(VENDOR));
+            fragments.add(ProducerFragment.newInstance(MARKER));
         }
         mAdapter = new ViewPagerAdapter(mFragment.getChildFragmentManager(), fragments);
         setAdapter(mAdapter);

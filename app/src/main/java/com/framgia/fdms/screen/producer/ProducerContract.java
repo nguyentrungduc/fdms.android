@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.producer.vendor;
+package com.framgia.fdms.screen.producer;
 
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.screen.producer.ProducerFunctionContract;
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * This specifies the contract between the view and the presenter.
  */
-interface VendorContract {
+interface ProducerContract {
     /**
      * View.
      */

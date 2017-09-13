@@ -1,6 +1,8 @@
-package com.framgia.fdms.screen.producer.vendor;
+package com.framgia.fdms.screen.producer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Parcel;
@@ -16,9 +18,6 @@ import com.framgia.fdms.BR;
 import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Producer;
-import com.framgia.fdms.screen.producer.ProducerDialog;
-import com.framgia.fdms.screen.producer.ProducerDialogContract;
-import com.framgia.fdms.screen.producer.ProducerFunctionContract;
 import com.framgia.fdms.utils.navigator.Navigator;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,24 +30,24 @@ import static com.framgia.fdms.utils.Constant.TAG_MAKER_DIALOG;
 /**
  * Exposes the data to be used in the Vendor screen.
  */
-public class VendorViewModel extends BaseObservable
-    implements VendorContract.ViewModel, ProducerDialogContract.ActionCallback,
+public class ProducerViewModel extends BaseObservable
+    implements ProducerContract.ViewModel, ProducerDialogContract.ActionCallback,
     FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener {
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<VendorViewModel> CREATOR =
-        new Parcelable.Creator<VendorViewModel>() {
+    public static final Parcelable.Creator<ProducerViewModel> CREATOR =
+        new Parcelable.Creator<ProducerViewModel>() {
             @Override
-            public VendorViewModel createFromParcel(Parcel in) {
-                return new VendorViewModel(in);
+            public ProducerViewModel createFromParcel(Parcel in) {
+                return new ProducerViewModel(in);
             }
 
             @Override
-            public VendorViewModel[] newArray(int size) {
-                return new VendorViewModel[size];
+            public ProducerViewModel[] newArray(int size) {
+                return new ProducerViewModel[size];
             }
         };
     private ProducerFunctionContract.ProducerPresenter mPresenter;
-    private VendorAdapter mAdapter;
+    private ProducerAdapter mAdapter;
     private AppCompatActivity mActivity;
     private ProducerDialog mVendorDialog;
     private int mPositionScroll = OUT_OF_INDEX;
@@ -72,22 +71,23 @@ public class VendorViewModel extends BaseObservable
             if (!mIsLoadMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                 mIsLoadMore = true;
                 setLoadingMoreVisibility(View.VISIBLE);
-                ((VendorPresenter) mPresenter).loadMorePage();
+                ((ProducerPresenter) mPresenter).loadMorePage();
             }
         }
     };
 
-    public VendorViewModel(Activity activity) {
+    public ProducerViewModel(Activity activity) {
         mActivity = (AppCompatActivity) activity;
         mNavigator = new Navigator(mActivity);
-        mAdapter = new VendorAdapter(FDMSApplication.getInstant(), this, new ArrayList<Producer>());
+        mAdapter =
+            new ProducerAdapter(FDMSApplication.getInstant(), this, new ArrayList<Producer>());
         setLoadingMoreVisibility(GONE);
     }
 
-    protected VendorViewModel(Parcel in) {
-        mPresenter = (VendorContract.Presenter) in.readValue(
-            VendorContract.Presenter.class.getClassLoader());
-        mAdapter = (VendorAdapter) in.readValue(VendorAdapter.class.getClassLoader());
+    protected ProducerViewModel(Parcel in) {
+        mPresenter = (ProducerContract.Presenter) in.readValue(
+            ProducerContract.Presenter.class.getClassLoader());
+        mAdapter = (ProducerAdapter) in.readValue(ProducerAdapter.class.getClassLoader());
         mActivity = (AppCompatActivity) in.readValue(AppCompatActivity.class.getClassLoader());
         mVendorDialog = (ProducerDialog) in.readValue(ProducerDialog.class.getClassLoader());
     }
@@ -118,7 +118,7 @@ public class VendorViewModel extends BaseObservable
     }
 
     @Bindable
-    public VendorAdapter getAdapter() {
+    public ProducerAdapter getAdapter() {
         return mAdapter;
     }
 
@@ -200,8 +200,18 @@ public class VendorViewModel extends BaseObservable
     }
 
     @Override
-    public void onDeleteProducerClick(Producer vendor) {
-        ((VendorPresenter) mPresenter).deleteVendor(vendor);
+    public void onDeleteProducerClick(final Producer vendor) {
+        new AlertDialog.Builder(mActivity).setTitle(mActivity.getString(R.string.title_delete))
+            .setMessage(mActivity.getString(R.string.msg_delete_producer) + " " + vendor.getName())
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ((ProducerPresenter) mPresenter).deleteVendor(vendor);
+                }
+            })
+            .setNegativeButton(android.R.string.no, null)
+            .create()
+            .show();
     }
 
     @Override
@@ -216,7 +226,7 @@ public class VendorViewModel extends BaseObservable
         if (producer == null) {
             return;
         }
-        ((VendorPresenter) mPresenter).addVendor(producer);
+        ((ProducerPresenter) mPresenter).addVendor(producer);
     }
 
     @Override
@@ -225,7 +235,7 @@ public class VendorViewModel extends BaseObservable
             return;
         }
         mVendorEdit = oldProducer;
-        ((VendorContract.Presenter) mPresenter).editVendor(newProducer);
+        ((ProducerContract.Presenter) mPresenter).editVendor(newProducer);
     }
 
     @Bindable
@@ -241,13 +251,13 @@ public class VendorViewModel extends BaseObservable
     @Override
     public void onSearchAction(String currentQuery) {
         mAdapter.clearData();
-        ((VendorPresenter) mPresenter).getVendors(currentQuery);
+        ((ProducerPresenter) mPresenter).getVendors(currentQuery);
     }
 
     @Override
     public void onClearSearchClicked() {
         mAdapter.clearData();
-        ((VendorPresenter) mPresenter).getVendors("");
+        ((ProducerPresenter) mPresenter).getVendors("");
     }
 
     @Override

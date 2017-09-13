@@ -9,7 +9,7 @@
         <import type="android.view.View"/>
         <variable
             name="viewModel"
-            type="com.framgia.fdms.screen.producer.vendor.VendorViewModel"
+            type="com.framgia.fdms.screen.producer.ProducerViewModel"
             />
         <variable
             name="vendor"
@@ -53,14 +53,16 @@
                     android:layout_marginRight="@dimen/dp_7"
                     android:onClick="@{() -> viewModel.onEditProducerClick(vendor)}"
                     android:padding="@dimen/dp_5"
-                    car_view:srcCompat="@drawable/ic_pencil_edit_button"
+                    car_view:srcCompat="@drawable/ic_edit"
+                    tools:ignore="ContentDescription"
                     />
                 <ImageView
                     android:layout_width="@dimen/dp_30"
                     android:layout_height="@dimen/dp_30"
                     android:onClick="@{() -> viewModel.onDeleteProducerClick(vendor)}"
                     android:padding="@dimen/dp_5"
-                    car_view:srcCompat="@drawable/ic_delete"
+                    car_view:srcCompat="@drawable/ic_x_button"
+                    tools:ignore="ContentDescription"
                     />
             </LinearLayout>
 

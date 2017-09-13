@@ -8,7 +8,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.framgia.fdms.screen.producer.vendor.VendorViewModel"
+            type="com.framgia.fdms.screen.producer.ProducerViewModel"
             />
     </data>
 

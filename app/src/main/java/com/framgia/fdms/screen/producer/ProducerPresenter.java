@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.producer.vendor;
+package com.framgia.fdms.screen.producer;
 
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Respone;
@@ -15,25 +15,24 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
-import static com.framgia.fdms.screen.producer.vendor.VendorFragment.ProductType;
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
 /**
- * Listens to user actions from the UI ({@link VendorFragment}), retrieves the data and updates
+ * Listens to user actions from the UI ({@link ProducerFragment}), retrieves the data and updates
  * the UI as required.
  */
-final class VendorPresenter implements VendorContract.Presenter {
-    private final VendorContract.ViewModel mViewModel;
+final class ProducerPresenter implements ProducerContract.Presenter {
+    private final ProducerContract.ViewModel mViewModel;
     private VendorDataSource.RemoteDataSource mVendorRepository;
     private MarkerDataSource mMarkerRepository;
     private CompositeDisposable mSubscription;
     private int mPage;
-    @ProductType
+    @ProducerFragment.ProductType
     private int mType;
     private String mName;
 
-    VendorPresenter(VendorContract.ViewModel viewModel, @ProductType int type,
+    ProducerPresenter(ProducerContract.ViewModel viewModel, @ProducerFragment.ProductType int type,
         VendorDataSource.RemoteDataSource vendorRepository, MarkerDataSource markerRepository) {
         mViewModel = viewModel;
         mType = type;
@@ -56,12 +55,12 @@ final class VendorPresenter implements VendorContract.Presenter {
     public void getVendors() {
         Observable<List<Producer>> observable;
         switch (mType) {
-            case ProductType.VENDOR:
+            case ProducerFragment.ProductType.VENDOR:
                 observable = mVendorRepository.getListVendor(mName, mPage, PER_PAGE);
                 break;
 
             default:
-            case ProductType.MARKER:
+            case ProducerFragment.ProductType.MARKER:
                 observable = mMarkerRepository.getListMarker(mName, mPage, PER_PAGE);
                 break;
         }
@@ -107,12 +106,12 @@ final class VendorPresenter implements VendorContract.Presenter {
     public void addVendor(Producer producer) {
         Observable<Producer> observable;
         switch (mType) {
-            case ProductType.VENDOR:
+            case ProducerFragment.ProductType.VENDOR:
                 observable = mVendorRepository.addVendor(producer);
                 break;
 
             default:
-            case ProductType.MARKER:
+            case ProducerFragment.ProductType.MARKER:
                 observable = mMarkerRepository.addMarker(producer);
                 break;
         }
@@ -137,12 +136,12 @@ final class VendorPresenter implements VendorContract.Presenter {
     public void deleteVendor(final Producer producer) {
         Observable<Respone<String>> observable;
         switch (mType) {
-            case ProductType.VENDOR:
+            case ProducerFragment.ProductType.VENDOR:
                 observable = mVendorRepository.deleteVendor(producer);
                 break;
 
             default:
-            case ProductType.MARKER:
+            case ProducerFragment.ProductType.MARKER:
                 observable = mMarkerRepository.deleteMarker(producer);
                 break;
         }
@@ -170,12 +169,12 @@ final class VendorPresenter implements VendorContract.Presenter {
     public void editVendor(final Producer producer) {
         Observable<String> observable;
         switch (mType) {
-            case ProductType.VENDOR:
+            case ProducerFragment.ProductType.VENDOR:
                 observable = mVendorRepository.editVendor(producer);
                 break;
 
             default:
-            case ProductType.MARKER:
+            case ProducerFragment.ProductType.MARKER:
                 observable = mMarkerRepository.editMarker(producer);
                 break;
         }

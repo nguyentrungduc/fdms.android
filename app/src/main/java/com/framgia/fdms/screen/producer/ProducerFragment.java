@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.producer.vendor;
+package com.framgia.fdms.screen.producer;
 
 import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
@@ -15,22 +15,22 @@ import com.framgia.fdms.data.source.VendorRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.remote.MarkerRemoteDataSource;
 import com.framgia.fdms.data.source.remote.VendorRemoteDataSource;
-import com.framgia.fdms.databinding.FragmentVendorBinding;
+import com.framgia.fdms.databinding.FragmentProducerBinding;
 
-import static com.framgia.fdms.screen.producer.vendor.VendorFragment.ProductType.MARKER;
-import static com.framgia.fdms.screen.producer.vendor.VendorFragment.ProductType.VENDOR;
+import static com.framgia.fdms.screen.producer.ProducerFragment.ProductType.MARKER;
+import static com.framgia.fdms.screen.producer.ProducerFragment.ProductType.VENDOR;
 
 /**
  * Vendor Screen.
  */
-public class VendorFragment extends Fragment {
+public class ProducerFragment extends Fragment {
     private static final String ARGUMENT_TYPE = "ARGUMENT_TYPE";
-    private VendorContract.ViewModel mViewModel;
+    private ProducerContract.ViewModel mViewModel;
     @ProductType
     private int mFragmentType;
 
-    public static VendorFragment newInstance(@ProductType int type) {
-        VendorFragment fragment = new VendorFragment();
+    public static ProducerFragment newInstance(@ProductType int type) {
+        ProducerFragment fragment = new ProducerFragment();
         Bundle args = new Bundle();
         args.putInt(ARGUMENT_TYPE, type);
         fragment.setArguments(args);
@@ -41,10 +41,10 @@ public class VendorFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new VendorViewModel(getActivity());
+        mViewModel = new ProducerViewModel(getActivity());
         getDataIntent();
 
-        VendorContract.Presenter presenter = new VendorPresenter(mViewModel, mFragmentType,
+        ProducerContract.Presenter presenter = new ProducerPresenter(mViewModel, mFragmentType,
             VendorRepository.getInstances(
                 new VendorRemoteDataSource(FDMSServiceClient.getInstance())),
             MarkerRepository.getInstance(
@@ -63,9 +63,9 @@ public class VendorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState) {
-        FragmentVendorBinding binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_vendor, container, false);
-        binding.setViewModel((VendorViewModel) mViewModel);
+        FragmentProducerBinding binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_producer, container, false);
+        binding.setViewModel((ProducerViewModel) mViewModel);
         return binding.getRoot();
     }
 

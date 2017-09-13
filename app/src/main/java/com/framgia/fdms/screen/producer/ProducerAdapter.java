@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.producer.vendor;
+package com.framgia.fdms.screen.producer;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -16,11 +16,11 @@ import java.util.List;
  * Created by framgia on 03/07/2017.
  */
 
-public class VendorAdapter extends BaseRecyclerViewAdapter<Producer, VendorAdapter.ViewHolder> {
+public class ProducerAdapter extends BaseRecyclerViewAdapter<Producer, ProducerAdapter.ViewHolder> {
     private List<Producer> mVendors;
-    private VendorContract.ViewModel mViewModel;
+    private ProducerContract.ViewModel mViewModel;
 
-    public VendorAdapter(@NonNull Context context, @NonNull VendorContract.ViewModel viewModel,
+    public ProducerAdapter(@NonNull Context context, @NonNull ProducerContract.ViewModel viewModel,
         @NonNull List<Producer> vendors) {
         super(context);
         mViewModel = viewModel;
@@ -61,16 +61,16 @@ public class VendorAdapter extends BaseRecyclerViewAdapter<Producer, VendorAdapt
     }
 
     @Override
-    public VendorAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ProducerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemVendorBinding binding =
             DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_vendor,
                 parent, false);
-        binding.setViewModel((VendorViewModel) mViewModel);
+        binding.setViewModel((ProducerViewModel) mViewModel);
         return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(VendorAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ProducerAdapter.ViewHolder holder, int position) {
         holder.bindData(mVendors.get(position));
     }
 
