@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.framgia.fdms">
+<manifest package="com.framgia.fdms"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -76,6 +76,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -87,6 +88,10 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="731ae80443a5d1005298e4d8934ce1bc9b4de457"/>
+
+        <activity
+            android:name=".screen.deviceselection.DeviceSelectionActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
