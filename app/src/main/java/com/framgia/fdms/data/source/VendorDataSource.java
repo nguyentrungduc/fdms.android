@@ -11,7 +11,7 @@ import java.util.List;
 
 public class VendorDataSource {
     public interface RemoteDataSource {
-        Observable<List<Producer>> getListVendor(int page, int perPage);
+        Observable<List<Producer>> getListVendor(String name, int page, int perPage);
 
         Observable<Producer> addVendor(Producer producer);
 

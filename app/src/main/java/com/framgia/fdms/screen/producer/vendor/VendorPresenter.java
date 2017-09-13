@@ -2,9 +2,11 @@ package com.framgia.fdms.screen.producer.vendor;
 
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Respone;
+import com.framgia.fdms.data.source.MarkerDataSource;
 import com.framgia.fdms.data.source.VendorDataSource;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -12,6 +14,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
+import static com.framgia.fdms.screen.producer.vendor.VendorFragment.ProductType;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
 /**
@@ -20,14 +23,20 @@ import static com.framgia.fdms.utils.Constant.PER_PAGE;
  */
 final class VendorPresenter implements VendorContract.Presenter {
     private final VendorContract.ViewModel mViewModel;
-    private VendorDataSource.RemoteDataSource mRepository;
+    private VendorDataSource.RemoteDataSource mVendorRepository;
+    private MarkerDataSource mMarkerRepository;
     private CompositeDisposable mSubscription;
     private int mPage;
+    @ProductType
+    private int mType;
+    private String mName;
 
-    VendorPresenter(VendorContract.ViewModel viewModel,
-        VendorDataSource.RemoteDataSource repository) {
+    VendorPresenter(VendorContract.ViewModel viewModel, @ProductType int type,
+        VendorDataSource.RemoteDataSource vendorRepository, MarkerDataSource markerRepository) {
         mViewModel = viewModel;
-        mRepository = repository;
+        mType = type;
+        mVendorRepository = vendorRepository;
+        mMarkerRepository = markerRepository;
         mSubscription = new CompositeDisposable();
     }
 
@@ -43,8 +52,19 @@ final class VendorPresenter implements VendorContract.Presenter {
 
     @Override
     public void getVendors(int page) {
-        Disposable subscription = mRepository.getListVendor(page, PER_PAGE)
-            .subscribeOn(Schedulers.io())
+        Observable<List<Producer>> observable;
+        switch (mType) {
+            case ProductType.VENDOR:
+                observable = mVendorRepository.getListVendor(mName, page, PER_PAGE);
+                break;
+
+            default:
+            case ProductType.MARKER:
+                observable = mMarkerRepository.getListMarker(mName, page, PER_PAGE);
+                break;
+        }
+
+        Disposable subscription = observable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<List<Producer>>() {
                 @Override
@@ -72,8 +92,19 @@ final class VendorPresenter implements VendorContract.Presenter {
 
     @Override
     public void addVendor(Producer producer) {
-        Disposable subscription = mRepository.addVendor(producer)
-            .subscribeOn(Schedulers.io())
+        Observable<Producer> observable;
+        switch (mType) {
+            case ProductType.VENDOR:
+                observable = mVendorRepository.addVendor(producer);
+                break;
+
+            default:
+            case ProductType.MARKER:
+                observable = mMarkerRepository.addMarker(producer);
+                break;
+        }
+
+        Disposable subscription = observable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<Producer>() {
                 @Override
@@ -91,8 +122,19 @@ final class VendorPresenter implements VendorContract.Presenter {
 
     @Override
     public void deleteVendor(final Producer producer) {
-        Disposable subscription = mRepository.deleteVendor(producer)
-            .subscribeOn(Schedulers.io())
+        Observable<Respone<String>> observable;
+        switch (mType) {
+            case ProductType.VENDOR:
+                observable = mVendorRepository.deleteVendor(producer);
+                break;
+
+            default:
+            case ProductType.MARKER:
+                observable = mMarkerRepository.deleteMarker(producer);
+                break;
+        }
+
+        Disposable subscription = observable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<Respone<String>>() {
                 @Override
@@ -113,8 +155,18 @@ final class VendorPresenter implements VendorContract.Presenter {
 
     @Override
     public void editVendor(final Producer producer) {
-        Disposable subscription = mRepository.editVendor(producer)
-            .subscribeOn(Schedulers.io())
+        Observable<String> observable;
+        switch (mType) {
+            case ProductType.VENDOR:
+                observable = mVendorRepository.editVendor(producer);
+                break;
+
+            default:
+            case ProductType.MARKER:
+                observable = mMarkerRepository.editMarker(producer);
+                break;
+        }
+        Disposable subscription = observable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<String>() {
                 @Override

@@ -1,6 +1,7 @@
 package com.framgia.fdms.data.source;
 
 import com.framgia.fdms.data.model.Producer;
+import com.framgia.fdms.data.model.Respone;
 import io.reactivex.Observable;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface MarkerDataSource {
 
     Observable<Producer> addMarker(Producer marker);
 
-    Observable<String> deleteMarker(Producer marker);
+    Observable<Respone<String>> deleteMarker(Producer marker);
 
     Observable<String> editMarker(Producer marker);
 }

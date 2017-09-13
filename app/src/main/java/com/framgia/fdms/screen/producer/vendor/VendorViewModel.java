@@ -22,9 +22,6 @@ import com.framgia.fdms.utils.navigator.Navigator;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.framgia.fdms.screen.producer.vendor.VendorViewModel.Action.ACTION_ADD_VENDOR;
-import static com.framgia.fdms.screen.producer.vendor.VendorViewModel.Action.ACTION_DELETE_VENDOR;
-import static com.framgia.fdms.screen.producer.vendor.VendorViewModel.Action.ACTION_EDIT_VENDOR;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.TAG_MAKER_DIALOG;
 
@@ -47,7 +44,7 @@ public class VendorViewModel extends BaseObservable
             }
         };
     private ProducerFunctionContract.ProducerPresenter mPresenter;
-    private ListVendorAdapter mAdapter;
+    private VendorAdapter mAdapter;
     private List<Producer> mVendors = new ArrayList<>();
     private AppCompatActivity mActivity;
     private ProducerDialog mVendorDialog;
@@ -79,14 +76,14 @@ public class VendorViewModel extends BaseObservable
     public VendorViewModel(Activity activity) {
         mActivity = (AppCompatActivity) activity;
         mNavigator = new Navigator(mActivity);
-        mAdapter = new ListVendorAdapter(FDMSApplication.getInstant(), this, mVendors);
+        mAdapter = new VendorAdapter(FDMSApplication.getInstant(), this, mVendors);
         setLoadingMoreVisibility(View.GONE);
     }
 
     protected VendorViewModel(Parcel in) {
         mPresenter = (VendorContract.Presenter) in.readValue(
             VendorContract.Presenter.class.getClassLoader());
-        mAdapter = (ListVendorAdapter) in.readValue(ListVendorAdapter.class.getClassLoader());
+        mAdapter = (VendorAdapter) in.readValue(VendorAdapter.class.getClassLoader());
         if (in.readByte() == 0x01) {
             mVendors = new ArrayList<Producer>();
             in.readList(mVendors, Producer.class.getClassLoader());
@@ -123,7 +120,7 @@ public class VendorViewModel extends BaseObservable
     }
 
     @Bindable
-    public ListVendorAdapter getAdapter() {
+    public VendorAdapter getAdapter() {
         return mAdapter;
     }
 
@@ -252,10 +249,4 @@ public class VendorViewModel extends BaseObservable
         dest.writeValue(mVendorDialog);
     }
 
-    @IntDef({ ACTION_EDIT_VENDOR, ACTION_ADD_VENDOR, ACTION_DELETE_VENDOR })
-    public @interface Action {
-        int ACTION_EDIT_VENDOR = 0;
-        int ACTION_ADD_VENDOR = 1;
-        int ACTION_DELETE_VENDOR = 2;
-    }
 }

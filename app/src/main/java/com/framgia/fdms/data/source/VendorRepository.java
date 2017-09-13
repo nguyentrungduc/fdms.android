@@ -25,8 +25,8 @@ public class VendorRepository implements VendorDataSource.RemoteDataSource {
     }
 
     @Override
-    public Observable<List<Producer>> getListVendor(int page, int perPage) {
-        return mVendorRemoteDataSource.getListVendor(page, perPage);
+    public Observable<List<Producer>> getListVendor(String name, int page, int perPage) {
+        return mVendorRemoteDataSource.getListVendor(name, page, perPage);
     }
 
     @Override
