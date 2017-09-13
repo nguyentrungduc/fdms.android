@@ -1,7 +1,17 @@
 package com.framgia.fdms.screen.meetingroom.detailmeetingroom;
 
+import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import java.util.List;
 
 /**
  * Listens to user actions from the UI ({@link DetailMeetingRoomActivity}), retrieves the data and
@@ -16,7 +26,7 @@ final class DetailMeetingRoomPresenter implements DetailMeetingRoomContract.Pres
     private CompositeDisposable mCompositeSubscriptions;
 
     DetailMeetingRoomPresenter(DetailMeetingRoomContract.ViewModel viewModel,
-            DeviceRepository deviceRepository) {
+        DeviceRepository deviceRepository) {
         mViewModel = viewModel;
         mDeviceRepository = deviceRepository;
         mCompositeSubscriptions = new CompositeDisposable();
@@ -32,8 +42,33 @@ final class DetailMeetingRoomPresenter implements DetailMeetingRoomContract.Pres
     }
 
     @Override
-    public void getListDevice(String deviceName, int categoryId, int statusId, int page,
-            int perPage) {
-        //TODO: Get list device
+    public void getListDevice(int meetingRoomId, int page, int perPage) {
+        Disposable subscription =
+            mDeviceRepository.getListDeviceByMeetingRoomId(meetingRoomId, page, perPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mViewModel.showProgressbar();
+                    }
+                })
+                .subscribe(new Consumer<List<Device>>() {
+                    @Override
+                    public void accept(@NonNull List<Device> devices) throws Exception {
+                        mViewModel.onGetListDeviceSuccess(devices);
+                    }
+                }, new RequestError() {
+                    @Override
+                    public void onRequestError(BaseException error) {
+                        mViewModel.onGetListDeviceError(error.getMessage());
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mViewModel.hideProgressbar();
+                    }
+                });
+        mCompositeSubscriptions.add(subscription);
     }
 }

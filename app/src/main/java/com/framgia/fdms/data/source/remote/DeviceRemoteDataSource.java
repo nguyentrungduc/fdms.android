@@ -13,6 +13,7 @@ import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.utils.Utils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -258,6 +259,19 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
                 public ObservableSource<Device> apply(Respone<Device> deviceRespone)
                     throws Exception {
                     return Utils.getResponse(deviceRespone);
+                }
+            });
+    }
+
+    @Override
+    public Observable<List<Device>> getListDeviceByMeetingRoomId(int meetingRoomId, int page,
+        int perPage) {
+        return mFDMSApi.getListDeviceByMeetingRoomId(meetingRoomId, page, perPage)
+            .flatMap(new Function<Respone<List<Device>>, ObservableSource<List<Device>>>() {
+                @Override
+                public ObservableSource<List<Device>> apply(
+                    @NonNull Respone<List<Device>> listRespone) throws Exception {
+                    return Utils.getResponse(listRespone);
                 }
             });
     }

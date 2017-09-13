@@ -132,6 +132,7 @@
     <string name="action_reject">Reject</string>
     <string name="title_serial_number">Serial Number</string>
     <string name="msg_update_device_error">Update device error</string>
+    <string name="msg_nothing_here">Nothing here!</string>
     <string name="title_add_request_detail">Add Request Detail</string>
     <string name="action_agree">AGREE</string>
     <string name="action_dis_agree">DIS AGREE</string>

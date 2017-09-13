@@ -9,8 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
+import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.MeetingRoom;
+import com.framgia.fdms.utils.Constant;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
@@ -31,9 +34,13 @@ public class DetailMeetingRoomViewModel extends BaseObservable
     private boolean mIsRefresh;
     private boolean mIsLoadingMore;
     private boolean mProgressBarVisibility;
+    private boolean mIsVisibleLayoutDataNotFound;
+    private String mNotificationLoadData;
+    private List<Device> mDevices;
 
-    public DetailMeetingRoomViewModel(Context context, MeetingRoom meetingRoom) {
+    DetailMeetingRoomViewModel(Context context, MeetingRoom meetingRoom) {
         mContext = context;
+        mDevices = new ArrayList<>();
         if (meetingRoom == null) {
             return;
         }
@@ -56,6 +63,7 @@ public class DetailMeetingRoomViewModel extends BaseObservable
     @Override
     public void setPresenter(DetailMeetingRoomContract.Presenter presenter) {
         mPresenter = presenter;
+        mPresenter.getListDevice(mMeetingRoom.getId(), mPage, Constant.PER_PAGE);
     }
 
     public MeetingRoom getMeetingRoom() {
@@ -86,7 +94,7 @@ public class DetailMeetingRoomViewModel extends BaseObservable
         return mIsLoadingMore;
     }
 
-    public void setLoadingMore(boolean loadingMore) {
+    private void setLoadingMore(boolean loadingMore) {
         mIsLoadingMore = loadingMore;
         notifyPropertyChanged(BR.loadingMore);
     }
@@ -107,7 +115,7 @@ public class DetailMeetingRoomViewModel extends BaseObservable
             public void onRefresh() {
                 mPage = FIRST_PAGE;
                 mListDeviceAdapter.clear();
-                //TODO: get list device
+                mPresenter.getListDevice(mMeetingRoom.getId(), mPage, Constant.PER_PAGE);
             }
         };
 
@@ -141,14 +149,23 @@ public class DetailMeetingRoomViewModel extends BaseObservable
 
     private void loadMore() {
         mPage++;
-        //TODO: get list device
+        mPresenter.getListDevice(mMeetingRoom.getId(), mPage, Constant.PER_PAGE);
     }
 
     @Override
     public void onGetListDeviceSuccess(List<Device> devices) {
+        if (devices == null) {
+            return;
+        }
         setLoadingMore(false);
-        mListDeviceAdapter.onUpdatePage(devices);
         setRefresh(false);
+        mDevices.addAll(devices);
+        if (mDevices.size() == 0) {
+            setVisibleLayoutDataNotFound(true);
+            setNotificationLoadData(mContext.getString(R.string.msg_nothing_here));
+            return;
+        }
+        mListDeviceAdapter.onUpdatePage(devices);
     }
 
     @Override
@@ -164,5 +181,25 @@ public class DetailMeetingRoomViewModel extends BaseObservable
     @Override
     public void hideProgressbar() {
         setProgressBarVisibility(false);
+    }
+
+    @Bindable
+    public boolean isVisibleLayoutDataNotFound() {
+        return mIsVisibleLayoutDataNotFound;
+    }
+
+    private void setVisibleLayoutDataNotFound(boolean visibleLayoutDataNotFound) {
+        mIsVisibleLayoutDataNotFound = visibleLayoutDataNotFound;
+        notifyPropertyChanged(BR.visibleLayoutDataNotFound);
+    }
+
+    @Bindable
+    public String getNotificationLoadData() {
+        return mNotificationLoadData;
+    }
+
+    public void setNotificationLoadData(String notificationLoadData) {
+        mNotificationLoadData = notificationLoadData;
+        notifyPropertyChanged(BR.notificationLoadData);
     }
 }
