@@ -37,6 +37,11 @@ public class AssignmentAdapter
     }
 
     public void addItem(AssignmentItemRequest request) {
+        for (AssignmentItemRequest requestTemp : mRequests) {
+            if (requestTemp.getDeviceId() == request.getDeviceId()) {
+                return;
+            }
+        }
         mRequests.add(request);
         notifyDataSetChanged();
     }
