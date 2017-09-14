@@ -126,16 +126,13 @@
                                 >
 
                                 <TextView
-                                    android:id="@+id/textInputEditText2"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:focusable="false"
-                                    android:hint="@string/title_request_assignment"
-                                    android:text="@={viewModel.deviceGroup.name}"
                                     android:onClick="@{() -> viewModel.onShowDeviceGroups()}"
-                                    android:textColorHint="@color/color_black"
+                                    android:text="@={viewModel.deviceGroup.name}"
+                                    android:textColorHint="@color/colorAccent"
                                     android:textSize="@dimen/sp_12"
-                                    app:hintTextAppearance="@color/color_brown"
+                                    bind:hint="@{viewModel.deviceGroupHint}"
                                     />
                             </android.support.v7.widget.CardView>
 
@@ -157,13 +154,11 @@
                                     android:id="@+id/textView"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:focusable="false"
-                                    android:hint="@string/title_btn_category"
-                                    android:text="@={viewModel.category.name}"
                                     android:onClick="@{() -> viewModel.onShowCategories()}"
-                                    android:textColorHint="@color/color_black"
+                                    android:text="@={viewModel.category.name}"
+                                    android:textColorHint="@color/colorAccent"
                                     android:textSize="@dimen/sp_12"
-                                    app:hintTextAppearance="@color/color_brown"
+                                    bind:hint="@{viewModel.categoryHint}"
                                     />
                             </android.support.v7.widget.CardView>
 
@@ -184,13 +179,11 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:focusable="false"
-                                    android:hint="@string/title_device_id"
-                                    android:text="@={viewModel.device.deviceCode}"
                                     android:onClick="@{() -> viewModel.onShowDevices()}"
-                                    android:textColorHint="@color/color_black"
+                                    android:text="@={viewModel.device.deviceCode}"
+                                    android:textColorHint="@color/colorAccent"
                                     android:textSize="@dimen/sp_12"
-                                    app:hintTextAppearance="@color/color_brown"
+                                    bind:hint="@{viewModel.deviceHint}"
                                     />
                             </android.support.v7.widget.CardView>
                         </LinearLayout>
@@ -244,7 +237,7 @@
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.onSaveClick()}"
+                android:onClick="@{(view)->viewModel.onSaveClick(view)}"
                 app:fab_colorNormal="@android:color/white"
                 app:fab_colorPressed="@color/color_seashell"
                 app:fab_icon="@drawable/ic_save_24dp"

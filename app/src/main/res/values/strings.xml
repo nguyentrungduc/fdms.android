@@ -160,7 +160,7 @@
     <string name="title_staff">Staff</string>
     <string name="title_add_new_device">Add New Device</string>
     <string name="title_assignment">Assignment</string>
-    <string name="title_device_id">Device ID</string>
+    <string name="title_device_code">Device Code</string>
     <string name="title_add_device">Add Device</string>
     <string name="title_branch">Branch: </string>
     <string name="title_type_code">Type of code</string>
@@ -294,4 +294,10 @@
     <string name="title_filter_by">Filter</string>
     <string name="title_meeting_room">Meeting room</string>
     <string name="title_device_name_code">Device name/code</string>
+    <string name="action_all">All</string>
+    <string name="title_no_category">No Category</string>
+    <string name="title_no_device_group">No Device Group</string>
+    <string name="title_validate_item_assignment">Please select fully(Device Group, Category, Device)</string>
+    <string name="title_validate_assignment">Please add device</string>
+    <string name="msg_assignment_success">Assignment Success</string>
 </resources>

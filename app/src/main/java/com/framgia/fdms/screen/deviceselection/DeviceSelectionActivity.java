@@ -90,14 +90,14 @@ public class DeviceSelectionActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return false;
+        if (mViewModel != null) {
+            mViewModel.onSearchData(query);
+        }
+        return true;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if (mViewModel != null) {
-            mViewModel.onSearchData(newText);
-        }
-        return true;
+        return false;
     }
 }
