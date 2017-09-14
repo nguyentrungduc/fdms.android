@@ -39,6 +39,9 @@ public class MeetingRoom extends BaseObservable implements Parcelable {
     @SerializedName("updated_at")
     private String mUpdatedAt;
 
+    public MeetingRoom() {
+    }
+
     protected MeetingRoom(Parcel in) {
         mId = in.readInt();
         mName = in.readString();

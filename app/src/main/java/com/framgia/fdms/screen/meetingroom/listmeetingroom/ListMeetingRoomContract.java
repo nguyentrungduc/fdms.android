@@ -1,7 +1,5 @@
 package com.framgia.fdms.screen.meetingroom.listmeetingroom;
 
-import com.framgia.fdms.BasePresenter;
-import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.MeetingRoom;
 import java.util.List;
 
@@ -12,7 +10,7 @@ interface ListMeetingRoomContract {
     /**
      * View.
      */
-    interface ViewModel extends BaseViewModel<Presenter> {
+    interface ViewModel extends MeetingRoomFunctionContract.ViewModel<Presenter> {
         void onGetListMeetingRoomSuccess(List<MeetingRoom> meetingRooms);
 
         void onGetListMeetingRoomError(String error);
@@ -25,7 +23,13 @@ interface ListMeetingRoomContract {
     /**
      * Presenter.
      */
-    interface Presenter extends BasePresenter {
+    interface Presenter extends MeetingRoomFunctionContract.MeetingRoomPresenter {
         void getListMeetingRoom(String roomName, int page, int perPage);
+
+        void addMeetingRoom(MeetingRoom meetingRoom);
+
+        void editMeetingRoom(MeetingRoom meetingRoom);
+
+        void deleteMeetingRoom(MeetingRoom meetingRoom);
     }
 }
