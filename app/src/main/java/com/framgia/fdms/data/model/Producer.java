@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by framgia on 03/07/2017.
  */
-public class Producer extends BaseObservable implements Parcelable {
+public class Producer extends Status implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Producer> CREATOR = new Parcelable.Creator<Producer>() {
         @Override
@@ -24,38 +24,24 @@ public class Producer extends BaseObservable implements Parcelable {
             return new Producer[size];
         }
     };
-    @SerializedName("id")
     @Expose
-    private int mId;
-    @SerializedName("name")
-    @Expose
-    private String mName;
     @SerializedName("description")
-    @Expose
     private String mDescription;
+    @Expose
+    @SerializedName("created_at")
+    private String mCreatedAt;
+    @Expose
+    @SerializedName("updated_at")
+    private String mUpdatedAt;
 
-    public Producer() {
+    public Producer(){
     }
 
-    public Producer(String name, String description) {
-        mName = name;
-        mDescription = description;
-    }
-
-    protected Producer(Parcel in) {
-        mName = in.readString();
+    public Producer(Parcel in) {
+        super(in);
         mDescription = in.readString();
-        mId = in.readInt();
-    }
-
-    @Bindable
-    public String getName() {
-        return mName == null ? "" : mName;
-    }
-
-    public void setName(String name) {
-        mName = name;
-        notifyPropertyChanged(BR.name);
+        mCreatedAt = in.readString();
+        mUpdatedAt = in.readString();
     }
 
     @Bindable
@@ -69,13 +55,23 @@ public class Producer extends BaseObservable implements Parcelable {
     }
 
     @Bindable
-    public int getId() {
-        return mId;
+    public String getCreatedAt() {
+        return mCreatedAt;
     }
 
-    public void setId(int id) {
-        mId = id;
-        notifyPropertyChanged(BR.id);
+    public void setCreatedAt(String createdAt) {
+        mCreatedAt = createdAt;
+        notifyPropertyChanged(BR.creatAt);
+    }
+
+    @Bindable
+    public String getUpdatedAt() {
+        return mUpdatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        mUpdatedAt = updatedAt;
+        notifyPropertyChanged(BR.updatedAt);
     }
 
     @Override
@@ -85,8 +81,10 @@ public class Producer extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mName);
         dest.writeInt(mId);
+        dest.writeString(mName);
         dest.writeString(mDescription);
+        dest.writeString(mCreatedAt);
+        dest.writeString(mUpdatedAt);
     }
 }

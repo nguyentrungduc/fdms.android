@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.MeetingRoom;
+import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.databinding.DialogConfirmMeetingRoomBinding;
 
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_ACTION_CALLBACK;
@@ -21,11 +21,11 @@ import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_TITLE;
 
 public class MeetingRoomDialog extends DialogFragment implements MeetingRoomDialogContract {
     private ObservableField<String> mMessageError = new ObservableField<>();
-    private MeetingRoom mMeetingRoom, mTempMeetingRoom = new MeetingRoom();
+    private Producer mMeetingRoom, mTempMeetingRoom = new Producer();
     private ObservableField<String> mTitle = new ObservableField<>();
     private MeetingRoomDialogContract.ActionCallback mActionCallback;
 
-    public static MeetingRoomDialog newInstant(MeetingRoom meetingRoom, String title,
+    public static MeetingRoomDialog newInstant(Producer meetingRoom, String title,
         MeetingRoomDialogContract.ActionCallback callback) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(BUNDLE_MEETING_ROOM, meetingRoom);

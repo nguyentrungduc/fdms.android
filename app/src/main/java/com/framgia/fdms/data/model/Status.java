@@ -1,7 +1,11 @@
 package com.framgia.fdms.data.model;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.framgia.fdms.BR;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by MyPC on 03/05/2017.
  */
 
-public class Status implements Parcelable {
+public class Status extends BaseObservable implements Parcelable {
     public static final Creator<Status> CREATOR = new Creator<Status>() {
         @Override
         public Status createFromParcel(Parcel in) {
@@ -24,10 +28,13 @@ public class Status implements Parcelable {
     public static String USING_STATUS = "using";
     @Expose
     @SerializedName("id")
-    private int mId;
+    protected int mId;
     @Expose
     @SerializedName("name")
-    private String mName;
+    protected String mName;
+
+    public Status() {
+    }
 
     public Status(int id, String name) {
         mId = id;
@@ -39,20 +46,24 @@ public class Status implements Parcelable {
         mName = in.readString();
     }
 
+    @Bindable
     public int getId() {
         return mId;
     }
 
     public void setId(int id) {
         mId = id;
+        notifyPropertyChanged(BR.id);
     }
 
+    @Bindable
     public String getName() {
         return mName;
     }
 
     public void setName(String name) {
         mName = name;
+        notifyPropertyChanged(BR.name);
     }
 
     @Override

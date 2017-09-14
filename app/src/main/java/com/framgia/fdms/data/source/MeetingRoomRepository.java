@@ -1,6 +1,6 @@
 package com.framgia.fdms.data.source;
 
-import com.framgia.fdms.data.model.MeetingRoom;
+import com.framgia.fdms.data.model.Producer;
 import io.reactivex.Observable;
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class MeetingRoomRepository {
         mRemoteDataSource = remoteDataSource;
     }
 
-    public Observable<List<MeetingRoom>> getListMeetingRoom(String roomName, int page,
+    public Observable<List<Producer>> getListMeetingRoom(String roomName, int page,
         int perPage) {
         return mRemoteDataSource.getListMeetingRoom(roomName, page, perPage);
     }

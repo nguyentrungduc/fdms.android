@@ -60,16 +60,22 @@ public class ListDeviceViewModel extends BaseObservable
     private Context mContext;
     private List<Category> mCategories;
     private List<Status> mStatuses;
-    private Category mCategory;
-    private Status mStatus;
+
     private String mKeyWord;
     private boolean mIsBo;
     private int mTab = TAB_MY_DEVICE;
     private int mEmptyViewVisible = View.GONE;
-    private Producer mVendor, mMaker;
+
     private boolean mIsTopSheetExpand;
     private boolean mIsRefresh;
     private String mDrawerStatus = DRAWER_IS_CLOSE;
+
+    private Status mStatus;
+    private Category mCategory;
+    private Producer mVendor, mMaker;
+    private Producer mMeetingRoom;
+    private String mDeviceName;
+    private String mStaffName;
 
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
         @Override
@@ -445,6 +451,9 @@ public class ListDeviceViewModel extends BaseObservable
             case R.id.action_filter:
                 setDrawerStatus(
                     mDrawerStatus == DRAWER_IS_CLOSE ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
+                break;
+            case R.id.action_search:
+                // TODO: 9/14/17
                 break;
             default:
                 break;

@@ -1,6 +1,6 @@
 package com.framgia.fdms.screen.meetingroom.listmeetingroom;
 
-import com.framgia.fdms.data.model.MeetingRoom;
+import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.source.MeetingRoomRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
@@ -51,9 +51,9 @@ final class ListMeetingRoomPresenter implements ListMeetingRoomContract.Presente
                     mViewModel.showProgressbar();
                 }
             })
-            .subscribe(new Consumer<List<MeetingRoom>>() {
+            .subscribe(new Consumer<List<Producer>>() {
                 @Override
-                public void accept(List<MeetingRoom> meetingRooms) throws Exception {
+                public void accept(List<Producer> meetingRooms) throws Exception {
                     mViewModel.onGetListMeetingRoomSuccess(meetingRooms);
                 }
             }, new RequestError() {
@@ -71,17 +71,17 @@ final class ListMeetingRoomPresenter implements ListMeetingRoomContract.Presente
     }
 
     @Override
-    public void addMeetingRoom(MeetingRoom meetingRoom) {
+    public void addMeetingRoom(Producer meetingRoom) {
         //TODO: add meeting room
     }
 
     @Override
-    public void editMeetingRoom(MeetingRoom meetingRoom) {
+    public void editMeetingRoom(Producer meetingRoom) {
         //TODO: edit meeting room
     }
 
     @Override
-    public void deleteMeetingRoom(MeetingRoom meetingRoom) {
+    public void deleteMeetingRoom(Producer meetingRoom) {
         //TODO: delete meeting room
     }
 }
