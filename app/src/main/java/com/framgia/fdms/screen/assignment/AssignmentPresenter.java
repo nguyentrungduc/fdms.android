@@ -1,6 +1,8 @@
 package com.framgia.fdms.screen.assignment;
 
+import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.AssignmentRequest;
+import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
@@ -58,6 +60,9 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
 
     @Override
     public void registerAssignment(AssignmentRequest request) {
+        if (!validateAssignment(request)) {
+            return;
+        }
         Disposable subscription = mRequestRepository.registerAssignment(request)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -149,5 +154,24 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
                 }
             });
         mSubscription.add(disposable);
+    }
+
+    @Override
+    public boolean validateAddItem(Status category, Device device, Status deviceGroup) {
+        boolean isValid = true;
+        if (category == null || device == null || deviceGroup == null) {
+            isValid = false;
+            mViewModel.onError(R.string.title_validate_item_assignment);
+        }
+        return isValid;
+    }
+
+    public boolean validateAssignment(AssignmentRequest request) {
+        boolean isValid = true;
+        if (request.getItemRequests().size() == 0) {
+            isValid = false;
+            mViewModel.onError(R.string.title_validate_assignment);
+        }
+        return isValid;
     }
 }

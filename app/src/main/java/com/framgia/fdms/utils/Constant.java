@@ -54,6 +54,7 @@ public class Constant {
         public static final String BUNDLE_ACTION_CALLBACK = "BUNDLE_ACTION_CALLBACK";
         public static final String BUNDLE_DEVICES = "BUNDLE_DEVICES";
         public static final String BUNDLE_CATEGORY_ID = "BUNDLE_CATEGORY_ID";
+        public static final String BUNDLE_SUCCESS = "BUNDLE_SUCCESS";
     }
 
     public static final class RequestConstant {
@@ -112,6 +113,7 @@ public class Constant {
         public static final String ASSIGNMENT_DESCRIPTION = "assignment[description]";
         public static final String ASSIGNMENT_ASSIGNMENT_DETAILS =
             "assignment[assignment_details_attributes]";
+        public static final String DEVICE_GROUP_ID = "device_group_id";
     }
 
     public class DeviceStatus {

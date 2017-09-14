@@ -726,4 +726,13 @@ public final class BindingUtils {
     public static void setupWithViewPager(TabLayout tabLayout, ViewPager viewPager) {
         tabLayout.setupWithViewPager(viewPager);
     }
+
+    @BindingAdapter("bind:hint")
+    public static void setupWithViewPager(TextView view, String text) {
+        if (text == null) {
+            return;
+        }
+        view.setText(null);
+        view.setHint(text);
+    }
 }

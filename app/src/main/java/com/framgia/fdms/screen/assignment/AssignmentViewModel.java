@@ -21,13 +21,14 @@ import com.framgia.fdms.screen.profile.chooseexport.ChooseExportActivity;
 import com.framgia.fdms.screen.selection.StatusSelectionActivity;
 import com.framgia.fdms.screen.selection.StatusSelectionType;
 import com.framgia.fdms.utils.navigator.Navigator;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.screen.selection.StatusSelectionAdapter.FIRST_INDEX;
-import static com.framgia.fdms.utils.Constant.ACTION_CLEAR;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICES;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_STATUE;
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORIES;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE;
@@ -38,6 +39,7 @@ import static com.framgia.fdms.utils.Utils.hideSoftKeyboard;
  * Exposes the data to be used in the Assignment screen.
  */
 public class AssignmentViewModel extends BaseObservable implements AssignmentContract.ViewModel {
+    private static final int NO_DEVICE = -2;
     private AssignmentContract.Presenter mPresenter;
     private AppCompatActivity mActivity;
     private int mProgressBarVisibility = View.GONE;
@@ -48,15 +50,21 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     private List<Status> mCategories;
     private Status mDeviceGroup;
     private Status mCategory;
-    private int mCategoryId = OUT_OF_INDEX;
+    private int mCategoryId = NO_DEVICE;
     private Device mDevice;
     private Navigator mNavigator;
+    private String mDeviceGroupHint;
+    private String mCategoryHint;
+    private String mDeviceHint;
 
     public AssignmentViewModel(AppCompatActivity activity) {
         mActivity = activity;
         mNavigator = new Navigator(activity);
         mContext = activity.getApplicationContext();
         mAdapter = new AssignmentAdapter(mContext, this);
+        setDeviceGroupHint(mContext.getString(R.string.title_request_assignment));
+        setCategoryHint(mContext.getString(R.string.title_btn_category));
+        setDeviceHint(mContext.getString(R.string.title_device_code));
     }
 
     @Override
@@ -93,7 +101,7 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     }
 
     public void onShowDevices() {
-        if (mCategoryId == OUT_OF_INDEX) {
+        if (mCategoryId == NO_DEVICE) {
             return;
         }
         mNavigator.startActivityForResult(
@@ -111,9 +119,12 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
             case REQUEST_DEVICE_GROUPS:
                 status = bundle.getParcelable(BUNDLE_STATUE);
                 if (status != null) {
-                    if (status.getName().equals(mContext.getString(R.string.action_clear))) {
-                        status.setName(mContext.getString(R.string.title_request_assignment));
-                    }
+                    setCategoryHint(mContext.getString(R.string.title_btn_category));
+                    setDeviceHint(mContext.getString(R.string.title_device_code));
+                    mCategories = null;
+                    mCategory = null;
+                    mDevice = null;
+                    mCategoryId = OUT_OF_INDEX;
                     setDeviceGroup(status);
                     mPresenter.getCategoriesByDeviceGroupId(status.getId());
                 }
@@ -121,9 +132,7 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
             case REQUEST_CATEGORIES:
                 status = bundle.getParcelable(BUNDLE_STATUE);
                 if (status != null) {
-                    if (status.getName().equals(mContext.getString(R.string.action_clear))) {
-                        status.setName(mContext.getString(R.string.title_btn_category));
-                    }
+                    setDeviceHint(mContext.getString(R.string.title_device_code));
                     setCategory(status);
                     mCategoryId = status.getId();
                 }
@@ -131,9 +140,6 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
             case REQUEST_DEVICE:
                 Device device = bundle.getParcelable(BUNDLE_DEVICES);
                 if (device != null) {
-                    if (device.getDeviceCode().equals(mContext.getString(R.string.action_clear))) {
-                        device.setDeviceCode(mContext.getString(R.string.title_device_id));
-                    }
                     setDevice(device);
                 }
                 break;
@@ -145,7 +151,9 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     @Override
     public void onAddItemClick() {
         hideSoftKeyboard(mActivity);
-        // TODO: 13/09/2017 check validate
+        if (!mPresenter.validateAddItem(mCategory, mDevice, mDeviceGroup)) {
+            return;
+        }
         mAdapter.addItem(new AssignmentItemRequest.Builder().deviceId(mDevice.getId())
             .deviceCategoryId(mCategory.getId())
             .categoryGroupId(mDeviceGroup.getId())
@@ -156,8 +164,9 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     }
 
     @Override
-    public void onSaveClick() {
-        // TODO: 13/09/2017 check validate
+    public void onSaveClick(View view) {
+        FloatingActionsMenu fapMenu = (FloatingActionsMenu) view.getParent();
+        fapMenu.toggle();
         AssignmentRequest assignmentRequest =
             new AssignmentRequest(mRequest.getId(), mRequest.getAssigneeId(),
                 mRequest.getDescription(), mAdapter.getData());
@@ -194,25 +203,40 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
 
     @Override
     public void onAssignmentSuccess(Request request) {
-        // TODO: 13/09/2017 Assignment Success
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putInt(BUNDLE_SUCCESS, R.string.msg_assignment_success);
+        intent.putExtras(bundle);
+        mNavigator.finishActivityWithResult(intent, RESULT_OK);
     }
 
     @Override
     public void onGetDeviceGroupsSuccess(List<Status> statuses) {
         if (statuses == null || statuses.size() == 0) {
+            setDeviceGroupHint(mContext.getString(R.string.title_no_device_group));
             return;
         }
         mDeviceGroups = statuses;
-        mDeviceGroups.add(FIRST_INDEX, new Status(OUT_OF_INDEX, ACTION_CLEAR));
+        mDeviceGroups.add(FIRST_INDEX,
+            new Status(OUT_OF_INDEX, mContext.getString(R.string.action_all)));
     }
 
     @Override
     public void onGetCategoriesSuccess(List<Status> statuses) {
         if (statuses == null || statuses.size() == 0) {
+            setCategoryHint(mContext.getString(R.string.title_no_category));
             return;
         }
         mCategories = statuses;
-        mCategories.add(FIRST_INDEX, new Status(OUT_OF_INDEX, ACTION_CLEAR));
+        if (mDeviceGroup.getId() == OUT_OF_INDEX) {
+            mCategories.add(FIRST_INDEX,
+                new Status(OUT_OF_INDEX, mContext.getString(R.string.action_all)));
+        }
+    }
+
+    @Override
+    public void onError(int stringId) {
+        mNavigator.showToast(stringId);
     }
 
     public AppCompatActivity getActivity() {
@@ -277,5 +301,35 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     public void setDevice(Device device) {
         mDevice = device;
         notifyPropertyChanged(BR.device);
+    }
+
+    @Bindable
+    public String getDeviceGroupHint() {
+        return mDeviceGroupHint;
+    }
+
+    public void setDeviceGroupHint(String deviceGroupHint) {
+        mDeviceGroupHint = deviceGroupHint;
+        notifyPropertyChanged(BR.deviceGroupHint);
+    }
+
+    @Bindable
+    public String getCategoryHint() {
+        return mCategoryHint;
+    }
+
+    public void setCategoryHint(String categoryHint) {
+        mCategoryHint = categoryHint;
+        notifyPropertyChanged(BR.categoryHint);
+    }
+
+    @Bindable
+    public String getDeviceHint() {
+        return mDeviceHint;
+    }
+
+    public void setDeviceHint(String deviceHint) {
+        mDeviceHint = deviceHint;
+        notifyPropertyChanged(BR.deviceHint);
     }
 }

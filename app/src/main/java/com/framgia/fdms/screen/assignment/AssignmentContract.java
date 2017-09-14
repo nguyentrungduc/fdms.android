@@ -1,9 +1,11 @@
 package com.framgia.fdms.screen.assignment;
 
 import android.content.Intent;
+import android.view.View;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.AssignmentRequest;
+import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
@@ -21,7 +23,7 @@ interface AssignmentContract {
 
         void onAddItemClick();
 
-        void onSaveClick();
+        void onSaveClick(View view);
 
         void onLoadError(String msg);
 
@@ -38,6 +40,8 @@ interface AssignmentContract {
         void onGetDeviceGroupsSuccess(List<Status> statuses);
 
         void onGetCategoriesSuccess(List<Status> statuses);
+
+        void onError(int stringId);
     }
 
     /**
@@ -53,5 +57,7 @@ interface AssignmentContract {
         void getDeviceGroups();
 
         void getCategoriesByDeviceGroupId(int deviceGroupId);
+
+        boolean validateAddItem(Status category, Device device, Status deviceGroup);
     }
 }
