@@ -3,9 +3,9 @@ package com.framgia.fdms.screen.requestdetail;
 import android.content.Intent;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
+import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import java.util.List;
 
@@ -20,7 +20,7 @@ public interface RequestDetailContract {
 
         void onLoadError(String message);
 
-        void onGetCategorySuccess(List<Category> categories);
+        void onGetCategorySuccess(List<Status> categories);
 
         void onActivityResult(int requestCode, int resultCode, Intent data);
 

@@ -45,7 +45,7 @@ import android.widget.TextView;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.bumptech.glide.Glide;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.Category;
+import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.databinding.NavHeaderMainBinding;
 import com.framgia.fdms.screen.ViewPagerScroll;
 import com.framgia.fdms.screen.dashboard.DashboardViewModel;
@@ -358,7 +358,7 @@ public final class BindingUtils {
     @InverseBindingAdapter(attribute = "deviceCategoryId", event = "deviceCategoryIdAttrChanged")
     public static int captureDeviceCategoryId(AppCompatSpinner spinner) {
         Object selectedItem = spinner.getSelectedItem();
-        return ((Category) selectedItem).getId();
+        return ((Status) selectedItem).getId();
     }
 
     @BindingAdapter(value = {

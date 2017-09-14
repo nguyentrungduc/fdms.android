@@ -1,7 +1,6 @@
 package com.framgia.fdms.screen.devicecreation;
 
 import android.text.TextUtils;
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.BranchRepository;
@@ -137,9 +136,9 @@ final class CreateDevicePresenter implements CreateDeviceContract.Presenter {
                     mViewModel.showProgressbar();
                 }
             })
-            .subscribe(new Consumer<List<Category>>() {
+            .subscribe(new Consumer<List<Status>>() {
                 @Override
-                public void accept(List<Category> categories) throws Exception {
+                public void accept(List<Status> categories) throws Exception {
                     mViewModel.onDeviceCategoryLoaded(categories);
                 }
             }, new RequestError() {

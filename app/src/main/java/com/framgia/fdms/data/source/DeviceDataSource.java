@@ -1,6 +1,5 @@
 package com.framgia.fdms.data.source;
 
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
@@ -20,7 +19,7 @@ public class DeviceDataSource {
         Observable<List<Device>> getListDevices(String deviceName, int categoryId, int statusId,
             int page, int perPage);
 
-        Observable<List<Category>> getListCategory();
+        Observable<List<Status>> getListCategory();
 
         Observable<List<Status>> getListStatus();
 

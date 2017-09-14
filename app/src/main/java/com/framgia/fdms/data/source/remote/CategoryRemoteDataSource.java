@@ -1,6 +1,5 @@
 package com.framgia.fdms.data.source.remote;
 
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.CategoryDataSource;
@@ -28,11 +27,11 @@ public class CategoryRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<List<Category>> getListCategory() {
+    public Observable<List<Status>> getListCategory() {
         return mFDMSApi.getListCategory()
-            .flatMap(new Function<Respone<List<Category>>, ObservableSource<List<Category>>>() {
+            .flatMap(new Function<Respone<List<Status>>, ObservableSource<List<Status>>>() {
                 @Override
-                public ObservableSource<List<Category>> apply(Respone<List<Category>> listRespone)
+                public ObservableSource<List<Status>> apply(Respone<List<Status>> listRespone)
                     throws Exception {
                     return Utils.getResponse(listRespone);
                 }

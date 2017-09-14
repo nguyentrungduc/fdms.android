@@ -224,7 +224,7 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
         @Expose
         @SerializedName("category_name")
         private String mCategoryName;
-        private Category mCategory;
+        private Status mCategory;
 
         @Override
         public Object clone() throws CloneNotSupportedException {
@@ -232,11 +232,11 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
         }
 
         @Bindable
-        public Category getCategory() {
+        public Status getCategory() {
             return mCategory;
         }
 
-        public void setCategory(Category category) {
+        public void setCategory(Status category) {
             mCategory = category;
             notifyPropertyChanged(BR.category);
         }

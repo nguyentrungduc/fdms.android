@@ -134,7 +134,10 @@
             </com.getbase.floatingactionbutton.FloatingActionsMenu>
         </RelativeLayout>
 
-        <include layout="@layout/filter_device"/>
+        <include
+            layout="@layout/filter_device"
+            bind:viewModel="@{viewModel}"
+            />
     </android.support.v4.widget.DrawerLayout>
 
 </layout>

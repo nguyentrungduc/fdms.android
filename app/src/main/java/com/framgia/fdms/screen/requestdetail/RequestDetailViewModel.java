@@ -13,9 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
+import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
 import com.framgia.fdms.screen.selection.StatusSelectionActivity;
@@ -49,9 +49,9 @@ public class RequestDetailViewModel extends BaseObservable
     private FragmentActivity mActivity;
     private ObservableBoolean mIsEdit = new ObservableBoolean();
     private RequestDetailAdapter mAdapter;
-    private List<Category> mCategories = new ArrayList<>();
+    private List<Status> mCategories = new ArrayList<>();
     private RequestDetailContract.Presenter mPresenter;
-    private ObservableField<Category> mCategory = new ObservableField<>();
+    private ObservableField<Status> mCategory = new ObservableField<>();
     private List<Request.RequestAction> mListAction = new ArrayList<>();
     private String mStatusRequest;
     private Request mRequest;
@@ -93,7 +93,7 @@ public class RequestDetailViewModel extends BaseObservable
     }
 
     @Override
-    public void onGetCategorySuccess(List<Category> categories) {
+    public void onGetCategorySuccess(List<Status> categories) {
         if (categories == null) {
             return;
         }
@@ -139,7 +139,7 @@ public class RequestDetailViewModel extends BaseObservable
         switch (requestCode) {
             case REQUEST_CATEGORY:
                 Bundle bundle = data.getExtras();
-                Category category = bundle.getParcelable(BUNDLE_CATEGORY);
+                Status category = bundle.getParcelable(BUNDLE_CATEGORY);
                 if (category.getName().equals(mContext.getString(R.string.action_clear))) {
                     category.setName(mContext.getString(R.string.title_empty));
                 }
@@ -276,11 +276,11 @@ public class RequestDetailViewModel extends BaseObservable
         mPresenter.initFloatActionButton(request);
     }
 
-    public ObservableField<Category> getCategory() {
+    public ObservableField<Status> getCategory() {
         return mCategory;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(Status category) {
         mCategory.set(category);
         notifyPropertyChanged(BR.category);
     }

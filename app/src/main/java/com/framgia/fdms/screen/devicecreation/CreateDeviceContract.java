@@ -3,7 +3,6 @@ package com.framgia.fdms.screen.devicecreation;
 import android.content.Intent;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Status;
 import java.util.List;
@@ -16,7 +15,7 @@ interface CreateDeviceContract {
      * View.
      */
     interface ViewModel extends BaseViewModel<Presenter> {
-        void onDeviceCategoryLoaded(List<Category> categories);
+        void onDeviceCategoryLoaded(List<Status> categories);
 
         void onDeviceStatusLoaded(List<Status> statuses);
 

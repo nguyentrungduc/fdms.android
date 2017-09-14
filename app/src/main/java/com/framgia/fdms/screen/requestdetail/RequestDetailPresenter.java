@@ -1,8 +1,8 @@
 package com.framgia.fdms.screen.requestdetail;
 
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
+import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.RequestRepository;
@@ -55,9 +55,9 @@ public class RequestDetailPresenter implements RequestDetailContract.Presenter {
                     mViewModel.showProgressbar();
                 }
             })
-            .subscribe(new Consumer<List<Category>>() {
+            .subscribe(new Consumer<List<Status>>() {
                 @Override
-                public void accept(List<Category> categories) throws Exception {
+                public void accept(List<Status> categories) throws Exception {
                     mViewModel.onGetCategorySuccess(categories);
                 }
             }, new RequestError() {

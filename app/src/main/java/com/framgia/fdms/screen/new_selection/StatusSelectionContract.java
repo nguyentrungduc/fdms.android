@@ -1,8 +1,8 @@
-package com.framgia.fdms.screen.selection;
+package com.framgia.fdms.screen.new_selection;
 
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
-import com.framgia.fdms.data.model.Status;
+import java.util.List;
 
 /**
  * This specifies the contract between the view and the presenter.
@@ -12,15 +12,19 @@ public interface StatusSelectionContract {
      * View.
      */
     interface ViewModel extends BaseViewModel<Presenter> {
-        void onSelectedItem(Status category, Status status, StatusSelectionType type,
-            int position);
+        void setPresenter(Presenter presenter);
 
-        void onSearchData(String newText);
+        void onSearch(String query);
+
+        void onGetDataSuccess(List data);
+
+        void onGetDataFailed(String msg);
     }
 
     /**
      * Presenter.
      */
     interface Presenter extends BasePresenter {
+        void getData(String query);
     }
 }

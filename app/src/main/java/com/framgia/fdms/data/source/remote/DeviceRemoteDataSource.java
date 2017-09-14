@@ -1,7 +1,6 @@
 package com.framgia.fdms.data.source.remote;
 
 import android.text.TextUtils;
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
@@ -66,9 +65,9 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
     }
 
     @Override
-    public Observable<List<Category>> getListCategory() {
+    public Observable<List<Status>> getListCategory() {
         // TODO: replace by call API later
-        List<Category> categories = new ArrayList<>();
+        List<Status> categories = new ArrayList<>();
         return Observable.just(categories);
     }
 

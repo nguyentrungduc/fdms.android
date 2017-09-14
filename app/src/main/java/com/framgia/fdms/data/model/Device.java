@@ -83,7 +83,7 @@ public class Device extends BaseObservable implements Parcelable {
     @SerializedName("user")
     private UserBorrow mUser;
     private Status mVendor;
-    private Status mMaker;
+    private Status mMarker;
     private String mWarranty;
 
     public Device() {
@@ -108,7 +108,7 @@ public class Device extends BaseObservable implements Parcelable {
         setSummary(device.getSummary());
         setUser(device.getUser());
         setVendor(device.getVendor());
-        setMaker(device.getMaker());
+        setMarker(device.getMarker());
         setWarranty(device.getWarranty());
     }
 
@@ -136,7 +136,7 @@ public class Device extends BaseObservable implements Parcelable {
         mIsSelected = in.readByte() != 0;
         mUser = in.readParcelable(UserBorrow.class.getClassLoader());
         mVendor = in.readParcelable(Status.class.getClassLoader());
-        mMaker = in.readParcelable(Status.class.getClassLoader());
+        mMarker = in.readParcelable(Status.class.getClassLoader());
         mWarranty = in.readString();
     }
 
@@ -159,7 +159,7 @@ public class Device extends BaseObservable implements Parcelable {
         dest.writeByte((byte) (mIsSelected ? 1 : 0));
         dest.writeParcelable(mUser, flags);
         dest.writeParcelable(mVendor, flags);
-        dest.writeParcelable(mMaker, flags);
+        dest.writeParcelable(mMarker, flags);
         dest.writeString(mWarranty);
     }
 
@@ -349,13 +349,13 @@ public class Device extends BaseObservable implements Parcelable {
     }
 
     @Bindable
-    public Status getMaker() {
-        return mMaker;
+    public Status getMarker() {
+        return mMarker;
     }
 
-    public void setMaker(Status maker) {
-        mMaker = maker;
-        notifyPropertyChanged(BR.maker);
+    public void setMarker(Status marker) {
+        mMarker = marker;
+        notifyPropertyChanged(BR.marker);
     }
 
     @Bindable

@@ -1,6 +1,5 @@
 package com.framgia.fdms.data.source;
 
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.remote.CategoryRemoteDataSource;
 import io.reactivex.Observable;
@@ -17,7 +16,7 @@ public class CategoryRepository implements CategoryDataSource.RemoteDataSource {
         mCategoryRemoteDataSource = categoryRemoteDataSource;
     }
 
-    public Observable<List<Category>> getListCategory() {
+    public Observable<List<Status>> getListCategory() {
         return mCategoryRemoteDataSource.getListCategory();
     }
 

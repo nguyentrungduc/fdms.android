@@ -1,6 +1,5 @@
 package com.framgia.fdms.data.source;
 
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
@@ -23,7 +22,7 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource{
             perPage);
     }
 
-    public Observable<List<Category>> getListCategory() {
+    public Observable<List<Status>> getListCategory() {
         return mDeviceRemoteDataSource.getListCategory();
     }
 

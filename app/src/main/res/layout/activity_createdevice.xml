@@ -152,7 +152,7 @@
                             bind:error="@{viewModel.makerError}"
                             bind:image="@{@drawable/ic_maker_24dp}"
                             bind:onClick="@{() -> viewModel.onChooseMaker()}"
-                            bind:text="@{viewModel.maker.name}"
+                            bind:text="@{viewModel.marker.name}"
                             bind:title="@{@string/title_maker}"
                             bind:type="@{DeviceStatusType.CREATE}"
                             />
