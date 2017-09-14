@@ -12,6 +12,14 @@ public class AssignmentRequest {
     private String mDescription;
     private List<AssignmentItemRequest> mItemRequests;
 
+    public AssignmentRequest(int requestId, int assigneeId, String description,
+        List<AssignmentItemRequest> itemRequests) {
+        mRequestId = requestId;
+        mAssigneeId = assigneeId;
+        mDescription = description;
+        mItemRequests = itemRequests;
+    }
+
     public int getRequestId() {
         return mRequestId;
     }

@@ -128,11 +128,11 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     @Override
     public Observable<Request> registerAssignment(AssignmentRequest request) {
         Map<String, String> parrams = new HashMap<>();
-        if (request.getRequestId() <= 0) {
+        if (request.getRequestId() > 0) {
             parrams.put(ASSIGNMENT_REQUEST_ID, String.valueOf(request.getRequestId()));
         }
 
-        if (request.getAssigneeId() <= 0) {
+        if (request.getAssigneeId() > 0) {
             parrams.put(ASSIGNMENT_ASSIGNEE_ID, String.valueOf(request.getAssigneeId()));
         }
 

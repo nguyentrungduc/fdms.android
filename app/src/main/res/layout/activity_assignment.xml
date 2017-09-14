@@ -55,7 +55,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        >
 
                         <include
                             layout="@layout/text_image"
@@ -99,7 +100,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        >
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -129,9 +131,12 @@
                                     android:layout_height="wrap_content"
                                     android:focusable="false"
                                     android:hint="@string/title_request_assignment"
+                                    android:text="@={viewModel.deviceGroup.name}"
+                                    android:onClick="@{() -> viewModel.onShowDeviceGroups()}"
                                     android:textColorHint="@color/color_black"
                                     android:textSize="@dimen/sp_12"
-                                    app:hintTextAppearance="@color/color_brown"/>
+                                    app:hintTextAppearance="@color/color_brown"
+                                    />
                             </android.support.v7.widget.CardView>
 
                             <android.support.v7.widget.CardView
@@ -149,13 +154,17 @@
                                 >
 
                                 <TextView
+                                    android:id="@+id/textView"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:focusable="false"
                                     android:hint="@string/title_btn_category"
+                                    android:text="@={viewModel.category.name}"
+                                    android:onClick="@{() -> viewModel.onShowCategories()}"
                                     android:textColorHint="@color/color_black"
                                     android:textSize="@dimen/sp_12"
-                                    app:hintTextAppearance="@color/color_brown"/>
+                                    app:hintTextAppearance="@color/color_brown"
+                                    />
                             </android.support.v7.widget.CardView>
 
                             <android.support.v7.widget.CardView
@@ -177,9 +186,12 @@
                                     android:layout_height="wrap_content"
                                     android:focusable="false"
                                     android:hint="@string/title_device_id"
+                                    android:text="@={viewModel.device.deviceCode}"
+                                    android:onClick="@{() -> viewModel.onShowDevices()}"
                                     android:textColorHint="@color/color_black"
                                     android:textSize="@dimen/sp_12"
-                                    app:hintTextAppearance="@color/color_brown"/>
+                                    app:hintTextAppearance="@color/color_brown"
+                                    />
                             </android.support.v7.widget.CardView>
                         </LinearLayout>
 
@@ -197,7 +209,8 @@
                                 android:layout_height="40dp"
                                 android:onClick="@{()-> viewModel.onAddItemClick()}"
                                 app:srcCompat="@drawable/ic_add_mobile_40dp"
-                                tools:ignore="@null"/>
+                                tools:ignore="@null"
+                                />
                         </android.support.v7.widget.CardView>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
