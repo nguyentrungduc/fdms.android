@@ -25,6 +25,7 @@ import com.framgia.fdms.screen.request.userrequest.UserRequestAdapter;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
 import com.framgia.fdms.screen.selection.StatusSelectionActivity;
 import com.framgia.fdms.screen.selection.StatusSelectionType;
+import com.framgia.fdms.utils.navigator.Navigator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ import static com.framgia.fdms.screen.selection.StatusSelectionAdapter.FIRST_IND
 import static com.framgia.fdms.utils.Constant.ACTION_CLEAR;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_STATUE;
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
@@ -64,8 +66,10 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 getData();
             }
         };
+    private Navigator mNavigator;
 
     public RequestManagerViewModel(Fragment fragment) {
+        mNavigator = new Navigator(fragment);
         mFragment = fragment;
         mContext = fragment.getContext();
         mAdapter = new UserRequestAdapter(mContext, new ArrayList<Request>(), this, new User());
@@ -162,6 +166,11 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 if (requestRespone != null) {
                     onUpdateActionSuccess(requestRespone);
                 }
+                break;
+            case REQUEST_CREATE_ASSIGNMENT:
+                mNavigator.showToast(bundle.getInt(BUNDLE_SUCCESS));
+                mAdapter.clear();
+                getData();
                 break;
             default:
                 break;
