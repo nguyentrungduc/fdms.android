@@ -29,7 +29,7 @@ public class ListMeetingRoomFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Navigator navigator = new Navigator(this);
-        mViewModel = new ListMeetingRoomViewModel(this.getActivity(), navigator);
+        mViewModel = new ListMeetingRoomViewModel(getActivity(), navigator);
 
         ListMeetingRoomContract.Presenter presenter = new ListMeetingRoomPresenter(mViewModel,
             new MeetingRoomRepository(

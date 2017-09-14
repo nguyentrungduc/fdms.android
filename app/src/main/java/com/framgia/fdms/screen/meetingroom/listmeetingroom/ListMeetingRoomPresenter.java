@@ -69,4 +69,19 @@ final class ListMeetingRoomPresenter implements ListMeetingRoomContract.Presente
             });
         mCompositeSubscriptions.add(subscription);
     }
+
+    @Override
+    public void addMeetingRoom(MeetingRoom meetingRoom) {
+        //TODO: add meeting room
+    }
+
+    @Override
+    public void editMeetingRoom(MeetingRoom meetingRoom) {
+        //TODO: edit meeting room
+    }
+
+    @Override
+    public void deleteMeetingRoom(MeetingRoom meetingRoom) {
+        //TODO: delete meeting room
+    }
 }

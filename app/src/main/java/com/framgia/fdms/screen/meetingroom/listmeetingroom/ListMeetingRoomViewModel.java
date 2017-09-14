@@ -1,11 +1,14 @@
 package com.framgia.fdms.screen.meetingroom.listmeetingroom;
 
-import android.content.Context;
+import android.app.Activity;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableField;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -25,19 +28,31 @@ import java.util.List;
 
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
+import static com.framgia.fdms.utils.Constant.TAG_MEETING_ROOM_DIALOG;
 
 /**
  * Exposes the data to be used in the ListMeetingRoom screen.
  */
 
 public class ListMeetingRoomViewModel extends BaseObservable
-    implements ListMeetingRoomContract.ViewModel,
+    implements ListMeetingRoomContract.ViewModel, MeetingRoomDialogContract.ActionCallback,
     BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom>,
-    FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
-    OnSearchMenuItemClickListener {
+    OnSearchMenuItemClickListener, FloatingSearchView.OnSearchListener,
+    FloatingSearchView.OnClearSearchActionListener {
+    public static final Parcelable.Creator<ListMeetingRoomViewModel> CREATOR =
+        new Parcelable.Creator<ListMeetingRoomViewModel>() {
+            @Override
+            public ListMeetingRoomViewModel createFromParcel(Parcel in) {
+                return new ListMeetingRoomViewModel(in);
+            }
 
-    private Context mContext;
-    private ListMeetingRoomContract.Presenter mPresenter;
+            @Override
+            public ListMeetingRoomViewModel[] newArray(int size) {
+                return new ListMeetingRoomViewModel[size];
+            }
+        };
+    private AppCompatActivity mActivity;
+    private MeetingRoomFunctionContract.MeetingRoomPresenter mPresenter;
     private ListMeetingRoomAdapter mListMeetingRoomAdapter;
     private ObservableField<Integer> mProgressBarVisibility;
     private int mPage;
@@ -45,11 +60,23 @@ public class ListMeetingRoomViewModel extends BaseObservable
     private boolean mIsLoadingMore;
     private Navigator mNavigator;
     private String mRoomName;
+    private MeetingRoomDialog mMeetingRoomDialog;
+    private MeetingRoom mMeetingRoom;
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
+        new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPage = FIRST_PAGE;
+                mListMeetingRoomAdapter.clear();
+                ((ListMeetingRoomPresenter) mPresenter).getListMeetingRoom(getRoomName(), mPage,
+                    PER_PAGE);
+            }
+        };
 
-    ListMeetingRoomViewModel(Context context, Navigator navigator) {
-        mContext = context;
+    ListMeetingRoomViewModel(Activity activity, Navigator navigator) {
+        mActivity = (AppCompatActivity) activity;
         mNavigator = navigator;
-        mListMeetingRoomAdapter = new ListMeetingRoomAdapter(mContext);
+        mListMeetingRoomAdapter = new ListMeetingRoomAdapter(mActivity);
         mListMeetingRoomAdapter.setItemClickListener(this);
         mProgressBarVisibility = new ObservableField<>();
         mPage = FIRST_PAGE;
@@ -65,10 +92,14 @@ public class ListMeetingRoomViewModel extends BaseObservable
         mPresenter.onStop();
     }
 
-    @Override
-    public void setPresenter(ListMeetingRoomContract.Presenter presenter) {
-        mPresenter = presenter;
-        mPresenter.getListMeetingRoom(Constant.BLANK, mPage, PER_PAGE);
+    private ListMeetingRoomViewModel(Parcel in) {
+        mPresenter = (ListMeetingRoomContract.Presenter) in.readValue(
+            ListMeetingRoomContract.Presenter.class.getClassLoader());
+        mActivity = (AppCompatActivity) in.readValue(AppCompatActivity.class.getClassLoader());
+        mListMeetingRoomAdapter =
+            (ListMeetingRoomAdapter) in.readValue(ListMeetingRoomAdapter.class.getClassLoader());
+        mMeetingRoomDialog =
+            (MeetingRoomDialog) in.readValue(MeetingRoomDialog.class.getClassLoader());
     }
 
     @Override
@@ -90,8 +121,9 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     @Override
-    public void onGetListMeetingRoomError(String error) {
-        Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+    public void setPresenter(MeetingRoomFunctionContract.MeetingRoomPresenter presenter) {
+        mPresenter = presenter;
+        ((ListMeetingRoomPresenter) mPresenter).getListMeetingRoom(Constant.BLANK, mPage, PER_PAGE);
     }
 
     @Override
@@ -118,15 +150,10 @@ public class ListMeetingRoomViewModel extends BaseObservable
         notifyPropertyChanged(BR.loadingMore);
     }
 
-    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
-        new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPage = FIRST_PAGE;
-                mListMeetingRoomAdapter.clear();
-                mPresenter.getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
-            }
-        };
+    @Override
+    public void onGetListMeetingRoomError(String error) {
+        Toast.makeText(mActivity, error, Toast.LENGTH_SHORT).show();
+    }
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -178,11 +205,13 @@ public class ListMeetingRoomViewModel extends BaseObservable
 
     private void loadMore() {
         mPage++;
-        mPresenter.getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
+        ((ListMeetingRoomPresenter) mPresenter).getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
     }
 
     public void onAddMeetingRoomClick() {
-        // TODO: Open meeting room form
+        mMeetingRoomDialog = MeetingRoomDialog.newInstant(new MeetingRoom(),
+            mActivity.getResources().getString(R.string.title_add_producer), this);
+        mMeetingRoomDialog.show(mActivity.getFragmentManager(), TAG_MEETING_ROOM_DIALOG);
     }
 
     @Override
@@ -190,7 +219,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
         mPage = FIRST_PAGE;
         mListMeetingRoomAdapter.clear();
         setRoomName(Constant.BLANK);
-        mPresenter.getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
+        ((ListMeetingRoomPresenter) mPresenter).getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
     }
 
     @Override
@@ -210,6 +239,36 @@ public class ListMeetingRoomViewModel extends BaseObservable
         mPage = FIRST_PAGE;
         mListMeetingRoomAdapter.clear();
         setRoomName(currentQuery);
-        mPresenter.getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
+        ((ListMeetingRoomPresenter) mPresenter).getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(mPresenter);
+        dest.writeValue(mActivity);
+        dest.writeValue(mListMeetingRoomAdapter);
+        dest.writeValue(mMeetingRoomDialog);
+    }
+
+    @Override
+    public void onAddCallback(MeetingRoom meetingRoom) {
+        if (meetingRoom == null) {
+            return;
+        }
+        ((ListMeetingRoomPresenter) mPresenter).addMeetingRoom(meetingRoom);
+    }
+
+    @Override
+    public void onEditCallback(MeetingRoom oldMeetingRoom, MeetingRoom newMeetingRoom) {
+        if (oldMeetingRoom == null || newMeetingRoom == null) {
+            return;
+        }
+        mMeetingRoom = oldMeetingRoom;
+        ((ListMeetingRoomPresenter) mPresenter).editMeetingRoom(newMeetingRoom);
     }
 }
