@@ -29,6 +29,5 @@ final class DeviceInfomationPresenter implements DeviceInfomationContract.Presen
 
     @Override
     public void onStop() {
-        mSubscription.clear();
     }
 }

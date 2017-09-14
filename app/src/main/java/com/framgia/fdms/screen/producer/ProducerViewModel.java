@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
@@ -19,6 +20,7 @@ import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.utils.navigator.Navigator;
+import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,8 @@ import static com.framgia.fdms.utils.Constant.TAG_MAKER_DIALOG;
  */
 public class ProducerViewModel extends BaseObservable
     implements ProducerContract.ViewModel, ProducerDialogContract.ActionCallback,
-    FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener {
+    FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
+    OnSearchMenuItemClickListener {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<ProducerViewModel> CREATOR =
         new Parcelable.Creator<ProducerViewModel>() {
@@ -252,6 +255,13 @@ public class ProducerViewModel extends BaseObservable
     public void onSearchAction(String currentQuery) {
         mAdapter.clearData();
         ((ProducerPresenter) mPresenter).getVendors(currentQuery);
+    }
+
+    @Override
+    public void onActionMenuItemSelected(FloatingSearchView searchView, MenuItem item) {
+        if (item.getItemId() == R.id.action_search) {
+            onSearchAction(searchView.getQuery());
+        }
     }
 
     @Override
