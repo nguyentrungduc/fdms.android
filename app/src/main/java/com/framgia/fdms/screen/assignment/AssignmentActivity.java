@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.source.CategoryRepository;
+import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.RequestRepository;
 import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.local.UserLocalDataSource;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
+import com.framgia.fdms.data.source.remote.CategoryRemoteDataSource;
+import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.data.source.remote.RequestRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityAssignmentBinding;
 
@@ -41,7 +45,9 @@ public class AssignmentActivity extends AppCompatActivity {
 
         AssignmentContract.Presenter presenter = new AssignmentPresenter(mViewModel, deviceId,
             new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
-            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))));
+            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))),
+            new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
+            new CategoryRepository(new CategoryRemoteDataSource(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
 
         ActivityAssignmentBinding binding =
@@ -67,5 +73,11 @@ public class AssignmentActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) onBackPressed();
         hideSoftKeyboard(this);
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mViewModel.onActivityResult(requestCode, resultCode, data);
     }
 }

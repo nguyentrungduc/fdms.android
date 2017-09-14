@@ -68,6 +68,9 @@ public class Constant {
         public static final int REQUEST_BRANCH = 10;
         public static final int REQUEST_VENDOR = 11;
         public static final int REQUEST_MAKER = 12;
+        public static final int REQUEST_DEVICE_GROUPS = 13;
+        public static final int REQUEST_CATEGORIES = 14;
+        public static final int REQUEST_DEVICE = 15;
     }
 
     public static final class Role {

@@ -96,32 +96,32 @@ public class AssignmentItemRequest {
         private String mNestedDeviceCategoryGroupName;
         private String mNestedDeviceCode;
 
-        public Builder setNestedDeviceId(int nestedDeviceId) {
+        public Builder deviceId(int nestedDeviceId) {
             mNestedDeviceId = nestedDeviceId;
             return this;
         }
 
-        public Builder setNestedDeviceCategoryId(int nestedDeviceCategoryId) {
+        public Builder deviceCategoryId(int nestedDeviceCategoryId) {
             mNestedDeviceCategoryId = nestedDeviceCategoryId;
             return this;
         }
 
-        public Builder setNestedCategoryGroupId(int nestedCategoryGroupId) {
+        public Builder categoryGroupId(int nestedCategoryGroupId) {
             mNestedCategoryGroupId = nestedCategoryGroupId;
             return this;
         }
 
-        public Builder setNestedDeviceCategoryName(String nestedDeviceCategoryName) {
+        public Builder deviceCategoryName(String nestedDeviceCategoryName) {
             mNestedDeviceCategoryName = nestedDeviceCategoryName;
             return this;
         }
 
-        public Builder setNestedDeviceCategoryGroupName(String nestedDeviceCategoryGroupName) {
+        public Builder deviceCategoryGroupName(String nestedDeviceCategoryGroupName) {
             mNestedDeviceCategoryGroupName = nestedDeviceCategoryGroupName;
             return this;
         }
 
-        public Builder setNestedDeviceCode(String nestedDeviceCode) {
+        public Builder deviceCode(String nestedDeviceCode) {
             mNestedDeviceCode = nestedDeviceCode;
             return this;
         }

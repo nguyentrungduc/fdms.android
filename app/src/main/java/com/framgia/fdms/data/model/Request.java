@@ -34,6 +34,9 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     @SerializedName("assignee")
     private String mAssignee;
     @Expose
+    @SerializedName("assignee_id")
+    private int mAssigneeId;
+    @Expose
     @SerializedName("request_for")
     private String mRequestFor;
     @Expose
@@ -184,6 +187,16 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     public void setDevice(List<Device> device) {
         mDevice = device;
         notifyPropertyChanged(BR.device);
+    }
+
+    @Bindable
+    public int getAssigneeId() {
+        return mAssigneeId;
+    }
+
+    public void setAssigneeId(int assigneeId) {
+        mAssigneeId = assigneeId;
+        notifyPropertyChanged(BR.assigneeId);
     }
 
     @Bindable
