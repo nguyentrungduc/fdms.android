@@ -7,11 +7,14 @@ import android.databinding.Bindable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Category;
@@ -25,6 +28,7 @@ import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.returndevice.ReturnDeviceActivity;
 import com.framgia.fdms.screen.selection.StatusSelectionActivity;
 import com.framgia.fdms.screen.selection.StatusSelectionType;
+import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,8 @@ import static com.framgia.fdms.screen.selection.StatusSelectionAdapter.FIRST_IND
 import static com.framgia.fdms.utils.Constant.ACTION_CLEAR;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_CATEGORY;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_STATUE;
+import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
+import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SELECTION;
 
@@ -43,7 +49,9 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SELECTION;
  * Exposes the data to be used in the ListDevice screen.
  */
 public class ListDeviceViewModel extends BaseObservable
-    implements ListDeviceContract.ViewModel, ItemDeviceClickListenner {
+    implements ListDeviceContract.ViewModel, ItemDeviceClickListenner,
+    FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
+    OnSearchMenuItemClickListener, DrawerLayout.DrawerListener {
     private ListDeviceFragment mFragment;
     private ObservableField<Integer> mProgressBarVisibility = new ObservableField<>();
     private ObservableBoolean mIsLoadingMore = new ObservableBoolean(false);
@@ -61,6 +69,7 @@ public class ListDeviceViewModel extends BaseObservable
     private Producer mVendor, mMaker;
     private boolean mIsTopSheetExpand;
     private boolean mIsRefresh;
+    private String mDrawerStatus = DRAWER_IS_CLOSE;
 
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
         @Override
@@ -402,5 +411,63 @@ public class ListDeviceViewModel extends BaseObservable
     @Override
     public void onItemDeviceClick(Device device) {
         mContext.startActivity(DeviceDetailActivity.getInstance(mContext, device));
+    }
+
+    @Bindable
+    public String getDrawerStatus() {
+        return mDrawerStatus;
+    }
+
+    public void setDrawerStatus(String drawerStatus) {
+        mDrawerStatus = drawerStatus;
+        notifyPropertyChanged(BR.drawerStatus);
+    }
+
+    @Override
+    public void onClearSearchClicked() {
+        // TODO: 9/14/17  
+    }
+
+    @Override
+    public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+        // TODO: 9/14/17  
+    }
+
+    @Override
+    public void onSearchAction(String currentQuery) {
+        // TODO: 9/14/17  
+    }
+
+    @Override
+    public void onActionMenuItemSelected(FloatingSearchView searchView, MenuItem item) {
+        // TODO: 9/14/17
+        switch (item.getItemId()) {
+            case R.id.action_filter:
+                setDrawerStatus(
+                    mDrawerStatus == DRAWER_IS_CLOSE ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+        // no ops
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+        setDrawerStatus(DRAWER_IS_OPEN);
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+        setDrawerStatus(DRAWER_IS_CLOSE);
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+        // no ops
     }
 }

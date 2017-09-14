@@ -16,7 +16,6 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -676,16 +675,23 @@ public final class BindingUtils {
         }
     }
 
-    @BindingAdapter({ "statusDrawerLayout" })
-    public static void setStatusDrawerLayout(DrawerLayout drawerLayout, final String status) {
+    @BindingAdapter({ "statusDrawerLayout", "side" })
+    public static void setStatusDrawerLayout(DrawerLayout drawerLayout, final String status,
+        int side) {
         if (status != null) {
             if (status.equals(DRAWER_IS_CLOSE)) {
-                drawerLayout.closeDrawer(GravityCompat.START);
+                drawerLayout.closeDrawer(side);
             }
             if (status.equals(DRAWER_IS_OPEN)) {
-                drawerLayout.openDrawer(GravityCompat.START);
+                drawerLayout.openDrawer(side);
             }
         }
+    }
+
+    @BindingAdapter({ "drawerListener" })
+    public static void setDrawerListener(DrawerLayout drawerLayout,
+        DrawerLayout.DrawerListener listener) {
+        drawerLayout.setDrawerListener(listener);
     }
 
     @BindingAdapter("activity")

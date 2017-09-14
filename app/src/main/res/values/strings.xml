@@ -233,6 +233,7 @@
     <string name="title_vendor_delete">Vendor deleted</string>
     <string name="error_load_makers">Sorry, Not load makers successfully !!!</string>
     <string name="title_searching">Search...</string>
+    <string name="title_device_searching">Staff are using</string>
     <string name="top_sheet_behavior" translatable="false">com.framgia.fdms.widget.TopSheetBehavior</string>
     <string name="title_welcome">Welcome</string>
     <string name="action_close_show_case">GOT IT</string>
@@ -290,4 +291,7 @@
     <string name="title_delete">Confirm Delete</string>
     <string name="msg_delete_producer">Do you want to delete</string>
     <string name="menu_filter">Filter</string>
+    <string name="title_filter_by">Filter</string>
+    <string name="title_meeting_room">Meeting room</string>
+    <string name="title_device_name_code">Device name/code</string>
 </resources>
