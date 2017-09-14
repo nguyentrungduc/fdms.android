@@ -7,9 +7,8 @@
     >
 
     <data>
-
+        <import type="android.support.v4.view.GravityCompat"/>
         <import type="android.support.v4.widget.DrawerLayout"/>
-
         <import type="com.framgia.fdms.screen.main.MainViewModel.Tab"/>
 
         <variable
@@ -25,6 +24,7 @@
         android:layout_height="match_parent"
         bind:activity="@{viewModel.activity}"
         bind:lockMode="@{DrawerLayout.LOCK_MODE_LOCKED_CLOSED}"
+        bind:side="@{GravityCompat.START}"
         bind:statusDrawerLayout="@{viewModel.statusDrawerLayout}"
         >
 
