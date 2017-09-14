@@ -19,7 +19,7 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.MeetingRoom;
+import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.screen.meetingroom.detailmeetingroom.DetailMeetingRoomActivity;
 import com.framgia.fdms.utils.Constant;
 import com.framgia.fdms.utils.navigator.Navigator;
@@ -36,7 +36,7 @@ import static com.framgia.fdms.utils.Constant.TAG_MEETING_ROOM_DIALOG;
 
 public class ListMeetingRoomViewModel extends BaseObservable
     implements ListMeetingRoomContract.ViewModel, MeetingRoomDialogContract.ActionCallback,
-    BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom>,
+    BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<Producer>,
     OnSearchMenuItemClickListener, FloatingSearchView.OnSearchListener,
     FloatingSearchView.OnClearSearchActionListener {
     public static final Parcelable.Creator<ListMeetingRoomViewModel> CREATOR =
@@ -61,7 +61,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
     private Navigator mNavigator;
     private String mRoomName;
     private MeetingRoomDialog mMeetingRoomDialog;
-    private MeetingRoom mMeetingRoom;
+    private Producer mMeetingRoom;
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
         new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -103,7 +103,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     @Override
-    public void onItemRecyclerViewClick(MeetingRoom item) {
+    public void onItemRecyclerViewClick(Producer item) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constant.BundleConstant.BUNDLE_MEETING_ROOM, item);
         mNavigator.startActivity(DetailMeetingRoomActivity.class, bundle);
@@ -114,7 +114,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     @Override
-    public void onGetListMeetingRoomSuccess(List<MeetingRoom> meetingRooms) {
+    public void onGetListMeetingRoomSuccess(List<Producer> meetingRooms) {
         setLoadingMore(false);
         mListMeetingRoomAdapter.onUpdatePage(meetingRooms);
         setRefresh(false);
@@ -209,7 +209,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     public void onAddMeetingRoomClick() {
-        mMeetingRoomDialog = MeetingRoomDialog.newInstant(new MeetingRoom(),
+        mMeetingRoomDialog = MeetingRoomDialog.newInstant(new Producer(),
             mActivity.getResources().getString(R.string.title_add_producer), this);
         mMeetingRoomDialog.show(mActivity.getFragmentManager(), TAG_MEETING_ROOM_DIALOG);
     }
@@ -256,7 +256,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     @Override
-    public void onAddCallback(MeetingRoom meetingRoom) {
+    public void onAddCallback(Producer meetingRoom) {
         if (meetingRoom == null) {
             return;
         }
@@ -264,7 +264,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     @Override
-    public void onEditCallback(MeetingRoom oldMeetingRoom, MeetingRoom newMeetingRoom) {
+    public void onEditCallback(Producer oldMeetingRoom, Producer newMeetingRoom) {
         if (oldMeetingRoom == null || newMeetingRoom == null) {
             return;
         }

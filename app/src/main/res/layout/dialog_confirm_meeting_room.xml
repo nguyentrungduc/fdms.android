@@ -14,7 +14,7 @@
 
         <variable
             name="meetingroom"
-            type="com.framgia.fdms.data.model.MeetingRoom"
+            type="com.framgia.fdms.data.model.Producer"
             />
     </data>
 

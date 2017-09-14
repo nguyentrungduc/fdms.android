@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.MeetingRoom;
+import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.databinding.ItemListMeetingRoomBinding;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +18,10 @@ import java.util.List;
  */
 
 public class ListMeetingRoomAdapter
-    extends BaseRecyclerViewAdapter<MeetingRoom, ListMeetingRoomAdapter.ViewHolder> {
+    extends BaseRecyclerViewAdapter<Producer, ListMeetingRoomAdapter.ViewHolder> {
 
-    private OnRecyclerViewItemClickListener<MeetingRoom> mItemClickListener;
-    private List<MeetingRoom> mMeetingRooms;
+    private OnRecyclerViewItemClickListener<Producer> mItemClickListener;
+    private List<Producer> mMeetingRooms;
 
     ListMeetingRoomAdapter(@NonNull Context context) {
         super(context);
@@ -29,7 +29,7 @@ public class ListMeetingRoomAdapter
     }
 
     @Override
-    public void onUpdatePage(List<MeetingRoom> data) {
+    public void onUpdatePage(List<Producer> data) {
         if (data == null) {
             return;
         }
@@ -55,7 +55,7 @@ public class ListMeetingRoomAdapter
         return mMeetingRooms == null ? 0 : mMeetingRooms.size();
     }
 
-    void setItemClickListener(OnRecyclerViewItemClickListener<MeetingRoom> itemClickListener) {
+    void setItemClickListener(OnRecyclerViewItemClickListener<Producer> itemClickListener) {
         mItemClickListener = itemClickListener;
     }
 
@@ -66,16 +66,16 @@ public class ListMeetingRoomAdapter
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private ItemListMeetingRoomBinding mBinding;
-        private OnRecyclerViewItemClickListener<MeetingRoom> mItemClickListener;
+        private OnRecyclerViewItemClickListener<Producer> mItemClickListener;
 
         public ViewHolder(ItemListMeetingRoomBinding binding,
-            BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom> listener) {
+            BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<Producer> listener) {
             super(binding.getRoot());
             mBinding = binding;
             mItemClickListener = listener;
         }
 
-        void bindData(MeetingRoom meetingRoom) {
+        void bindData(Producer meetingRoom) {
             if (meetingRoom == null) {
                 return;
             }

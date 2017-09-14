@@ -1,7 +1,7 @@
 package com.framgia.fdms.data.source.remote;
 
 import android.text.TextUtils;
-import com.framgia.fdms.data.model.MeetingRoom;
+import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.source.MeetingRoomDataSource;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
@@ -30,14 +30,13 @@ public class MeetingRoomRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<List<MeetingRoom>> getListMeetingRoom(String roomName, int page,
-        int perPage) {
+    public Observable<List<Producer>> getListMeetingRoom(String roomName, int page, int perPage) {
         return mFDMSApi.getListMeetingRoom(getRoomParams(roomName, page, perPage))
             .flatMap(
-                new Function<Respone<List<MeetingRoom>>, ObservableSource<List<MeetingRoom>>>() {
+                new Function<Respone<List<Producer>>, ObservableSource<List<Producer>>>() {
                     @Override
-                    public ObservableSource<List<MeetingRoom>> apply(
-                        Respone<List<MeetingRoom>> listRespone) {
+                    public ObservableSource<List<Producer>> apply(
+                        Respone<List<Producer>> listRespone) {
                         return Utils.getResponse(listRespone);
                     }
                 });

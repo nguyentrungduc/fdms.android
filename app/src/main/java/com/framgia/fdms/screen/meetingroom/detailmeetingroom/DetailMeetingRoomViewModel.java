@@ -12,7 +12,7 @@ import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
-import com.framgia.fdms.data.model.MeetingRoom;
+import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.utils.Constant;
 import com.framgia.fdms.utils.navigator.Navigator;
@@ -31,7 +31,7 @@ public class DetailMeetingRoomViewModel extends BaseObservable
 
     private Context mContext;
     private DetailMeetingRoomContract.Presenter mPresenter;
-    private MeetingRoom mMeetingRoom;
+    private Producer mMeetingRoom;
     private Navigator mNavigator;
     private ListDeviceAdapter mListDeviceAdapter;
     private int mPage;
@@ -42,7 +42,7 @@ public class DetailMeetingRoomViewModel extends BaseObservable
     private String mNotificationLoadData;
     private List<Device> mDevices;
 
-    DetailMeetingRoomViewModel(Context context, MeetingRoom meetingRoom, Navigator navigator) {
+    DetailMeetingRoomViewModel(Context context, Producer meetingRoom, Navigator navigator) {
         mContext = context;
         mDevices = new ArrayList<>();
         if (meetingRoom == null) {
@@ -71,7 +71,7 @@ public class DetailMeetingRoomViewModel extends BaseObservable
         mPresenter.getListDevice(mMeetingRoom.getId(), mPage, Constant.PER_PAGE);
     }
 
-    public MeetingRoom getMeetingRoom() {
+    public Producer getMeetingRoom() {
         return mMeetingRoom;
     }
 

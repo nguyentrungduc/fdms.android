@@ -4,7 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.MeetingRoom;
+import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
@@ -22,7 +22,7 @@ public class DetailMeetingRoomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MeetingRoom meetingRoom =
+        Producer meetingRoom =
             this.getIntent().getExtras().getParcelable(Constant.BundleConstant.BUNDLE_MEETING_ROOM);
         Navigator navigator = new Navigator(this);
         mViewModel = new DetailMeetingRoomViewModel(this, meetingRoom, navigator);
