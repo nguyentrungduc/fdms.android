@@ -55,6 +55,7 @@ import com.framgia.fdms.screen.devicedetail.DeviceDetailViewModel;
 import com.framgia.fdms.screen.main.MainViewModel;
 import com.framgia.fdms.screen.requestdetail.RequestDetailViewModel;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
+import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import com.framgia.fdms.widget.TopSheetBehavior;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.github.mikephil.charting.animation.Easing;
@@ -185,16 +186,17 @@ public final class BindingUtils {
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    @BindingAdapter({ "bind:searchListenner", "bind:clearListenner" })
+    @BindingAdapter({ "bind:searchListenner", "bind:clearListenner", "bind:menuItemClick" })
     public static void setOnQueryChangeListenner(final FloatingSearchView searchView,
-        final FloatingSearchView.OnSearchListener onSearchListener,
-        FloatingSearchView.OnClearSearchActionListener clearSearchActionListener) {
+        FloatingSearchView.OnSearchListener onSearchListener,
+        FloatingSearchView.OnClearSearchActionListener clearSearchActionListener,
+        final OnSearchMenuItemClickListener onSearchMenuItemClickListener) {
         searchView.setOnSearchListener(onSearchListener);
         searchView.setOnClearSearchActionListener(clearSearchActionListener);
         searchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
             @Override
             public void onActionMenuItemSelected(MenuItem item) {
-                onSearchListener.onSearchAction(searchView.getQuery());
+                onSearchMenuItemClickListener.onActionMenuItemSelected(searchView, item);
             }
         });
     }

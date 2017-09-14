@@ -8,16 +8,19 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
+import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.MeetingRoom;
 import com.framgia.fdms.screen.meetingroom.detailmeetingroom.DetailMeetingRoomActivity;
 import com.framgia.fdms.utils.Constant;
 import com.framgia.fdms.utils.navigator.Navigator;
+import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import java.util.List;
 
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
@@ -30,7 +33,8 @@ import static com.framgia.fdms.utils.Constant.PER_PAGE;
 public class ListMeetingRoomViewModel extends BaseObservable
     implements ListMeetingRoomContract.ViewModel,
     BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<MeetingRoom>,
-    FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener {
+    FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
+    OnSearchMenuItemClickListener {
 
     private Context mContext;
     private ListMeetingRoomContract.Presenter mPresenter;
@@ -187,6 +191,13 @@ public class ListMeetingRoomViewModel extends BaseObservable
         mListMeetingRoomAdapter.clear();
         setRoomName(Constant.BLANK);
         mPresenter.getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
+    }
+
+    @Override
+    public void onActionMenuItemSelected(FloatingSearchView searchView, MenuItem item) {
+        if (item.getItemId() == R.id.action_search) {
+            onSearchAction(searchView.getQuery());
+        }
     }
 
     @Override

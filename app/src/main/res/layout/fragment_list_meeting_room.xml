@@ -52,6 +52,7 @@
                             app:floatingSearch_searchHint="@string/title_searching"
                             app:floatingSearch_showSearchKey="true"
                             app:searchListenner="@{viewModel}"
+                            app:menuItemClick="@{viewModel}"
                             />
                     </android.support.design.widget.CollapsingToolbarLayout>
                 </android.support.design.widget.AppBarLayout>

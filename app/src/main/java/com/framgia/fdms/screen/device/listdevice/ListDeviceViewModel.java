@@ -57,18 +57,11 @@ public class ListDeviceViewModel extends BaseObservable
     private String mKeyWord;
     private boolean mIsBo;
     private int mTab = TAB_MY_DEVICE;
-    private int mEmptyViewVisible = View.GONE; // show empty state ui when not data
+    private int mEmptyViewVisible = View.GONE;
     private Producer mVendor, mMaker;
     private boolean mIsTopSheetExpand;
     private boolean mIsRefresh;
-    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
-        new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mAdapter.clear();
-                loadData();
-            }
-        };
+
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -346,16 +339,6 @@ public class ListDeviceViewModel extends BaseObservable
     public void setRefresh(boolean refresh) {
         mIsRefresh = refresh;
         notifyPropertyChanged(BR.refresh);
-    }
-
-    @Bindable
-    public SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
-        return mOnRefreshListener;
-    }
-
-    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener onRefreshListener) {
-        mOnRefreshListener = onRefreshListener;
-        notifyPropertyChanged(BR.onRefreshListener);
     }
 
     @Bindable
