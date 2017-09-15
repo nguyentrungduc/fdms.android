@@ -92,7 +92,7 @@
                 <include
                     layout="@layout/text_display"
                     bind:image="@{@drawable/ic_maker_24dp}"
-                    bind:text="@{viewModel.device.maker.name}"
+                    bind:text="@{viewModel.device.marker.name}"
                     bind:title="@{@string/title_maker}"
                     />
 

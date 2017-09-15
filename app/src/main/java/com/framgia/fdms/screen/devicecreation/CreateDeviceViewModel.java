@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.Toast;
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Picture;
 import com.framgia.fdms.data.model.Status;
@@ -83,15 +82,15 @@ public class CreateDeviceViewModel extends BaseObservable
     private Device mDevice;
     private String mStatusError;
     private List<Status> mStatuses = new ArrayList<>();
-    private List<Category> mCategories = new ArrayList<>();
+    private List<Status> mCategories = new ArrayList<>();
     private List<Status> mBranches = new ArrayList<>();
     private List<Status> mVendors = new ArrayList<>();
     private List<Status> mMakers = new ArrayList<>();
-    private Category mCategory;
+    private Status mCategory;
     private Status mStatus;
     private Status mBranch;
     private Status mVendor;
-    private Status mMaker;
+    private Status mMarker;
     private Calendar mCalendar = Calendar.getInstance();
     private boolean mIsQrCode = true;
     private Bitmap mDeviceCode;
@@ -108,7 +107,7 @@ public class CreateDeviceViewModel extends BaseObservable
             mDevice.setDeviceStatusId(DEFAULT_STATUS_ID);
         } else {
             mDevice = device;
-            mCategory = new Category(device.getDeviceCategoryId(), device.getDeviceCategoryName());
+            mCategory = new Status(device.getDeviceCategoryId(), device.getDeviceCategoryName());
             setBoughtDate(Utils.stringBoughtDateDevice(device.getBoughtDate()));
             mStatus = new Status(device.getDeviceStatusId(), device.getDeviceStatusName());
         }
@@ -219,11 +218,11 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onDeviceCategoryLoaded(List<Category> categories) {
+    public void onDeviceCategoryLoaded(List<Status> categories) {
         updateCategory(categories);
     }
 
-    public void updateCategory(List<Category> list) {
+    public void updateCategory(List<Status> list) {
         if (list == null) {
             return;
         }
@@ -403,7 +402,7 @@ public class CreateDeviceViewModel extends BaseObservable
                 break;
             case REQUEST_CATEGORY:
                 Bundle bundle = data.getExtras();
-                Category category = bundle.getParcelable(BUNDLE_CATEGORY);
+                Status category = bundle.getParcelable(BUNDLE_CATEGORY);
                 if (category.getName().equals(mContext.getString(R.string.action_clear))) {
                     category.setName(mContext.getString(R.string.title_empty));
                 }
@@ -444,7 +443,7 @@ public class CreateDeviceViewModel extends BaseObservable
                 if (maker.getName().equals(mContext.getString(R.string.action_clear))) {
                     maker.setName(mContext.getString(R.string.title_empty));
                 }
-                setMaker(maker);
+                setMarker(maker);
                 break;
             default:
                 break;
@@ -528,11 +527,11 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     @Bindable
-    public Category getCategory() {
+    public Status getCategory() {
         return mCategory;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(Status category) {
         mDevice.setDeviceCategoryId(category.getId());
         mCategory = category;
         notifyPropertyChanged(BR.category);
@@ -635,14 +634,14 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     @Bindable
-    public Status getMaker() {
-        return mMaker;
+    public Status getMarker() {
+        return mMarker;
     }
 
-    public void setMaker(Status maker) {
-        mDevice.setMaker(maker);
-        mMaker = maker;
-        notifyPropertyChanged(BR.maker);
+    public void setMarker(Status marker) {
+        mDevice.setMarker(marker);
+        mMarker = marker;
+        notifyPropertyChanged(BR.marker);
     }
 
     @Bindable

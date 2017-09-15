@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.framgia.fdms"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.framgia.fdms">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -91,6 +91,10 @@
 
         <activity
             android:name=".screen.deviceselection.DeviceSelectionActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".screen.new_selection.StatusSelectionActivity"
             android:screenOrientation="portrait"/>
     </application>
 

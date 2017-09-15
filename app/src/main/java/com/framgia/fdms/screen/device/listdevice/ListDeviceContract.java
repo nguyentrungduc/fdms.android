@@ -3,7 +3,6 @@ package com.framgia.fdms.screen.device.listdevice;
 import android.content.Intent;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
@@ -26,19 +25,21 @@ interface ListDeviceContract {
 
         void hideProgressbar();
 
-        void onDeviceCategoryLoaded(List<Category> categories);
+        void onDeviceCategoryLoaded(List<Status> categories);
 
         void onDeviceStatusLoaded(List<Status> statuses);
 
         void onSearch(String keyWord);
 
-        void onChooseCategory();
+        void onChooseCategoryClick();
 
-        void onChooseStatus();
+        void onChooseStatusClick();
 
-        void onChooseMaker();
+        void onChooseMakerClick();
 
-        void onChooseVendor();
+        void onChooseVendorClick();
+
+        void onChooseMeetingRoomClick();
 
         void onReset();
 
@@ -63,7 +64,7 @@ interface ListDeviceContract {
     interface Presenter extends BasePresenter {
         void loadMoreData();
 
-        void getData(String keyWord, Category category, Status status);
+        void getData(String keyWord, Status category, Status status);
 
         void getCurrentUser();
 

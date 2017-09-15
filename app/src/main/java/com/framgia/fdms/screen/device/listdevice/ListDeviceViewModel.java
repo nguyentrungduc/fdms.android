@@ -17,7 +17,6 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
@@ -26,8 +25,6 @@ import com.framgia.fdms.screen.devicecreation.CreateDeviceActivity;
 import com.framgia.fdms.screen.devicecreation.DeviceStatusType;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.returndevice.ReturnDeviceActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionType;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import java.util.ArrayList;
@@ -36,6 +33,11 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MANAGE_DEVICE;
 import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MY_DEVICE;
+import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
+import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
+import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
+import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
+import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
 import static com.framgia.fdms.screen.selection.StatusSelectionAdapter.FIRST_INDEX;
 import static com.framgia.fdms.utils.Constant.ACTION_CLEAR;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_CATEGORY;
@@ -58,7 +60,7 @@ public class ListDeviceViewModel extends BaseObservable
     private ListDeviceAdapter mAdapter;
     private ListDeviceContract.Presenter mPresenter;
     private Context mContext;
-    private List<Category> mCategories;
+    private List<Status> mCategories;
     private List<Status> mStatuses;
 
     private String mKeyWord;
@@ -71,8 +73,8 @@ public class ListDeviceViewModel extends BaseObservable
     private String mDrawerStatus = DRAWER_IS_CLOSE;
 
     private Status mStatus;
-    private Category mCategory;
-    private Producer mVendor, mMaker;
+    private Status mCategory;
+    private Producer mVendor, mMarker;
     private Producer mMeetingRoom;
     private String mDeviceName;
     private String mStaffName;
@@ -100,12 +102,13 @@ public class ListDeviceViewModel extends BaseObservable
         mFragment = fragment;
         mContext = fragment.getContext();
         mAdapter = new ListDeviceAdapter(mContext, new ArrayList<Device>(), this);
-        setCategory(new Category(OUT_OF_INDEX, mContext.getString(R.string.title_btn_category)));
+        setCategory(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_btn_category)));
         setStatus(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_request_status)));
-        setVendor(new Producer());
+        setMeetingRoom(new Producer(OUT_OF_INDEX));
+        setVendor(new Producer(OUT_OF_INDEX));
         mVendor.setName(mContext.getString(R.string.title_vendor));
-        setMaker(new Producer());
-        mMaker.setName(mContext.getString(R.string.title_maker));
+        setMarker(new Producer(OUT_OF_INDEX));
+        mMarker.setName(mContext.getString(R.string.title_maker));
         mTab = tabDevice;
     }
 
@@ -133,7 +136,7 @@ public class ListDeviceViewModel extends BaseObservable
         switch (requestCode) {
             case REQUEST_SELECTION:
                 Bundle bundle = data.getExtras();
-                Category category = bundle.getParcelable(BUNDLE_CATEGORY);
+                Status category = bundle.getParcelable(BUNDLE_CATEGORY);
                 Status status = bundle.getParcelable(BUNDLE_STATUE);
                 if (category != null) {
                     if (category.getName().equals(mContext.getString(R.string.action_clear))) {
@@ -164,27 +167,38 @@ public class ListDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onChooseCategory() {
-        if (mCategories == null) return;
+    public void onChooseCategoryClick() {
         mFragment.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, mCategories, null,
-                StatusSelectionType.CATEGORY), REQUEST_SELECTION);
+            com.framgia.fdms.screen.new_selection.StatusSelectionActivity.getInstance(mContext,
+                CATEGORY), REQUEST_SELECTION);
     }
 
     @Override
-    public void onChooseStatus() {
-        if (mStatuses == null) return;
+    public void onChooseStatusClick() {
         mFragment.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, null, mStatuses,
-                StatusSelectionType.STATUS), REQUEST_SELECTION);
+            com.framgia.fdms.screen.new_selection.StatusSelectionActivity.getInstance(mContext,
+                STATUS), REQUEST_SELECTION);
     }
 
     @Override
-    public void onChooseMaker() {
+    public void onChooseMakerClick() {
+        mFragment.startActivityForResult(
+            com.framgia.fdms.screen.new_selection.StatusSelectionActivity.getInstance(mContext,
+                MARKER), REQUEST_SELECTION);
     }
 
     @Override
-    public void onChooseVendor() {
+    public void onChooseVendorClick() {
+        mFragment.startActivityForResult(
+            com.framgia.fdms.screen.new_selection.StatusSelectionActivity.getInstance(mContext,
+                VENDOR), REQUEST_SELECTION);
+    }
+
+    @Override
+    public void onChooseMeetingRoomClick() {
+        mFragment.startActivityForResult(
+            com.framgia.fdms.screen.new_selection.StatusSelectionActivity.getInstance(mContext,
+                MEETING_ROOM), REQUEST_SELECTION);
     }
 
     @Override
@@ -244,7 +258,7 @@ public class ListDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onDeviceCategoryLoaded(List<Category> categories) {
+    public void onDeviceCategoryLoaded(List<Status> categories) {
         updateCategory(categories);
     }
 
@@ -280,18 +294,18 @@ public class ListDeviceViewModel extends BaseObservable
             || device.getDeviceCategoryName() == null) {
             return;
         }
-        setCategory(new Category(device.getDeviceCategoryId(), device.getDeviceCategoryName()));
+        setCategory(new Status(device.getDeviceCategoryId(), device.getDeviceCategoryName()));
         mAdapter.clear();
         mPresenter.getData(mKeyWord, mCategory, mStatus);
     }
 
-    public void updateCategory(List<Category> list) {
+    public void updateCategory(List<Status> list) {
         if (list == null) {
             return;
         }
         // update list mCategories
         mCategories = list;
-        mCategories.add(FIRST_INDEX, new Category(OUT_OF_INDEX, ACTION_CLEAR));
+        mCategories.add(FIRST_INDEX, new Status(OUT_OF_INDEX, ACTION_CLEAR));
     }
 
     public void updateStatus(List<Status> list) {
@@ -317,11 +331,11 @@ public class ListDeviceViewModel extends BaseObservable
     }
 
     @Bindable
-    public Category getCategory() {
+    public Status getCategory() {
         return mCategory;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(Status category) {
         mCategory = category;
         notifyPropertyChanged(BR.category);
     }
@@ -395,13 +409,13 @@ public class ListDeviceViewModel extends BaseObservable
     }
 
     @Bindable
-    public Producer getMaker() {
-        return mMaker;
+    public Producer getMarker() {
+        return mMarker;
     }
 
-    public void setMaker(Producer maker) {
-        mMaker = maker;
-        notifyPropertyChanged(BR.maker);
+    public void setMarker(Producer marker) {
+        mMarker = marker;
+        notifyPropertyChanged(BR.marker);
     }
 
     @Bindable
@@ -478,5 +492,35 @@ public class ListDeviceViewModel extends BaseObservable
     @Override
     public void onDrawerStateChanged(int newState) {
         // no ops
+    }
+
+    @Bindable
+    public Producer getMeetingRoom() {
+        return mMeetingRoom;
+    }
+
+    public void setMeetingRoom(Producer meetingRoom) {
+        mMeetingRoom = meetingRoom;
+        notifyPropertyChanged(BR.meetingRoom);
+    }
+
+    @Bindable
+    public String getDeviceName() {
+        return mDeviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        mDeviceName = deviceName;
+        notifyPropertyChanged(BR.deviceName);
+    }
+
+    @Bindable
+    public String getStaffName() {
+        return mStaffName;
+    }
+
+    public void setStaffName(String staffName) {
+        mStaffName = staffName;
+        notifyPropertyChanged(BR.staffName);
     }
 }

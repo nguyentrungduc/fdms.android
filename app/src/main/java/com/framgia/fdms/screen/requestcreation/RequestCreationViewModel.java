@@ -9,8 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Request;
+import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 
 import static android.app.Activity.RESULT_OK;
@@ -22,7 +22,7 @@ import static android.app.Activity.RESULT_OK;
 public class RequestCreationViewModel extends BaseObservable
     implements RequestCreationContract.ViewModel {
 
-    private ArrayAdapter<Category> mAdapterCategory;
+    private ArrayAdapter<Status> mAdapterCategory;
     private RequestCreationContract.Presenter mPresenter;
     private AppCompatActivity mActivity;
     private String mRequestTitle;

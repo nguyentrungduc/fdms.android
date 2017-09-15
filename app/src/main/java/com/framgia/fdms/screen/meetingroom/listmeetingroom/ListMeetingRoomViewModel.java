@@ -27,6 +27,7 @@ import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import java.util.List;
 
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
+import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.TAG_MEETING_ROOM_DIALOG;
 
@@ -209,7 +210,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     public void onAddMeetingRoomClick() {
-        mMeetingRoomDialog = MeetingRoomDialog.newInstant(new Producer(),
+        mMeetingRoomDialog = MeetingRoomDialog.newInstant(new Producer(OUT_OF_INDEX),
             mActivity.getResources().getString(R.string.title_add_producer), this);
         mMeetingRoomDialog.show(mActivity.getFragmentManager(), TAG_MEETING_ROOM_DIALOG);
     }

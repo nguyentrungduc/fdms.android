@@ -31,6 +31,7 @@ public class Constant {
     public static final int FIRST_INDEX = 0;
     public static final String DRAWER_IS_CLOSE = "CLOSE";
     public static final String DRAWER_IS_OPEN = "OPEN";
+    public static final String TITLE_NA = "N/A";
 
     private Constant() {
         // No-op

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Status;
 import java.util.List;
 
@@ -20,12 +19,12 @@ import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_TYPE;
 public class StatusSelectionViewModel implements StatusSelectionContract.ViewModel {
 
     private AppCompatActivity mActivity;
-    private List<Category> mCategories;
+    private List<Status> mCategories;
     private StatusSelectionType mSelectionType;
     private StatusSelectionContract.Presenter mPresenter;
     private ObservableField<StatusSelectionAdapter> mAdapter = new ObservableField<>();
 
-    public StatusSelectionViewModel(AppCompatActivity activity, List<Category> categories,
+    public StatusSelectionViewModel(AppCompatActivity activity, List<Status> categories,
         List<Status> statuses, StatusSelectionType selectionType) {
         mActivity = activity;
         mCategories = categories;
@@ -56,7 +55,7 @@ public class StatusSelectionViewModel implements StatusSelectionContract.ViewMod
     }
 
     @Override
-    public void onSelectedItem(Category category, Status status, StatusSelectionType type,
+    public void onSelectedItem(Status category, Status status, StatusSelectionType type,
         int position) {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();

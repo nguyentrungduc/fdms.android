@@ -219,7 +219,7 @@ public class ProducerViewModel extends BaseObservable
 
     @Override
     public void onAddProducerClick() {
-        mVendorDialog = ProducerDialog.newInstant(new Producer(),
+        mVendorDialog = ProducerDialog.newInstant(new Producer(OUT_OF_INDEX),
             mActivity.getResources().getString(R.string.title_add_producer), this);
         mVendorDialog.show(mActivity.getSupportFragmentManager(), TAG_MAKER_DIALOG);
     }

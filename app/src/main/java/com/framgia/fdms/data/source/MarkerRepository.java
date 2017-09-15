@@ -21,7 +21,7 @@ public final class MarkerRepository implements MarkerDataSource {
         return sInstance;
     }
 
-    private MarkerRepository(MarkerDataSource remoteDataSource) {
+    public MarkerRepository(MarkerDataSource remoteDataSource) {
         mRemoteDataSource = remoteDataSource;
     }
 

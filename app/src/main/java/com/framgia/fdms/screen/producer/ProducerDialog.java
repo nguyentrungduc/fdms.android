@@ -17,6 +17,7 @@ import com.framgia.fdms.databinding.DialogConfirmProducerBinding;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_ACTION_CALLBACK;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_PRODUCER;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_TITLE;
+import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 /**
  * Created by framgia on 04/07/2017.
@@ -25,7 +26,7 @@ public class ProducerDialog extends DialogFragment implements ProducerDialogCont
     private static final String TITLE_EDIT = "Edit";
     private static final String TITLE_ADD = "Add";
     private ObservableField<String> mMessageError = new ObservableField<>();
-    private Producer mProducer, mTempProducer = new Producer();
+    private Producer mProducer, mTempProducer = new Producer(OUT_OF_INDEX);
     private ObservableField<String> mTitle = new ObservableField<>();
     private ProducerDialogContract.ActionCallback mActionCallback;
     private DialogConfirmProducerBinding mBinding;

@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.databinding.ActivityStatusSelectionBinding;
 import java.util.ArrayList;
@@ -28,15 +27,15 @@ public class StatusSelectionActivity extends AppCompatActivity
     implements SearchView.OnQueryTextListener {
 
     private StatusSelectionContract.ViewModel mViewModel;
-    private List<Category> mCategories;
+    private List<Status> mCategories;
     private List<Status> mStatuses;
     private StatusSelectionType mSelectionType;
 
-    public static Intent getInstance(Context context, List<Category> categories,
+    public static Intent getInstance(Context context, List<Status> categories,
         List<Status> statuses, StatusSelectionType type) {
         Intent intent = new Intent(context, StatusSelectionActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(BUNDLE_CATEGORIES, (ArrayList<Category>) categories);
+        bundle.putParcelableArrayList(BUNDLE_CATEGORIES, (ArrayList<Status>) categories);
         bundle.putParcelableArrayList(BUNDLE_STATUSES, (ArrayList<Status>) statuses);
         bundle.putSerializable(BUNDLE_TYPE, type);
         intent.putExtras(bundle);

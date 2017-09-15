@@ -9,6 +9,9 @@ import com.framgia.fdms.BR;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
+import static com.framgia.fdms.utils.Constant.TITLE_NA;
+
 /**
  * Created by MyPC on 03/05/2017.
  */
@@ -36,6 +39,10 @@ public class Status extends BaseObservable implements Parcelable {
     public Status() {
     }
 
+    public Status(int id) {
+        mId = id;
+    }
+
     public Status(int id, String name) {
         mId = id;
         mName = name;
@@ -58,7 +65,7 @@ public class Status extends BaseObservable implements Parcelable {
 
     @Bindable
     public String getName() {
-        return mName;
+        return mId == OUT_OF_INDEX ? TITLE_NA : mName;
     }
 
     public void setName(String name) {

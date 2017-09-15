@@ -3,7 +3,7 @@ package com.framgia.fdms.data.source.api.request;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import com.framgia.fdms.BR;
-import com.framgia.fdms.data.model.Category;
+import com.framgia.fdms.data.model.Status;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -22,7 +22,7 @@ public class DeviceRequest extends BaseObservable {
     @Expose
     @SerializedName("number")
     private int mNumber;
-    private Category mCategory;
+    private Status mCategory;
 
     public DeviceRequest() {
     }
@@ -58,11 +58,11 @@ public class DeviceRequest extends BaseObservable {
     }
 
     @Bindable
-    public Category getCategory() {
+    public Status getCategory() {
         return mCategory;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(Status category) {
         mCategory = category;
         notifyPropertyChanged(BR.category);
     }

@@ -1,6 +1,5 @@
 package com.framgia.fdms.data.model;
 
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -34,7 +33,8 @@ public class Producer extends Status implements Parcelable {
     @SerializedName("updated_at")
     private String mUpdatedAt;
 
-    public Producer(){
+    public Producer(int id) {
+        mId = id;
     }
 
     public Producer(Parcel in) {
@@ -72,6 +72,11 @@ public class Producer extends Status implements Parcelable {
     public void setUpdatedAt(String updatedAt) {
         mUpdatedAt = updatedAt;
         notifyPropertyChanged(BR.updatedAt);
+    }
+
+    @Override
+    public String getName() {
+        return super.getName();
     }
 
     @Override

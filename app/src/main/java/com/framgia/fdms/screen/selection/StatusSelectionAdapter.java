@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import com.framgia.fdms.data.model.Category;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.databinding.ItemStatusSelectionBinding;
 import java.util.ArrayList;
@@ -22,13 +21,13 @@ public class StatusSelectionAdapter
     private StatusSelectionContract.ViewModel mViewModel;
     private StatusSelectionType mStatusType = StatusSelectionType.STATUS;
     private LayoutInflater mInflater;
-    private List<Category> mCategories;
-    private List<Category> mCategoriesTemp = new ArrayList<>();
+    private List<Status> mCategories;
+    private List<Status> mCategoriesTemp = new ArrayList<>();
     private List<Status> mStatuses;
     private List<Status> mStatusesTemp = new ArrayList<>();
 
     public StatusSelectionAdapter(StatusSelectionContract.ViewModel viewModel,
-        List<Category> categories, StatusSelectionType type) {
+        List<Status> categories, StatusSelectionType type) {
         mViewModel = viewModel;
         mCategories = categories;
         mCategoriesTemp.addAll(categories);
@@ -56,7 +55,7 @@ public class StatusSelectionAdapter
     public void onBindViewHolder(SelectionHolder holder, int position) {
         switch (mStatusType) {
             case CATEGORY:
-                Category category = mCategories.get(position);
+                Status category = mCategories.get(position);
                 if (category != null) holder.bind(category, position);
                 break;
             case STATUS:
@@ -86,7 +85,7 @@ public class StatusSelectionAdapter
                     mCategories.addAll(mCategoriesTemp);
                 } else {
                     newText = newText.toLowerCase();
-                    for (Category category : mCategoriesTemp) {
+                    for (Status category : mCategoriesTemp) {
                         if (category.getName().toLowerCase().contains(newText)) {
                             mCategories.add(category);
                         }
@@ -120,14 +119,8 @@ public class StatusSelectionAdapter
             mBinding = binding;
         }
 
-        private void bind(Category category, int position) {
+        private void bind(Status category, int position) {
             mBinding.setCategory(category);
-            mBinding.setPosition(position);
-            mBinding.executePendingBindings();
-        }
-
-        private void bind(Status status, int position) {
-            mBinding.setStatus(status);
             mBinding.setPosition(position);
             mBinding.executePendingBindings();
         }
