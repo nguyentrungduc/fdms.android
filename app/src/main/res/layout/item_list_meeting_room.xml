@@ -5,9 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     >
     <data>
+        <import type="android.text.TextUtils"/>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
-            type="com.framgia.fdms.screen.meetingroom.listmeetingroom.ItemListMeetingRoomViewModel"
+            type="com.framgia.fdms.screen.meetingroom.listmeetingroom.ListMeetingRoomViewModel"
+            />
+
+        <variable
+            name="item"
+            type="com.framgia.fdms.data.model.Producer"
             />
     </data>
 
@@ -15,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_2"
-        android:onClick="@{viewModel::onItemClicked}"
+        android:onClick="@{()-> viewModel.onItemRecyclerViewClick(item)}"
         app:cardCornerRadius="@dimen/dp_2"
         >
         <RelativeLayout
@@ -34,7 +41,7 @@
                     android:layout_width="@dimen/dp_25"
                     android:layout_height="@dimen/dp_25"
                     android:layout_margin="@dimen/dp_5"
-                    android:onClick="@{()-> viewModel.onEditMeetingRoom()}"
+                    android:onClick="@{()-> viewModel.onEditMeetingRoomClick(item)}"
                     app:srcCompat="@drawable/ic_edit"
                     tools:ignore="ContentDescription"
                     />
@@ -42,7 +49,7 @@
                     android:layout_width="@dimen/dp_25"
                     android:layout_height="@dimen/dp_25"
                     android:layout_margin="@dimen/dp_5"
-                    android:onClick="@{()-> viewModel.onDeleteMeetingRoom()}"
+                    android:onClick="@{()-> viewModel.onDeleteMeetingRoomClick(item)}"
                     app:srcCompat="@drawable/ic_x_button"
                     tools:ignore="ContentDescription"
                     />
@@ -70,36 +77,33 @@
                     android:layout_marginTop="@dimen/dp_5"
                     android:orientation="vertical"
                     >
-                    <LinearLayout
-                        android:layout_width="match_parent"
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dp_3"
-                            android:text="@{viewModel.roomName}"
-                            android:textColor="@color/color_gray"
-                            android:textSize="@dimen/sp_16"
-                            android:textStyle="bold"
-                            />
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_1"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/dp_5"
-                            android:background="@color/color_black"
-                            />
-                    </LinearLayout>
+                        android:layout_marginStart="@dimen/dp_3"
+                        android:text="@{item.name}"
+                        android:textColor="@color/color_gray"
+                        android:textSize="@dimen/sp_16"
+                        android:textStyle="bold"
+                        />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_1"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/dp_5"
+                        android:background="@color/color_brown_100"
+                        android:visibility="@{TextUtils.isEmpty(item.description) ? View.GONE: View.VISIBLE}"
+                        />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp_3"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:text="@{viewModel.roomDescription}"
+                        android:text="@{item.description}"
                         android:textSize="@dimen/sp_12"
+                        android:visibility="@{TextUtils.isEmpty(item.description) ? View.GONE: View.VISIBLE}"
                         />
                 </LinearLayout>
             </LinearLayout>

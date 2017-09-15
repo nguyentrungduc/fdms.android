@@ -1,6 +1,7 @@
 package com.framgia.fdms.data.source;
 
 import com.framgia.fdms.data.model.Producer;
+import com.framgia.fdms.data.model.Respone;
 import io.reactivex.Observable;
 import java.util.List;
 
@@ -17,5 +18,17 @@ public class MeetingRoomRepository {
 
     public Observable<List<Producer>> getListMeetingRoom(String roomName, int page, int perPage) {
         return mRemoteDataSource.getListMeetingRoom(roomName, page, perPage);
+    }
+
+    public Observable<Producer> addMeetingRoom(Producer marker) {
+        return mRemoteDataSource.addMeetingRoom(marker);
+    }
+
+    public Observable<Respone<String>> deleteMeetingRoom(Producer marker) {
+        return mRemoteDataSource.deleteMeetingRoom(marker);
+    }
+
+    public Observable<String> editMeetingRoom(Producer marker) {
+        return mRemoteDataSource.editMeetingRoom(marker);
     }
 }

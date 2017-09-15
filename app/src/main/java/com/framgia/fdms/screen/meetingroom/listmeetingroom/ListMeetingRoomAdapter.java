@@ -2,7 +2,6 @@ package com.framgia.fdms.screen.meetingroom.listmeetingroom;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -20,12 +19,13 @@ import java.util.List;
 public class ListMeetingRoomAdapter
     extends BaseRecyclerViewAdapter<Producer, ListMeetingRoomAdapter.ViewHolder> {
 
-    private OnRecyclerViewItemClickListener<Producer> mItemClickListener;
     private List<Producer> mMeetingRooms;
+    private ListMeetingRoomViewModel mViewModel;
 
-    ListMeetingRoomAdapter(@NonNull Context context) {
+    ListMeetingRoomAdapter(Context context, ListMeetingRoomViewModel viewModel) {
         super(context);
         mMeetingRooms = new ArrayList<>();
+        mViewModel = viewModel;
     }
 
     @Override
@@ -37,12 +37,37 @@ public class ListMeetingRoomAdapter
         notifyDataSetChanged();
     }
 
+    public void addData(int position, Producer producer) {
+        if (producer == null || position < 0 || position > mMeetingRooms.size()) {
+            return;
+        }
+        mMeetingRooms.add(position, producer);
+        notifyItemInserted(position);
+    }
+
+    public void removeData(Producer producer) {
+        if (mMeetingRooms == null || mMeetingRooms.size() == 0 || producer == null) {
+            return;
+        }
+        mMeetingRooms.remove(producer);
+        notifyItemRemoved(mMeetingRooms.indexOf(producer));
+    }
+
+    public void updateData(Producer oldMeeting, Producer newMeeting) {
+        int pos = mMeetingRooms.indexOf(oldMeeting);
+        if (pos < 0) {
+            return;
+        }
+        mMeetingRooms.add(pos, newMeeting);
+        notifyItemChanged(pos);
+    }
+
     @Override
     public ListMeetingRoomAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemListMeetingRoomBinding binding =
             DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                 R.layout.item_list_meeting_room, parent, false);
-        return new ListMeetingRoomAdapter.ViewHolder(binding, mItemClickListener);
+        return new ListMeetingRoomAdapter.ViewHolder(binding);
     }
 
     @Override
@@ -55,32 +80,25 @@ public class ListMeetingRoomAdapter
         return mMeetingRooms == null ? 0 : mMeetingRooms.size();
     }
 
-    void setItemClickListener(OnRecyclerViewItemClickListener<Producer> itemClickListener) {
-        mItemClickListener = itemClickListener;
-    }
-
     public void clear() {
         mMeetingRooms.clear();
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private ItemListMeetingRoomBinding mBinding;
-        private OnRecyclerViewItemClickListener<Producer> mItemClickListener;
 
-        public ViewHolder(ItemListMeetingRoomBinding binding,
-            BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<Producer> listener) {
+        public ViewHolder(ItemListMeetingRoomBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
-            mItemClickListener = listener;
         }
 
         void bindData(Producer meetingRoom) {
             if (meetingRoom == null) {
                 return;
             }
-            mBinding.setViewModel(
-                new ItemListMeetingRoomViewModel(meetingRoom, mItemClickListener));
+            mBinding.setViewModel(mViewModel);
+            mBinding.setItem(meetingRoom);
             mBinding.executePendingBindings();
         }
     }
