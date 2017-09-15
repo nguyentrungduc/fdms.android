@@ -19,6 +19,10 @@ public interface StatusSelectionContract {
         void onGetDataSuccess(List data);
 
         void onGetDataFailed(String msg);
+
+        void showProgress();
+
+        void hideProgress();
     }
 
     /**

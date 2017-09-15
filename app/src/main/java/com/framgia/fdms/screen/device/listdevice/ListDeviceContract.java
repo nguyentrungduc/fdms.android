@@ -37,9 +37,9 @@ interface ListDeviceContract {
 
         void onChooseMeetingRoomClick();
 
-        void onReset();
+        void onClearFilterClick();
 
-        void getData();
+        void onReset();
 
         void onActivityResult(int requestCode, int resultCode, Intent data);
 
@@ -52,6 +52,8 @@ interface ListDeviceContract {
         void onRegisterDeviceClick(FloatingActionsMenu floatingActionsMenu);
 
         void getDataWithDevice(Device device);
+
+        void onStartGetData();
     }
 
     /**
@@ -60,12 +62,10 @@ interface ListDeviceContract {
     interface Presenter extends BasePresenter {
         void loadMoreData();
 
-        void getData(String keyWord, Status category, Status status);
+        void getData(DeviceFilterModel filterModel, int page);
 
         void getCurrentUser();
 
         void getDevicesBorrow();
-
-        void getListDevice(String deviceName, int categoryId, int statusId, int page, int perPage);
     }
 }

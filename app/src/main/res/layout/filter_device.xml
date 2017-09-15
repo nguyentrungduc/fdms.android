@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    >
     <data>
         <variable
             name="viewModel"
@@ -18,21 +20,39 @@
             android:background="@color/color_gray_blue"
             android:orientation="vertical"
             >
-
-            <android.support.v7.widget.AppCompatTextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
+                android:layout_height="wrap_content"
                 android:background="@color/color_mos"
-                android:gravity="center_vertical"
-                android:paddingEnd="@dimen/dp_15"
-                android:paddingLeft="@dimen/dp_15"
-                android:paddingRight="@dimen/dp_15"
-                android:paddingStart="@dimen/dp_15"
-                android:text="@string/title_filter_by"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sp_18"
-                android:textStyle="bold"
-                />
+                android:gravity="center"
+                android:orientation="horizontal"
+                >
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="@dimen/dp_15"
+                    android:paddingLeft="@dimen/dp_15"
+                    android:paddingRight="@dimen/dp_15"
+                    android:paddingStart="@dimen/dp_15"
+                    android:text="@string/title_filter_by"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_18"
+                    android:textStyle="bold"
+                    />
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.onClearFilterClick()}"
+                    android:padding="@dimen/dp_5"
+                    android:text="@string/action_clear"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold"
+                    />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -55,11 +75,16 @@
                 android:textSize="@dimen/sp_16"
                 />
 
-            <EditText
+            <android.support.v7.widget.SearchView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_15"
-                android:inputType="text"
+                bind:queryTextListener="@{viewModel.queryTextListener}"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/color_gray"
                 />
 
             <android.support.v7.widget.AppCompatTextView
@@ -86,7 +111,7 @@
                 android:paddingLeft="@dimen/dp_20"
                 android:paddingRight="@dimen/dp_20"
                 android:paddingStart="@dimen/dp_20"
-                android:text="@{viewModel.status.name}"
+                android:text="@{viewModel.filterModel.status.name}"
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/sp_16"
                 />
@@ -121,7 +146,7 @@
                 android:paddingBottom="@dimen/dp_8"
                 android:paddingLeft="@dimen/dp_20"
                 android:paddingStart="@dimen/dp_20"
-                android:text="@{viewModel.category.name}"
+                android:text="@{viewModel.filterModel.category.name}"
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/sp_16"
                 />
@@ -156,7 +181,7 @@
                 android:paddingLeft="@dimen/dp_20"
                 android:paddingRight="@dimen/dp_20"
                 android:paddingStart="@dimen/dp_20"
-                android:text="@{viewModel.vendor.name}"
+                android:text="@{viewModel.filterModel.vendor.name}"
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/sp_16"
                 />
@@ -193,7 +218,7 @@
                 android:paddingLeft="@dimen/dp_20"
                 android:paddingRight="@dimen/dp_20"
                 android:paddingStart="@dimen/dp_20"
-                android:text="@{viewModel.marker.name}"
+                android:text="@{viewModel.filterModel.marker.name}"
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/sp_16"
                 />
@@ -230,7 +255,7 @@
                 android:paddingLeft="@dimen/dp_20"
                 android:paddingRight="@dimen/dp_20"
                 android:paddingStart="@dimen/dp_20"
-                android:text="@{viewModel.meetingRoom.name}"
+                android:text="@{viewModel.filterModel.meetingRoom.name}"
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/sp_16"
                 />

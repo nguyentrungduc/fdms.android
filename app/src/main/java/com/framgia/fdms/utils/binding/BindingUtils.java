@@ -326,6 +326,12 @@ public final class BindingUtils {
         }
     }
 
+    @BindingAdapter("bind:queryTextListener")
+    public static void querySearchView(SearchView searchView,
+        SearchView.OnQueryTextListener listener) {
+        searchView.setOnQueryTextListener(listener);
+    }
+
     @BindingAdapter({ "model" })
     public static void onSearch(final SearchView view, final ListDeviceViewModel viewModel) {
         view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

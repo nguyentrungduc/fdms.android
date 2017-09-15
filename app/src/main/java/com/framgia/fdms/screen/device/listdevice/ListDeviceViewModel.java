@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.BindingAdapter;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -41,13 +43,12 @@ import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
 import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
-import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
+import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MAKER;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MEETING_ROOM;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_VENDOR;
-import static com.framgia.fdms.utils.Constant.TITLE_NA;
 
 /**
  * Exposes the data to be used in the ListDevice screen.
@@ -56,6 +57,7 @@ public class ListDeviceViewModel extends BaseObservable
     implements ListDeviceContract.ViewModel, ItemDeviceClickListenner,
     FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
     OnSearchMenuItemClickListener, DrawerLayout.DrawerListener {
+
     private ListDeviceFragment mFragment;
     private int mProgressBarVisibility;
     private boolean mIsLoadingMore;
@@ -63,7 +65,6 @@ public class ListDeviceViewModel extends BaseObservable
     private ListDeviceContract.Presenter mPresenter;
     private Context mContext;
 
-    private String mKeyWord;
     private boolean mIsBo;
     private int mTab = TAB_MY_DEVICE;
     private int mEmptyViewVisible = View.GONE;
@@ -71,13 +72,8 @@ public class ListDeviceViewModel extends BaseObservable
     private boolean mIsTopSheetExpand;
     private boolean mIsRefresh;
     private String mDrawerStatus = DRAWER_IS_CLOSE;
-
-    private Status mStatus;
-    private Status mCategory;
-    private Producer mVendor, mMarker;
-    private Producer mMeetingRoom;
-    private String mDeviceName;
-    private String mStaffName;
+    private DeviceFilterModel mFilterModel;
+    private boolean mIsChangeFilter;
 
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
         @Override
@@ -98,22 +94,30 @@ public class ListDeviceViewModel extends BaseObservable
         }
     };
 
+    private SearchView.OnQueryTextListener mQueryTextListener =
+        new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mIsChangeFilter = true;
+                mFilterModel.setDeviceName(query);
+                setDrawerStatus(DRAWER_IS_CLOSE);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mIsChangeFilter = true;
+                return false;
+            }
+        };
+
     public ListDeviceViewModel(ListDeviceFragment fragment, int tabDevice) {
         mFragment = fragment;
         mContext = fragment.getContext();
         mAdapter = new ListDeviceAdapter(mContext, new ArrayList<Device>(), this);
-        initDeaultFilter();
+        mFilterModel = new DeviceFilterModel();
         mTab = tabDevice;
-    }
-
-    private void initDeaultFilter() {
-        setCategory(new Status(OUT_OF_INDEX, TITLE_NA));
-        setStatus(new Status(OUT_OF_INDEX, TITLE_NA));
-        setMeetingRoom(new Producer(OUT_OF_INDEX, TITLE_NA));
-        setVendor(new Producer(OUT_OF_INDEX, TITLE_NA));
-        setMarker(new Producer(OUT_OF_INDEX, TITLE_NA));
-        setDeviceName("");
-        setStaffName("");
     }
 
     public void loadData() {
@@ -123,7 +127,7 @@ public class ListDeviceViewModel extends BaseObservable
                 mPresenter.getDevicesBorrow();
                 break;
             case TAB_MANAGE_DEVICE:
-                mPresenter.getData(mKeyWord, mCategory, mStatus);
+                mPresenter.getData(mFilterModel, FIRST_PAGE);
                 break;
             default:
                 break;
@@ -135,27 +139,29 @@ public class ListDeviceViewModel extends BaseObservable
         if (resultCode != RESULT_OK) {
             return;
         }
+        mIsChangeFilter = true;
         Bundle bundle = dataIntent.getExtras();
         Status data = bundle.getParcelable(BUNDLE_DATA);
         switch (requestCode) {
             case REQUEST_CATEGORY:
-                setCategory(data);
+                mFilterModel.setCategory(data);
                 break;
             case REQUEST_STATUS:
-                setStatus(data);
+                mFilterModel.setStatus(data);
                 break;
             case REQUEST_MAKER:
-                setMarker((Producer) data);
+                mFilterModel.setMarker((Producer) data);
                 break;
             case REQUEST_VENDOR:
-                setVendor((Producer) data);
+                mFilterModel.setVendor((Producer) data);
                 break;
             case REQUEST_MEETING_ROOM:
-                setMeetingRoom((Producer) data);
+                mFilterModel.setMeetingRoom((Producer) data);
                 break;
             default:
                 break;
         }
+        setDrawerStatus(DRAWER_IS_CLOSE);
     }
 
     @Override
@@ -198,14 +204,16 @@ public class ListDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onReset() {
-        mAdapter.clear();
-        mPresenter.getData(null, mCategory, mStatus);
+    public void onClearFilterClick() {
+        mFilterModel.initDefaultFilter();
+        mIsChangeFilter = true;
+        setDrawerStatus(DRAWER_IS_CLOSE);
     }
 
     @Override
-    public void getData() {
-        mPresenter.getData(null, null, null);
+    public void onReset() {
+        mAdapter.clear();
+        mPresenter.getData(mFilterModel, FIRST_PAGE);
     }
 
     @Override
@@ -256,8 +264,8 @@ public class ListDeviceViewModel extends BaseObservable
     @Override
     public void onSearch(String keyWord) {
         mAdapter.clear();
-        mKeyWord = keyWord;
-        mPresenter.getData(mKeyWord, mCategory, mStatus);
+        mFilterModel.setStaffName(keyWord);
+        mPresenter.getData(mFilterModel, FIRST_PAGE);
     }
 
     @Override
@@ -280,9 +288,15 @@ public class ListDeviceViewModel extends BaseObservable
             || device.getDeviceCategoryName() == null) {
             return;
         }
-        setCategory(new Status(device.getDeviceCategoryId(), device.getDeviceCategoryName()));
+        mFilterModel.setCategory(
+            new Status(device.getDeviceCategoryId(), device.getDeviceCategoryName()));
         mAdapter.clear();
-        mPresenter.getData(mKeyWord, mCategory, mStatus);
+        mPresenter.getData(mFilterModel, FIRST_PAGE);
+    }
+
+    @Override
+    public void onStartGetData() {
+        mIsChangeFilter = false;
     }
 
     public RecyclerView.OnScrollListener getScrollListenner() {
@@ -292,26 +306,6 @@ public class ListDeviceViewModel extends BaseObservable
     @Bindable
     public ListDeviceAdapter getAdapter() {
         return mAdapter;
-    }
-
-    @Bindable
-    public Status getCategory() {
-        return mCategory;
-    }
-
-    public void setCategory(Status category) {
-        mCategory = category;
-        notifyPropertyChanged(BR.category);
-    }
-
-    @Bindable
-    public Status getStatus() {
-        return mStatus;
-    }
-
-    public void setStatus(Status status) {
-        mStatus = status;
-        notifyPropertyChanged(BR.status);
     }
 
     @Bindable
@@ -363,26 +357,6 @@ public class ListDeviceViewModel extends BaseObservable
     }
 
     @Bindable
-    public Producer getVendor() {
-        return mVendor;
-    }
-
-    public void setVendor(Producer vendor) {
-        mVendor = vendor;
-        notifyPropertyChanged(BR.vendor);
-    }
-
-    @Bindable
-    public Producer getMarker() {
-        return mMarker;
-    }
-
-    public void setMarker(Producer marker) {
-        mMarker = marker;
-        notifyPropertyChanged(BR.marker);
-    }
-
-    @Bindable
     public boolean isTopSheetExpand() {
         return mIsTopSheetExpand;
     }
@@ -409,17 +383,21 @@ public class ListDeviceViewModel extends BaseObservable
 
     @Override
     public void onClearSearchClicked() {
-        // TODO: 9/14/17  
+        mAdapter.clear();
+        mFilterModel.setStaffName("");
+        mPresenter.getData(mFilterModel, FIRST_PAGE);
     }
 
     @Override
     public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
-        // TODO: 9/14/17  
+        // no ops
     }
 
     @Override
     public void onSearchAction(String currentQuery) {
-        // TODO: 9/14/17  
+        mAdapter.clear();
+        mFilterModel.setStaffName(currentQuery);
+        mPresenter.getData(mFilterModel, FIRST_PAGE);
     }
 
     @Override
@@ -431,7 +409,9 @@ public class ListDeviceViewModel extends BaseObservable
                     mDrawerStatus == DRAWER_IS_CLOSE ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
                 break;
             case R.id.action_search:
-                // TODO: 9/14/17
+                mAdapter.clear();
+                mFilterModel.setStaffName(searchView.getQuery());
+                mPresenter.getData(mFilterModel, FIRST_PAGE);
                 break;
             default:
                 break;
@@ -450,42 +430,17 @@ public class ListDeviceViewModel extends BaseObservable
 
     @Override
     public void onDrawerClosed(View drawerView) {
+        if (!mIsChangeFilter) {
+            return;
+        }
         setDrawerStatus(DRAWER_IS_CLOSE);
+        mAdapter.clear();
+        mPresenter.getData(mFilterModel, FIRST_PAGE);
     }
 
     @Override
     public void onDrawerStateChanged(int newState) {
         // no ops
-    }
-
-    @Bindable
-    public Producer getMeetingRoom() {
-        return mMeetingRoom;
-    }
-
-    public void setMeetingRoom(Producer meetingRoom) {
-        mMeetingRoom = meetingRoom;
-        notifyPropertyChanged(BR.meetingRoom);
-    }
-
-    @Bindable
-    public String getDeviceName() {
-        return mDeviceName;
-    }
-
-    public void setDeviceName(String deviceName) {
-        mDeviceName = deviceName;
-        notifyPropertyChanged(BR.deviceName);
-    }
-
-    @Bindable
-    public String getStaffName() {
-        return mStaffName;
-    }
-
-    public void setStaffName(String staffName) {
-        mStaffName = staffName;
-        notifyPropertyChanged(BR.staffName);
     }
 
     @Bindable
@@ -506,5 +461,20 @@ public class ListDeviceViewModel extends BaseObservable
     public void setLoadingMore(boolean loadingMore) {
         mIsLoadingMore = loadingMore;
         notifyPropertyChanged(BR.loadingMore);
+    }
+
+    @Bindable
+    public DeviceFilterModel getFilterModel() {
+        return mFilterModel;
+    }
+
+    public void setFilterModel(DeviceFilterModel filterModel) {
+        mFilterModel = filterModel;
+        notifyPropertyChanged(BR.filterModel);
+    }
+
+    @Bindable
+    public SearchView.OnQueryTextListener getQueryTextListener() {
+        return mQueryTextListener;
     }
 }
