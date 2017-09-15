@@ -35,6 +35,11 @@ public class StatusSelectionAdapter
         notifyDataSetChanged();
     }
 
+    public void clearData() {
+        mDatas.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public SelectionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (mInflater == null) {

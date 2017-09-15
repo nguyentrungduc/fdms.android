@@ -210,7 +210,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     public void onAddMeetingRoomClick() {
-        mMeetingRoomDialog = MeetingRoomDialog.newInstant(new Producer(OUT_OF_INDEX),
+        mMeetingRoomDialog = MeetingRoomDialog.newInstant(new Producer(OUT_OF_INDEX, ""),
             mActivity.getResources().getString(R.string.title_add_producer), this);
         mMeetingRoomDialog.show(mActivity.getFragmentManager(), TAG_MEETING_ROOM_DIALOG);
     }

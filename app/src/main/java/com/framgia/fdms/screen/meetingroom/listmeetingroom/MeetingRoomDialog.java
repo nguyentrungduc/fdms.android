@@ -22,7 +22,7 @@ import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 public class MeetingRoomDialog extends DialogFragment implements MeetingRoomDialogContract {
     private ObservableField<String> mMessageError = new ObservableField<>();
-    private Producer mMeetingRoom, mTempMeetingRoom = new Producer(OUT_OF_INDEX);
+    private Producer mMeetingRoom, mTempMeetingRoom = new Producer(OUT_OF_INDEX, "");
     private ObservableField<String> mTitle = new ObservableField<>();
     private MeetingRoomDialogContract.ActionCallback mActionCallback;
 

@@ -15,6 +15,8 @@ public class CategoryDataSource {
     public interface RemoteDataSource {
         Observable<List<Status>> getListCategory();
 
+        Observable<List<Status>> getListCategory(String query);
+
         Observable<List<Status>> getCategoriesByDeviceGroupId(int deviceGroupId);
     }
 }

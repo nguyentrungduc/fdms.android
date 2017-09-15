@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +22,7 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.devicecreation.CreateDeviceActivity;
 import com.framgia.fdms.screen.devicecreation.DeviceStatusType;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
+import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
 import com.framgia.fdms.screen.returndevice.ReturnDeviceActivity;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -31,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static android.view.View.VISIBLE;
 import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MANAGE_DEVICE;
 import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MY_DEVICE;
 import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
@@ -38,14 +38,16 @@ import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
-import static com.framgia.fdms.screen.selection.StatusSelectionAdapter.FIRST_INDEX;
-import static com.framgia.fdms.utils.Constant.ACTION_CLEAR;
-import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_CATEGORY;
-import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_STATUE;
+import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
-import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SELECTION;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MAKER;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MEETING_ROOM;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_VENDOR;
+import static com.framgia.fdms.utils.Constant.TITLE_NA;
 
 /**
  * Exposes the data to be used in the ListDevice screen.
@@ -55,13 +57,11 @@ public class ListDeviceViewModel extends BaseObservable
     FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
     OnSearchMenuItemClickListener, DrawerLayout.DrawerListener {
     private ListDeviceFragment mFragment;
-    private ObservableField<Integer> mProgressBarVisibility = new ObservableField<>();
-    private ObservableBoolean mIsLoadingMore = new ObservableBoolean(false);
+    private int mProgressBarVisibility;
+    private boolean mIsLoadingMore;
     private ListDeviceAdapter mAdapter;
     private ListDeviceContract.Presenter mPresenter;
     private Context mContext;
-    private List<Status> mCategories;
-    private List<Status> mStatuses;
 
     private String mKeyWord;
     private boolean mIsBo;
@@ -91,8 +91,8 @@ public class ListDeviceViewModel extends BaseObservable
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-            if (!mIsLoadingMore.get() && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                mIsLoadingMore.set(true);
+            if (!mIsLoadingMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                setLoadingMore(true);
                 mPresenter.loadMoreData();
             }
         }
@@ -102,18 +102,18 @@ public class ListDeviceViewModel extends BaseObservable
         mFragment = fragment;
         mContext = fragment.getContext();
         mAdapter = new ListDeviceAdapter(mContext, new ArrayList<Device>(), this);
-        setCategory(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_btn_category)));
-        setStatus(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_request_status)));
-        setMeetingRoom(new Producer(OUT_OF_INDEX));
-        setVendor(new Producer(OUT_OF_INDEX));
-        mVendor.setName(mContext.getString(R.string.title_vendor));
-        setMarker(new Producer(OUT_OF_INDEX));
-        mMarker.setName(mContext.getString(R.string.title_maker));
+        initDeaultFilter();
         mTab = tabDevice;
     }
 
-    public ObservableBoolean getIsLoadingMore() {
-        return mIsLoadingMore;
+    private void initDeaultFilter() {
+        setCategory(new Status(OUT_OF_INDEX, TITLE_NA));
+        setStatus(new Status(OUT_OF_INDEX, TITLE_NA));
+        setMeetingRoom(new Producer(OUT_OF_INDEX, TITLE_NA));
+        setVendor(new Producer(OUT_OF_INDEX, TITLE_NA));
+        setMarker(new Producer(OUT_OF_INDEX, TITLE_NA));
+        setDeviceName("");
+        setStaffName("");
     }
 
     public void loadData() {
@@ -131,28 +131,27 @@ public class ListDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK) return;
+    public void onActivityResult(int requestCode, int resultCode, Intent dataIntent) {
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        Bundle bundle = dataIntent.getExtras();
+        Status data = bundle.getParcelable(BUNDLE_DATA);
         switch (requestCode) {
-            case REQUEST_SELECTION:
-                Bundle bundle = data.getExtras();
-                Status category = bundle.getParcelable(BUNDLE_CATEGORY);
-                Status status = bundle.getParcelable(BUNDLE_STATUE);
-                if (category != null) {
-                    if (category.getName().equals(mContext.getString(R.string.action_clear))) {
-                        category.setName(mContext.getString(R.string.title_btn_category));
-                    }
-                    setCategory(category);
-                    mAdapter.clear();
-                }
-                if (status != null) {
-                    if (status.getName().equals(mContext.getString(R.string.action_clear))) {
-                        status.setName(mContext.getString(R.string.title_request_status));
-                    }
-                    setStatus(status);
-                    mAdapter.clear();
-                }
-                mPresenter.getData(mKeyWord, mCategory, mStatus);
+            case REQUEST_CATEGORY:
+                setCategory(data);
+                break;
+            case REQUEST_STATUS:
+                setStatus(data);
+                break;
+            case REQUEST_MAKER:
+                setMarker((Producer) data);
+                break;
+            case REQUEST_VENDOR:
+                setVendor((Producer) data);
+                break;
+            case REQUEST_MEETING_ROOM:
+                setMeetingRoom((Producer) data);
                 break;
             default:
                 break;
@@ -162,43 +161,40 @@ public class ListDeviceViewModel extends BaseObservable
     @Override
     public void setupFloatingActionsMenu(User user) {
         String role = user.getRole();
-        if (role == null) return;
+        if (role == null) {
+            return;
+        }
         setBo(user.isBo());
     }
 
     @Override
     public void onChooseCategoryClick() {
-        mFragment.startActivityForResult(
-            com.framgia.fdms.screen.new_selection.StatusSelectionActivity.getInstance(mContext,
-                CATEGORY), REQUEST_SELECTION);
+        mFragment.startActivityForResult(StatusSelectionActivity.getInstance(mContext, CATEGORY),
+            REQUEST_CATEGORY);
     }
 
     @Override
     public void onChooseStatusClick() {
-        mFragment.startActivityForResult(
-            com.framgia.fdms.screen.new_selection.StatusSelectionActivity.getInstance(mContext,
-                STATUS), REQUEST_SELECTION);
+        mFragment.startActivityForResult(StatusSelectionActivity.getInstance(mContext, STATUS),
+            REQUEST_STATUS);
     }
 
     @Override
     public void onChooseMakerClick() {
-        mFragment.startActivityForResult(
-            com.framgia.fdms.screen.new_selection.StatusSelectionActivity.getInstance(mContext,
-                MARKER), REQUEST_SELECTION);
+        mFragment.startActivityForResult(StatusSelectionActivity.getInstance(mContext, MARKER),
+            REQUEST_MAKER);
     }
 
     @Override
     public void onChooseVendorClick() {
-        mFragment.startActivityForResult(
-            com.framgia.fdms.screen.new_selection.StatusSelectionActivity.getInstance(mContext,
-                VENDOR), REQUEST_SELECTION);
+        mFragment.startActivityForResult(StatusSelectionActivity.getInstance(mContext, VENDOR),
+            REQUEST_VENDOR);
     }
 
     @Override
     public void onChooseMeetingRoomClick() {
         mFragment.startActivityForResult(
-            com.framgia.fdms.screen.new_selection.StatusSelectionActivity.getInstance(mContext,
-                MEETING_ROOM), REQUEST_SELECTION);
+            StatusSelectionActivity.getInstance(mContext, MEETING_ROOM), REQUEST_MEETING_ROOM);
     }
 
     @Override
@@ -230,41 +226,31 @@ public class ListDeviceViewModel extends BaseObservable
     @Override
     public void onDeviceLoaded(List<Device> devices) {
         setEmptyViewVisible(
-            devices.isEmpty() && mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
-        mIsLoadingMore.set(false);
+            devices.isEmpty() && mAdapter.getItemCount() == 0 ? VISIBLE : View.GONE);
+        setLoadingMore(false);
         mAdapter.onUpdatePage(devices);
         setRefresh(false);
     }
 
     @Override
     public void showProgressbar() {
-        mProgressBarVisibility.set(View.VISIBLE);
+        setProgressBarVisibility(VISIBLE);
     }
 
     @Override
     public void onError(String msg) {
-        mIsLoadingMore.set(false);
+        setLoadingMore(false);
         hideProgressbar();
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
         setRefresh(false);
         if (mAdapter.getItemCount() == 0) {
-            setEmptyViewVisible(View.VISIBLE);
+            setEmptyViewVisible(VISIBLE);
         }
     }
 
     @Override
     public void hideProgressbar() {
-        mProgressBarVisibility.set(View.GONE);
-    }
-
-    @Override
-    public void onDeviceCategoryLoaded(List<Status> categories) {
-        updateCategory(categories);
-    }
-
-    @Override
-    public void onDeviceStatusLoaded(List<Status> statuses) {
-        updateStatus(statuses);
+        setProgressBarVisibility(View.GONE);
     }
 
     @Override
@@ -297,28 +283,6 @@ public class ListDeviceViewModel extends BaseObservable
         setCategory(new Status(device.getDeviceCategoryId(), device.getDeviceCategoryName()));
         mAdapter.clear();
         mPresenter.getData(mKeyWord, mCategory, mStatus);
-    }
-
-    public void updateCategory(List<Status> list) {
-        if (list == null) {
-            return;
-        }
-        // update list mCategories
-        mCategories = list;
-        mCategories.add(FIRST_INDEX, new Status(OUT_OF_INDEX, ACTION_CLEAR));
-    }
-
-    public void updateStatus(List<Status> list) {
-        if (list == null) {
-            return;
-        }
-        // update list statuses
-        mStatuses = list;
-        mStatuses.add(FIRST_INDEX, new Status(OUT_OF_INDEX, ACTION_CLEAR));
-    }
-
-    public ObservableField<Integer> getProgressBarVisibility() {
-        return mProgressBarVisibility;
     }
 
     public RecyclerView.OnScrollListener getScrollListenner() {
@@ -522,5 +486,25 @@ public class ListDeviceViewModel extends BaseObservable
     public void setStaffName(String staffName) {
         mStaffName = staffName;
         notifyPropertyChanged(BR.staffName);
+    }
+
+    @Bindable
+    public int getProgressBarVisibility() {
+        return mProgressBarVisibility;
+    }
+
+    public void setProgressBarVisibility(int progressBarVisibility) {
+        mProgressBarVisibility = progressBarVisibility;
+        notifyPropertyChanged(BR.progressBarVisibility);
+    }
+
+    @Bindable
+    public boolean isLoadingMore() {
+        return mIsLoadingMore;
+    }
+
+    public void setLoadingMore(boolean loadingMore) {
+        mIsLoadingMore = loadingMore;
+        notifyPropertyChanged(BR.loadingMore);
     }
 }

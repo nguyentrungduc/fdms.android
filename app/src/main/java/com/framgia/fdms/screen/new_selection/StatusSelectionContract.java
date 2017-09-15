@@ -26,5 +26,7 @@ public interface StatusSelectionContract {
      */
     interface Presenter extends BasePresenter {
         void getData(String query);
+
+        void loadMoreData();
     }
 }
