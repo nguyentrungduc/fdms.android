@@ -1,6 +1,7 @@
 package com.framgia.fdms.screen.meetingroom.listmeetingroom;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableField;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +23,7 @@ import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.screen.meetingroom.detailmeetingroom.DetailMeetingRoomActivity;
+import com.framgia.fdms.screen.producer.ProducerDialog;
 import com.framgia.fdms.utils.Constant;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
@@ -36,7 +39,7 @@ import static com.framgia.fdms.utils.Constant.TAG_MEETING_ROOM_DIALOG;
  */
 
 public class ListMeetingRoomViewModel extends BaseObservable
-    implements ListMeetingRoomContract.ViewModel, MeetingRoomDialogContract.ActionCallback,
+    implements ListMeetingRoomContract.ViewModel, ProducerDialog.ActionCallback,
     BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<Producer>,
     OnSearchMenuItemClickListener, FloatingSearchView.OnSearchListener,
     FloatingSearchView.OnClearSearchActionListener {
@@ -53,7 +56,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
             }
         };
     private AppCompatActivity mActivity;
-    private MeetingRoomFunctionContract.MeetingRoomPresenter mPresenter;
+    private ListMeetingRoomContract.Presenter mPresenter;
     private ListMeetingRoomAdapter mListMeetingRoomAdapter;
     private ObservableField<Integer> mProgressBarVisibility;
     private int mPage;
@@ -61,24 +64,23 @@ public class ListMeetingRoomViewModel extends BaseObservable
     private boolean mIsLoadingMore;
     private Navigator mNavigator;
     private String mRoomName;
-    private MeetingRoomDialog mMeetingRoomDialog;
+    private ProducerDialog mMeetingRoomDialog;
     private Producer mMeetingRoom;
+    private int mPositionScroll = OUT_OF_INDEX;
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
         new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mPage = FIRST_PAGE;
                 mListMeetingRoomAdapter.clear();
-                ((ListMeetingRoomPresenter) mPresenter).getListMeetingRoom(getRoomName(), mPage,
-                    PER_PAGE);
+                mPresenter.getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
             }
         };
 
     ListMeetingRoomViewModel(Activity activity, Navigator navigator) {
         mActivity = (AppCompatActivity) activity;
         mNavigator = navigator;
-        mListMeetingRoomAdapter = new ListMeetingRoomAdapter(mActivity);
-        mListMeetingRoomAdapter.setItemClickListener(this);
+        mListMeetingRoomAdapter = new ListMeetingRoomAdapter(mActivity, this);
         mProgressBarVisibility = new ObservableField<>();
         mPage = FIRST_PAGE;
     }
@@ -99,8 +101,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
         mActivity = (AppCompatActivity) in.readValue(AppCompatActivity.class.getClassLoader());
         mListMeetingRoomAdapter =
             (ListMeetingRoomAdapter) in.readValue(ListMeetingRoomAdapter.class.getClassLoader());
-        mMeetingRoomDialog =
-            (MeetingRoomDialog) in.readValue(MeetingRoomDialog.class.getClassLoader());
+        mMeetingRoomDialog = (ProducerDialog) in.readValue(ProducerDialog.class.getClassLoader());
     }
 
     @Override
@@ -122,9 +123,9 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     @Override
-    public void setPresenter(MeetingRoomFunctionContract.MeetingRoomPresenter presenter) {
+    public void setPresenter(ListMeetingRoomContract.Presenter presenter) {
         mPresenter = presenter;
-        ((ListMeetingRoomPresenter) mPresenter).getListMeetingRoom(Constant.BLANK, mPage, PER_PAGE);
+        mPresenter.getListMeetingRoom(Constant.BLANK, mPage, PER_PAGE);
     }
 
     @Override
@@ -154,6 +155,41 @@ public class ListMeetingRoomViewModel extends BaseObservable
     @Override
     public void onGetListMeetingRoomError(String error) {
         Toast.makeText(mActivity, error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAddMeetingRoomSuccess(Producer meetingRoom) {
+        mListMeetingRoomAdapter.addData(0, meetingRoom);
+        setPositionScroll(0);
+    }
+
+    @Override
+    public void onAddMeetingRoomFailed(String message) {
+        mNavigator.showToast(message);
+    }
+
+    @Override
+    public void onDeleteMeetingRoomSuccess(Producer meetingRoom) {
+        mListMeetingRoomAdapter.removeData(meetingRoom);
+    }
+
+    @Override
+    public void onDeleteMeetingRoomFailed(String message) {
+        mNavigator.showToast(message);
+    }
+
+    @Override
+    public void onUpdateMeetingRoomSuccess(Producer meetingRoom, String message) {
+        if (meetingRoom == null || mMeetingRoom == null) {
+            return;
+        }
+        mListMeetingRoomAdapter.updateData(mMeetingRoom, meetingRoom);
+        mNavigator.showToast(message);
+    }
+
+    @Override
+    public void onUpdateMeetingRoomFailed(String message) {
+        mNavigator.showToast(message);
     }
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
@@ -210,9 +246,32 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     public void onAddMeetingRoomClick() {
-        mMeetingRoomDialog = MeetingRoomDialog.newInstant(new Producer(OUT_OF_INDEX, ""),
+        mMeetingRoomDialog = ProducerDialog.newInstant(new Producer(OUT_OF_INDEX, ""),
             mActivity.getResources().getString(R.string.title_add_producer), this);
-        mMeetingRoomDialog.show(mActivity.getFragmentManager(), TAG_MEETING_ROOM_DIALOG);
+        mMeetingRoomDialog.show(mActivity.getSupportFragmentManager(), TAG_MEETING_ROOM_DIALOG);
+    }
+
+    @Override
+    public void onEditMeetingRoomClick(Producer meetingRoom) {
+        mMeetingRoomDialog = ProducerDialog.newInstant(meetingRoom,
+            mActivity.getResources().getString(R.string.action_edit), this);
+        mMeetingRoomDialog.show(mActivity.getSupportFragmentManager(), TAG_MEETING_ROOM_DIALOG);
+    }
+
+    @Override
+    public void onDeleteMeetingRoomClick(final Producer meetingRoom) {
+        new AlertDialog.Builder(mActivity).setTitle(mActivity.getString(R.string.title_delete))
+            .setMessage(
+                mActivity.getString(R.string.msg_delete_producer) + " " + meetingRoom.getName())
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    mPresenter.deleteMeetingRoom(meetingRoom);
+                }
+            })
+            .setNegativeButton(android.R.string.no, null)
+            .create()
+            .show();
     }
 
     @Override
@@ -220,7 +279,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
         mPage = FIRST_PAGE;
         mListMeetingRoomAdapter.clear();
         setRoomName(Constant.BLANK);
-        ((ListMeetingRoomPresenter) mPresenter).getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
+        mPresenter.getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
     }
 
     @Override
@@ -240,7 +299,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
         mPage = FIRST_PAGE;
         mListMeetingRoomAdapter.clear();
         setRoomName(currentQuery);
-        ((ListMeetingRoomPresenter) mPresenter).getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
+        mPresenter.getListMeetingRoom(getRoomName(), mPage, PER_PAGE);
     }
 
     @Override
@@ -261,7 +320,8 @@ public class ListMeetingRoomViewModel extends BaseObservable
         if (meetingRoom == null) {
             return;
         }
-        ((ListMeetingRoomPresenter) mPresenter).addMeetingRoom(meetingRoom);
+        mMeetingRoom = meetingRoom;
+        mPresenter.addMeetingRoom(mMeetingRoom);
     }
 
     @Override
@@ -270,6 +330,16 @@ public class ListMeetingRoomViewModel extends BaseObservable
             return;
         }
         mMeetingRoom = oldMeetingRoom;
-        ((ListMeetingRoomPresenter) mPresenter).editMeetingRoom(newMeetingRoom);
+        mPresenter.editMeetingRoom(newMeetingRoom);
+    }
+
+    @Bindable
+    public int getPositionScroll() {
+        return mPositionScroll;
+    }
+
+    public void setPositionScroll(int positionScroll) {
+        mPositionScroll = positionScroll;
+        notifyPropertyChanged(BR.positionScroll);
     }
 }

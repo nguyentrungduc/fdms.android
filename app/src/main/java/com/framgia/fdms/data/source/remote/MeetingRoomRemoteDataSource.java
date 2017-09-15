@@ -8,6 +8,7 @@ import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.utils.Utils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.ROOM_NAME;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
+import static com.framgia.fdms.utils.Utils.getStringFromList;
 
 /**
  * Created by ASUS on 08/09/2017.
@@ -32,14 +34,50 @@ public class MeetingRoomRemoteDataSource extends BaseRemoteDataSource
     @Override
     public Observable<List<Producer>> getListMeetingRoom(String roomName, int page, int perPage) {
         return mFDMSApi.getListMeetingRoom(getRoomParams(roomName, page, perPage))
-            .flatMap(
-                new Function<Respone<List<Producer>>, ObservableSource<List<Producer>>>() {
-                    @Override
-                    public ObservableSource<List<Producer>> apply(
-                        Respone<List<Producer>> listRespone) {
-                        return Utils.getResponse(listRespone);
+            .flatMap(new Function<Respone<List<Producer>>, ObservableSource<List<Producer>>>() {
+                @Override
+                public ObservableSource<List<Producer>> apply(Respone<List<Producer>> listRespone) {
+                    return Utils.getResponse(listRespone);
+                }
+            });
+    }
+
+    @Override
+    public Observable<Producer> addMeetingRoom(Producer meetingRoom) {
+        return mFDMSApi.addMeetingRoom(meetingRoom.getName(), meetingRoom.getDescription())
+            .flatMap(new Function<Respone<Producer>, ObservableSource<Producer>>() {
+                @Override
+                public ObservableSource<Producer> apply(@NonNull Respone<Producer> producerRespone)
+                    throws Exception {
+                    return Utils.getResponse(producerRespone);
+                }
+            });
+    }
+
+    @Override
+    public Observable<Respone<String>> deleteMeetingRoom(Producer meetingRoom) {
+        return mFDMSApi.deleteMeetingRoom(meetingRoom.getId());
+    }
+
+    @Override
+    public Observable<String> editMeetingRoom(Producer meetingRoom) {
+        return mFDMSApi.updateMeetingRoom(meetingRoom.getId(), meetingRoom.getName(),
+            meetingRoom.getDescription()).flatMap(
+
+            new Function<Respone<List<String>>, ObservableSource<String>>() {
+                @Override
+                public ObservableSource<String> apply(@NonNull Respone<List<String>> listRespone)
+                    throws Exception {
+                    if (listRespone == null) {
+                        return Observable.error(new NullPointerException());
                     }
-                });
+                    if (listRespone.isError()) {
+                        return Observable.error(
+                            new NullPointerException("ERROR" + listRespone.getStatus()));
+                    }
+                    return Observable.just(getStringFromList(listRespone.getData()));
+                }
+            });
     }
 
     private Map<String, String> getRoomParams(String roomName, int page, int perPage) {
