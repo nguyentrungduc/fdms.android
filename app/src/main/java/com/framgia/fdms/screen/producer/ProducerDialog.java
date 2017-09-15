@@ -26,7 +26,7 @@ public class ProducerDialog extends DialogFragment implements ProducerDialogCont
     private static final String TITLE_EDIT = "Edit";
     private static final String TITLE_ADD = "Add";
     private ObservableField<String> mMessageError = new ObservableField<>();
-    private Producer mProducer, mTempProducer = new Producer(OUT_OF_INDEX);
+    private Producer mProducer, mTempProducer = new Producer(OUT_OF_INDEX, "");
     private ObservableField<String> mTitle = new ObservableField<>();
     private ProducerDialogContract.ActionCallback mActionCallback;
     private DialogConfirmProducerBinding mBinding;

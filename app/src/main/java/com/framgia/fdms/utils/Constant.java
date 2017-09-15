@@ -74,6 +74,7 @@ public class Constant {
         public static final int REQUEST_DEVICE_GROUPS = 13;
         public static final int REQUEST_CATEGORIES = 14;
         public static final int REQUEST_DEVICE = 15;
+        public static final int REQUEST_MEETING_ROOM = 16;
     }
 
     public static final class Role {

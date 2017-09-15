@@ -27,6 +27,15 @@ public class ProducerAdapter extends BaseRecyclerViewAdapter<Producer, ProducerA
         mVendors = vendors;
     }
 
+    public void onUpdateItem(Producer old, Producer producer) {
+        int pos = mVendors.indexOf(old);
+        if (pos < 0) {
+            return;
+        }
+        mVendors.add(pos, producer);
+        notifyItemChanged(pos);
+    }
+
     @Override
     public void onUpdatePage(List<Producer> datas) {
         if (datas == null) {

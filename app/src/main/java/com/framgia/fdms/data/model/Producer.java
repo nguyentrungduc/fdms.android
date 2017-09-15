@@ -33,8 +33,9 @@ public class Producer extends Status implements Parcelable {
     @SerializedName("updated_at")
     private String mUpdatedAt;
 
-    public Producer(int id) {
+    public Producer(int id, String name) {
         mId = id;
+        mName = name;
     }
 
     public Producer(Parcel in) {

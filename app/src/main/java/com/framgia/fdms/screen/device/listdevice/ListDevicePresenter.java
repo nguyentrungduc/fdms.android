@@ -123,64 +123,6 @@ final class ListDevicePresenter implements ListDeviceContract.Presenter {
         mCompositeSubscriptions.add(subscription);
     }
 
-    public void getListCategories() {
-        Disposable subscription = mCategoryRepository.getListCategory()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(new Consumer<Disposable>() {
-                @Override
-                public void accept(Disposable disposable) throws Exception {
-                    mViewModel.showProgressbar();
-                }
-            })
-            .subscribe(new Consumer<List<Status>>() {
-                @Override
-                public void accept(List<Status> categories) throws Exception {
-                    mViewModel.onDeviceCategoryLoaded(categories);
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mViewModel.onError(error.getMessage());
-                }
-            }, new Action() {
-                @Override
-                public void run() throws Exception {
-                    mViewModel.hideProgressbar();
-                }
-            });
-        mCompositeSubscriptions.add(subscription);
-    }
-
-    public void getListStatuses() {
-        Disposable subscription = mStatusRepository.getListStatus()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(new Consumer<Disposable>() {
-                @Override
-                public void accept(Disposable disposable) throws Exception {
-                    mViewModel.showProgressbar();
-                }
-            })
-            .subscribe(new Consumer<List<Status>>() {
-                @Override
-                public void accept(List<Status> statuses) throws Exception {
-                    mViewModel.onDeviceStatusLoaded(statuses);
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mViewModel.onError(error.getMessage());
-                }
-            }, new Action() {
-                @Override
-                public void run() throws Exception {
-                    mViewModel.hideProgressbar();
-                }
-            });
-        mCompositeSubscriptions.add(subscription);
-    }
-
     @Override
     public void loadMoreData() {
         mPage++;
@@ -200,8 +142,6 @@ final class ListDevicePresenter implements ListDeviceContract.Presenter {
             mKeyWord = keyWord;
         }
         getListDevice(mKeyWord, mCategoryId, mStatusId, mPage, PER_PAGE);
-        getListCategories();
-        getListStatuses();
         getCurrentUser();
     }
 

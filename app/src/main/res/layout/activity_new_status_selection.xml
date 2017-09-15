@@ -31,9 +31,17 @@
             />
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             app:layoutManager="LinearLayoutManager"
             app:recyclerAdapter="@{viewModel.adapter}"
+            app:scrollListenner="@{viewModel.scrollListener}"
+            />
+        <ProgressBar
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:layout_gravity="center"
+            android:visibility="@{viewModel.loadingMoreVisibility}"
             />
     </LinearLayout>
 </layout>

@@ -25,10 +25,6 @@ interface ListDeviceContract {
 
         void hideProgressbar();
 
-        void onDeviceCategoryLoaded(List<Status> categories);
-
-        void onDeviceStatusLoaded(List<Status> statuses);
-
         void onSearch(String keyWord);
 
         void onChooseCategoryClick();

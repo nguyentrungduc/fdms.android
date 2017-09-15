@@ -65,7 +65,7 @@ public class Status extends BaseObservable implements Parcelable {
 
     @Bindable
     public String getName() {
-        return mId == OUT_OF_INDEX ? TITLE_NA : mName;
+        return mName;
     }
 
     public void setName(String name) {

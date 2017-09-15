@@ -175,8 +175,7 @@ public class ProducerViewModel extends BaseObservable
         if (vendor == null || mVendorEdit == null) {
             return;
         }
-        mVendorEdit.setName(vendor.getName());
-        mVendorEdit.setDescription(vendor.getDescription());
+        mAdapter.onUpdateItem(mVendorEdit, vendor);
         mNavigator.showToast(message);
     }
 
@@ -219,7 +218,7 @@ public class ProducerViewModel extends BaseObservable
 
     @Override
     public void onAddProducerClick() {
-        mVendorDialog = ProducerDialog.newInstant(new Producer(OUT_OF_INDEX),
+        mVendorDialog = ProducerDialog.newInstant(new Producer(OUT_OF_INDEX, ""),
             mActivity.getResources().getString(R.string.title_add_producer), this);
         mVendorDialog.show(mActivity.getSupportFragmentManager(), TAG_MAKER_DIALOG);
     }
