@@ -46,10 +46,8 @@ public class ListDeviceFragment extends Fragment {
         mViewModel = new ListDeviceViewModel(this, getArguments().getInt(BUNDLE_TAB));
         ListDeviceContract.Presenter presenter = new ListDevicePresenter(mViewModel,
             new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
-            new CategoryRepository(new CategoryRemoteDataSource(FDMSServiceClient.getInstance())),
-            new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance())),
-            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))),
-            new DeviceReturnRepository());
+            new DeviceReturnRepository(),
+            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
         mViewModel.setPresenter(presenter);
     }
 

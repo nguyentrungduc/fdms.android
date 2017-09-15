@@ -6,20 +6,25 @@ import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
+import com.framgia.fdms.screen.device.listdevice.DeviceFilterModel;
 import io.reactivex.Observable;
 import java.util.List;
 
-public class DeviceRepository implements DeviceDataSource.RemoteDataSource{
+public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
     private DeviceRemoteDataSource mDeviceRemoteDataSource;
 
     public DeviceRepository(DeviceRemoteDataSource remoteDataSource) {
         mDeviceRemoteDataSource = remoteDataSource;
     }
 
+    public Observable<List<Device>> getListDevices(DeviceFilterModel filterModel, int page,
+        int perPage) {
+        return mDeviceRemoteDataSource.getListDevices(filterModel, page, perPage);
+    }
+
     public Observable<List<Device>> getListDevices(String deviceName, int categoryId, int statusId,
         int page, int perPage) {
-        return mDeviceRemoteDataSource.getListDevices(deviceName, categoryId, statusId, page,
-            perPage);
+        return mDeviceRemoteDataSource.getListDevices(deviceName, categoryId, statusId, page, perPage);
     }
 
     public Observable<List<Status>> getListCategory() {

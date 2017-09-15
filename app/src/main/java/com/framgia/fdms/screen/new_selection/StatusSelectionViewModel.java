@@ -44,7 +44,6 @@ public class StatusSelectionViewModel extends BaseObservable
             int totalItemCount = layoutManager.getItemCount();
             int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
             if (!mIsLoadMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                mIsLoadMore = true;
                 setLoadingMoreVisibility(VISIBLE);
                 mPresenter.loadMoreData();
             }
@@ -111,15 +110,23 @@ public class StatusSelectionViewModel extends BaseObservable
     @Override
     public void onGetDataSuccess(List data) {
         mIsLoadMore = false;
-        setLoadingMoreVisibility(GONE);
         mAdapter.updateData(data);
     }
 
     @Override
     public void onGetDataFailed(String msg) {
         mIsLoadMore = false;
-        setLoadingMoreVisibility(GONE);
         mNavigator.showToast(msg);
+    }
+
+    @Override
+    public void showProgress() {
+        setLoadingMoreVisibility(VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        setLoadingMoreVisibility(GONE);
     }
 
     @Bindable

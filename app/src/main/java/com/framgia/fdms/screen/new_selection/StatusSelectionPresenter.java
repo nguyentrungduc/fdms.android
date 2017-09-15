@@ -13,6 +13,7 @@ import com.framgia.fdms.data.source.api.error.RequestError;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
@@ -131,6 +132,12 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
         Disposable disposable = mMarkerRepository.getListMarker(mKeySearch, mPage, PER_PAGE)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgress();
+                }
+            })
             .subscribe(new Consumer<List<Producer>>() {
                 @Override
                 public void accept(List<Producer> statuses) throws Exception {
@@ -144,6 +151,11 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                 public void onRequestError(BaseException error) {
                     mViewModel.onGetDataFailed(error.getMessage());
                 }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
+                }
             });
         mCompositeDisposable.add(disposable);
     }
@@ -153,6 +165,12 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
             mMeetingRoomRepository.getListMeetingRoom(mKeySearch, mPage, PER_PAGE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mViewModel.showProgress();
+                    }
+                })
                 .subscribe(new Consumer<List<Producer>>() {
                     @Override
                     public void accept(List<Producer> statuses) throws Exception {
@@ -168,6 +186,11 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                     public void onRequestError(BaseException error) {
                         mViewModel.onGetDataFailed(error.getMessage());
                     }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mViewModel.hideProgress();
+                    }
                 });
         mCompositeDisposable.add(disposable);
     }
@@ -176,6 +199,12 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
         Disposable disposable = mVendorRepository.getListVendor(mKeySearch, mPage, PER_PAGE)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgress();
+                }
+            })
             .subscribe(new Consumer<List<Producer>>() {
                 @Override
                 public void accept(List<Producer> statuses) throws Exception {
@@ -189,6 +218,11 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                 public void onRequestError(BaseException error) {
                     mViewModel.onGetDataFailed(error.getMessage());
                 }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
+                }
             });
         mCompositeDisposable.add(disposable);
     }
@@ -196,6 +230,12 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
     private void getListCategory() {
         Disposable disposable = mCategoryRepository.getListCategory(mKeySearch)
             .subscribeOn(Schedulers.io())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgress();
+                }
+            })
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<List<Status>>() {
                 @Override
@@ -209,6 +249,11 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.onGetDataFailed(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
                 }
             });
         mCompositeDisposable.add(disposable);
@@ -218,6 +263,12 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
         Disposable disposable = mStatusRepository.getListStatus(mKeySearch)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgress();
+                }
+            })
             .subscribe(new Consumer<List<Status>>() {
                 @Override
                 public void accept(List<Status> statuses) throws Exception {
@@ -230,6 +281,11 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.onGetDataFailed(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
                 }
             });
         mCompositeDisposable.add(disposable);
