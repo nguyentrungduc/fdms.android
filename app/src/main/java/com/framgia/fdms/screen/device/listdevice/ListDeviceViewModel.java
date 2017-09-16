@@ -108,6 +108,7 @@ public class ListDeviceViewModel extends BaseObservable
             @Override
             public boolean onQueryTextChange(String newText) {
                 mIsChangeFilter = true;
+                mFilterModel.setDeviceName(newText);
                 return false;
             }
         };
