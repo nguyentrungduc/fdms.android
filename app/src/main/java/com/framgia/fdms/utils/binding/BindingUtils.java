@@ -185,11 +185,13 @@ public final class BindingUtils {
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    @BindingAdapter({ "bind:searchListenner", "bind:clearListenner", "bind:menuItemClick" })
+    @BindingAdapter(value = {
+        "bind:searchListenner", "bind:clearListenner", "bind:menuItemClick", "bind:searchText"
+    }, requireAll = false)
     public static void setOnQueryChangeListenner(final FloatingSearchView searchView,
         FloatingSearchView.OnSearchListener onSearchListener,
         FloatingSearchView.OnClearSearchActionListener clearSearchActionListener,
-        final OnSearchMenuItemClickListener onSearchMenuItemClickListener) {
+        final OnSearchMenuItemClickListener onSearchMenuItemClickListener, String searchText) {
         searchView.setOnSearchListener(onSearchListener);
         searchView.setOnClearSearchActionListener(clearSearchActionListener);
         searchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
@@ -198,6 +200,9 @@ public final class BindingUtils {
                 onSearchMenuItemClickListener.onActionMenuItemSelected(searchView, item);
             }
         });
+        if (searchText != null) {
+            searchView.setSearchText(searchText);
+        }
     }
 
     @BindingAdapter({ "pieData", "totalValue", "description" })
@@ -326,34 +331,13 @@ public final class BindingUtils {
         }
     }
 
-    @BindingAdapter("bind:queryTextListener")
+    @BindingAdapter(value = { "bind:queryTextListener", "bind:searchText" }, requireAll = false)
     public static void querySearchView(SearchView searchView,
-        SearchView.OnQueryTextListener listener) {
+        SearchView.OnQueryTextListener listener, String searchText) {
         searchView.setOnQueryTextListener(listener);
-    }
-
-    @BindingAdapter({ "model" })
-    public static void onSearch(final SearchView view, final ListDeviceViewModel viewModel) {
-        view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                viewModel.onSearch(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (newText.equals("")) viewModel.onReset();
-                return true;
-            }
-        });
-        view.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                viewModel.onReset();
-                return true;
-            }
-        });
+        if (searchText != null) {
+            searchView.setQuery(searchText, false);
+        }
     }
 
     @BindingAdapter({ "resourceId" })

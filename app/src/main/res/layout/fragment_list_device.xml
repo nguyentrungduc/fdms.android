@@ -57,6 +57,7 @@
                             bind:clearListenner="@{viewModel}"
                             bind:menuItemClick="@{viewModel}"
                             bind:searchListenner="@{viewModel}"
+                            bind:searchText="@{viewModel.filterModel.staffName}"
                             />
                     </android.support.design.widget.CollapsingToolbarLayout>
                 </android.support.design.widget.AppBarLayout>
