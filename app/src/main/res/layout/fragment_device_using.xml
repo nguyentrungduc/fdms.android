@@ -6,41 +6,89 @@
     >
 
     <data>
-
+        <import type="android.support.v4.view.GravityCompat"/>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.framgia.fdms.screen.deviceusingmanager.DeviceUsingManagerViewModel"
             />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.v4.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        bind:drawerListener="@{viewModel}"
+        bind:side="@{GravityCompat.END}"
+        bind:statusDrawerLayout="@{viewModel.drawerStatus}"
         >
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/app_bar_layout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             >
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tab_layout"
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabGravity="fill"
-                app:tabMode="fixed"
-                bind:viewPager="@{viewPager}"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 >
-            </android.support.design.widget.TabLayout>
-        </android.support.design.widget.AppBarLayout>
+                <android.support.design.widget.CollapsingToolbarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    app:contentScrim="?attr/colorPrimary"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                    >
+                    <com.arlib.floatingsearchview.FloatingSearchView
+                        android:id="@+id/floating_search_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50"
+                        app:backgroundTint="@color/colorPrimaryDark"
+                        app:floatingSearch_leftActionMode="noLeftAction"
+                        app:floatingSearch_menu="@menu/menu_device_manager"
+                        app:floatingSearch_searchHint="@string/title_device_searching"
+                        app:floatingSearch_showSearchKey="true"
+                        bind:clearListenner="@{viewModel}"
+                        bind:menuItemClick="@{viewModel}"
+                        bind:searchListenner="@{viewModel}"
+                        />
+                </android.support.design.widget.CollapsingToolbarLayout>
+            </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            bind:pagerAdapter="@{viewModel.adapter}"
+            <include
+                layout="@layout/empty_state"
+                bind:image="@{@drawable/ic_no_report}"
+                bind:text="@{@string/msg_no_device}"
+                bind:visibleState="@{viewModel.emptyViewVisible}"
+                />
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                />
+
+            <ProgressBar
+                android:id="@+id/progress_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="@{viewModel.progressBarVisibility}"
+                />
+
+            <ProgressBar
+                android:id="@+id/progress_loading_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="@{viewModel.isLoadingMore ? View.VISIBLE : View.GONE}"
+                />
+        </LinearLayout>
+
+        <include
+            layout="@layout/filter_device_using_history"
+            bind:viewModel="@{viewModel}"
             />
-    </android.support.design.widget.CoordinatorLayout>
+    </android.support.v4.widget.DrawerLayout>
 </layout>

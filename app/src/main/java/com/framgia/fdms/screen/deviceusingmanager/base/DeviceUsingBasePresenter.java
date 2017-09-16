@@ -28,4 +28,9 @@ public class DeviceUsingBasePresenter implements DeviceUsingManagerContract.Pres
     public void getDeviceUsingHistory() {
 
     }
+
+    @Override
+    public void loadMoreData() {
+
+    }
 }

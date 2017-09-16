@@ -17,6 +17,10 @@ public interface DeviceUsingManagerContract {
         void onGetDeviceUsingHistorySuccess(List<DeviceUsingHistory> deviceUsingHistories);
 
         void onGetDeviceUsingHistoryFailed();
+
+        void onClearFilterClick();
+
+        void onChooseStatusClick();
     }
 
     /**
@@ -25,5 +29,7 @@ public interface DeviceUsingManagerContract {
     interface Presenter extends BasePresenter {
 
         void getDeviceUsingHistory();
+
+        void loadMoreData();
     }
 }

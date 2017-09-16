@@ -25,4 +25,9 @@ final class DeviceUsingManagerPresenter implements DeviceUsingManagerContract.Pr
     public void getDeviceUsingHistory() {
 
     }
+
+    @Override
+    public void loadMoreData() {
+        //// TODO: 9/16/2017  
+    }
 }
