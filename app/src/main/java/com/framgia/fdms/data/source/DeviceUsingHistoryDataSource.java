@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by framgia on 14/07/2017.
  */
-public class DeviceHistoryDataSource {
+public class DeviceUsingHistoryDataSource {
     public interface RemoteDataSource {
         Observable<List<DeviceUsingHistory>> getListDeviceHistory();
     }

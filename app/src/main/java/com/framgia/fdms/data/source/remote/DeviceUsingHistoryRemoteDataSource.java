@@ -2,7 +2,7 @@ package com.framgia.fdms.data.source.remote;
 
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
-import com.framgia.fdms.data.source.DeviceHistoryDataSource;
+import com.framgia.fdms.data.source.DeviceUsingHistoryDataSource;
 import io.reactivex.Observable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,15 +11,16 @@ import java.util.List;
 /**
  * Created by framgia on 14/07/2017.
  */
-public class DeviceUsingHistoryDataSource implements DeviceHistoryDataSource.RemoteDataSource {
-    private static DeviceUsingHistoryDataSource sInstances;
+public class DeviceUsingHistoryRemoteDataSource
+    implements DeviceUsingHistoryDataSource.RemoteDataSource {
+    private static DeviceUsingHistoryRemoteDataSource sInstances;
 
-    public DeviceUsingHistoryDataSource() {
+    public DeviceUsingHistoryRemoteDataSource() {
     }
 
-    public static DeviceUsingHistoryDataSource getInstances() {
+    public static DeviceUsingHistoryRemoteDataSource getInstances() {
         if (sInstances == null) {
-            sInstances = new DeviceUsingHistoryDataSource();
+            sInstances = new DeviceUsingHistoryRemoteDataSource();
         }
         return sInstances;
     }

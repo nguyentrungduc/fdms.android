@@ -49,12 +49,11 @@
                     bind:listener="@{viewModel.listener}"
                     >
 
-                    <FrameLayout
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|end"
                         >
-
                         <ImageView
                             android:layout_width="@dimen/dp_30"
                             android:layout_height="@dimen/dp_30"
@@ -62,22 +61,42 @@
                             android:layout_marginLeft="@dimen/dp_10"
                             android:layout_marginRight="@dimen/dp_10"
                             android:layout_marginStart="@dimen/dp_10"
-                            app:srcCompat="@drawable/ic_bell_24dp"
+                            android:onClick="@{()-> viewModel.onStartScannerQrCode()}"
+                            app:srcCompat="@drawable/ic_qr_code_white"
                             tools:ignore="@null"
                             />
 
-                        <TextView
-                            android:layout_width="@dimen/dp_20"
-                            android:layout_height="@dimen/dp_20"
-                            android:layout_gravity="top|end"
-                            android:layout_marginEnd="@dimen/dp_5"
-                            android:layout_marginLeft="@dimen/dp_5"
-                            android:layout_marginRight="@dimen/dp_5"
-                            android:layout_marginStart="@dimen/dp_5"
-                            android:gravity="center"
-                            android:textColor="@color/color_white"
-                            />
-                    </FrameLayout>
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            >
+
+                            <ImageView
+                                android:layout_width="@dimen/dp_30"
+                                android:layout_height="@dimen/dp_30"
+                                android:layout_marginEnd="@dimen/dp_10"
+                                android:layout_marginLeft="@dimen/dp_10"
+                                android:layout_marginRight="@dimen/dp_10"
+                                android:layout_marginStart="@dimen/dp_10"
+                                app:srcCompat="@drawable/ic_bell_24dp"
+                                tools:ignore="ContentDescription"
+                                />
+
+                            <TextView
+                                android:layout_width="@dimen/dp_20"
+                                android:layout_height="@dimen/dp_20"
+                                android:layout_gravity="top|end"
+                                android:layout_marginEnd="@dimen/dp_5"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_marginRight="@dimen/dp_5"
+                                android:layout_marginStart="@dimen/dp_5"
+                                android:gravity="center"
+                                android:textColor="@color/color_white"
+                                />
+                        </FrameLayout>
+
+                    </LinearLayout>
+
                 </android.support.v7.widget.Toolbar>
 
             </android.support.design.widget.AppBarLayout>

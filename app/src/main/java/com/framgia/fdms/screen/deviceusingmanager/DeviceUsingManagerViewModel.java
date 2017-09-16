@@ -11,12 +11,14 @@ import android.view.View;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
+import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import java.util.List;
 
 import static android.view.View.GONE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
+import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 
 /**
  * Exposes the data to be used in the DeviceUsing screen.
@@ -77,10 +79,11 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     @Override
     public void onGetDeviceUsingHistorySuccess(List<DeviceUsingHistory> deviceUsingHistories) {
         //Do this on DeviceUsingBaseViewModel
+        setAdapter(new DeviceUsingHistoryAdapter(deviceUsingHistories));
     }
 
     @Override
-    public void onGetDeviceUsingHistoryFailed() {
+    public void onGetDeviceUsingHistoryFailed(String msg) {
         //Do this on DeviceUsingBaseViewModel
     }
 
@@ -113,17 +116,17 @@ public class DeviceUsingManagerViewModel extends BaseObservable
 
     @Override
     public void onDrawerOpened(View drawerView) {
-
+        // no ops
     }
 
     @Override
     public void onDrawerClosed(View drawerView) {
-
+        setDrawerStatus(DRAWER_IS_CLOSE);
     }
 
     @Override
     public void onDrawerStateChanged(int newState) {
-
+        // no ops
     }
 
     @Override
@@ -143,7 +146,17 @@ public class DeviceUsingManagerViewModel extends BaseObservable
 
     @Override
     public void onActionMenuItemSelected(FloatingSearchView searchView, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
 
+                break;
+            case R.id.action_filter:
+                setDrawerStatus(
+                    mDrawerStatus == DRAWER_IS_CLOSE ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
+                break;
+            default:
+                break;
+        }
     }
 
     @Bindable

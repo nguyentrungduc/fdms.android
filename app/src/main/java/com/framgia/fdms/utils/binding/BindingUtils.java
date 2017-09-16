@@ -641,6 +641,12 @@ public final class BindingUtils {
         }
     }
 
+    @BindingAdapter("bind:adapter")
+    public static void setAdapter(ExpandableListView expandableListView,
+        BaseExpandableListAdapter adapter) {
+        expandableListView.setAdapter(adapter);
+    }
+
     @BindingAdapter({ "drawerListener" })
     public static void setDrawerListener(DrawerLayout drawerLayout,
         DrawerLayout.DrawerListener listener) {
