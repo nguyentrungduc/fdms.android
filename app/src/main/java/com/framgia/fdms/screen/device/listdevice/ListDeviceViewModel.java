@@ -69,7 +69,6 @@ public class ListDeviceViewModel extends BaseObservable
     private int mTab = TAB_MY_DEVICE;
     private int mEmptyViewVisible = View.GONE;
 
-    private boolean mIsTopSheetExpand;
     private boolean mIsRefresh;
     private String mDrawerStatus = DRAWER_IS_CLOSE;
     private DeviceFilterModel mFilterModel;
@@ -355,16 +354,6 @@ public class ListDeviceViewModel extends BaseObservable
 
     public void setFragment(ListDeviceFragment fragment) {
         mFragment = fragment;
-    }
-
-    @Bindable
-    public boolean isTopSheetExpand() {
-        return mIsTopSheetExpand;
-    }
-
-    public void setTopSheetExpand(boolean topSheetExpand) {
-        mIsTopSheetExpand = topSheetExpand;
-        notifyPropertyChanged(BR.topSheetExpand);
     }
 
     @Override

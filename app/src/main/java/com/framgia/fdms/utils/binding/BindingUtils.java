@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -49,13 +48,11 @@ import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.databinding.NavHeaderMainBinding;
 import com.framgia.fdms.screen.ViewPagerScroll;
 import com.framgia.fdms.screen.dashboard.DashboardViewModel;
-import com.framgia.fdms.screen.device.listdevice.ListDeviceViewModel;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailViewModel;
 import com.framgia.fdms.screen.main.MainViewModel;
 import com.framgia.fdms.screen.requestdetail.RequestDetailViewModel;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
-import com.framgia.fdms.widget.TopSheetBehavior;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -576,40 +573,6 @@ public final class BindingUtils {
     public static void setOnScrollListener(ExpandableListView expandableListView,
         AbsListView.OnScrollListener listener) {
         expandableListView.setOnScrollListener(listener);
-    }
-
-    @BindingAdapter({ "iconClick", "viewModel" })
-    public static void setTopSheet(View topSheet, View imageIcon,
-        final ListDeviceViewModel viewModel) {
-        final TopSheetBehavior behavior = TopSheetBehavior.from(topSheet);
-        if (behavior == null) return;
-        imageIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (behavior.getState() == TopSheetBehavior.STATE_EXPANDED) {
-                    behavior.setState(TopSheetBehavior.STATE_COLLAPSED);
-                    viewModel.setTopSheetExpand(false);
-                } else {
-                    behavior.setState(TopSheetBehavior.STATE_EXPANDED);
-                    viewModel.setTopSheetExpand(true);
-                }
-            }
-        });
-        behavior.setTopSheetCallback(new TopSheetBehavior.TopSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet,
-                @TopSheetBehavior.State int newState) {
-                if (newState == TopSheetBehavior.STATE_EXPANDED) {
-                    viewModel.setTopSheetExpand(true);
-                } else if (newState == TopSheetBehavior.STATE_COLLAPSED) {
-                    viewModel.setTopSheetExpand(false);
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-            }
-        });
     }
 
     @BindingAdapter({ "itemSelected", "currentItem", "model", "staffType" })

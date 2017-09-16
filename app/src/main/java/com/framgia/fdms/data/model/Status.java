@@ -9,9 +9,6 @@ import com.framgia.fdms.BR;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
-import static com.framgia.fdms.utils.Constant.TITLE_NA;
-
 /**
  * Created by MyPC on 03/05/2017.
  */

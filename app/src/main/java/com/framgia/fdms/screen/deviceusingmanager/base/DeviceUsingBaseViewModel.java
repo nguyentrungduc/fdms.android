@@ -33,11 +33,21 @@ public class DeviceUsingBaseViewModel implements DeviceUsingManagerContract.View
 
     @Override
     public void onGetDeviceUsingHistorySuccess(List<DeviceUsingHistory> deviceUsingHistories) {
-
+        // TODO: 9/16/2017  
     }
 
     @Override
     public void onGetDeviceUsingHistoryFailed() {
+        // TODO: 9/16/2017  
+    }
 
+    @Override
+    public void onClearFilterClick() {
+        // TODO: 9/16/2017  
+    }
+
+    @Override
+    public void onChooseStatusClick() {
+        // TODO: 9/16/2017  
     }
 }
