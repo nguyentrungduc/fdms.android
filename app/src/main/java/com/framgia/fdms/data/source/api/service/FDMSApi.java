@@ -138,6 +138,19 @@ public interface FDMSApi {
     @GET("api/meeting_rooms")
     Observable<Respone<List<Producer>>> getListMeetingRoom(@QueryMap Map<String, String> params);
 
+    @POST("api/meeting_rooms")
+    Observable<Respone<Producer>> addMeetingRoom(
+        @Query("meeting_room[name]") String meetingRoomName,
+        @Query("meeting_room[description]") String description);
+
+    @DELETE("api/meeting_rooms/{meeting_room_id}")
+    Observable<Respone<String>> deleteMeetingRoom(@Path("meeting_room_id") int meetingRoomId);
+
+    @PATCH("api/meeting_rooms/{meeting_room_id}")
+    Observable<Respone<List<String>>> updateMeetingRoom(@Path("meeting_room_id") int meetingRoomId,
+        @Query("meeting_room[name]") String name,
+        @Query("meeting_room[description]") String description);
+
     @GET("api/vendors")
     Observable<Respone<List<Producer>>> getListVendors(@Query("name") String name,
         @Query("page") int page, @Query("per_page") int perPage);

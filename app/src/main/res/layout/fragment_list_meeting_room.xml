@@ -51,8 +51,8 @@
                             app:floatingSearch_menu="@menu/menu_search"
                             app:floatingSearch_searchHint="@string/title_searching"
                             app:floatingSearch_showSearchKey="true"
-                            app:searchListenner="@{viewModel}"
                             app:menuItemClick="@{viewModel}"
+                            app:searchListenner="@{viewModel}"
                             />
                     </android.support.design.widget.CollapsingToolbarLayout>
                 </android.support.design.widget.AppBarLayout>
@@ -72,6 +72,7 @@
                         app:layout_behavior="@string/appbar_scrolling_view_behavior"
                         app:recyclerAdapter="@{viewModel.listMeetingRoomAdapter}"
                         app:scrollListenner="@{viewModel.scrollListener}"
+                        app:scrollPosition="@{viewModel.positionScroll}"
                         />
 
                     <ProgressBar
