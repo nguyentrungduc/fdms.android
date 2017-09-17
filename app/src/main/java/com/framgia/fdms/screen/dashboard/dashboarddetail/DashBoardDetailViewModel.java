@@ -21,7 +21,6 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.device.OnDeviceClickListenner;
-import com.framgia.fdms.screen.main.MainActivity;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
 import com.framgia.fdms.screen.request.userrequest.UserRequestAdapter;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
@@ -36,7 +35,6 @@ import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailF
     .DEVICE_DASHBOARD;
 import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
     .REQUEST_DASHBOARD;
-import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_DEVICE_MANAGER;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
 
@@ -45,6 +43,13 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
  */
 public class DashBoardDetailViewModel extends BaseObservable
     implements DashBoardDetailContract.ViewModel, OnRequestClickListenner, OnDeviceClickListenner {
+    /**
+     * Listener Event DashBoardDetail
+     */
+    public interface OnDashBoardDetailClickListener {
+        void onItemClick(Device device);
+    }
+
     private static final float PIE_DATA_SLICE_SPACE = 3f;
     private static final float PIE_DATA_SLECTION_SHIFT = 5f;
     private DashBoardDetailContract.Presenter mPresenter;
@@ -303,6 +308,6 @@ public class DashBoardDetailViewModel extends BaseObservable
 
     @Override
     public void onDeviceDashBoardClick(Device device) {
-        ((MainActivity) mFragment.getActivity()).setTabWithDevice(TAB_DEVICE_MANAGER, device);
+        ((OnDashBoardDetailClickListener) mFragment.getActivity()).onItemClick(device);
     }
 }

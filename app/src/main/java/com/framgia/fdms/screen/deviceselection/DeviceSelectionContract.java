@@ -3,6 +3,7 @@ package com.framgia.fdms.screen.deviceselection;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Device;
+import com.framgia.fdms.screen.device.listdevice.DeviceFilterModel;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ interface DeviceSelectionContract {
      * Presenter.
      */
     interface Presenter extends BasePresenter {
-        void getListDevice(String deviceName, int categoryId, int statusId, int page, int perPage);
+        void getListDevice(DeviceFilterModel filterModel, int page);
 
         void getData(String keyWord);
 

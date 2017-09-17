@@ -2,9 +2,11 @@ package com.framgia.fdms.screen.deviceselection;
 
 import android.text.TextUtils;
 import com.framgia.fdms.data.model.Device;
+import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
+import com.framgia.fdms.screen.device.listdevice.DeviceFilterModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -31,12 +33,15 @@ public class DeviceSelectionPresenter implements DeviceSelectionContract.Present
     private int mCategoryId = OUT_OF_INDEX;
     private int mStatusId = OUT_OF_INDEX;
     private DeviceRepository mDeviceRepository;
+    private DeviceFilterModel mFilterModel;
 
     public DeviceSelectionPresenter(DeviceSelectionContract.ViewModel viewModel,
         DeviceRepository deviceRepository, int categoryId) {
         mViewModel = viewModel;
         mDeviceRepository = deviceRepository;
         mCategoryId = categoryId;
+        mFilterModel = new DeviceFilterModel();
+        mFilterModel.setCategory(new Status(categoryId));
         getData(null);
     }
 
@@ -50,34 +55,32 @@ public class DeviceSelectionPresenter implements DeviceSelectionContract.Present
     }
 
     @Override
-    public void getListDevice(String deviceName, int categoryId, int statusId, int page,
-        int perPage) {
-        Disposable subscription =
-            mDeviceRepository.getListDevices(deviceName, categoryId, statusId, page, perPage)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        mViewModel.showProgressbar();
-                    }
-                })
-                .subscribe(new Consumer<List<Device>>() {
-                    @Override
-                    public void accept(List<Device> devices) throws Exception {
-                        mViewModel.onGetDeviceSucces(devices);
-                    }
-                }, new RequestError() {
-                    @Override
-                    public void onRequestError(BaseException error) {
-                        mViewModel.onError(error.getMessage());
-                    }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        mViewModel.hideProgressbar();
-                    }
-                });
+    public void getListDevice(DeviceFilterModel filterModel, int page) {
+        Disposable subscription = mDeviceRepository.getListDevices(filterModel, page, PER_PAGE)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgressbar();
+                }
+            })
+            .subscribe(new Consumer<List<Device>>() {
+                @Override
+                public void accept(List<Device> devices) throws Exception {
+                    mViewModel.onGetDeviceSucces(devices);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onError(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            });
         mCompositeSubscriptions.add(subscription);
     }
 
@@ -85,12 +88,13 @@ public class DeviceSelectionPresenter implements DeviceSelectionContract.Present
     public void getData(String keyWord) {
         mKeyWord = TextUtils.isEmpty(keyWord) ? NOT_SEARCH : keyWord;
         mPage = FIRST_PAGE;
-        getListDevice(mKeyWord, mCategoryId, mStatusId, mPage, PER_PAGE);
+        mFilterModel.setDeviceName(keyWord);
+        getListDevice(mFilterModel, mPage);
     }
 
     @Override
     public void loadMoreData() {
         mPage++;
-        getListDevice(mKeyWord, mCategoryId, mStatusId, mPage, PER_PAGE);
+        getListDevice(mFilterModel, mPage);
     }
 }

@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -16,12 +15,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.CategoryRepository;
+import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.MarkerRepository;
 import com.framgia.fdms.data.source.MeetingRoomRepository;
 import com.framgia.fdms.data.source.StatusRepository;
 import com.framgia.fdms.data.source.VendorRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.remote.CategoryRemoteDataSource;
+import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.data.source.remote.MarkerRemoteDataSource;
 import com.framgia.fdms.data.source.remote.MeetingRoomRemoteDataSource;
 import com.framgia.fdms.data.source.remote.StatusRemoteDataSource;
@@ -29,6 +30,7 @@ import com.framgia.fdms.data.source.remote.VendorRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityNewStatusSelectionBinding;
 
 import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
+import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
@@ -40,9 +42,11 @@ import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
 public class StatusSelectionActivity extends AppCompatActivity
     implements SearchView.OnQueryTextListener {
     private static final String BUNDLE_SELECTION_TYPE = "BUNDLE_SELECTION_TYPE";
+    private static final String BUNDLE_ID = "BUNDLE_ID";
     private StatusSelectionContract.ViewModel mViewModel;
     @SelectionType
     private int mSelectionType;
+    private int mDeviceGroupId;
     private SearchView mSearchView;
     private MenuItem mSearchMenu;
 
@@ -50,6 +54,15 @@ public class StatusSelectionActivity extends AppCompatActivity
         Intent intent = new Intent(context, StatusSelectionActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(BUNDLE_SELECTION_TYPE, type);
+        intent.putExtras(bundle);
+        return intent;
+    }
+
+    public static Intent getInstance(Context context, @SelectionType int type, int id) {
+        Intent intent = new Intent(context, StatusSelectionActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(BUNDLE_SELECTION_TYPE, type);
+        bundle.putInt(BUNDLE_ID, id);
         intent.putExtras(bundle);
         return intent;
     }
@@ -83,6 +96,7 @@ public class StatusSelectionActivity extends AppCompatActivity
                 CategoryRepository categoryRepository = new CategoryRepository(
                     new CategoryRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setCategoryRepository(categoryRepository);
+                presenter.setDeviceGroupId(mDeviceGroupId);
                 break;
             case VENDOR:
                 VendorRepository vendorRepository = new VendorRepository(
@@ -99,6 +113,11 @@ public class StatusSelectionActivity extends AppCompatActivity
                     new MeetingRoomRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setMeetingRoomRepository(meetingRoomRepository);
                 break;
+            case DEVICE_GROUP:
+                DeviceRepository deviceRepository = new DeviceRepository(
+                    new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
+                presenter.setDeviceRepository(deviceRepository);
+                break;
             default:
                 break;
         }
@@ -110,6 +129,8 @@ public class StatusSelectionActivity extends AppCompatActivity
             return;
         }
         mSelectionType = bundle.getInt(BUNDLE_SELECTION_TYPE);
+        mDeviceGroupId = bundle.getInt(BUNDLE_ID);
+
     }
 
     @Override

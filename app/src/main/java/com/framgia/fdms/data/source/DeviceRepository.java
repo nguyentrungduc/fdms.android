@@ -24,7 +24,8 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
 
     public Observable<List<Device>> getListDevices(String deviceName, int categoryId, int statusId,
         int page, int perPage) {
-        return mDeviceRemoteDataSource.getListDevices(deviceName, categoryId, statusId, page, perPage);
+        return mDeviceRemoteDataSource.getListDevices(deviceName, categoryId, statusId, page,
+            perPage);
     }
 
     public Observable<List<Status>> getListCategory() {
@@ -79,5 +80,10 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
     @Override
     public Observable<List<Status>> getDeviceGroups() {
         return mDeviceRemoteDataSource.getDeviceGroups();
+    }
+
+    @Override
+    public Observable<List<Status>> getDeviceGroups(String query) {
+        return mDeviceRemoteDataSource.getDeviceGroups(query);
     }
 }

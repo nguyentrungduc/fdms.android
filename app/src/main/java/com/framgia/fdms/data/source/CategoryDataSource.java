@@ -17,6 +17,6 @@ public class CategoryDataSource {
 
         Observable<List<Status>> getListCategory(String query);
 
-        Observable<List<Status>> getCategoriesByDeviceGroupId(int deviceGroupId);
+        Observable<List<Status>> getListCategory(String query, int deviceGroupId);
     }
 }

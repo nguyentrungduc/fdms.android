@@ -17,19 +17,17 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.deviceselection.DeviceSelectionActivity;
+import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
 import com.framgia.fdms.screen.profile.chooseexport.ChooseExportActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionType;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.screen.selection.StatusSelectionAdapter.FIRST_INDEX;
+import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
+import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
+import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICES;
-import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_STATUE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
-import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORIES;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_GROUPS;
@@ -39,18 +37,14 @@ import static com.framgia.fdms.utils.Utils.hideSoftKeyboard;
  * Exposes the data to be used in the Assignment screen.
  */
 public class AssignmentViewModel extends BaseObservable implements AssignmentContract.ViewModel {
-    private static final int NO_DEVICE = -2;
     private AssignmentContract.Presenter mPresenter;
     private AppCompatActivity mActivity;
     private int mProgressBarVisibility = View.GONE;
     private Request mRequest;
     private AssignmentAdapter mAdapter;
     private Context mContext;
-    private List<Status> mDeviceGroups;
-    private List<Status> mCategories;
     private Status mDeviceGroup;
     private Status mCategory;
-    private int mCategoryId = NO_DEVICE;
     private Device mDevice;
     private Navigator mNavigator;
     private String mDeviceGroupHint;
@@ -83,29 +77,25 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     }
 
     public void onShowDeviceGroups() {
-        if (mDeviceGroups == null) {
-            return;
-        }
         mNavigator.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, null, mDeviceGroups,
-                StatusSelectionType.STATUS), REQUEST_DEVICE_GROUPS);
+            StatusSelectionActivity.getInstance(mContext, DEVICE_GROUP), REQUEST_DEVICE_GROUPS);
     }
 
     public void onShowCategories() {
-        if (mCategories == null) {
+        if (mDeviceGroup == null) {
             return;
         }
         mNavigator.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, null, mCategories,
-                StatusSelectionType.STATUS), REQUEST_CATEGORIES);
+            StatusSelectionActivity.getInstance(mContext, CATEGORY, mDeviceGroup.getId()),
+            REQUEST_CATEGORIES);
     }
 
     public void onShowDevices() {
-        if (mCategoryId == NO_DEVICE) {
+        if (mCategory == null) {
             return;
         }
         mNavigator.startActivityForResult(
-            DeviceSelectionActivity.getInstance(mContext, mCategoryId), REQUEST_DEVICE);
+            DeviceSelectionActivity.getInstance(mContext, mCategory.getId()), REQUEST_DEVICE);
     }
 
     @Override
@@ -117,24 +107,18 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
         Status status;
         switch (requestCode) {
             case REQUEST_DEVICE_GROUPS:
-                status = bundle.getParcelable(BUNDLE_STATUE);
+                status = bundle.getParcelable(BUNDLE_DATA);
                 if (status != null) {
-                    setCategoryHint(mContext.getString(R.string.title_btn_category));
-                    setDeviceHint(mContext.getString(R.string.title_device_code));
-                    mCategories = null;
-                    mCategory = null;
-                    mDevice = null;
-                    mCategoryId = OUT_OF_INDEX;
                     setDeviceGroup(status);
-                    mPresenter.getCategoriesByDeviceGroupId(status.getId());
+                    resetCategory();
+                    resetDevice();
                 }
                 break;
             case REQUEST_CATEGORIES:
-                status = bundle.getParcelable(BUNDLE_STATUE);
+                status = bundle.getParcelable(BUNDLE_DATA);
                 if (status != null) {
-                    setDeviceHint(mContext.getString(R.string.title_device_code));
                     setCategory(status);
-                    mCategoryId = status.getId();
+                    resetDevice();
                 }
                 break;
             case REQUEST_DEVICE:
@@ -161,6 +145,9 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
             .deviceCategoryGroupName(mDeviceGroup.getName())
             .deviceCode(mDevice.getDeviceCode())
             .create());
+        resetDeviceGroup();
+        resetCategory();
+        resetDevice();
     }
 
     @Override
@@ -211,36 +198,27 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     }
 
     @Override
-    public void onGetDeviceGroupsSuccess(List<Status> statuses) {
-        if (statuses == null || statuses.size() == 0) {
-            setDeviceGroupHint(mContext.getString(R.string.title_no_device_group));
-            return;
-        }
-        mDeviceGroups = statuses;
-        mDeviceGroups.add(FIRST_INDEX,
-            new Status(OUT_OF_INDEX, mContext.getString(R.string.action_all)));
-    }
-
-    @Override
-    public void onGetCategoriesSuccess(List<Status> statuses) {
-        if (statuses == null || statuses.size() == 0) {
-            setCategoryHint(mContext.getString(R.string.title_no_category));
-            return;
-        }
-        mCategories = statuses;
-        if (mDeviceGroup.getId() == OUT_OF_INDEX) {
-            mCategories.add(FIRST_INDEX,
-                new Status(OUT_OF_INDEX, mContext.getString(R.string.action_all)));
-        }
-    }
-
-    @Override
     public void onError(int stringId) {
         mNavigator.showToast(stringId);
     }
 
     public AppCompatActivity getActivity() {
         return mActivity;
+    }
+
+    private void resetDeviceGroup() {
+        mDeviceGroup = null;
+        setDeviceGroupHint(mContext.getString(R.string.title_request_assignment));
+    }
+
+    private void resetCategory() {
+        mCategory = null;
+        setCategoryHint(mContext.getString(R.string.title_btn_category));
+    }
+
+    private void resetDevice() {
+        mDevice = null;
+        setDeviceHint(mContext.getString(R.string.title_device_code));
     }
 
     @Bindable

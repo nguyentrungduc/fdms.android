@@ -49,5 +49,7 @@ public class DeviceDataSource {
             int perPage);
 
         Observable<List<Status>> getDeviceGroups();
+
+        Observable<List<Status>> getDeviceGroups(String query);
     }
 }

@@ -21,7 +21,6 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.ViewPagerScroll;
 import com.framgia.fdms.screen.authenication.login.LoginActivity;
 import com.framgia.fdms.screen.dashboard.DashboardFragment;
-import com.framgia.fdms.screen.device.DeviceFragment;
 import com.framgia.fdms.screen.device.listdevice.ListDeviceFragment;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.meetingroom.listmeetingroom.ListMeetingRoomFragment;
@@ -293,12 +292,6 @@ public class MainViewModel extends BaseObservable
     }
 
     @Override
-    public void setTabWithDevice(int tab, Device device) {
-        setTab(tab);
-        ((DeviceFragment) mPagerAdapter.getItem(tab)).setTabWithDevice(TAB_MANAGE_DEVICE, device);
-    }
-
-    @Override
     public void onGetUserSuccess(User user) {
         setUser(user);
     }
@@ -306,6 +299,13 @@ public class MainViewModel extends BaseObservable
     @Override
     public void onError(String msg) {
         mNavigator.showToast(msg);
+    }
+
+    @Override
+    public void setTabDeviceManage(Device device) {
+        setTab(TAB_DEVICE_MANAGER);
+        ((ListDeviceFragment) mPagerAdapter.getItem(TAB_DEVICE_MANAGER)).getDataWithDevice(device);
+        setCurrentItem(R.id.item_manage_device);
     }
 
     public AppCompatActivity getActivity() {

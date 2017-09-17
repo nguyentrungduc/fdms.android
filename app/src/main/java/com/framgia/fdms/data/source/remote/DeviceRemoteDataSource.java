@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -43,7 +44,6 @@ import static com.framgia.fdms.utils.Constant.ApiParram.SERIAL_NUMBER;
 import static com.framgia.fdms.utils.Constant.ApiParram.STAFF_USING_NAME;
 import static com.framgia.fdms.utils.Constant.ApiParram.STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.VENDOR_ID;
-import static com.framgia.fdms.utils.Constant.NOT_SEARCH;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource {
@@ -293,6 +293,29 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
                 public ObservableSource<List<Status>> apply(
                     @NonNull Respone<List<Status>> listRespone) throws Exception {
                     return Utils.getResponse(listRespone);
+                }
+            });
+    }
+
+    @Override
+    public Observable<List<Status>> getDeviceGroups(final String query) {
+        if (TextUtils.isEmpty(query)) {
+            return getDeviceGroups();
+        }
+        return getDeviceGroups().flatMap(
+            new Function<List<Status>, ObservableSource<List<Status>>>() {
+                @Override
+                public ObservableSource<List<Status>> apply(@NonNull List<Status> statuses)
+                    throws Exception {
+                    List<Status> data = new ArrayList<>();
+                    for (Status status : statuses) {
+                        if (status.getName()
+                            .toLowerCase(Locale.getDefault())
+                            .contains(query.toLowerCase(Locale.getDefault()))) {
+                            data.add(status);
+                        }
+                    }
+                    return Observable.just(data);
                 }
             });
     }
