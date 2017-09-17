@@ -46,7 +46,6 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
         mCategoryRepository = categoryRepository;
         mSubscription = new CompositeDisposable();
         getRequest(mRequestId);
-        getDeviceGroups();
     }
 
     @Override
@@ -116,44 +115,6 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
                 }
             });
         mSubscription.add(subscription);
-    }
-
-    @Override
-    public void getDeviceGroups() {
-        Disposable disposable = mDeviceRepository.getDeviceGroups()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<List<Status>>() {
-                @Override
-                public void accept(@NonNull List<Status> statuses) throws Exception {
-                    mViewModel.onGetDeviceGroupsSuccess(statuses);
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mViewModel.onLoadError(error.getMessage());
-                }
-            });
-        mSubscription.add(disposable);
-    }
-
-    @Override
-    public void getCategoriesByDeviceGroupId(int deviceGroupId) {
-        Disposable disposable = mCategoryRepository.getCategoriesByDeviceGroupId(deviceGroupId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<List<Status>>() {
-                @Override
-                public void accept(@NonNull List<Status> statuses) throws Exception {
-                    mViewModel.onGetCategoriesSuccess(statuses);
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mViewModel.onLoadError(error.getMessage());
-                }
-            });
-        mSubscription.add(disposable);
     }
 
     @Override

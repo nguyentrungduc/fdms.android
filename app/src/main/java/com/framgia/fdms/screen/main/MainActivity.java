@@ -15,11 +15,13 @@ import com.framgia.fdms.data.source.local.UserLocalDataSource;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityNewmainBinding;
+import com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailViewModel;
 
 /**
  * Newmain Screen.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+    DashBoardDetailViewModel.OnDashBoardDetailClickListener {
     private MainContract.ViewModel mViewModel;
 
     public static Intent getInstance(Context context) {
@@ -75,10 +77,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setTabWithDevice(@MainViewModel.Tab int tab, Device device) {
+    @Override
+    public void onItemClick(Device device) {
         if (mViewModel == null) {
             return;
         }
-        mViewModel.setTabWithDevice(tab, device);
+        mViewModel.setTabDeviceManage(device);
     }
 }

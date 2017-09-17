@@ -37,10 +37,6 @@ interface AssignmentContract {
 
         void onAssignmentSuccess(Request request);
 
-        void onGetDeviceGroupsSuccess(List<Status> statuses);
-
-        void onGetCategoriesSuccess(List<Status> statuses);
-
         void onError(int stringId);
     }
 
@@ -53,10 +49,6 @@ interface AssignmentContract {
         void getRequest(int requestId);
 
         void chooseExportActivity();
-
-        void getDeviceGroups();
-
-        void getCategoriesByDeviceGroupId(int deviceGroupId);
 
         boolean validateAddItem(Status category, Device device, Status deviceGroup);
     }

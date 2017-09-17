@@ -26,7 +26,7 @@ public class CategoryRepository implements CategoryDataSource.RemoteDataSource {
     }
 
     @Override
-    public Observable<List<Status>> getCategoriesByDeviceGroupId(int deviceGroupId) {
-        return mCategoryRemoteDataSource.getCategoriesByDeviceGroupId(deviceGroupId);
+    public Observable<List<Status>> getListCategory(String query, int deviceGroupId) {
+        return  mCategoryRemoteDataSource.getListCategory(query, deviceGroupId);
     }
 }

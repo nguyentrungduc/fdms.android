@@ -120,7 +120,7 @@ public class StatusSelectionAdapter
         }
 
         private void bind(Status category, int position) {
-            mBinding.setCategory(category);
+            mBinding.setStatus(category);
             mBinding.setPosition(position);
             mBinding.executePendingBindings();
         }

@@ -28,11 +28,11 @@ public interface MainContract {
 
         void setShowCaseRequest(boolean showCaseRequest);
 
-        void setTabWithDevice(int tab, Device device);
-
         void onGetUserSuccess(User user);
 
         void onError(String msg);
+
+        void setTabDeviceManage(Device device);
     }
 
     /**
