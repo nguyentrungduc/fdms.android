@@ -4,12 +4,15 @@ import android.text.TextUtils;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.Respone;
+import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.DeviceUsingHistoryDataSource;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.screen.deviceusingmanager.DeviceUsingHistoryFilter;
 import com.framgia.fdms.utils.Utils;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 import java.util.ArrayList;
@@ -23,6 +26,9 @@ import static com.framgia.fdms.utils.Constant.ApiParram.EMAIL;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.STATUS;
+import static com.framgia.fdms.utils.Constant.DeviceUsingStatus.ALL;
+import static com.framgia.fdms.utils.Constant.DeviceUsingStatus.RETURN;
+import static com.framgia.fdms.utils.Constant.DeviceUsingStatus.USING;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 /**
@@ -56,6 +62,22 @@ public class DeviceUsingHistoryRemoteDataSource extends BaseRemoteDataSource
                         return Utils.getResponse(listRespone);
                     }
                 });
+    }
+
+    @Override
+    public Observable<List<Status>> getListStatus() {
+        return Observable.create(new ObservableOnSubscribe<List<Status>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<Status>> observableEmitter)
+                throws Exception {
+                List<Status> statuses = new ArrayList<>();
+                statuses.add(new Status(OUT_OF_INDEX, ALL));
+                statuses.add(new Status(OUT_OF_INDEX, USING));
+                statuses.add(new Status(OUT_OF_INDEX, RETURN));
+                observableEmitter.onNext(statuses);
+                observableEmitter.onComplete();
+            }
+        });
     }
 
     private Map<String, String> getParams(DeviceUsingHistoryFilter filter, int page, int perPage) {

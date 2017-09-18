@@ -79,6 +79,12 @@ public class Constant {
         public static final int REQUEST_DEVICE_USING_STATUS = 17;
     }
 
+    public static final class DeviceUsingStatus {
+        public static final String ALL = "all";
+        public static final String USING = "using";
+        public static final String RETURN = "return";
+    }
+
     public static final class Role {
         public static final String STAFF = "staff";
         public static final String DIVISION_MANAGER = "division_manager";

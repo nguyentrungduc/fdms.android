@@ -5,6 +5,7 @@ import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.source.DeviceUsingHistoryRepository;
 import com.framgia.fdms.data.source.MarkerRepository;
 import com.framgia.fdms.data.source.MeetingRoomRepository;
 import com.framgia.fdms.data.source.StatusRepository;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
+import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_HISTORY;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
@@ -52,6 +54,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
     private String mKeySearch;
     private int mDeviceGroupId;
     private DeviceRepository mDeviceRepository;
+    private DeviceUsingHistoryRepository mDeviceUsingHistoryRepository;
 
     public StatusSelectionPresenter(StatusSelectionContract.ViewModel viewModel,
         @SelectionType int selectionType) {
@@ -88,6 +91,11 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
         mDeviceGroupId = deviceGroupId;
     }
 
+    public void setDeviceUsingHistoryRepository(
+        DeviceUsingHistoryRepository deviceUsingHistoryRepository) {
+        mDeviceUsingHistoryRepository = deviceUsingHistoryRepository;
+    }
+
     @Override
     public void onStart() {
     }
@@ -118,14 +126,49 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                 break;
             case DEVICE_GROUP:
                 getDeviceGroups();
+                break;
+            case DEVICE_USING_HISTORY:
+                getDeviceUsingHistoryStatus();
+                break;
             default:
                 break;
         }
     }
 
+    private void getDeviceUsingHistoryStatus() {
+        Disposable disposable = mDeviceUsingHistoryRepository.getListStatus()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgress();
+                }
+            })
+            .subscribe(new Consumer<List<Status>>() {
+                @Override
+                public void accept(List<Status> statuses) throws Exception {
+                    mViewModel.onGetDataSuccess(statuses);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onGetDataFailed(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
+                }
+            });
+        mCompositeDisposable.add(disposable);
+    }
+
     @Override
     public void loadMoreData() {
-        if (mSelectionType == STATUS || mSelectionType == CATEGORY) {
+        if (mSelectionType == STATUS
+            || mSelectionType == CATEGORY
+            || mSelectionType == DEVICE_USING_HISTORY) {
             mViewModel.onGetDataFailed(null);
             mViewModel.hideProgress();
             return;
