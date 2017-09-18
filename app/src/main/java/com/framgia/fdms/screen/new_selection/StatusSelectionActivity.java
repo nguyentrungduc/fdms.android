@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.source.DeviceUsingHistoryRepository;
 import com.framgia.fdms.data.source.MarkerRepository;
 import com.framgia.fdms.data.source.MeetingRoomRepository;
 import com.framgia.fdms.data.source.StatusRepository;
@@ -23,6 +24,7 @@ import com.framgia.fdms.data.source.VendorRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.remote.CategoryRemoteDataSource;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
+import com.framgia.fdms.data.source.remote.DeviceUsingHistoryRemoteDataSource;
 import com.framgia.fdms.data.source.remote.MarkerRemoteDataSource;
 import com.framgia.fdms.data.source.remote.MeetingRoomRemoteDataSource;
 import com.framgia.fdms.data.source.remote.StatusRemoteDataSource;
@@ -31,6 +33,7 @@ import com.framgia.fdms.databinding.ActivityNewStatusSelectionBinding;
 
 import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
+import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_HISTORY;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
@@ -92,31 +95,43 @@ public class StatusSelectionActivity extends AppCompatActivity
                     new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setStatusRepository(statusRepository);
                 break;
+
             case CATEGORY:
                 CategoryRepository categoryRepository = new CategoryRepository(
                     new CategoryRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setCategoryRepository(categoryRepository);
                 presenter.setDeviceGroupId(mDeviceGroupId);
                 break;
+
             case VENDOR:
                 VendorRepository vendorRepository = new VendorRepository(
                     new VendorRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setVendorRepository(vendorRepository);
                 break;
+
             case MARKER:
                 MarkerRepository markerRepository = new MarkerRepository(
                     new MarkerRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setMarkerRepository(markerRepository);
                 break;
+
             case MEETING_ROOM:
                 MeetingRoomRepository meetingRoomRepository = new MeetingRoomRepository(
                     new MeetingRoomRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setMeetingRoomRepository(meetingRoomRepository);
                 break;
+
             case DEVICE_GROUP:
                 DeviceRepository deviceRepository = new DeviceRepository(
                     new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setDeviceRepository(deviceRepository);
+                break;
+
+            case DEVICE_USING_HISTORY:
+                DeviceUsingHistoryRepository deviceUsingHistoryRepository =
+                    new DeviceUsingHistoryRepository(
+                        new DeviceUsingHistoryRemoteDataSource(FDMSServiceClient.getInstance()));
+                presenter.setDeviceUsingHistoryRepository(deviceUsingHistoryRepository);
                 break;
             default:
                 break;
@@ -130,7 +145,6 @@ public class StatusSelectionActivity extends AppCompatActivity
         }
         mSelectionType = bundle.getInt(BUNDLE_SELECTION_TYPE);
         mDeviceGroupId = bundle.getInt(BUNDLE_ID);
-
     }
 
     @Override
