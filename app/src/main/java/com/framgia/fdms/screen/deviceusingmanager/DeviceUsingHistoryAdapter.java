@@ -26,6 +26,21 @@ public class DeviceUsingHistoryAdapter extends BaseExpandableListAdapter {
         mDevices = deviceUsingHistories;
     }
 
+    public void clearData() {
+        if (mDevices != null) {
+            mDevices.clear();
+            notifyDataSetChanged();
+        }
+    }
+
+    public void updateData(List<DeviceUsingHistory> devices) {
+        if (devices == null) {
+            return;
+        }
+        mDevices.addAll(devices);
+        notifyDataSetChanged();
+    }
+
     public void setViewModel(DeviceUsingManagerViewModel viewModel) {
         mViewModel = viewModel;
     }

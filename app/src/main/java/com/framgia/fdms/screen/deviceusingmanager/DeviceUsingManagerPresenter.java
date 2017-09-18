@@ -7,6 +7,7 @@ import com.framgia.fdms.data.source.api.error.RequestError;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
@@ -46,6 +47,12 @@ final class DeviceUsingManagerPresenter implements DeviceUsingManagerContract.Pr
         Disposable disposable = mRepository.getListDeviceHistory(filter, mPage, PER_PAGE)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgress();
+                }
+            })
             .subscribe(new Consumer<List<DeviceUsingHistory>>() {
                 @Override
                 public void accept(List<DeviceUsingHistory> deviceUsingHistories) throws Exception {
@@ -55,6 +62,12 @@ final class DeviceUsingManagerPresenter implements DeviceUsingManagerContract.Pr
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.onGetDeviceUsingHistoryFailed(error.getMessage());
+                    mViewModel.hideProgress();
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
                 }
             });
         mCompositeDisposable.add(disposable);

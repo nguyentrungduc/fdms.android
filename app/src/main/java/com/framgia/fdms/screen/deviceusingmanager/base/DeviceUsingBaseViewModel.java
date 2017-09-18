@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.deviceusingmanager.base;
 
+import android.content.Intent;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.screen.deviceusingmanager.DeviceUsingManagerContract;
@@ -54,6 +55,21 @@ public class DeviceUsingBaseViewModel implements DeviceUsingManagerContract.View
 
     @Override
     public void onItemDeviceClick(Device device) {
+
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     }
 }
