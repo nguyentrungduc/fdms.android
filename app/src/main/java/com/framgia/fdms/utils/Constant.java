@@ -121,6 +121,8 @@ public class Constant {
         public static final String ASSIGNMENT_ASSIGNMENT_DETAILS =
             "assignment[assignment_details_attributes]";
         public static final String DEVICE_GROUP_ID = "device_group_id";
+        public static final String STATUS = "status";
+        public static final String EMAIL = "email";
     }
 
     public class DeviceStatus {

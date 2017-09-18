@@ -37,6 +37,7 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     private int mProgressBarVisibility;
 
     private DeviceUsingHistoryAdapter mAdapter;
+    private DeviceUsingHistoryFilter mFilter;
 
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
         @Override
@@ -58,7 +59,7 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     };
 
     public DeviceUsingManagerViewModel() {
-
+        mFilter = new DeviceUsingHistoryFilter();
     }
 
     @Override
@@ -74,6 +75,7 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     @Override
     public void setPresenter(DeviceUsingManagerContract.Presenter presenter) {
         mPresenter = presenter;
+        mPresenter.getDeviceUsingHistory(mFilter);
     }
 
     @Override
