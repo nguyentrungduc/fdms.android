@@ -1,8 +1,10 @@
 package com.framgia.fdms.screen.deviceusingmanager;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,14 +17,21 @@ import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
+import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
+import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
+import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
+import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_HISTORY;
+import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_USING_STATUS;
 
 /**
  * Exposes the data to be used in the DeviceUsing screen.
@@ -34,14 +43,14 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     OnSearchMenuItemClickListener, DrawerLayout.DrawerListener {
 
     private DeviceUsingManagerContract.Presenter mPresenter;
-    private DeviceUsingHistoryFilter mFilterModel;
     private String mDrawerStatus = DRAWER_IS_CLOSE;
     private int mEmptyViewVisible = GONE;
     private boolean mIsLoadingMore;
-    private int mProgressBarVisibility;
 
     private DeviceUsingHistoryAdapter mAdapter;
-    private DeviceUsingHistoryFilter mFilter;
+    private DeviceUsingHistoryFilter mFilterModel;
+    private boolean mIsFilterChanged;
+
     private Navigator mNavigator;
 
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
@@ -63,9 +72,11 @@ public class DeviceUsingManagerViewModel extends BaseObservable
         }
     };
 
-    public DeviceUsingManagerViewModel(Activity activity) {
-        mFilter = new DeviceUsingHistoryFilter();
-        mNavigator = new Navigator(activity);
+    public DeviceUsingManagerViewModel(Fragment fragment) {
+        mFilterModel = new DeviceUsingHistoryFilter();
+        mNavigator = new Navigator(fragment);
+        setAdapter(new DeviceUsingHistoryAdapter(new ArrayList<DeviceUsingHistory>()));
+        mAdapter.setViewModel(this);
     }
 
     @Override
@@ -81,29 +92,33 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     @Override
     public void setPresenter(DeviceUsingManagerContract.Presenter presenter) {
         mPresenter = presenter;
-        mPresenter.getDeviceUsingHistory(mFilter);
+        mPresenter.getDeviceUsingHistory(mFilterModel);
     }
 
     @Override
     public void onGetDeviceUsingHistorySuccess(List<DeviceUsingHistory> deviceUsingHistories) {
-        //Do this on DeviceUsingBaseViewModel
-        setAdapter(new DeviceUsingHistoryAdapter(deviceUsingHistories));
-        mAdapter.setViewModel(this);
+        mAdapter.updateData(deviceUsingHistories);
+        mIsFilterChanged = false;
     }
 
     @Override
     public void onGetDeviceUsingHistoryFailed(String msg) {
-        //Do this on DeviceUsingBaseViewModel
+        mNavigator.showToast(msg);
+        mIsFilterChanged = false;
     }
 
     @Override
     public void onClearFilterClick() {
-        // TODO: 9/16/2017  
+        mFilterModel.initDefaultData();
+        mIsFilterChanged = true;
+        setDrawerStatus(DRAWER_IS_CLOSE);
     }
 
     @Override
     public void onChooseStatusClick() {
-        // TODO: 9/16/2017
+        mNavigator.startActivityForResult(
+            StatusSelectionActivity.getInstance(mNavigator.getContext(), DEVICE_USING_HISTORY),
+            REQUEST_DEVICE_USING_STATUS);
     }
 
     @Override
@@ -112,20 +127,44 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     }
 
     @Override
+    public void showProgress() {
+        setLoadingMore(true);
+    }
+
+    @Override
+    public void hideProgress() {
+        setLoadingMore(false);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != REQUEST_DEVICE_USING_STATUS || resultCode != RESULT_OK || data == null) {
+            return;
+        }
+        mIsFilterChanged = true;
+        Bundle bundle = data.getExtras();
+        Status status = bundle.getParcelable(BUNDLE_DATA);
+        mFilterModel.setStatus(status);
+        setDrawerStatus(DRAWER_IS_CLOSE);
+    }
+
+    @Override
     public boolean onQueryTextSubmit(String query) {
-        // TODO: 9/16/2017  
+        mFilterModel.setDeviceCode(query);
+        setDrawerStatus(DRAWER_IS_CLOSE);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        // TODO: 9/16/2017  
+        mFilterModel.setDeviceCode(newText);
+        mIsFilterChanged = true;
         return false;
     }
 
     @Override
     public void onDrawerSlide(View drawerView, float slideOffset) {
-
+        // no ops
     }
 
     @Override
@@ -136,6 +175,9 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     @Override
     public void onDrawerClosed(View drawerView) {
         setDrawerStatus(DRAWER_IS_CLOSE);
+        if (mIsFilterChanged) {
+            getData();
+        }
     }
 
     @Override
@@ -145,24 +187,34 @@ public class DeviceUsingManagerViewModel extends BaseObservable
 
     @Override
     public void onClearSearchClicked() {
-
+        mFilterModel.setStaffName("");
+        getData();
     }
 
     @Override
     public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
-
+        // no ops
     }
 
     @Override
     public void onSearchAction(String s) {
+        mAdapter.clearData();
+        mFilterModel.setStaffName(s);
+        getData();
+    }
 
+    private void getData() {
+        mAdapter.clearData();
+        mIsFilterChanged = true;
+        mPresenter.getDeviceUsingHistory(mFilterModel);
     }
 
     @Override
     public void onActionMenuItemSelected(FloatingSearchView searchView, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
-
+                mFilterModel.setStaffName(searchView.getQuery());
+                getData();
                 break;
             case R.id.action_filter:
                 setDrawerStatus(
@@ -171,16 +223,6 @@ public class DeviceUsingManagerViewModel extends BaseObservable
             default:
                 break;
         }
-    }
-
-    @Bindable
-    public DeviceUsingHistoryFilter getFilterModel() {
-        return mFilterModel;
-    }
-
-    public void setFilterModel(DeviceUsingHistoryFilter filterModel) {
-        mFilterModel = filterModel;
-        notifyPropertyChanged(BR.filterModel);
     }
 
     @Bindable
@@ -234,12 +276,12 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     }
 
     @Bindable
-    public int getProgressBarVisibility() {
-        return mProgressBarVisibility;
+    public DeviceUsingHistoryFilter getFilterModel() {
+        return mFilterModel;
     }
 
-    public void setProgressBarVisibility(int progressBarVisibility) {
-        mProgressBarVisibility = progressBarVisibility;
-        notifyPropertyChanged(BR.progressBarVisibility);
+    public void setFilterModel(DeviceUsingHistoryFilter filterModel) {
+        mFilterModel = filterModel;
+        notifyPropertyChanged(BR.filterModel);
     }
 }

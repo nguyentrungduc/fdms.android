@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.deviceusingmanager;
 
+import android.content.Intent;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Device;
@@ -24,6 +25,12 @@ public interface DeviceUsingManagerContract {
         void onChooseStatusClick();
 
         void onItemDeviceClick(Device device);
+
+        void showProgress();
+
+        void hideProgress();
+
+        void onActivityResult(int requestCode, int resultCode, Intent data);
     }
 
     /**

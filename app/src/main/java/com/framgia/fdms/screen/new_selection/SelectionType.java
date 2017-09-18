@@ -4,6 +4,7 @@ import android.support.annotation.IntDef;
 
 import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
+import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_HISTORY;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
@@ -14,7 +15,7 @@ import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
  * <></>
  */
 
-@IntDef({ STATUS, CATEGORY, VENDOR, MARKER, MEETING_ROOM, DEVICE_GROUP })
+@IntDef({ STATUS, CATEGORY, VENDOR, MARKER, MEETING_ROOM, DEVICE_GROUP, DEVICE_USING_HISTORY })
 public @interface SelectionType {
     int STATUS = 0;
     int CATEGORY = 1;
@@ -22,4 +23,5 @@ public @interface SelectionType {
     int MARKER = 3;
     int MEETING_ROOM = 4;
     int DEVICE_GROUP = 5;
+    int DEVICE_USING_HISTORY = 6;
 }
