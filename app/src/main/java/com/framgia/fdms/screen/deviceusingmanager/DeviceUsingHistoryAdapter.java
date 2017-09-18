@@ -37,12 +37,12 @@ public class DeviceUsingHistoryAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getGroup(int i) {
+    public DeviceUsingHistory getGroup(int i) {
         return mDevices.get(i);
     }
 
     @Override
-    public Object getChild(int i, int i1) {
+    public Device getChild(int i, int i1) {
         List<Device> devices = mDevices.get(i).getUsingDevices();
         return devices.get(i);
     }
@@ -63,33 +63,48 @@ public class DeviceUsingHistoryAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
+    public View getGroupView(int groupPosition, boolean isExpanded, View view,
+        ViewGroup viewGroup) {
+        ItemGroupUserDeviceBinding binding;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) viewGroup.getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            ItemGroupUserDeviceBinding binding =
-                DataBindingUtil.inflate(inflater, R.layout.item_group_user_device, viewGroup,
-                    false);
+            binding = DataBindingUtil.inflate(inflater, R.layout.item_group_user_device, viewGroup,
+                false);
             view = binding.getRoot();
+            view.setTag(binding);
+        } else {
+            binding = (ItemGroupUserDeviceBinding) view.getTag();
         }
-        return view;
+
+        binding.setIsExpanded(isExpanded);
+        binding.setDeviceUsingHistory(getGroup(groupPosition));
+        binding.executePendingBindings();
+        return binding.getRoot();
     }
 
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
+        ItemDeviceUsingHistoryBinding binding;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) viewGroup.getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            ItemDeviceUsingHistoryBinding binding =
+            binding =
                 DataBindingUtil.inflate(inflater, R.layout.item_device_using_history, viewGroup,
                     false);
             view = binding.getRoot();
+            view.setTag(binding);
+        } else {
+            binding = (ItemDeviceUsingHistoryBinding) view.getTag();
         }
-        return view;
+        binding.setDevice(getChild(i, i1));
+        binding.setDeviceUsingHistory(getGroup(i));
+        binding.executePendingBindings();
+        return binding.getRoot();
     }
 
     @Override
     public boolean isChildSelectable(int i, int i1) {
-        return false;
+        return true;
     }
 }

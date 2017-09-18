@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.source.DeviceUsingHistoryRepository;
+import com.framgia.fdms.data.source.remote.DeviceUsingHistoryRemoteDataSource;
 import com.framgia.fdms.databinding.FragmentDeviceUsingBinding;
 
 /**
@@ -26,8 +28,8 @@ public class DeviceUsingManagerFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mViewModel = new DeviceUsingManagerViewModel();
 
-        DeviceUsingManagerContract.Presenter presenter =
-            new DeviceUsingManagerPresenter(mViewModel);
+        DeviceUsingManagerContract.Presenter presenter = new DeviceUsingManagerPresenter(mViewModel,
+            new DeviceUsingHistoryRepository(new DeviceUsingHistoryRemoteDataSource()));
         mViewModel.setPresenter(presenter);
     }
 

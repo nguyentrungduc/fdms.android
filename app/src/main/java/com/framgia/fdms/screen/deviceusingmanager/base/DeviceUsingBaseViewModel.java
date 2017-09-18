@@ -37,7 +37,7 @@ public class DeviceUsingBaseViewModel implements DeviceUsingManagerContract.View
     }
 
     @Override
-    public void onGetDeviceUsingHistoryFailed() {
+    public void onGetDeviceUsingHistoryFailed(String msg) {
         // TODO: 9/16/2017  
     }
 

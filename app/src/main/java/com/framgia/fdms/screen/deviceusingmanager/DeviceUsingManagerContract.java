@@ -16,7 +16,7 @@ public interface DeviceUsingManagerContract {
 
         void onGetDeviceUsingHistorySuccess(List<DeviceUsingHistory> deviceUsingHistories);
 
-        void onGetDeviceUsingHistoryFailed();
+        void onGetDeviceUsingHistoryFailed(String msg);
 
         void onClearFilterClick();
 

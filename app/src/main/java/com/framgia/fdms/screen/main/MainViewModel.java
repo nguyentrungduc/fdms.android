@@ -23,6 +23,7 @@ import com.framgia.fdms.screen.authenication.login.LoginActivity;
 import com.framgia.fdms.screen.dashboard.DashboardFragment;
 import com.framgia.fdms.screen.device.listdevice.ListDeviceFragment;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
+import com.framgia.fdms.screen.deviceusingmanager.DeviceUsingManagerFragment;
 import com.framgia.fdms.screen.meetingroom.listmeetingroom.ListMeetingRoomFragment;
 import com.framgia.fdms.screen.producer.ProducerFragment;
 import com.framgia.fdms.screen.profile.ProfileFragment;
@@ -93,6 +94,7 @@ public class MainViewModel extends BaseObservable
         fragments.add(ListDeviceFragment.newInstance(TAB_MY_DEVICE));
         fragments.add(UserRequestFragment.newInstance());
         fragments.add(ListMeetingRoomFragment.newInstance());
+        fragments.add(DeviceUsingManagerFragment.newInstance());
         mPagerAdapter = new ViewPagerAdapter(activity.getSupportFragmentManager(), fragments);
         mActivity = activity;
         mNavigator = new Navigator(activity);
@@ -174,10 +176,8 @@ public class MainViewModel extends BaseObservable
                 mActivity.setTitle(R.string.title_manage_meeting_room);
                 break;
             case R.id.item_device_using_history:
-                // TODO: 07/09/2017 show using history
-                break;
-            case R.id.item_scan_qrcode:
-                onStartScannerQrCode();
+                setTab(TAB_DEVICE_USING_HISTORY);
+                mActivity.setTitle(R.string.title_device_using_history);
                 break;
             case R.id.item_logout:
                 // TODO: 07/09/2017 call api logout

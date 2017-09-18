@@ -1,7 +1,7 @@
 package com.framgia.fdms.data.source;
 
 import com.framgia.fdms.data.model.DeviceUsingHistory;
-import com.framgia.fdms.data.source.remote.DeviceUsingHistoryDataSource;
+import com.framgia.fdms.data.source.remote.DeviceUsingHistoryRemoteDataSource;
 import io.reactivex.Observable;
 import java.util.List;
 
@@ -10,14 +10,15 @@ import java.util.List;
  */
 public class DeviceHistoryRepository {
     private static DeviceHistoryRepository sInstances;
-    private DeviceUsingHistoryDataSource mDeviceUsingHistoryDataSource;
+    private DeviceUsingHistoryRemoteDataSource mDeviceUsingHistoryDataSource;
 
-    public DeviceHistoryRepository(DeviceUsingHistoryDataSource deviceUsingHistoryDataSource) {
+    public DeviceHistoryRepository(
+        DeviceUsingHistoryRemoteDataSource deviceUsingHistoryDataSource) {
         mDeviceUsingHistoryDataSource = deviceUsingHistoryDataSource;
     }
 
     private DeviceHistoryRepository() {
-        mDeviceUsingHistoryDataSource = DeviceUsingHistoryDataSource.getInstances();
+        mDeviceUsingHistoryDataSource = DeviceUsingHistoryRemoteDataSource.getInstances();
     }
 
     public static DeviceHistoryRepository getInstances() {
