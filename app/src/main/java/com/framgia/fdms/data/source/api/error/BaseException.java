@@ -77,7 +77,7 @@ public final class BaseException extends RuntimeException {
 
     private String getNetworkErrorMessage(Throwable throwable) {
         if (throwable instanceof SocketTimeoutException) {
-            return throwable.getMessage();
+            return "Please check your internet connection and try again!";
         }
 
         if (throwable instanceof UnknownHostException) {

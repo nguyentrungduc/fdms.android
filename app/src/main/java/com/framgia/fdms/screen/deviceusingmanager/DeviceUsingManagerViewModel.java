@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.deviceusingmanager;
 
+import android.app.Activity;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v4.widget.DrawerLayout;
@@ -12,7 +13,10 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
+import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
+import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import java.util.List;
 
@@ -38,6 +42,7 @@ public class DeviceUsingManagerViewModel extends BaseObservable
 
     private DeviceUsingHistoryAdapter mAdapter;
     private DeviceUsingHistoryFilter mFilter;
+    private Navigator mNavigator;
 
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
         @Override
@@ -58,8 +63,9 @@ public class DeviceUsingManagerViewModel extends BaseObservable
         }
     };
 
-    public DeviceUsingManagerViewModel() {
+    public DeviceUsingManagerViewModel(Activity activity) {
         mFilter = new DeviceUsingHistoryFilter();
+        mNavigator = new Navigator(activity);
     }
 
     @Override
@@ -82,6 +88,7 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     public void onGetDeviceUsingHistorySuccess(List<DeviceUsingHistory> deviceUsingHistories) {
         //Do this on DeviceUsingBaseViewModel
         setAdapter(new DeviceUsingHistoryAdapter(deviceUsingHistories));
+        mAdapter.setViewModel(this);
     }
 
     @Override
@@ -97,6 +104,11 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     @Override
     public void onChooseStatusClick() {
         // TODO: 9/16/2017
+    }
+
+    @Override
+    public void onItemDeviceClick(Device device) {
+        mNavigator.startActivity(DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
     }
 
     @Override
