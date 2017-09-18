@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.deviceusingmanager;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,7 +27,7 @@ public class DeviceUsingManagerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new DeviceUsingManagerViewModel(getActivity());
+        mViewModel = new DeviceUsingManagerViewModel(this);
 
         DeviceUsingManagerContract.Presenter presenter = new DeviceUsingManagerPresenter(mViewModel,
             new DeviceUsingHistoryRepository(DeviceUsingHistoryRemoteDataSource.getInstances()));
@@ -42,6 +43,12 @@ public class DeviceUsingManagerFragment extends Fragment {
             DataBindingUtil.inflate(inflater, R.layout.fragment_device_using, container, false);
         binding.setViewModel((DeviceUsingManagerViewModel) mViewModel);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mViewModel.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
