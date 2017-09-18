@@ -20,9 +20,14 @@ import java.util.List;
 public class DeviceUsingHistoryAdapter extends BaseExpandableListAdapter {
 
     private List<DeviceUsingHistory> mDevices;
+    private DeviceUsingManagerViewModel mViewModel;
 
     public DeviceUsingHistoryAdapter(List<DeviceUsingHistory> deviceUsingHistories) {
         mDevices = deviceUsingHistories;
+    }
+
+    public void setViewModel(DeviceUsingManagerViewModel viewModel) {
+        mViewModel = viewModel;
     }
 
     @Override
@@ -103,7 +108,7 @@ public class DeviceUsingHistoryAdapter extends BaseExpandableListAdapter {
             binding = (ItemDeviceUsingHistoryBinding) view.getTag();
         }
         binding.setDevice(getChild(groupPosition, childPos));
-        binding.setDeviceUsingHistory(getGroup(groupPosition));
+        binding.setViewModel(mViewModel);
         binding.executePendingBindings();
         return binding.getRoot();
     }

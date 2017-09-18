@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class DeviceUsingHistory extends BaseObservable {
     @Expose
-    @SerializedName("name")
+    @SerializedName(value = "staff", alternate = { "name" })
     private String mStaffName;
     @Expose
     @SerializedName("from_date")

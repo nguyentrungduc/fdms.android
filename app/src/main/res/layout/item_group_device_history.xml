@@ -39,6 +39,7 @@
                 android:textSize="@dimen/sp_16"
                 android:textStyle="bold"
                 />
+
             <ImageView
                 android:layout_width="@dimen/dp_10"
                 android:layout_height="@dimen/dp_10"

@@ -26,7 +26,7 @@ public class DeviceUsingManagerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new DeviceUsingManagerViewModel();
+        mViewModel = new DeviceUsingManagerViewModel(getActivity());
 
         DeviceUsingManagerContract.Presenter presenter = new DeviceUsingManagerPresenter(mViewModel,
             new DeviceUsingHistoryRepository(DeviceUsingHistoryRemoteDataSource.getInstances()));

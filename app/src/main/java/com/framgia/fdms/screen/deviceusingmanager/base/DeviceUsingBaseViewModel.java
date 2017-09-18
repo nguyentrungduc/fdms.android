@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.deviceusingmanager.base;
 
+import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.screen.deviceusingmanager.DeviceUsingManagerContract;
 import java.util.List;
@@ -49,5 +50,10 @@ public class DeviceUsingBaseViewModel implements DeviceUsingManagerContract.View
     @Override
     public void onChooseStatusClick() {
         // TODO: 9/16/2017  
+    }
+
+    @Override
+    public void onItemDeviceClick(Device device) {
+
     }
 }
