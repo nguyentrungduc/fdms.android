@@ -28,7 +28,7 @@ public interface DeviceUsingManagerContract {
      */
     interface Presenter extends BasePresenter {
 
-        void getDeviceUsingHistory();
+        void getDeviceUsingHistory(DeviceUsingHistoryFilter filter);
 
         void loadMoreData();
     }

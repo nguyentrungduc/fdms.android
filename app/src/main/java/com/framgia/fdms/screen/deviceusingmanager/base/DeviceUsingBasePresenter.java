@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.deviceusingmanager.base;
 
+import com.framgia.fdms.screen.deviceusingmanager.DeviceUsingHistoryFilter;
 import com.framgia.fdms.screen.deviceusingmanager.DeviceUsingManagerContract;
 
 /**
@@ -25,7 +26,7 @@ public class DeviceUsingBasePresenter implements DeviceUsingManagerContract.Pres
     }
 
     @Override
-    public void getDeviceUsingHistory() {
+    public void getDeviceUsingHistory(DeviceUsingHistoryFilter filter) {
 
     }
 

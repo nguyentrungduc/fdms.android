@@ -29,7 +29,7 @@ public class DeviceUsingManagerFragment extends Fragment {
         mViewModel = new DeviceUsingManagerViewModel();
 
         DeviceUsingManagerContract.Presenter presenter = new DeviceUsingManagerPresenter(mViewModel,
-            new DeviceUsingHistoryRepository(new DeviceUsingHistoryRemoteDataSource()));
+            new DeviceUsingHistoryRepository(DeviceUsingHistoryRemoteDataSource.getInstances()));
         mViewModel.setPresenter(presenter);
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class DeviceUsingHistory extends BaseObservable {
     @Expose
-    @SerializedName("staff")
+    @SerializedName("name")
     private String mStaffName;
     @Expose
     @SerializedName("from_date")
@@ -21,15 +21,9 @@ public class DeviceUsingHistory extends BaseObservable {
     @Expose
     @SerializedName("return_date")
     private Date mEndDate;
+    @SerializedName("device")
+    @Expose
     private List<Device> mUsingDevices;
-
-    public DeviceUsingHistory(String staffName, Date startDate, Date endDate,
-        List<Device> usingDevices) {
-        mStaffName = staffName;
-        mStartDate = startDate;
-        mEndDate = endDate;
-        mUsingDevices = usingDevices;
-    }
 
     @Bindable
     public List<Device> getUsingDevices() {

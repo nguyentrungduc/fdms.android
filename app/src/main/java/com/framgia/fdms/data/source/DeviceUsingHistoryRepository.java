@@ -1,6 +1,7 @@
 package com.framgia.fdms.data.source;
 
 import com.framgia.fdms.data.model.DeviceUsingHistory;
+import com.framgia.fdms.screen.deviceusingmanager.DeviceUsingHistoryFilter;
 import io.reactivex.Observable;
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class DeviceUsingHistoryRepository implements DeviceUsingHistoryDataSourc
     }
 
     @Override
-    public Observable<List<DeviceUsingHistory>> getListDeviceHistory() {
-        return mRemoteDataSource.getListDeviceHistory();
+    public Observable<List<DeviceUsingHistory>> getListDeviceHistory(
+        DeviceUsingHistoryFilter filter, int page, int perPage) {
+        return mRemoteDataSource.getListDeviceHistory(filter, page, perPage);
     }
 }

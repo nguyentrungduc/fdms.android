@@ -11,6 +11,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
+import static com.framgia.fdms.utils.Constant.PER_PAGE;
+
 /**
  * Listens to user actions from the UI ({@link DeviceUsingManagerFragment}),
  * retrieves the data and updates
@@ -21,6 +23,7 @@ final class DeviceUsingManagerPresenter implements DeviceUsingManagerContract.Pr
     private final DeviceUsingManagerContract.ViewModel mViewModel;
     private DeviceUsingHistoryDataSource.RemoteDataSource mRepository;
     private CompositeDisposable mCompositeDisposable;
+    private int mPage = 1;
 
     DeviceUsingManagerPresenter(DeviceUsingManagerContract.ViewModel viewModel,
         DeviceUsingHistoryDataSource.RemoteDataSource repository) {
@@ -31,7 +34,6 @@ final class DeviceUsingManagerPresenter implements DeviceUsingManagerContract.Pr
 
     @Override
     public void onStart() {
-        getDeviceUsingHistory();
     }
 
     @Override
@@ -40,8 +42,8 @@ final class DeviceUsingManagerPresenter implements DeviceUsingManagerContract.Pr
     }
 
     @Override
-    public void getDeviceUsingHistory() {
-        Disposable disposable = mRepository.getListDeviceHistory()
+    public void getDeviceUsingHistory(DeviceUsingHistoryFilter filter) {
+        Disposable disposable = mRepository.getListDeviceHistory(filter, mPage, PER_PAGE)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<List<DeviceUsingHistory>>() {

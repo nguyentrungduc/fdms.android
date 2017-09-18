@@ -32,8 +32,10 @@ public class DeviceUsingHistoryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int i) {
-        List<Device> devices = mDevices.get(i).getUsingDevices();
-        return devices != null ? devices.size() : 0;
+        if (getGroup(i) != null && getGroup(i).getUsingDevices() != null) {
+            return getGroup(i).getUsingDevices().size();
+        }
+        return 0;
     }
 
     @Override
@@ -42,19 +44,21 @@ public class DeviceUsingHistoryAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Device getChild(int i, int i1) {
-        List<Device> devices = mDevices.get(i).getUsingDevices();
-        return devices.get(i);
+    public Device getChild(int groupPos, int childPos) {
+        if (getGroup(groupPos) != null && getGroup(groupPos).getUsingDevices() != null) {
+            return getGroup(groupPos).getUsingDevices().get(childPos);
+        }
+        return null;
     }
 
     @Override
-    public long getGroupId(int i) {
-        return i;
+    public long getGroupId(int groupPos) {
+        return groupPos;
     }
 
     @Override
-    public long getChildId(int i, int i1) {
-        return i1;
+    public long getChildId(int groupPos, int childPos) {
+        return childPos;
     }
 
     @Override
@@ -84,7 +88,8 @@ public class DeviceUsingHistoryAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
+    public View getChildView(int groupPosition, int childPos, boolean b, View view,
+        ViewGroup viewGroup) {
         ItemDeviceUsingHistoryBinding binding;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) viewGroup.getContext()
@@ -97,8 +102,8 @@ public class DeviceUsingHistoryAdapter extends BaseExpandableListAdapter {
         } else {
             binding = (ItemDeviceUsingHistoryBinding) view.getTag();
         }
-        binding.setDevice(getChild(i, i1));
-        binding.setDeviceUsingHistory(getGroup(i));
+        binding.setDevice(getChild(groupPosition, childPos));
+        binding.setDeviceUsingHistory(getGroup(groupPosition));
         binding.executePendingBindings();
         return binding.getRoot();
     }

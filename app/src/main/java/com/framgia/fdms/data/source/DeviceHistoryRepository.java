@@ -29,6 +29,6 @@ public class DeviceHistoryRepository {
     }
 
     public Observable<List<DeviceUsingHistory>> getListDeviceHistory() {
-        return mDeviceUsingHistoryDataSource.getListDeviceHistory();
+        return mDeviceUsingHistoryDataSource.getListDeviceHistory(null, 0, 0);
     }
 }
