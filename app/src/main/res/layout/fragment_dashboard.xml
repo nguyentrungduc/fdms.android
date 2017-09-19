@@ -84,42 +84,5 @@
                 />
 
         </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:layout_marginRight="@dimen/dp_8"
-            >
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="@dimen/dp_32"
-                android:layout_height="@dimen/dp_32"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:onClick="@{ () -> viewModel.onStartNotificationView()}"
-                android:src="@drawable/ic_notifications_black_24dp"
-                bind:contentShowCase="@{@string/show_case_notification_description}"
-                bind:dismissText="@{@string/action_close_show_case}"
-                bind:showcaseSequence="@{viewModel.sequence}"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/bg_notification_circle_red"
-                android:gravity="center"
-                android:minHeight="@dimen/dp_18"
-                android:minWidth="@dimen/dp_18"
-                android:text="@{viewModel.numberNotification &lt; Constant.MAX_NOTIFICATION ? viewModel.numberNotification + `` : @string/text_number_notification_more}"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/sp_12"
-                android:visibility="@{viewModel.numberNotification > 0 ? View.VISIBLE : View.GONE}"
-                />
-        </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>
 </layout>
