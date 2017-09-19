@@ -48,8 +48,6 @@ public class RequestDetailViewModel extends BaseObservable
     private Context mContext;
     private FragmentActivity mActivity;
     private ObservableBoolean mIsEdit = new ObservableBoolean();
-    private RequestDetailAdapter mAdapter;
-    private List<Status> mCategories = new ArrayList<>();
     private RequestDetailContract.Presenter mPresenter;
     private ObservableField<Status> mCategory = new ObservableField<>();
     private List<Request.RequestAction> mListAction = new ArrayList<>();
@@ -62,7 +60,7 @@ public class RequestDetailViewModel extends BaseObservable
     private Request mRequestTemp;
     private int mActionMenuVisibility;
 
-    public RequestDetailViewModel(AppCompatActivity activity, List<Request.DeviceRequest> request,
+    public RequestDetailViewModel(AppCompatActivity activity,
         List<Request.RequestAction> actions, String statusRequest, Request actionRequest,
         FloatingActionMenu floatingActionsMenu) {
         mContext = activity;
@@ -70,8 +68,6 @@ public class RequestDetailViewModel extends BaseObservable
         setRequest(actionRequest);
         mStatusRequest = statusRequest;
         mIsEdit.set(false);
-        mAdapter = new RequestDetailAdapter(activity, this);
-        mAdapter.onUpdatePage(request);
         mListAction.addAll(actions);
         mFloatingActionsMenu = floatingActionsMenu;
     }
@@ -92,15 +88,6 @@ public class RequestDetailViewModel extends BaseObservable
             .show();
     }
 
-    @Override
-    public void onGetCategorySuccess(List<Status> categories) {
-        if (categories == null) {
-            return;
-        }
-        mCategories.clear();
-        mCategories.addAll(categories);
-    }
-
     public ObservableBoolean getIsEdit() {
         return mIsEdit;
     }
@@ -117,21 +104,6 @@ public class RequestDetailViewModel extends BaseObservable
     @Override
     public void setPresenter(RequestDetailContract.Presenter presenter) {
         mPresenter = presenter;
-    }
-
-    public void removeAt(int pos) {
-        mAdapter.removeAt(pos);
-    }
-
-    public void addAtItem() {
-        mAdapter.addItem();
-    }
-
-    public void onCategoryClick() {
-        if (mCategories == null) return;
-        mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, mCategories, null,
-                StatusSelectionType.CATEGORY), REQUEST_CATEGORY);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -164,8 +136,6 @@ public class RequestDetailViewModel extends BaseObservable
         mFloatingActionsMenu.showMenu(true);
         if (mRequestTemp != null) {
             setRequest(mRequestTemp);
-            mAdapter.clear();
-            mAdapter.onUpdatePage(mRequestTemp.getDevices());
         }
         hideSoftKeyboard(mActivity);
     }
@@ -322,16 +292,6 @@ public class RequestDetailViewModel extends BaseObservable
     public void setRequest(Request request) {
         mRequest = request;
         notifyPropertyChanged(BR.request);
-    }
-
-    @Bindable
-    public RequestDetailAdapter getAdapter() {
-        return mAdapter;
-    }
-
-    public void setAdapter(RequestDetailAdapter adapter) {
-        mAdapter = adapter;
-        notifyPropertyChanged(BR.adapter);
     }
 
     @Bindable

@@ -27,7 +27,6 @@ import static com.framgia.fdms.utils.Constant.DeviceStatus.APPROVED;
  */
 public class RequestDetailPresenter implements RequestDetailContract.Presenter {
     private RequestDetailContract.ViewModel mViewModel;
-    private CategoryRepository mCategoryRepository;
     private CompositeDisposable mSubscription;
     private RequestRepository mRequestRepository;
     private UserRepository mUserRepository;
@@ -36,38 +35,10 @@ public class RequestDetailPresenter implements RequestDetailContract.Presenter {
         UserRepository userRepository) {
         mViewModel = viewModel;
         mSubscription = new CompositeDisposable();
-        mCategoryRepository =
-            new CategoryRepository(new CategoryRemoteDataSource(FDMSServiceClient.getInstance()));
         mRequestRepository =
             new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance()));
         mUserRepository = userRepository;
-        getListCategory();
         getCurrentUser();
-    }
-
-    public void getListCategory() {
-        Disposable subscription = mCategoryRepository.getListCategory()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(new Consumer<Disposable>() {
-                @Override
-                public void accept(Disposable disposable) throws Exception {
-                    mViewModel.showProgressbar();
-                }
-            })
-            .subscribe(new Consumer<List<Status>>() {
-                @Override
-                public void accept(List<Status> categories) throws Exception {
-                    mViewModel.onGetCategorySuccess(categories);
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mViewModel.hideProgressbar();
-                    mViewModel.onLoadError(error.getMessage());
-                }
-            });
-        mSubscription.add(subscription);
     }
 
     public void updateActionRequest(int requestId, int actionId) {
