@@ -19,8 +19,8 @@ import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Picture;
 import com.framgia.fdms.data.model.Status;
-import com.framgia.fdms.screen.selection.StatusSelectionActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionType;
+import com.framgia.fdms.screen.new_selection.SelectionType;
+import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
 import com.framgia.fdms.utils.Utils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -28,9 +28,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
@@ -38,15 +36,12 @@ import static android.widget.Toast.makeText;
 import static com.framgia.fdms.FDMSApplication.sUpdatedDevice;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.CREATE;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.EDIT;
-import static com.framgia.fdms.utils.Constant.ACTION_CLEAR;
-import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_CATEGORY;
-import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_STATUE;
-import static com.framgia.fdms.utils.Constant.FIRST_INDEX;
-import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
+import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.PICK_IMAGE_REQUEST;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_BRANCH;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MAKER;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MEETING_ROOM;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_VENDOR;
 
@@ -79,18 +74,15 @@ public class CreateDeviceViewModel extends BaseObservable
     private String mOriginalPriceError;
     private String mWarrantyError;
     private String mBoughtDate;
+    private String mMeetingRoomError;
     private Device mDevice;
     private String mStatusError;
-    private List<Status> mStatuses = new ArrayList<>();
-    private List<Status> mCategories = new ArrayList<>();
-    private List<Status> mBranches = new ArrayList<>();
-    private List<Status> mVendors = new ArrayList<>();
-    private List<Status> mMakers = new ArrayList<>();
     private Status mCategory;
     private Status mStatus;
     private Status mBranch;
     private Status mVendor;
     private Status mMarker;
+    private Status mMeetingRoom;
     private Calendar mCalendar = Calendar.getInstance();
     private boolean mIsQrCode = true;
     private Bitmap mDeviceCode;
@@ -141,65 +133,50 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onGetBranchSuccess(List<Status> branches) {
-        updateBranch(branches);
-    }
-
-    @Override
     public void onLoadError(String msg) {
         makeText(mContext, msg, Toast.LENGTH_LONG).show();
     }
 
     public void onChooseCategory() {
-        if (mCategories == null || mDeviceType == EDIT) {
+        if (mDeviceType == EDIT) {
             return;
         }
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, mCategories, mStatuses,
-                StatusSelectionType.CATEGORY), REQUEST_CATEGORY);
+            StatusSelectionActivity.getInstance(mContext, SelectionType.CATEGORY),
+            REQUEST_CATEGORY);
+    }
+
+    public void onChooseMeetingRoom() {
+        mActivity.startActivityForResult(
+            StatusSelectionActivity.getInstance(mContext, SelectionType.MEETING_ROOM),
+            REQUEST_MEETING_ROOM);
     }
 
     public void onChooseStatus() {
-        if (mStatuses == null || mStatus.getName() != null && mStatus.getName()
-            .equals(Status.USING_STATUS)) {
+        if (mStatus.getName() != null && mStatus.getName().equals(Status.USING_STATUS)) {
             return;
         }
-        for (Status status : mStatuses) {
-            if (status == null || status.getName().equals(Status.USING_STATUS)) {
-                mStatuses.remove(status);
-                break;
-            }
-        }
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, mCategories, mStatuses,
-                StatusSelectionType.STATUS), REQUEST_STATUS);
+            StatusSelectionActivity.getInstance(mContext, SelectionType.STATUS), REQUEST_STATUS);
     }
 
     public void onChooseBranch() {
-        if (mBranches == null || mDeviceType == EDIT) {
+        if (mDeviceType == EDIT) {
             return;
         }
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, mCategories, mBranches,
-                StatusSelectionType.STATUS), REQUEST_BRANCH);
+            StatusSelectionActivity.getInstance(mContext, SelectionType.BRANCH),
+            REQUEST_BRANCH);
     }
 
     public void onChooseVendor() {
-        if (mVendors == null) {
-            return;
-        }
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, mCategories, mVendors,
-                StatusSelectionType.STATUS), REQUEST_BRANCH);
+            StatusSelectionActivity.getInstance(mContext, SelectionType.VENDOR), REQUEST_VENDOR);
     }
 
     public void onChooseMaker() {
-        if (mMakers == null) {
-            return;
-        }
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, mCategories, mMakers,
-                StatusSelectionType.STATUS), REQUEST_BRANCH);
+            StatusSelectionActivity.getInstance(mContext, SelectionType.MARKER), REQUEST_MAKER);
     }
 
     @Override
@@ -215,53 +192,6 @@ public class CreateDeviceViewModel extends BaseObservable
     @Override
     public void setPresenter(CreateDeviceContract.Presenter presenter) {
         mPresenter = presenter;
-    }
-
-    @Override
-    public void onDeviceCategoryLoaded(List<Status> categories) {
-        updateCategory(categories);
-    }
-
-    public void updateCategory(List<Status> list) {
-        if (list == null) {
-            return;
-        }
-        mCategories.clear();
-        mCategories.addAll(list);
-    }
-
-    public void updateStatus(List<Status> list) {
-        if (list == null) {
-            return;
-        }
-        mStatuses.clear();
-        mStatuses.addAll(list);
-    }
-
-    public void updateBranch(List<Status> list) {
-        if (list == null) {
-            return;
-        }
-        mBranches.clear();
-        mBranches.addAll(list);
-    }
-
-    public void updateVendor(List<Status> list) {
-        if (list == null) {
-            return;
-        }
-        mVendors.clear();
-        mVendors.addAll(list);
-        mVendors.add(FIRST_INDEX, new Status(OUT_OF_INDEX, ACTION_CLEAR));
-    }
-
-    public void updateMaker(List<Status> list) {
-        if (list == null) {
-            return;
-        }
-        mMakers.clear();
-        mMakers.addAll(list);
-        mMakers.add(FIRST_INDEX, new Status(OUT_OF_INDEX, ACTION_CLEAR));
     }
 
     @Override
@@ -313,6 +243,12 @@ public class CreateDeviceViewModel extends BaseObservable
     public void onInputCategoryError() {
         mCategoryError = mContext.getString(R.string.msg_error_user_name);
         notifyPropertyChanged(BR.categoryError);
+    }
+
+    @Override
+    public void onInputMeetingRoomError() {
+        mMeetingRoomError = mContext.getString(R.string.msg_error_user_name);
+        notifyPropertyChanged(BR.meetingRoomError);
     }
 
     @Override
@@ -402,7 +338,7 @@ public class CreateDeviceViewModel extends BaseObservable
                 break;
             case REQUEST_CATEGORY:
                 Bundle bundle = data.getExtras();
-                Status category = bundle.getParcelable(BUNDLE_CATEGORY);
+                Status category = bundle.getParcelable(BUNDLE_DATA);
                 if (category.getName().equals(mContext.getString(R.string.action_clear))) {
                     category.setName(mContext.getString(R.string.title_empty));
                 }
@@ -411,7 +347,7 @@ public class CreateDeviceViewModel extends BaseObservable
                 break;
             case REQUEST_STATUS:
                 bundle = data.getExtras();
-                Status status = bundle.getParcelable(BUNDLE_STATUE);
+                Status status = bundle.getParcelable(BUNDLE_DATA);
                 if (status.getName().equals(mContext.getString(R.string.action_clear))) {
                     status.setName(mContext.getString(R.string.title_empty));
                 }
@@ -419,7 +355,7 @@ public class CreateDeviceViewModel extends BaseObservable
                 break;
             case REQUEST_BRANCH:
                 bundle = data.getExtras();
-                Status branch = bundle.getParcelable(BUNDLE_STATUE);
+                Status branch = bundle.getParcelable(BUNDLE_DATA);
                 if (branch.getName().equals(mContext.getString(R.string.action_clear))) {
                     branch.setId(DEFAULT_BRANCH_ID);
                     branch.setName(DEFAULT_BRANCH_NAME);
@@ -431,7 +367,7 @@ public class CreateDeviceViewModel extends BaseObservable
                 break;
             case REQUEST_VENDOR:
                 bundle = data.getExtras();
-                Status vendor = bundle.getParcelable(BUNDLE_STATUE);
+                Status vendor = bundle.getParcelable(BUNDLE_DATA);
                 if (vendor.getName().equals(mContext.getString(R.string.action_clear))) {
                     vendor.setName(mContext.getString(R.string.title_empty));
                 }
@@ -439,7 +375,7 @@ public class CreateDeviceViewModel extends BaseObservable
                 break;
             case REQUEST_MAKER:
                 bundle = data.getExtras();
-                Status maker = bundle.getParcelable(BUNDLE_STATUE);
+                Status maker = bundle.getParcelable(BUNDLE_DATA);
                 if (maker.getName().equals(mContext.getString(R.string.action_clear))) {
                     maker.setName(mContext.getString(R.string.title_empty));
                 }
@@ -471,11 +407,6 @@ public class CreateDeviceViewModel extends BaseObservable
         }
     }
 
-    @Override
-    public void onDeviceStatusLoaded(List<Status> statuses) {
-        updateStatus(statuses);
-    }
-
     @Bindable
     public String getDeviceCodeError() {
         return mDeviceCodeError;
@@ -504,6 +435,11 @@ public class CreateDeviceViewModel extends BaseObservable
     @Bindable
     public String getCategoryError() {
         return mCategoryError;
+    }
+
+    @Bindable
+    public String getMeetingRoomError() {
+        return mMeetingRoomError;
     }
 
     @Bindable
@@ -620,6 +556,16 @@ public class CreateDeviceViewModel extends BaseObservable
     public void setBranch(Status branch) {
         mBranch = branch;
         notifyPropertyChanged(BR.branch);
+    }
+
+    @Bindable
+    public Status getMeetingRoom() {
+        return mMeetingRoom;
+    }
+
+    public void setMeetingRoom(Status meetingRoom) {
+        mMeetingRoom = meetingRoom;
+        notifyPropertyChanged(BR.meetingRoom);
     }
 
     @Bindable

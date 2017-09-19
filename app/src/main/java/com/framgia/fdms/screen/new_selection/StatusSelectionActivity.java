@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.source.BranchRepository;
 import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.DeviceUsingHistoryRepository;
@@ -22,6 +23,7 @@ import com.framgia.fdms.data.source.MeetingRoomRepository;
 import com.framgia.fdms.data.source.StatusRepository;
 import com.framgia.fdms.data.source.VendorRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
+import com.framgia.fdms.data.source.remote.BranchRemoteDataSource;
 import com.framgia.fdms.data.source.remote.CategoryRemoteDataSource;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.data.source.remote.DeviceUsingHistoryRemoteDataSource;
@@ -31,6 +33,7 @@ import com.framgia.fdms.data.source.remote.StatusRemoteDataSource;
 import com.framgia.fdms.data.source.remote.VendorRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityNewStatusSelectionBinding;
 
+import static com.framgia.fdms.screen.new_selection.SelectionType.BRANCH;
 import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_HISTORY;
@@ -113,6 +116,12 @@ public class StatusSelectionActivity extends AppCompatActivity
                 MarkerRepository markerRepository = new MarkerRepository(
                     new MarkerRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setMarkerRepository(markerRepository);
+                break;
+
+            case BRANCH:
+                BranchRepository branchRepository = new BranchRepository(
+                    new BranchRemoteDataSource(FDMSServiceClient.getInstance()));
+                presenter.setBranchRepository(branchRepository);
                 break;
 
             case MEETING_ROOM:

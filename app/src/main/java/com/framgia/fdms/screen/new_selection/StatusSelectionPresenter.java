@@ -3,6 +3,7 @@ package com.framgia.fdms.screen.new_selection;
 import android.text.TextUtils;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
+import com.framgia.fdms.data.source.BranchRepository;
 import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.DeviceUsingHistoryRepository;
@@ -22,6 +23,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
+import static com.framgia.fdms.screen.new_selection.SelectionType.BRANCH;
 import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_HISTORY;
@@ -49,6 +51,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
     private CategoryRepository mCategoryRepository;
     private VendorRepository mVendorRepository;
     private MarkerRepository mMarkerRepository;
+    private BranchRepository mBranchRepository;
     private MeetingRoomRepository mMeetingRoomRepository;
     private int mPage = 1;
     private String mKeySearch;
@@ -77,6 +80,10 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
 
     public void setMarkerRepository(MarkerRepository markerRepository) {
         mMarkerRepository = markerRepository;
+    }
+
+    public void setBranchRepository(BranchRepository branchRepository) {
+        mBranchRepository = branchRepository;
     }
 
     public void setMeetingRoomRepository(MeetingRoomRepository meetingRoomRepository) {
@@ -120,6 +127,9 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                 break;
             case MARKER:
                 getListMarker();
+                break;
+            case BRANCH:
+                getListBranch();
                 break;
             case MEETING_ROOM:
                 getListMeetingRoom();
@@ -168,7 +178,9 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
     public void loadMoreData() {
         if (mSelectionType == STATUS
             || mSelectionType == CATEGORY
-            || mSelectionType == DEVICE_USING_HISTORY) {
+            || mSelectionType == DEVICE_USING_HISTORY
+            || mSelectionType == BRANCH
+            || mSelectionType == DEVICE_GROUP) {
             mViewModel.onGetDataFailed(null);
             mViewModel.hideProgress();
             return;
@@ -380,6 +392,35 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                     if (TextUtils.isEmpty(mKeySearch) && statuses != null && statuses.size() != 0) {
                         statuses.add(0, new Status(OUT_OF_INDEX, TITLE_ALL));
                     }
+                    mViewModel.onGetDataSuccess(statuses);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onGetDataFailed(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
+                }
+            });
+        mCompositeDisposable.add(disposable);
+    }
+
+    private void getListBranch() {
+        Disposable disposable = mBranchRepository.getListBranch()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgress();
+                }
+            })
+            .subscribe(new Consumer<List<Status>>() {
+                @Override
+                public void accept(@NonNull List<Status> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
                 }
             }, new RequestError() {

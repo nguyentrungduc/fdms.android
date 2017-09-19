@@ -8,15 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
-import com.framgia.fdms.data.source.BranchRepository;
-import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.DeviceRepository;
-import com.framgia.fdms.data.source.StatusRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
-import com.framgia.fdms.data.source.remote.BranchRemoteDataSource;
-import com.framgia.fdms.data.source.remote.CategoryRemoteDataSource;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
-import com.framgia.fdms.data.source.remote.StatusRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityCreatedeviceBinding;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -67,14 +61,8 @@ public class CreateDeviceActivity extends AppCompatActivity {
 
         DeviceRepository deviceRepository =
             new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
-        StatusRepository statusRepository =
-            new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
-        CategoryRepository categoryRepository =
-            new CategoryRepository(new CategoryRemoteDataSource(FDMSServiceClient.getInstance()));
         CreateDeviceContract.Presenter presenter =
-            new CreateDevicePresenter(mViewModel, deviceRepository, statusRepository,
-                categoryRepository,
-                new BranchRepository(new BranchRemoteDataSource(FDMSServiceClient.getInstance())));
+            new CreateDevicePresenter(mViewModel, deviceRepository);
         mViewModel.setPresenter(presenter);
 
         ActivityCreatedeviceBinding binding =
