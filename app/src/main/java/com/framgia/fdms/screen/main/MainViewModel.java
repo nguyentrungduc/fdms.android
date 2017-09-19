@@ -65,7 +65,7 @@ import static com.framgia.fdms.utils.permission.PermissionUtil.MY_PERMISSIONS_RE
  */
 public class MainViewModel extends BaseObservable
     implements MainContract.ViewModel, ViewPagerScroll {
-    private static final int PAGE_LIMIT = 8;
+    private static final int PAGE_LIMIT = 3;
     private MainContract.Presenter mPresenter;
     private ViewPagerAdapter mPagerAdapter;
     private int mTab = TAB_DASH_BOARD;

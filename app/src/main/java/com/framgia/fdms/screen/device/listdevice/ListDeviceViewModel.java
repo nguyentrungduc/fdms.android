@@ -288,6 +288,7 @@ public class ListDeviceViewModel extends BaseObservable
             || device.getDeviceCategoryName() == null) {
             return;
         }
+        mFilterModel.initDefaultFilter();
         mFilterModel.setCategory(
             new Status(device.getDeviceCategoryId(), device.getDeviceCategoryName()));
         mAdapter.clear();

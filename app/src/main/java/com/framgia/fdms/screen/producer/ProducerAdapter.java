@@ -65,8 +65,12 @@ public class ProducerAdapter extends BaseRecyclerViewAdapter<Producer, ProducerA
         if (mVendors == null || mVendors.size() == 0 || producer == null) {
             return;
         }
-        mVendors.remove(producer);
-        notifyItemRemoved(mVendors.indexOf(producer));
+        int index = mVendors.indexOf(producer);
+        if (index < 0) {
+            return;
+        }
+        mVendors.remove(index);
+        notifyItemRemoved(index);
     }
 
     @Override
