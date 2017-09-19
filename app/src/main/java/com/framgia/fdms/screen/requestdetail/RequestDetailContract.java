@@ -20,8 +20,6 @@ public interface RequestDetailContract {
 
         void onLoadError(String message);
 
-        void onGetCategorySuccess(List<Status> categories);
-
         void onActivityResult(int requestCode, int resultCode, Intent data);
 
         void onSubmitEditClick();

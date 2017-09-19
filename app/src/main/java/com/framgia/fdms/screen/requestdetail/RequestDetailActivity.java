@@ -25,7 +25,6 @@ public class RequestDetailActivity extends AppCompatActivity {
     private ActivityRequestDetailBinding mBinding;
     private Toolbar mToolbar;
     private RequestDetailContract.ViewModel mViewModel;
-    private FloatingActionMenu mFloatingActionsMenu;
     private Request mRequest;
 
     public static Intent newInstance(Context context, Request request) {
@@ -40,14 +39,13 @@ public class RequestDetailActivity extends AppCompatActivity {
         getRequestFromIntent();
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_request_detail);
         mViewModel =
-            new RequestDetailViewModel(this, mRequest.getDevices(), mRequest.getRequestActionList(),
+            new RequestDetailViewModel(this, mRequest.getRequestActionList(),
                 mRequest.getRequestStatus(), mRequest, mBinding.floatActionMenu);
         mBinding.setViewModel((RequestDetailViewModel) mViewModel);
         RequestDetailContract.Presenter presenter = new RequestDetailPresenter(mViewModel,
             new UserRepository(
                 new UserLocalDataSource(new SharePreferenceImp(getApplicationContext()))));
         mViewModel.setPresenter(presenter);
-        mFloatingActionsMenu = mBinding.floatActionMenu;
         mViewModel.initActionEdit(mRequest);
         initToolbar();
     }
