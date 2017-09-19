@@ -89,7 +89,7 @@ public interface FDMSApi {
     Observable<Respone<Request>> updateActionRequest(@Path("id") int requestId,
         @Field("request[request_status_id]") int actionId);
 
-    @GET("api/device_historys/{id}")
+    @GET("api/device_history/{id}")
     Observable<Respone<List<DeviceHistoryDetail>>> getDeviceDetailHistory(@Path("id") int deviceId);
 
     @GET("api/device_usings/{id}")
