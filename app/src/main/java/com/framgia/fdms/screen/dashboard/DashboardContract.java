@@ -16,8 +16,6 @@ interface DashboardContract {
 
         void onError(String message);
 
-        void onStartNotificationView();
-
         void onShowCase();
     }
 

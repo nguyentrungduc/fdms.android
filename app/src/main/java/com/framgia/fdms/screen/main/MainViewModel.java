@@ -25,6 +25,7 @@ import com.framgia.fdms.screen.device.listdevice.ListDeviceFragment;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.deviceusingmanager.DeviceUsingManagerFragment;
 import com.framgia.fdms.screen.meetingroom.listmeetingroom.ListMeetingRoomFragment;
+import com.framgia.fdms.screen.notification.NotificationActivity;
 import com.framgia.fdms.screen.producer.ProducerFragment;
 import com.framgia.fdms.screen.profile.ProfileFragment;
 import com.framgia.fdms.screen.request.RequestFragment;
@@ -362,6 +363,10 @@ public class MainViewModel extends BaseObservable
     public void setListener(View.OnClickListener listener) {
         mListener = listener;
         notifyPropertyChanged(BR.listener);
+    }
+
+    public void onNotificationClick() {
+        mNavigator.startActivity(NotificationActivity.getInstances(mNavigator.getContext()));
     }
 
     @Bindable

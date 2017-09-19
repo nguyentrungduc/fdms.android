@@ -30,15 +30,12 @@ import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailF
  * Exposes the data to be used in the Dashboard screen.
  */
 public class DashboardViewModel extends BaseObservable implements DashboardContract.ViewModel {
-    private final int NUMBER_NOTIFICATION = 5;
-    private final int MIN_NUMBER_NOTIFICATION = 0;
     private DashboardContract.Presenter mPresenter;
     private ViewPagerAdapter mPagerAdapter;
     private int mTab = TAB_REQUEST_DASH_BOARD;
     private boolean mIsBoRole;
     private Fragment mFragment;
     private Context mContext;
-    private int mNumberNotification = NUMBER_NOTIFICATION;
     private FDMSShowcaseSequence mSequence;
 
     public DashboardViewModel(Fragment fragment) {
@@ -117,12 +114,6 @@ public class DashboardViewModel extends BaseObservable implements DashboardContr
     }
 
     @Override
-    public void onStartNotificationView() {
-        mFragment.startActivity(NotificationActivity.getInstances(mContext));
-        mNumberNotification = MIN_NUMBER_NOTIFICATION;
-    }
-
-    @Override
     public void onShowCase() {
         mSequence.start();
         mSequence.setOnItemDismissedListener(
@@ -135,16 +126,6 @@ public class DashboardViewModel extends BaseObservable implements DashboardContr
                     }
                 }
             });
-    }
-
-    @Bindable
-    public int getNumberNotification() {
-        return mNumberNotification;
-    }
-
-    public void setNumberNotification(int numberNotification) {
-        mNumberNotification = numberNotification;
-        notifyPropertyChanged(BR.numberNotification);
     }
 
     @Bindable
