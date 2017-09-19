@@ -38,7 +38,6 @@ public class RequestManagerFragment extends BaseRequestFragment {
         RequestManagerContract.Presenter presenter = new RequestManagerPresenter(mViewModel,
             RequestRepository.getInstant(
                 new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
-            new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance())),
             new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
         mViewModel.setPresenter(presenter);
     }

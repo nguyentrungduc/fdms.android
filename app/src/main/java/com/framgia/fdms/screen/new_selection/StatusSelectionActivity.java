@@ -39,6 +39,7 @@ import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_HISTORY;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
+import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
 
@@ -141,6 +142,12 @@ public class StatusSelectionActivity extends AppCompatActivity
                     new DeviceUsingHistoryRepository(
                         new DeviceUsingHistoryRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setDeviceUsingHistoryRepository(deviceUsingHistoryRepository);
+                break;
+
+            case STATUS_REQUEST:
+                StatusRepository requestStatusRepository = new StatusRepository(
+                    new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
+                presenter.setRequestStatusRepository(requestStatusRepository);
                 break;
             default:
                 break;

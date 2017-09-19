@@ -29,6 +29,7 @@ import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_HISTORY;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
+import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
@@ -58,6 +59,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
     private int mDeviceGroupId;
     private DeviceRepository mDeviceRepository;
     private DeviceUsingHistoryRepository mDeviceUsingHistoryRepository;
+    private StatusRepository mRequestStatusRepository;
 
     public StatusSelectionPresenter(StatusSelectionContract.ViewModel viewModel,
         @SelectionType int selectionType) {
@@ -103,6 +105,10 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
         mDeviceUsingHistoryRepository = deviceUsingHistoryRepository;
     }
 
+    public void setRequestStatusRepository(StatusRepository requestStatusRepository) {
+        mRequestStatusRepository = requestStatusRepository;
+    }
+
     @Override
     public void onStart() {
     }
@@ -139,6 +145,8 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                 break;
             case DEVICE_USING_HISTORY:
                 getDeviceUsingHistoryStatus();
+            case STATUS_REQUEST:
+                getListRequestStatus();
                 break;
             default:
                 break;
@@ -180,7 +188,8 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
             || mSelectionType == CATEGORY
             || mSelectionType == DEVICE_USING_HISTORY
             || mSelectionType == BRANCH
-            || mSelectionType == DEVICE_GROUP) {
+            || mSelectionType == DEVICE_GROUP
+            || mSelectionType == STATUS_REQUEST) {
             mViewModel.onGetDataFailed(null);
             mViewModel.hideProgress();
             return;
@@ -199,6 +208,35 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
             default:
                 break;
         }
+    }
+
+    private void getListRequestStatus() {
+        Disposable disposable = mRequestStatusRepository.getListStatus()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgress();
+                }
+            })
+            .subscribe(new Consumer<List<Status>>() {
+                @Override
+                public void accept(List<Status> statuses) throws Exception {
+                    mViewModel.onGetDataSuccess(statuses);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onGetDataFailed(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
+                }
+            });
+        mCompositeDisposable.add(disposable);
     }
 
     private void getListMarker() {

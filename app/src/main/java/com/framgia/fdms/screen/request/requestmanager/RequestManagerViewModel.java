@@ -11,7 +11,6 @@ import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseFragmentContract;
 import com.framgia.fdms.BaseFragmentModel;
 import com.framgia.fdms.R;
@@ -20,18 +19,17 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
+import com.framgia.fdms.screen.new_selection.SelectionType;
+import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
 import com.framgia.fdms.screen.request.userrequest.UserRequestAdapter;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionType;
 import com.framgia.fdms.utils.navigator.Navigator;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.screen.selection.StatusSelectionAdapter.FIRST_INDEX;
-import static com.framgia.fdms.utils.Constant.ACTION_CLEAR;
+import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_STATUE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
@@ -52,8 +50,6 @@ public class RequestManagerViewModel extends BaseFragmentModel
     private Context mContext;
     private UserRequestAdapter mAdapter;
 
-    private List<Status> mStatuses = new ArrayList<>();
-    private List<Status> mRelatives = new ArrayList<>();
     private Status mStatus;
     private Status mRelative;
     private boolean mIsRefresh;
@@ -109,16 +105,6 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void onGetRequestError() {
         setEmptyViewVisible(View.VISIBLE);
-    }
-
-    @Override
-    public void onGetStatusSuccess(List<Status> statuses) {
-        updateStatus(statuses);
-    }
-
-    @Override
-    public void onGetRelativeSuccess(List<Status> relatives) {
-        updateRelative(relatives);
     }
 
     @Override
@@ -198,33 +184,14 @@ public class RequestManagerViewModel extends BaseFragmentModel
     }
 
     public void onSelectStatusClick() {
-        if (mStatuses == null) return;
         mFragment.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, null, mStatuses,
-                StatusSelectionType.STATUS), REQUEST_STATUS);
+            StatusSelectionActivity.getInstance(mContext, SelectionType.STATUS_REQUEST),
+            REQUEST_STATUS);
     }
 
     public void onSelectRelativeClick() {
-        if (mRelatives == null) return;
-        mFragment.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, null, mRelatives,
-                StatusSelectionType.STATUS), REQUEST_SELECTION);
-    }
-
-    public void updateStatus(List<Status> list) {
-        if (list == null) {
-            return;
-        }
-        mStatuses = list;
-        mStatuses.add(FIRST_INDEX, new Status(OUT_OF_INDEX, ACTION_CLEAR));
-    }
-
-    public void updateRelative(List<Status> relatives) {
-        if (relatives == null) {
-            return;
-        }
-        mRelatives = relatives;
-        mRelatives.add(FIRST_INDEX, new Status(OUT_OF_INDEX, ACTION_CLEAR));
+        mFragment.startActivityForResult(StatusSelectionActivity.getInstance(mContext, STATUS),
+            REQUEST_SELECTION);
     }
 
     @Bindable
@@ -234,7 +201,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
 
     public void setStatus(Status status) {
         mStatus = status;
-        notifyPropertyChanged(BR.status);
+        notifyPropertyChanged(com.framgia.fdms.BR.status);
     }
 
     @Bindable
@@ -244,7 +211,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
 
     public void setRelative(Status relative) {
         mRelative = relative;
-        notifyPropertyChanged(BR.relative);
+        notifyPropertyChanged(com.framgia.fdms.BR.relative);
     }
 
     @Override
@@ -293,7 +260,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void setRefresh(boolean isRefresh) {
         mIsRefresh = isRefresh;
-        notifyPropertyChanged(BR.isRefresh);
+        notifyPropertyChanged(com.framgia.fdms.BR.isRefresh);
     }
 
     public SwipeRefreshLayout.OnRefreshListener getRefreshLayout() {
@@ -307,6 +274,6 @@ public class RequestManagerViewModel extends BaseFragmentModel
 
     public void setEmptyViewVisible(int emptyViewVisible) {
         mEmptyViewVisible = emptyViewVisible;
-        notifyPropertyChanged(BR.emptyViewVisible);
+        notifyPropertyChanged(com.framgia.fdms.BR.emptyViewVisible);
     }
 }

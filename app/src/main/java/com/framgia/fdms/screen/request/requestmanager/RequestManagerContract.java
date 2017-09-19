@@ -18,10 +18,6 @@ interface RequestManagerContract {
     interface ViewModel extends BaseFragmentContract.ViewModel {
         void onGetRequestSuccess(List<Request> requests);
 
-        void onGetStatusSuccess(List<Status> statuses);
-
-        void onGetRelativeSuccess(List<Status> relatives);
-
         void onLoadError(String msg);
 
         void getData();
@@ -44,10 +40,6 @@ interface RequestManagerContract {
      */
     interface Presenter extends BaseFragmentContract.Presenter {
         void getRequest(int requestStatusId, int relativeId, int perPage, int page);
-
-        void getStatusDevice();
-
-        void getListRelative();
 
         void updateActionRequest(int requestId, int actionId);
 
