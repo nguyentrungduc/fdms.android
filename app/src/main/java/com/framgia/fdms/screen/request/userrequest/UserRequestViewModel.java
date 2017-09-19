@@ -101,13 +101,14 @@ public class UserRequestViewModel extends BaseFragmentModel
 
     @Override
     public void onGetRequestSuccess(List<Request> requests) {
-        setEmptyViewVisible(requests.isEmpty() ? View.VISIBLE : View.GONE);
         mAdapter.onUpdatePage(requests);
+        setEmptyViewVisible(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+
     }
 
     @Override
     public void onGetRequestError() {
-        setEmptyViewVisible(View.VISIBLE);
+        setEmptyViewVisible(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override

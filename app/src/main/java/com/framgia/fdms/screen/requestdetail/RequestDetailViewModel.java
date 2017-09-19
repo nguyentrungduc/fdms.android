@@ -53,7 +53,6 @@ public class RequestDetailViewModel extends BaseObservable
     private List<Request.RequestAction> mListAction = new ArrayList<>();
     private String mStatusRequest;
     private Request mRequest;
-    private int mPosition;
     private int mProgressBarVisibility = View.GONE;
     private User mUser;
     private FloatingActionMenu mFloatingActionsMenu;
@@ -191,7 +190,7 @@ public class RequestDetailViewModel extends BaseObservable
                         return;
                     }
                     mPresenter.updateActionRequest(mRequest.getId(),
-                        mListAction.get(mPosition).getId());
+                        requestAction.getId());
                     mFloatingActionsMenu.hideMenu(true);
                 }
             });

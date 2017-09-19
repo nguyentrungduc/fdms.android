@@ -21,6 +21,7 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
 import static com.framgia.fdms.utils.Constant.DeviceStatus.APPROVED;
+import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_APPROVE;
 
 /**
  * Created by tuanbg on 5/30/17.
@@ -108,6 +109,12 @@ public class RequestDetailPresenter implements RequestDetailContract.Presenter {
         Disposable subscription = mUserRepository.getCurrentUser()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            })
             .subscribe(new Consumer<User>() {
                 @Override
                 public void accept(User user) throws Exception {
@@ -117,6 +124,12 @@ public class RequestDetailPresenter implements RequestDetailContract.Presenter {
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.onLoadError(error.getMessage());
+                    mViewModel.hideProgressbar();
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
                 }
             });
         mSubscription.add(subscription);
@@ -124,10 +137,11 @@ public class RequestDetailPresenter implements RequestDetailContract.Presenter {
 
     @Override
     public void initFloatActionButton(Request request) {
-        if (request == null || request.getRequestActionList() == null) return;
+        if (request == null || request.getRequestActionList() == null) {
+            return;
+        }
         String status = request.getRequestStatus();
-        boolean isEdit = status != null && status.equals(APPROVED) ? true : false;
-        mViewModel.initFloatActionButton(isEdit);
+        mViewModel.initFloatActionButton(status != null && status.equals(WAITING_APPROVE));
     }
 
     @Override
