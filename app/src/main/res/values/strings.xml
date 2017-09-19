@@ -105,7 +105,7 @@
     <string name="title_using_history">Using History</string>
     <string name="title_device_infomation">Infomation</string>
     <string name="title_device_detail">Device Detail</string>
-    <string name="using_device_time" formatted="false">%s - %s</string>
+    <string name="using_device_time" formatted="false">%s -> %s</string>
     <string name="title_device_return">Return device</string>
     <string name="action_return_device">Return device</string>
     <string name="text_assign_to">Assign to</string>

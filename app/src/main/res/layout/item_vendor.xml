@@ -35,6 +35,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 >
+                <ImageView
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/dp_10"
+                    car_view:srcCompat="@drawable/ic_maker"
+                    tools:ignore="ContentDescription,VectorDrawableCompat"
+                    />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -42,7 +51,7 @@
                     android:maxLines="2"
                     android:padding="@dimen/dp_10"
                     android:text='@{vendor.name}'
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/color_gray"
                     android:textSize="@dimen/sp_16"
                     android:textStyle="bold"
                     />
@@ -69,11 +78,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginLeft="@dimen/dp_60"
+                android:layout_marginStart="@dimen/dp_60"
                 android:maxLines="2"
                 android:paddingBottom="@dimen/dp_10"
                 android:text='@{vendor.description}'
-                android:textSize="@dimen/sp_14"
+                android:textSize="@dimen/sp_12"
                 android:visibility="@{TextUtils.isEmpty(vendor.description)? View.GONE : View.VISIBLE}"
                 />
         </LinearLayout>
