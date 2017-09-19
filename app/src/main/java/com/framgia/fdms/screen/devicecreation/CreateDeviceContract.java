@@ -4,8 +4,6 @@ import android.content.Intent;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Device;
-import com.framgia.fdms.data.model.Status;
-import java.util.List;
 
 /**
  * This specifies the contract between the view and the presenter.
@@ -15,10 +13,6 @@ interface CreateDeviceContract {
      * View.
      */
     interface ViewModel extends BaseViewModel<Presenter> {
-        void onDeviceCategoryLoaded(List<Status> categories);
-
-        void onDeviceStatusLoaded(List<Status> statuses);
-
         void showProgressbar();
 
         void hideProgressbar();
@@ -36,6 +30,8 @@ interface CreateDeviceContract {
         void onInputDeviceCodeError();
 
         void onInputCategoryError();
+
+        void onInputMeetingRoomError();
 
         void onInputStatusError();
 
@@ -56,8 +52,6 @@ interface CreateDeviceContract {
         void onUpdateSuccess(Device device);
 
         void onPickDateTimeClick();
-
-        void onGetBranchSuccess(List<Status> branches);
 
         void onLoadError(String msg);
 

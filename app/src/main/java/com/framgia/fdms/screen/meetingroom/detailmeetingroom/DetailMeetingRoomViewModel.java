@@ -165,17 +165,19 @@ public class DetailMeetingRoomViewModel extends BaseObservable
         setLoadingMore(false);
         setRefresh(false);
         mDevices.addAll(devices);
-        if (mDevices.size() == 0) {
-            setVisibleLayoutDataNotFound(true);
-            setNotificationLoadData(mContext.getString(R.string.msg_nothing_here));
-            return;
-        }
         mListDeviceAdapter.onUpdatePage(devices);
     }
 
     @Override
     public void onGetListDeviceError(String error) {
-        Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+        if (mDevices.size() == 0) {
+            setVisibleLayoutDataNotFound(true);
+            setNotificationLoadData(mContext.getString(R.string.msg_nothing_here));
+            Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+        }
+        hideProgressbar();
+        setRefresh(false);
+        setLoadingMore(false);
     }
 
     @Override
