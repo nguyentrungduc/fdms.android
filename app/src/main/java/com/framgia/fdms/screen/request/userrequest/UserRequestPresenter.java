@@ -5,7 +5,6 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.RequestRepositoryContract;
-import com.framgia.fdms.data.source.StatusRepository;
 import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
@@ -34,21 +33,16 @@ public final class UserRequestPresenter implements UserRequestContract.Presenter
     private int mPage = FIRST_PAGE;
     private CompositeDisposable mSubscription;
     private RequestRepositoryContract mRequestRepository;
-    private StatusRepository mRepository;
     private UserRepository mUserRepository;
     private int mRelativeId = ALL_RELATIVE_ID;
     private int mStatusId = ALL_REQUEST_STATUS_ID;
 
     public UserRequestPresenter(UserRequestContract.ViewModel viewModel,
-        RequestRepositoryContract deviceRepository, StatusRepository statusRepository,
-        UserRepository userRepository) {
+        RequestRepositoryContract deviceRepository, UserRepository userRepository) {
         mViewModel = viewModel;
         mSubscription = new CompositeDisposable();
         mRequestRepository = deviceRepository;
-        mRepository = statusRepository;
         mUserRepository = userRepository;
-        getStatusDevice();
-        getListRelative();
         getMyRequest(ALL_REQUEST_STATUS_ID, ALL_RELATIVE_ID, mPage, PER_PAGE);
         getCurrentUser();
     }
@@ -114,57 +108,6 @@ public final class UserRequestPresenter implements UserRequestContract.Presenter
                         mViewModel.setRefresh(false);
                     }
                 });
-        mSubscription.add(subscription);
-    }
-
-    @Override
-    public void getStatusDevice() {
-        Disposable subscription = mRepository.getListStatusRequest()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(new Consumer<Disposable>() {
-                @Override
-                public void accept(Disposable disposable) throws Exception {
-                    mViewModel.showProgressbar();
-                }
-            })
-            .subscribe(new Consumer<List<Status>>() {
-                @Override
-                public void accept(List<Status> statuses) throws Exception {
-                    mViewModel.onGetStatusSuccess(statuses);
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mViewModel.hideProgressbar();
-                    mViewModel.onLoadError(error.getMessage());
-                }
-            }, new Action() {
-                @Override
-                public void run() throws Exception {
-                    mViewModel.hideProgressbar();
-                }
-            });
-
-        mSubscription.add(subscription);
-    }
-
-    @Override
-    public void getListRelative() {
-        Disposable subscription = mRepository.getListRelative()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<List<Status>>() {
-                @Override
-                public void accept(List<Status> statuses) throws Exception {
-                    mViewModel.onGetRelativeSuccess(statuses);
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mViewModel.onLoadError(error.getMessage());
-                }
-            });
         mSubscription.add(subscription);
     }
 
