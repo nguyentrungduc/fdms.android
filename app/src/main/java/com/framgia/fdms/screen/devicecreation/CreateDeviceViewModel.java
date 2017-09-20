@@ -7,7 +7,6 @@ import android.databinding.Bindable;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.print.PrintHelper;
@@ -17,10 +16,9 @@ import android.widget.Toast;
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
-import com.framgia.fdms.data.model.Picture;
 import com.framgia.fdms.data.model.Status;
-import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.screen.selection.SelectionActivity;
+import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.Utils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -37,7 +35,6 @@ import static com.framgia.fdms.FDMSApplication.sUpdatedDevice;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.CREATE;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.EDIT;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
-import static com.framgia.fdms.utils.Constant.PICK_IMAGE_REQUEST;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_BRANCH;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MAKER;
@@ -142,8 +139,7 @@ public class CreateDeviceViewModel extends BaseObservable
             return;
         }
         mActivity.startActivityForResult(
-            SelectionActivity.getInstance(mContext, SelectionType.CATEGORY),
-            REQUEST_CATEGORY);
+            SelectionActivity.getInstance(mContext, SelectionType.CATEGORY), REQUEST_CATEGORY);
     }
 
     public void onChooseMeetingRoom() {
@@ -153,7 +149,8 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     public void onChooseStatus() {
-        if (mStatus.getName() != null && mStatus.getName().equals(Status.USING_STATUS)) {
+        if ((mStatus.getName() != null && mStatus.getName().equals(Status.USING_STATUS))
+            || mDeviceType == CREATE) {
             return;
         }
         mActivity.startActivityForResult(
@@ -165,8 +162,7 @@ public class CreateDeviceViewModel extends BaseObservable
             return;
         }
         mActivity.startActivityForResult(
-            SelectionActivity.getInstance(mContext, SelectionType.BRANCH),
-            REQUEST_BRANCH);
+            SelectionActivity.getInstance(mContext, SelectionType.BRANCH), REQUEST_BRANCH);
     }
 
     public void onChooseVendor() {
@@ -313,29 +309,9 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onAddImageClick() {
-        pickImage();
-    }
-
-    public void pickImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        mActivity.startActivityForResult(
-            Intent.createChooser(intent, mContext.getString(R.string.title_select_file_upload)),
-            PICK_IMAGE_REQUEST);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK || data == null) return;
         switch (requestCode) {
-            case PICK_IMAGE_REQUEST:
-                if (data.getData() != null) {
-                    Uri uri = data.getData();
-                    mDevice.setPicture(new Picture(Utils.getPathFromUri(mActivity, uri)));
-                }
-                break;
             case REQUEST_CATEGORY:
                 Bundle bundle = data.getExtras();
                 Status category = bundle.getParcelable(BUNDLE_DATA);
@@ -574,7 +550,7 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     public void setVendor(Status vendor) {
-        mDevice.setVendor(vendor);
+        mDevice.setVendorId(vendor.getId());
         mVendor = vendor;
         notifyPropertyChanged(BR.vendor);
     }
@@ -585,7 +561,7 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     public void setMarker(Status marker) {
-        mDevice.setMarker(marker);
+        mDevice.setMarkerId(marker.getId());
         mMarker = marker;
         notifyPropertyChanged(BR.marker);
     }
