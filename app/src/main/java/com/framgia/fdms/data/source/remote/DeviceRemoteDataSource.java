@@ -32,6 +32,8 @@ import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CATEGORY_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CODE;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_NAME;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_STATUS_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.IS_BAR_CODE;
+import static com.framgia.fdms.utils.Constant.ApiParram.IS_MEETING_ROOM;
 import static com.framgia.fdms.utils.Constant.ApiParram.MAKER_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.MEETING_ROOM_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.MODEL_NUMBER;
@@ -44,6 +46,7 @@ import static com.framgia.fdms.utils.Constant.ApiParram.SERIAL_NUMBER;
 import static com.framgia.fdms.utils.Constant.ApiParram.STAFF_USING_NAME;
 import static com.framgia.fdms.utils.Constant.ApiParram.STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.VENDOR_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.WARRANTY;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource {
@@ -98,21 +101,34 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
             createPartFromString(String.valueOf(device.getDeviceStatusId()));
         RequestBody deviceCategoryId =
             createPartFromString(String.valueOf(device.getDeviceCategoryId()));
+        RequestBody vendorId = createPartFromString(String.valueOf(device.getVendorId()));
+        RequestBody makerId = createPartFromString(String.valueOf(device.getMarkerId()));
+        RequestBody meetingRoomId = createPartFromString(String.valueOf(device.getMeetingRoomId()));
         RequestBody serialNumber = createPartFromString(device.getSerialNumber());
-        RequestBody modellNumber = createPartFromString(device.getModelNumber());
+        RequestBody modelNumber = createPartFromString(device.getModelNumber());
         RequestBody deviceCode = createPartFromString(device.getDeviceCode());
+        RequestBody isBarcode = createPartFromString(String.valueOf(device.isBarcode()));
+        RequestBody isMeetingRoom =
+            createPartFromString(String.valueOf(device.isDeviceMeetingRoom()));
         RequestBody boughtDate =
             createPartFromString(String.valueOf(format.format(device.getBoughtDate())));
         RequestBody originalPrice = createPartFromString(device.getOriginalPrice());
+        RequestBody warranty = createPartFromString(device.getWarranty());
 
         parrams.put(PRODUCTION_NAME, productionName);
         parrams.put(DEVICE_STATUS_ID, deviceStatusId);
         parrams.put(DEVICE_CATEGORY_ID, deviceCategoryId);
+        parrams.put(VENDOR_ID, vendorId);
+        parrams.put(MAKER_ID, makerId);
+        parrams.put(MEETING_ROOM_ID, meetingRoomId);
+        parrams.put(IS_BAR_CODE, isBarcode);
+        parrams.put(IS_MEETING_ROOM, isMeetingRoom);
         parrams.put(SERIAL_NUMBER, serialNumber);
-        parrams.put(MODEL_NUMBER, modellNumber);
+        parrams.put(MODEL_NUMBER, modelNumber);
         parrams.put(DEVICE_CODE, deviceCode);
         parrams.put(BOUGHT_DATE, boughtDate);
         parrams.put(ORIGINAL_PRICE, originalPrice);
+        parrams.put(WARRANTY, warranty);
 
         MultipartBody.Part filePart = null;
 
