@@ -84,7 +84,6 @@ public class Device extends BaseObservable implements Parcelable {
     @Expose
     @SerializedName("summary")
     private Summary mSummary;
-    @Expose
     @SerializedName("user")
     private UserBorrow mUser;
     @Expose
