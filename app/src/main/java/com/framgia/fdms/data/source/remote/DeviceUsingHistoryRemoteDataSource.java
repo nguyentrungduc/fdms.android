@@ -1,7 +1,6 @@
 package com.framgia.fdms.data.source.remote;
 
 import android.text.TextUtils;
-import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
@@ -16,16 +15,15 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CODE;
-import static com.framgia.fdms.utils.Constant.ApiParram.EMAIL;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.STATUS;
+import static com.framgia.fdms.utils.Constant.ApiParram.TEXT_USER_SEARCH;
 import static com.framgia.fdms.utils.Constant.DeviceUsingStatus.ALL;
 import static com.framgia.fdms.utils.Constant.DeviceUsingStatus.RETURN;
 import static com.framgia.fdms.utils.Constant.DeviceUsingStatus.USING;
@@ -93,7 +91,7 @@ public class DeviceUsingHistoryRemoteDataSource extends BaseRemoteDataSource
                 param.put(STATUS, filter.getStatus().getName());
             }
             if (!TextUtils.isEmpty(filter.getStaffName())) {
-                param.put(EMAIL, filter.getStaffName());
+                param.put(TEXT_USER_SEARCH, filter.getStaffName());
             }
             if (!TextUtils.isEmpty(filter.getDeviceCode())) {
                 param.put(DEVICE_CODE, filter.getDeviceCode());
