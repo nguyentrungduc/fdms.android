@@ -46,6 +46,9 @@ public class Device extends BaseObservable implements Parcelable {
     @SerializedName("device_category_id")
     private int mDeviceCategoryId;
     @Expose
+    @SerializedName("meeting_room_id")
+    private int mMeetingRoomId;
+    @Expose
     @SerializedName("picture")
     private Picture mPicture;
     @Expose
@@ -60,6 +63,9 @@ public class Device extends BaseObservable implements Parcelable {
     @Expose
     @SerializedName("is_barcode")
     private boolean mIsBarcode;
+    @Expose
+    @SerializedName("is_meeting_room")
+    private boolean mIsDeviceMeetingRoom;
     @Expose
     @SerializedName("device_status_name")
     private String mDeviceStatusName;
@@ -79,11 +85,19 @@ public class Device extends BaseObservable implements Parcelable {
     @SerializedName("summary")
     private Summary mSummary;
     private boolean mIsSelected;
-    private boolean mIsDeviceMeetingRoom;
+    @Expose
     @SerializedName("user")
     private UserBorrow mUser;
     private Status mVendor;
     private Status mMarker;
+    @Expose
+    @SerializedName("vendor_id")
+    private int mVendorId;
+    @Expose
+    @SerializedName("marker_id")
+    private int mMarkerId;
+    @Expose
+    @SerializedName("warranty")
     private String mWarranty;
 
     public Device() {
@@ -109,6 +123,10 @@ public class Device extends BaseObservable implements Parcelable {
         setUser(device.getUser());
         setVendor(device.getVendor());
         setMarker(device.getMarker());
+        setVendorId(device.getVendorId());
+        setMarkerId(device.getMarkerId());
+        setMeetingRoomId(device.getMeetingRoomId());
+        setDeviceMeetingRoom(device.isDeviceMeetingRoom());
         setWarranty(device.getWarranty());
     }
 
@@ -124,10 +142,12 @@ public class Device extends BaseObservable implements Parcelable {
         mProductionName = in.readString();
         mDeviceStatusId = in.readInt();
         mDeviceCategoryId = in.readInt();
+        mMeetingRoomId = in.readInt();
         mPicture = in.readParcelable(Picture.class.getClassLoader());
         mOriginalPrice = in.readString();
         mPrintedCode = in.readString();
         mIsBarcode = in.readByte() != 0;
+        mIsDeviceMeetingRoom = in.readByte() != 0;
         mDeviceStatusName = in.readString();
         mDeviceCategoryName = in.readString();
         mSerialNumber = in.readString();
@@ -137,6 +157,8 @@ public class Device extends BaseObservable implements Parcelable {
         mUser = in.readParcelable(UserBorrow.class.getClassLoader());
         mVendor = in.readParcelable(Status.class.getClassLoader());
         mMarker = in.readParcelable(Status.class.getClassLoader());
+        mVendorId = in.readInt();
+        mMarkerId = in.readInt();
         mWarranty = in.readString();
     }
 
@@ -147,10 +169,12 @@ public class Device extends BaseObservable implements Parcelable {
         dest.writeString(mProductionName);
         dest.writeInt(mDeviceStatusId);
         dest.writeInt(mDeviceCategoryId);
+        dest.writeInt(mMeetingRoomId);
         dest.writeParcelable(mPicture, flags);
         dest.writeString(mOriginalPrice);
         dest.writeString(mPrintedCode);
         dest.writeByte((byte) (mIsBarcode ? 1 : 0));
+        dest.writeByte((byte) (mIsDeviceMeetingRoom ? 1 : 0));
         dest.writeString(mDeviceStatusName);
         dest.writeString(mDeviceCategoryName);
         dest.writeString(mSerialNumber);
@@ -160,7 +184,14 @@ public class Device extends BaseObservable implements Parcelable {
         dest.writeParcelable(mUser, flags);
         dest.writeParcelable(mVendor, flags);
         dest.writeParcelable(mMarker, flags);
+        dest.writeInt(mVendorId);
+        dest.writeInt(mMarkerId);
         dest.writeString(mWarranty);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Bindable
@@ -339,6 +370,36 @@ public class Device extends BaseObservable implements Parcelable {
     }
 
     @Bindable
+    public int getMeetingRoomId() {
+        return mMeetingRoomId;
+    }
+
+    public void setMeetingRoomId(int meetingRoomId) {
+        mMeetingRoomId = meetingRoomId;
+        notifyPropertyChanged(BR.meetingRoomId);
+    }
+
+    @Bindable
+    public int getVendorId() {
+        return mVendorId;
+    }
+
+    public void setVendorId(int vendorId) {
+        mVendorId = vendorId;
+        notifyPropertyChanged(BR.vendorId);
+    }
+
+    @Bindable
+    public int getMarkerId() {
+        return mMarkerId;
+    }
+
+    public void setMarkerId(int markerId) {
+        mMarkerId = markerId;
+        notifyPropertyChanged(BR.markerId);
+    }
+
+    @Bindable
     public Status getVendor() {
         return mVendor;
     }
@@ -390,11 +451,6 @@ public class Device extends BaseObservable implements Parcelable {
     public void setDeviceMeetingRoom(boolean deviceMeetingRoom) {
         mIsDeviceMeetingRoom = deviceMeetingRoom;
         notifyPropertyChanged(BR.deviceMeetingRoom);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     @Override
