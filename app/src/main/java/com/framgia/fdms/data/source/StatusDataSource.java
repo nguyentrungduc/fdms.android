@@ -23,6 +23,8 @@ public class StatusDataSource {
 
         Observable<List<Status>> getListRelative();
 
+        Observable<List<Status>> getListRelative(String query);
+
         Observable<List<Status>> getListAssignee();
     }
 }

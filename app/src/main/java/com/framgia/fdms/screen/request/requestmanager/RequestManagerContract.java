@@ -4,7 +4,6 @@ import android.content.Intent;
 import com.framgia.fdms.BaseFragmentContract;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
-import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import java.util.List;
 
@@ -17,8 +16,6 @@ interface RequestManagerContract {
      */
     interface ViewModel extends BaseFragmentContract.ViewModel {
         void onGetRequestSuccess(List<Request> requests);
-
-        void onGetRelativeSuccess(List<Status> relatives);
 
         void onLoadError(String msg);
 
@@ -42,8 +39,6 @@ interface RequestManagerContract {
      */
     interface Presenter extends BaseFragmentContract.Presenter {
         void getRequest(int requestStatusId, int relativeId, int perPage, int page);
-
-        void getListRelative();
 
         void updateActionRequest(int requestId, int actionId);
 
