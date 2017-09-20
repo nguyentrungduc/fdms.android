@@ -19,8 +19,8 @@ import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Picture;
 import com.framgia.fdms.data.model.Status;
-import com.framgia.fdms.screen.new_selection.SelectionType;
-import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
+import com.framgia.fdms.screen.selection.SelectionType;
+import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.utils.Utils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -36,7 +36,7 @@ import static android.widget.Toast.makeText;
 import static com.framgia.fdms.FDMSApplication.sUpdatedDevice;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.CREATE;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.EDIT;
-import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
+import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.PICK_IMAGE_REQUEST;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_BRANCH;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
@@ -142,13 +142,13 @@ public class CreateDeviceViewModel extends BaseObservable
             return;
         }
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, SelectionType.CATEGORY),
+            SelectionActivity.getInstance(mContext, SelectionType.CATEGORY),
             REQUEST_CATEGORY);
     }
 
     public void onChooseMeetingRoom() {
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, SelectionType.MEETING_ROOM),
+            SelectionActivity.getInstance(mContext, SelectionType.MEETING_ROOM),
             REQUEST_MEETING_ROOM);
     }
 
@@ -157,7 +157,7 @@ public class CreateDeviceViewModel extends BaseObservable
             return;
         }
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, SelectionType.STATUS), REQUEST_STATUS);
+            SelectionActivity.getInstance(mContext, SelectionType.STATUS), REQUEST_STATUS);
     }
 
     public void onChooseBranch() {
@@ -165,18 +165,18 @@ public class CreateDeviceViewModel extends BaseObservable
             return;
         }
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, SelectionType.BRANCH),
+            SelectionActivity.getInstance(mContext, SelectionType.BRANCH),
             REQUEST_BRANCH);
     }
 
     public void onChooseVendor() {
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, SelectionType.VENDOR), REQUEST_VENDOR);
+            SelectionActivity.getInstance(mContext, SelectionType.VENDOR), REQUEST_VENDOR);
     }
 
     public void onChooseMaker() {
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, SelectionType.MARKER), REQUEST_MAKER);
+            SelectionActivity.getInstance(mContext, SelectionType.MARKER), REQUEST_MAKER);
     }
 
     @Override

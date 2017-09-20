@@ -18,8 +18,6 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionType;
 import com.framgia.fdms.utils.Constant;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;

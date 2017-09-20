@@ -13,14 +13,14 @@ import android.widget.Toast;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Status;
-import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
+import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.scanner.ScannerActivity;
 import com.framgia.fdms.utils.permission.PermissionUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.framgia.fdms.screen.new_selection.SelectionType.RELATIVE_STAFF;
-import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
+import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
+import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_CONTENT;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SCANNER;
@@ -104,7 +104,7 @@ public class ReturnDeviceViewModel implements ReturnDeviceContract.ViewModel {
     @Override
     public void onSelectedUserReturn() {
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mActivity.getApplicationContext(), RELATIVE_STAFF),
+            SelectionActivity.getInstance(mActivity.getApplicationContext(), RELATIVE_STAFF),
             REQUEST_SELECTION);
     }
 

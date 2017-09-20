@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +23,7 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.devicecreation.CreateDeviceActivity;
 import com.framgia.fdms.screen.devicecreation.DeviceStatusType;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
-import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
+import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.returndevice.ReturnDeviceActivity;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -35,12 +34,12 @@ import static android.app.Activity.RESULT_OK;
 import static android.view.View.VISIBLE;
 import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MANAGE_DEVICE;
 import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MY_DEVICE;
-import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
-import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
-import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
-import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
-import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
-import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
+import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
+import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
+import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
+import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
+import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
+import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
@@ -175,32 +174,32 @@ public class ListDeviceViewModel extends BaseObservable
 
     @Override
     public void onChooseCategoryClick() {
-        mFragment.startActivityForResult(StatusSelectionActivity.getInstance(mContext, CATEGORY),
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, CATEGORY),
             REQUEST_CATEGORY);
     }
 
     @Override
     public void onChooseStatusClick() {
-        mFragment.startActivityForResult(StatusSelectionActivity.getInstance(mContext, STATUS),
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, STATUS),
             REQUEST_STATUS);
     }
 
     @Override
     public void onChooseMakerClick() {
-        mFragment.startActivityForResult(StatusSelectionActivity.getInstance(mContext, MARKER),
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, MARKER),
             REQUEST_MAKER);
     }
 
     @Override
     public void onChooseVendorClick() {
-        mFragment.startActivityForResult(StatusSelectionActivity.getInstance(mContext, VENDOR),
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, VENDOR),
             REQUEST_VENDOR);
     }
 
     @Override
     public void onChooseMeetingRoomClick() {
         mFragment.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, MEETING_ROOM), REQUEST_MEETING_ROOM);
+            SelectionActivity.getInstance(mContext, MEETING_ROOM), REQUEST_MEETING_ROOM);
     }
 
     @Override

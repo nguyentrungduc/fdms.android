@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.new_selection;
+package com.framgia.fdms.screen.selection;
 
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -21,11 +21,11 @@ import static android.view.View.VISIBLE;
  * Exposes the data to be used in the StatusSelection screen.
  */
 
-public class StatusSelectionViewModel extends BaseObservable
-    implements StatusSelectionContract.ViewModel {
+public class SelectionViewModel extends BaseObservable
+    implements SelectionContract.ViewModel {
     public static final String BUNDLE_DATA = "BUNDLE_DATA";
-    private StatusSelectionContract.Presenter mPresenter;
-    private StatusSelectionAdapter mAdapter;
+    private SelectionContract.Presenter mPresenter;
+    private SelectionAdapter mAdapter;
     private AppCompatActivity mActivity;
     private Navigator mNavigator;
     private boolean mIsLoadMore;
@@ -50,8 +50,8 @@ public class StatusSelectionViewModel extends BaseObservable
         }
     };
 
-    public StatusSelectionViewModel(AppCompatActivity activity) {
-        mAdapter = new StatusSelectionAdapter(new ArrayList<Status>());
+    public SelectionViewModel(AppCompatActivity activity) {
+        mAdapter = new SelectionAdapter(new ArrayList<Status>());
         mAdapter.setViewModel(this);
         mActivity = activity;
         mNavigator = new Navigator(activity);
@@ -68,7 +68,7 @@ public class StatusSelectionViewModel extends BaseObservable
     }
 
     @Override
-    public void setPresenter(StatusSelectionContract.Presenter presenter) {
+    public void setPresenter(SelectionContract.Presenter presenter) {
         mPresenter = presenter;
         mPresenter.getData("");
     }
@@ -82,11 +82,11 @@ public class StatusSelectionViewModel extends BaseObservable
     }
 
     @Bindable
-    public StatusSelectionAdapter getAdapter() {
+    public SelectionAdapter getAdapter() {
         return mAdapter;
     }
 
-    public void setAdapter(StatusSelectionAdapter adapter) {
+    public void setAdapter(SelectionAdapter adapter) {
         mAdapter = adapter;
         notifyPropertyChanged(BR.adapter);
     }

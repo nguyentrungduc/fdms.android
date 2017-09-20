@@ -22,16 +22,16 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
-import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
+import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.screen.new_selection.SelectionType.RELATIVE_STAFF;
-import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS_REQUEST;
-import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
+import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
+import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
@@ -182,12 +182,12 @@ public class UserRequestViewModel extends BaseFragmentModel
 
     public void onSelectStatusClick() {
         mFragment.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, STATUS_REQUEST), REQUEST_STATUS);
+            SelectionActivity.getInstance(mContext, STATUS_REQUEST), REQUEST_STATUS);
     }
 
     public void onSelectRelativeClick() {
         mFragment.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, RELATIVE_STAFF), REQUEST_SELECTION);
+            SelectionActivity.getInstance(mContext, RELATIVE_STAFF), REQUEST_SELECTION);
     }
 
     @Bindable

@@ -58,7 +58,6 @@
             android:name=".screen.devicedetail.DeviceDetailActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".screen.returndevice.ReturnDeviceActivity"/>
-        <activity android:name=".screen.selection.StatusSelectionActivity"/>
         <activity
             android:name=".screen.requestdetail.RequestDetailActivity"
             android:windowSoftInputMode="stateHidden"/>
@@ -95,7 +94,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".screen.new_selection.StatusSelectionActivity"
+            android:name=".screen.selection.SelectionActivity"
             android:screenOrientation="portrait"/>
     </application>
 

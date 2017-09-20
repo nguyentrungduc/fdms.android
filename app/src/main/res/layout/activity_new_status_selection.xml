@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.framgia.fdms.screen.new_selection.StatusSelectionViewModel"
+            type="com.framgia.fdms.screen.selection.SelectionViewModel"
             />
     </data>
 

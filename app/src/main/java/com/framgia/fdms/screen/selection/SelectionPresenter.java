@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.new_selection;
+package com.framgia.fdms.screen.selection;
 
 import android.text.TextUtils;
 import com.framgia.fdms.data.model.Producer;
@@ -23,29 +23,29 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
-import static com.framgia.fdms.screen.new_selection.SelectionType.BRANCH;
-import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
-import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
-import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_HISTORY;
-import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
-import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
-import static com.framgia.fdms.screen.new_selection.SelectionType.RELATIVE_STAFF;
-import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
-import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS_REQUEST;
-import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
+import static com.framgia.fdms.screen.selection.SelectionType.BRANCH;
+import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
+import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
+import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_USING_HISTORY;
+import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
+import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
+import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
+import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
+import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.TITLE_ALL;
 import static com.framgia.fdms.utils.Constant.TITLE_NA;
 
 /**
- * Listens to user actions from the UI ({@link StatusSelectionActivity}), retrieves the data and
+ * Listens to user actions from the UI ({@link SelectionActivity}), retrieves the data and
  * updates
  * the UI as required.
  */
-public final class StatusSelectionPresenter implements StatusSelectionContract.Presenter {
+public final class SelectionPresenter implements SelectionContract.Presenter {
 
-    private final StatusSelectionContract.ViewModel mViewModel;
+    private final SelectionContract.ViewModel mViewModel;
     @SelectionType
     private int mSelectionType;
     private CompositeDisposable mCompositeDisposable;
@@ -61,7 +61,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
     private DeviceRepository mDeviceRepository;
     private DeviceUsingHistoryRepository mDeviceUsingHistoryRepository;
 
-    public StatusSelectionPresenter(StatusSelectionContract.ViewModel viewModel,
+    public SelectionPresenter(SelectionContract.ViewModel viewModel,
         @SelectionType int selectionType) {
         mViewModel = viewModel;
         mSelectionType = selectionType;
