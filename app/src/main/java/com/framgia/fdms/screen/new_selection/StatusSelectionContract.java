@@ -32,5 +32,23 @@ public interface StatusSelectionContract {
         void getData(String query);
 
         void loadMoreData();
+
+        void getDeviceUsingHistoryStatus();
+
+        void getListMarker();
+
+        void getListMeetingRoom();
+
+        void getListVendor();
+
+        void getListCategory();
+
+        void getListStatus();
+
+        void getListStatusRequest();
+
+        void getDeviceGroups();
+
+        void getListBranch();
     }
 }

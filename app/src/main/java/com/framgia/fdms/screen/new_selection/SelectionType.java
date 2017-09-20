@@ -9,6 +9,7 @@ import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_H
 import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
+import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
 
 /**
@@ -17,7 +18,8 @@ import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
  */
 
 @IntDef({
-    STATUS, CATEGORY, VENDOR, MARKER, BRANCH, MEETING_ROOM, DEVICE_GROUP, DEVICE_USING_HISTORY
+    STATUS, CATEGORY, VENDOR, MARKER, BRANCH, MEETING_ROOM, DEVICE_GROUP, DEVICE_USING_HISTORY,
+    STATUS_REQUEST
 })
 public @interface SelectionType {
     int STATUS = 0;
@@ -28,4 +30,5 @@ public @interface SelectionType {
     int MEETING_ROOM = 5;
     int DEVICE_GROUP = 6;
     int DEVICE_USING_HISTORY = 7;
+    int STATUS_REQUEST = 8;
 }

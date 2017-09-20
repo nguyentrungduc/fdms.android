@@ -69,6 +69,27 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
+    public Observable<List<Status>> getListStatusRequest(final String query) {
+        if (TextUtils.isEmpty(query)) {
+            return getListStatusRequest();
+        }
+        return getListStatusRequest().flatMap(
+            new Function<List<Status>, ObservableSource<List<Status>>>() {
+                @Override
+                public ObservableSource<List<Status>> apply(List<Status> statuses)
+                    throws Exception {
+                    List<Status> data = new ArrayList<>();
+                    for (Status status : statuses) {
+                        if (status.getName().contains(query)) {
+                            data.add(status);
+                        }
+                    }
+                    return Observable.just(data);
+                }
+            });
+    }
+
+    @Override
     public Observable<List<Status>> getListRelative() {
         return mFDMSApi.getListRelative()
             .flatMap(new Function<Respone<List<Status>>, ObservableSource<List<Status>>>() {

@@ -46,7 +46,6 @@ public final class RequestManagerPresenter implements RequestManagerContract.Pre
         mRequestRepository = deviceRepository;
         mRepository = statusRepository;
         mUserRepository = userRepository;
-        getStatusDevice();
         getListRelative();
         getRequest(ALL_REQUEST_STATUS_ID, ALL_RELATIVE_ID, mPage, PER_PAGE);
         getCurrentUser();
@@ -143,31 +142,6 @@ public final class RequestManagerPresenter implements RequestManagerContract.Pre
                         mViewModel.setRefresh(false);
                     }
                 });
-        mSubscription.add(subscription);
-    }
-
-    @Override
-    public void getStatusDevice() {
-        Disposable subscription = mRepository.getListStatusRequest()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<List<Status>>() {
-                @Override
-                public void accept(List<Status> statuses) throws Exception {
-                    mViewModel.onGetStatusSuccess(statuses);
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mViewModel.hideProgressbar();
-                    mViewModel.onLoadError(error.getMessage());
-                }
-            }, new Action() {
-                @Override
-                public void run() throws Exception {
-                    mViewModel.hideProgressbar();
-                }
-            });
         mSubscription.add(subscription);
     }
 

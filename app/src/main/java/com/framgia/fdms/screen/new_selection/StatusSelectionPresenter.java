@@ -30,6 +30,7 @@ import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_H
 import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
+import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
@@ -140,12 +141,49 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
             case DEVICE_USING_HISTORY:
                 getDeviceUsingHistoryStatus();
                 break;
+            case STATUS_REQUEST:
+                getListStatusRequest();
+                break;
             default:
                 break;
         }
     }
 
-    private void getDeviceUsingHistoryStatus() {
+    @Override
+    public void getListStatusRequest() {
+        Disposable disposable = mStatusRepository.getListStatusRequest(mKeySearch)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgress();
+                }
+            })
+            .subscribe(new Consumer<List<Status>>() {
+                @Override
+                public void accept(List<Status> statuses) throws Exception {
+                    if (TextUtils.isEmpty(mKeySearch) && statuses != null && statuses.size() != 0) {
+                        statuses.add(0, new Status(OUT_OF_INDEX, TITLE_NA));
+                    }
+                    mViewModel.onGetDataSuccess(statuses);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onGetDataFailed(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
+                }
+            });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void getDeviceUsingHistoryStatus() {
         Disposable disposable = mDeviceUsingHistoryRepository.getListStatus()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -180,7 +218,8 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
             || mSelectionType == CATEGORY
             || mSelectionType == DEVICE_USING_HISTORY
             || mSelectionType == BRANCH
-            || mSelectionType == DEVICE_GROUP) {
+            || mSelectionType == DEVICE_GROUP
+            || mSelectionType == STATUS_REQUEST) {
             mViewModel.onGetDataFailed(null);
             mViewModel.hideProgress();
             return;
@@ -201,7 +240,8 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
         }
     }
 
-    private void getListMarker() {
+    @Override
+    public void getListMarker() {
         Disposable disposable = mMarkerRepository.getListMarker(mKeySearch, mPage, PER_PAGE)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -233,7 +273,8 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
         mCompositeDisposable.add(disposable);
     }
 
-    private void getListMeetingRoom() {
+    @Override
+    public void getListMeetingRoom() {
         Disposable disposable =
             mMeetingRoomRepository.getListMeetingRoom(mKeySearch, mPage, PER_PAGE)
                 .subscribeOn(Schedulers.io())
@@ -268,7 +309,8 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
         mCompositeDisposable.add(disposable);
     }
 
-    private void getListVendor() {
+    @Override
+    public void getListVendor() {
         Disposable disposable = mVendorRepository.getListVendor(mKeySearch, mPage, PER_PAGE)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -300,7 +342,8 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
         mCompositeDisposable.add(disposable);
     }
 
-    private void getListCategory() {
+    @Override
+    public void getListCategory() {
         Observable<List<Status>> observable;
         final String titleFirstItem;
         final boolean isInsertFirstItem;
@@ -344,7 +387,8 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
         mCompositeDisposable.add(disposable);
     }
 
-    private void getListStatus() {
+    @Override
+    public void getListStatus() {
         Disposable disposable = mStatusRepository.getListStatus(mKeySearch)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -376,6 +420,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
         mCompositeDisposable.add(disposable);
     }
 
+    @Override
     public void getDeviceGroups() {
         Disposable disposable = mDeviceRepository.getDeviceGroups(mKeySearch)
             .subscribeOn(Schedulers.io())
@@ -408,7 +453,8 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
         mCompositeDisposable.add(disposable);
     }
 
-    private void getListBranch() {
+    @Override
+    public void getListBranch() {
         Disposable disposable = mBranchRepository.getListBranch()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

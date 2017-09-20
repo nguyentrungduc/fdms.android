@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.screen.selection.StatusSelectionAdapter.FIRST_INDEX;
 import static com.framgia.fdms.utils.Constant.ACTION_CLEAR;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
@@ -52,7 +54,6 @@ public class RequestManagerViewModel extends BaseFragmentModel
     private Context mContext;
     private UserRequestAdapter mAdapter;
 
-    private List<Status> mStatuses = new ArrayList<>();
     private List<Status> mRelatives = new ArrayList<>();
     private Status mStatus;
     private Status mRelative;
@@ -112,11 +113,6 @@ public class RequestManagerViewModel extends BaseFragmentModel
     }
 
     @Override
-    public void onGetStatusSuccess(List<Status> statuses) {
-        updateStatus(statuses);
-    }
-
-    @Override
     public void onGetRelativeSuccess(List<Status> relatives) {
         updateRelative(relatives);
     }
@@ -150,15 +146,16 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 }
                 break;
             case REQUEST_STATUS:
-                Status status = bundle.getParcelable(BUNDLE_STATUE);
-                if (status != null) {
-                    if (status.getName().equals(mContext.getString(R.string.action_clear))) {
-                        status.setName(mContext.getString(R.string.title_request_status));
-                    }
-                    setStatus(status);
-                    mAdapter.clear();
-                    mPresenter.getData(mRelative, mStatus);
+                Status status = bundle.getParcelable(BUNDLE_DATA);
+                if (status == null) {
+                    return;
                 }
+                if (status.getId() == OUT_OF_INDEX) {
+                    status.setName(mContext.getString(R.string.title_request_status));
+                }
+                setStatus(status);
+                mAdapter.clear();
+                mPresenter.getData(mRelative, mStatus);
                 break;
             case REQUEST_DETAIL:
                 Respone<Request> requestRespone =
@@ -198,10 +195,9 @@ public class RequestManagerViewModel extends BaseFragmentModel
     }
 
     public void onSelectStatusClick() {
-        if (mStatuses == null) return;
         mFragment.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, null, mStatuses,
-                StatusSelectionType.STATUS), REQUEST_STATUS);
+            com.framgia.fdms.screen.new_selection.StatusSelectionActivity.getInstance(mContext,
+                STATUS_REQUEST), REQUEST_STATUS);
     }
 
     public void onSelectRelativeClick() {
@@ -209,14 +205,6 @@ public class RequestManagerViewModel extends BaseFragmentModel
         mFragment.startActivityForResult(
             StatusSelectionActivity.getInstance(mContext, null, mRelatives,
                 StatusSelectionType.STATUS), REQUEST_SELECTION);
-    }
-
-    public void updateStatus(List<Status> list) {
-        if (list == null) {
-            return;
-        }
-        mStatuses = list;
-        mStatuses.add(FIRST_INDEX, new Status(OUT_OF_INDEX, ACTION_CLEAR));
     }
 
     public void updateRelative(List<Status> relatives) {
