@@ -13,15 +13,16 @@ import android.widget.Toast;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Status;
+import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
 import com.framgia.fdms.screen.scanner.ScannerActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionType;
 import com.framgia.fdms.utils.permission.PermissionUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.framgia.fdms.screen.new_selection.SelectionType.RELATIVE_STAFF;
+import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_CONTENT;
-import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_STATUE;
+import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SCANNER;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SELECTION;
 import static com.framgia.fdms.utils.permission.PermissionUtil.MY_PERMISSIONS_REQUEST_CAMERA;
@@ -68,12 +69,12 @@ public class ReturnDeviceViewModel implements ReturnDeviceContract.ViewModel {
         Bundle bundle = data.getExtras();
         switch (requestCode) {
             case REQUEST_SELECTION:
-                Status status = bundle.getParcelable(BUNDLE_STATUE);
-
-                if (status != null) {
-                    mNameUserReturn.set(status);
-                    getAllDeviceBorrowOfUser(status);
+                Status status = bundle.getParcelable(BUNDLE_DATA);
+                if (status == null || status.getId() == OUT_OF_INDEX) {
+                    return;
                 }
+                mNameUserReturn.set(status);
+                getAllDeviceBorrowOfUser(status);
                 break;
             case REQUEST_SCANNER:
                 String contextQrCode = bundle.getString(BUNDLE_CONTENT);
@@ -103,8 +104,8 @@ public class ReturnDeviceViewModel implements ReturnDeviceContract.ViewModel {
     @Override
     public void onSelectedUserReturn() {
         mActivity.startActivityForResult(
-            StatusSelectionActivity.getInstance(mActivity.getApplicationContext(), null, mAssigners,
-                StatusSelectionType.STATUS), REQUEST_SELECTION);
+            StatusSelectionActivity.getInstance(mActivity.getApplicationContext(), RELATIVE_STAFF),
+            REQUEST_SELECTION);
     }
 
     @Override

@@ -9,13 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.RequestRepository;
-import com.framgia.fdms.data.source.StatusRepository;
 import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.local.UserLocalDataSource;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.data.source.remote.RequestRemoteDataSource;
-import com.framgia.fdms.data.source.remote.StatusRemoteDataSource;
 import com.framgia.fdms.databinding.FragmentUserRequestBinding;
 import com.framgia.fdms.screen.request.BaseRequestFragment;
 
@@ -39,7 +37,6 @@ public class UserRequestFragment extends BaseRequestFragment {
         UserRequestContract.Presenter presenter = new UserRequestPresenter(mViewModel,
             RequestRepository.getInstant(
                 new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
-            new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance())),
             new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
         mViewModel.setPresenter(presenter);
     }

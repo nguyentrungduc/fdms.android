@@ -22,18 +22,17 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
+import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionActivity;
-import com.framgia.fdms.screen.selection.StatusSelectionType;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.screen.selection.StatusSelectionAdapter.FIRST_INDEX;
-import static com.framgia.fdms.utils.Constant.ACTION_CLEAR;
+import static com.framgia.fdms.screen.new_selection.SelectionType.RELATIVE_STAFF;
+import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
-import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_STATUE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
@@ -50,9 +49,6 @@ public class UserRequestViewModel extends BaseFragmentModel
     private final Context mContext;
     private final Fragment mFragment;
     private UserRequestAdapter mAdapter;
-
-    private List<Status> mStatuses = new ArrayList<>();
-    private List<Status> mRelatives = new ArrayList<>();
 
     private Status mStatus;
     private Status mRelative;
@@ -103,22 +99,11 @@ public class UserRequestViewModel extends BaseFragmentModel
     public void onGetRequestSuccess(List<Request> requests) {
         mAdapter.onUpdatePage(requests);
         setEmptyViewVisible(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
-
     }
 
     @Override
     public void onGetRequestError() {
         setEmptyViewVisible(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
-    }
-
-    @Override
-    public void onGetStatusSuccess(List<Status> statuses) {
-        updateStatus(statuses);
-    }
-
-    @Override
-    public void onGetRelativeSuccess(List<Status> relatives) {
-        updateRelative(relatives);
     }
 
     @Override
@@ -139,26 +124,28 @@ public class UserRequestViewModel extends BaseFragmentModel
         Bundle bundle = data.getExtras();
         switch (requestCode) {
             case REQUEST_SELECTION:
-                Status relative = bundle.getParcelable(BUNDLE_STATUE);
-                if (relative != null) {
-                    if (relative.getName().equals(mContext.getString(R.string.action_clear))) {
-                        relative.setName(mContext.getString(R.string.title_request_relative));
-                    }
-                    setRelative(relative);
-                    mAdapter.clear();
-                    mPresenter.getData(mRelative, mStatus);
+                Status relative = bundle.getParcelable(BUNDLE_DATA);
+                if (relative == null) {
+                    return;
                 }
+                if (relative.getId() == OUT_OF_INDEX) {
+                    relative.setName(mContext.getString(R.string.title_request_relative));
+                }
+                setRelative(relative);
+                mAdapter.clear();
+                mPresenter.getData(mRelative, mStatus);
                 break;
             case REQUEST_STATUS:
-                Status status = bundle.getParcelable(BUNDLE_STATUE);
-                if (status != null) {
-                    if (status.getName().equals(mContext.getString(R.string.action_clear))) {
-                        status.setName(mContext.getString(R.string.title_request_status));
-                    }
-                    setStatus(status);
-                    mAdapter.clear();
-                    mPresenter.getData(mRelative, mStatus);
+                Status status = bundle.getParcelable(BUNDLE_DATA);
+                if (status == null) {
+                    return;
                 }
+                if (status.getId() == OUT_OF_INDEX) {
+                    status.setName(mContext.getString(R.string.title_request_status));
+                }
+                setStatus(status);
+                mAdapter.clear();
+                mPresenter.getData(mRelative, mStatus);
                 break;
             case REQUEST_DETAIL:
                 Respone<Request> requestRespone =
@@ -194,33 +181,13 @@ public class UserRequestViewModel extends BaseFragmentModel
     }
 
     public void onSelectStatusClick() {
-        if (mStatuses == null) return;
         mFragment.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, null, mStatuses,
-                StatusSelectionType.STATUS), REQUEST_STATUS);
+            StatusSelectionActivity.getInstance(mContext, STATUS_REQUEST), REQUEST_STATUS);
     }
 
     public void onSelectRelativeClick() {
-        if (mRelatives == null) return;
         mFragment.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, null, mRelatives,
-                StatusSelectionType.STATUS), REQUEST_SELECTION);
-    }
-
-    public void updateStatus(List<Status> list) {
-        if (list == null) {
-            return;
-        }
-        mStatuses = list;
-        mStatuses.add(FIRST_INDEX, new Status(OUT_OF_INDEX, ACTION_CLEAR));
-    }
-
-    public void updateRelative(List<Status> relatives) {
-        if (relatives == null) {
-            return;
-        }
-        mRelatives = relatives;
-        mRelatives.add(FIRST_INDEX, new Status(OUT_OF_INDEX, ACTION_CLEAR));
+            StatusSelectionActivity.getInstance(mContext, RELATIVE_STAFF), REQUEST_SELECTION);
     }
 
     @Bindable
