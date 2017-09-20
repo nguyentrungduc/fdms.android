@@ -40,6 +40,7 @@ import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_H
 import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
+import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
 
 /**
@@ -94,6 +95,7 @@ public class StatusSelectionActivity extends AppCompatActivity
     private void initPresenter(StatusSelectionPresenter presenter) {
         switch (mSelectionType) {
             case STATUS:
+            case STATUS_REQUEST:
                 StatusRepository statusRepository = new StatusRepository(
                     new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setStatusRepository(statusRepository);
