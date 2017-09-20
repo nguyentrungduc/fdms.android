@@ -50,5 +50,7 @@ public interface StatusSelectionContract {
         void getDeviceGroups();
 
         void getListBranch();
+
+        void getListRelative();
     }
 }

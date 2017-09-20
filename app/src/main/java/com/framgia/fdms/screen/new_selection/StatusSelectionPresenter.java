@@ -29,6 +29,7 @@ import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_HISTORY;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
+import static com.framgia.fdms.screen.new_selection.SelectionType.RELATIVE_STAFF;
 import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
@@ -144,9 +145,40 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
             case STATUS_REQUEST:
                 getListStatusRequest();
                 break;
+            case RELATIVE_STAFF:
+                getListRelative();
+                break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void getListRelative() {
+        Disposable subscription = mStatusRepository.getListRelative(mKeySearch)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<List<Status>>() {
+                @Override
+                public void accept(List<Status> statuses) throws Exception {
+                    if (TextUtils.isEmpty(mKeySearch) && statuses != null && statuses.size() != 0) {
+                        statuses.add(0, new Status(OUT_OF_INDEX, TITLE_NA));
+                    }
+                    mViewModel.onGetDataSuccess(statuses);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onGetDataFailed(error.getMessage());
+                    mViewModel.hideProgress();
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
+                }
+            });
+        mCompositeDisposable.add(subscription);
     }
 
     @Override
@@ -172,6 +204,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.onGetDataFailed(error.getMessage());
+                    mViewModel.hideProgress();
                 }
             }, new Action() {
                 @Override
@@ -197,6 +230,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                 @Override
                 public void accept(List<Status> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
+                    mViewModel.hideProgress();
                 }
             }, new RequestError() {
                 @Override
@@ -219,7 +253,8 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
             || mSelectionType == DEVICE_USING_HISTORY
             || mSelectionType == BRANCH
             || mSelectionType == DEVICE_GROUP
-            || mSelectionType == STATUS_REQUEST) {
+            || mSelectionType == STATUS_REQUEST
+            || mSelectionType == RELATIVE_STAFF) {
             mViewModel.onGetDataFailed(null);
             mViewModel.hideProgress();
             return;
@@ -263,6 +298,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.onGetDataFailed(error.getMessage());
+                    mViewModel.hideProgress();
                 }
             }, new Action() {
                 @Override
@@ -294,6 +330,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                             statuses.add(0, (Producer) new Producer(OUT_OF_INDEX, TITLE_NA));
                         }
                         mViewModel.onGetDataSuccess(statuses);
+                        mViewModel.hideProgress();
                     }
                 }, new RequestError() {
                     @Override
@@ -327,6 +364,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                         statuses.add(0, (Producer) new Producer(OUT_OF_INDEX, TITLE_NA));
                     }
                     mViewModel.onGetDataSuccess(statuses);
+                    mViewModel.hideProgress();
                 }
             }, new RequestError() {
                 @Override
@@ -377,6 +415,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.onGetDataFailed(error.getMessage());
+                    mViewModel.hideProgress();
                 }
             }, new Action() {
                 @Override
@@ -405,6 +444,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                         statuses.add(0, new Status(OUT_OF_INDEX, TITLE_NA));
                     }
                     mViewModel.onGetDataSuccess(statuses);
+                    mViewModel.hideProgress();
                 }
             }, new RequestError() {
                 @Override
@@ -438,6 +478,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                         statuses.add(0, new Status(OUT_OF_INDEX, TITLE_ALL));
                     }
                     mViewModel.onGetDataSuccess(statuses);
+                    mViewModel.hideProgress();
                 }
             }, new RequestError() {
                 @Override
@@ -468,6 +509,7 @@ public final class StatusSelectionPresenter implements StatusSelectionContract.P
                 @Override
                 public void accept(@NonNull List<Status> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
+                    mViewModel.hideProgress();
                 }
             }, new RequestError() {
                 @Override
