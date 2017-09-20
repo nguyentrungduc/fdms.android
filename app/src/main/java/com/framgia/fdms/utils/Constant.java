@@ -25,7 +25,7 @@ public class Constant {
     public static final String FOLDER_NAME_FAMS = "Report FAMS";
     public static final String TYPE_PDF = "application/pdf";
     public static final String TYPE_WORD = "application/msword";
-    public static final String TITLE_NOW = "NOW";
+    public static final String TITLE_NOW = "Now";
     public static final String TAG_MAKER_DIALOG = "MAKER_DIALOG";
     public static final String TAG_MEETING_ROOM_DIALOG = "TAG_MEETING_ROOM_DIALOG";
     public static final int FIRST_INDEX = 0;
@@ -82,7 +82,7 @@ public class Constant {
     public static final class DeviceUsingStatus {
         public static final String ALL = "all";
         public static final String USING = "using";
-        public static final String RETURN = "return";
+        public static final String RETURN = "returned";
     }
 
     public static final class Role {
@@ -132,7 +132,7 @@ public class Constant {
             "assignment[assignment_details_attributes]";
         public static final String DEVICE_GROUP_ID = "device_group_id";
         public static final String STATUS = "status";
-        public static final String EMAIL = "email";
+        public static final String TEXT_USER_SEARCH = "text_user_search";
     }
 
     public class DeviceStatus {

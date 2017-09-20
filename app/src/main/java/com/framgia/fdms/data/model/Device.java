@@ -84,10 +84,17 @@ public class Device extends BaseObservable implements Parcelable {
     @Expose
     @SerializedName("summary")
     private Summary mSummary;
-    private boolean mIsSelected;
     @Expose
     @SerializedName("user")
     private UserBorrow mUser;
+    @Expose
+    @SerializedName("borrow_date")
+    private Date mBorrowDate;
+    @Expose
+    @SerializedName("return_date")
+    private Date mReturnDate;
+
+    private boolean mIsSelected;
     private Status mVendor;
     private Status mMarker;
     @Expose
@@ -441,6 +448,25 @@ public class Device extends BaseObservable implements Parcelable {
             default:
                 return R.drawable.ic_avaiable;
         }
+    }
+
+    @Bindable
+    public Date getBorrowDate() {
+        return mBorrowDate;
+    }
+
+    public void setBorrowDate(Date borrowDate) {
+        mBorrowDate = borrowDate;
+        notifyPropertyChanged(BR.borrowDate);
+    }
+    @Bindable
+    public Date getReturnDate() {
+        return mReturnDate;
+    }
+
+    public void setReturnDate(Date returnDate) {
+        mReturnDate = returnDate;
+        notifyPropertyChanged(BR.returnDate);
     }
 
     @Bindable

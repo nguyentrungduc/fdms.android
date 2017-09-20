@@ -173,7 +173,7 @@ public interface FDMSApi {
     Observable<Respone<List<Status>>> getCategoriesByDeviceGroupId(
         @QueryMap Map<String, String> params);
 
-    @GET("api/device_histories")
+    @GET("api//device_using_histories")
     Observable<Respone<List<DeviceUsingHistory>>> getAllDeviceUsingHistory(
         @QueryMap Map<String, String> params);
 }

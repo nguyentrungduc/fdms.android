@@ -44,7 +44,7 @@ public class Utils {
 
     public static String getStringDate(Date date) {
         if (date == null) return TITLE_NOW;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         return formatter.format(date);
     }
 
