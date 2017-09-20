@@ -19,7 +19,7 @@ import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
-import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
+import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import java.util.ArrayList;
@@ -27,8 +27,8 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
-import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_HISTORY;
-import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
+import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_USING_HISTORY;
+import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_USING_STATUS;
@@ -117,7 +117,7 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     @Override
     public void onChooseStatusClick() {
         mNavigator.startActivityForResult(
-            StatusSelectionActivity.getInstance(mNavigator.getContext(), DEVICE_USING_HISTORY),
+            SelectionActivity.getInstance(mNavigator.getContext(), DEVICE_USING_HISTORY),
             REQUEST_DEVICE_USING_STATUS);
     }
 

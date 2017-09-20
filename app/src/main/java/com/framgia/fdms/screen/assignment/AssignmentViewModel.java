@@ -17,15 +17,15 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.deviceselection.DeviceSelectionActivity;
-import com.framgia.fdms.screen.new_selection.StatusSelectionActivity;
+import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.profile.chooseexport.ChooseExportActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
-import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
-import static com.framgia.fdms.screen.new_selection.StatusSelectionViewModel.BUNDLE_DATA;
+import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
+import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
+import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICES;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORIES;
@@ -78,7 +78,7 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
 
     public void onShowDeviceGroups() {
         mNavigator.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, DEVICE_GROUP), REQUEST_DEVICE_GROUPS);
+            SelectionActivity.getInstance(mContext, DEVICE_GROUP), REQUEST_DEVICE_GROUPS);
     }
 
     public void onShowCategories() {
@@ -86,7 +86,7 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
             return;
         }
         mNavigator.startActivityForResult(
-            StatusSelectionActivity.getInstance(mContext, CATEGORY, mDeviceGroup.getId()),
+            SelectionActivity.getInstance(mContext, CATEGORY, mDeviceGroup.getId()),
             REQUEST_CATEGORIES);
     }
 

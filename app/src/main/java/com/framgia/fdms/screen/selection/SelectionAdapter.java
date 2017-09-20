@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.new_selection;
+package com.framgia.fdms.screen.selection;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,18 +12,18 @@ import java.util.List;
  * <></>
  */
 
-public class StatusSelectionAdapter
-    extends RecyclerView.Adapter<StatusSelectionAdapter.SelectionHolder> {
+public class SelectionAdapter
+    extends RecyclerView.Adapter<SelectionAdapter.SelectionHolder> {
 
     private LayoutInflater mInflater;
     private List<Status> mDatas;
-    private StatusSelectionViewModel mViewModel;
+    private SelectionViewModel mViewModel;
 
-    public StatusSelectionAdapter(List<Status> datas) {
+    public SelectionAdapter(List<Status> datas) {
         mDatas = datas;
     }
 
-    public void setViewModel(StatusSelectionViewModel viewModel) {
+    public void setViewModel(SelectionViewModel viewModel) {
         mViewModel = viewModel;
     }
 

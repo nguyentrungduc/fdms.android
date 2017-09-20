@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.new_selection;
+package com.framgia.fdms.screen.selection;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -33,25 +33,25 @@ import com.framgia.fdms.data.source.remote.StatusRemoteDataSource;
 import com.framgia.fdms.data.source.remote.VendorRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityNewStatusSelectionBinding;
 
-import static com.framgia.fdms.screen.new_selection.SelectionType.BRANCH;
-import static com.framgia.fdms.screen.new_selection.SelectionType.CATEGORY;
-import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_GROUP;
-import static com.framgia.fdms.screen.new_selection.SelectionType.DEVICE_USING_HISTORY;
-import static com.framgia.fdms.screen.new_selection.SelectionType.MARKER;
-import static com.framgia.fdms.screen.new_selection.SelectionType.MEETING_ROOM;
-import static com.framgia.fdms.screen.new_selection.SelectionType.RELATIVE_STAFF;
-import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS;
-import static com.framgia.fdms.screen.new_selection.SelectionType.STATUS_REQUEST;
-import static com.framgia.fdms.screen.new_selection.SelectionType.VENDOR;
+import static com.framgia.fdms.screen.selection.SelectionType.BRANCH;
+import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
+import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
+import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_USING_HISTORY;
+import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
+import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
+import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
+import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
+import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 
 /**
  * StatusSelection Screen.
  */
-public class StatusSelectionActivity extends AppCompatActivity
+public class SelectionActivity extends AppCompatActivity
     implements SearchView.OnQueryTextListener {
     private static final String BUNDLE_SELECTION_TYPE = "BUNDLE_SELECTION_TYPE";
     private static final String BUNDLE_ID = "BUNDLE_ID";
-    private StatusSelectionContract.ViewModel mViewModel;
+    private SelectionContract.ViewModel mViewModel;
     @SelectionType
     private int mSelectionType;
     private int mDeviceGroupId;
@@ -59,7 +59,7 @@ public class StatusSelectionActivity extends AppCompatActivity
     private MenuItem mSearchMenu;
 
     public static Intent getInstance(Context context, @SelectionType int type) {
-        Intent intent = new Intent(context, StatusSelectionActivity.class);
+        Intent intent = new Intent(context, SelectionActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(BUNDLE_SELECTION_TYPE, type);
         intent.putExtras(bundle);
@@ -67,7 +67,7 @@ public class StatusSelectionActivity extends AppCompatActivity
     }
 
     public static Intent getInstance(Context context, @SelectionType int type, int id) {
-        Intent intent = new Intent(context, StatusSelectionActivity.class);
+        Intent intent = new Intent(context, SelectionActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(BUNDLE_SELECTION_TYPE, type);
         bundle.putInt(BUNDLE_ID, id);
@@ -80,20 +80,20 @@ public class StatusSelectionActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         getDataFromIntent();
 
-        mViewModel = new StatusSelectionViewModel(this);
+        mViewModel = new SelectionViewModel(this);
 
-        StatusSelectionContract.Presenter presenter =
-            new StatusSelectionPresenter(mViewModel, mSelectionType);
-        initPresenter((StatusSelectionPresenter) presenter);
+        SelectionContract.Presenter presenter =
+            new SelectionPresenter(mViewModel, mSelectionType);
+        initPresenter((SelectionPresenter) presenter);
 
         mViewModel.setPresenter(presenter);
 
         ActivityNewStatusSelectionBinding binding =
             DataBindingUtil.setContentView(this, R.layout.activity_new_status_selection);
-        binding.setViewModel((StatusSelectionViewModel) mViewModel);
+        binding.setViewModel((SelectionViewModel) mViewModel);
     }
 
-    private void initPresenter(StatusSelectionPresenter presenter) {
+    private void initPresenter(SelectionPresenter presenter) {
         switch (mSelectionType) {
             case STATUS:
             case STATUS_REQUEST:

@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.new_selection;
+package com.framgia.fdms.screen.selection;
 
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * This specifies the contract between the view and the presenter.
  */
-public interface StatusSelectionContract {
+public interface SelectionContract {
     /**
      * View.
      */
