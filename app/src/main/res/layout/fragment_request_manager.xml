@@ -95,6 +95,20 @@
                 android:layout_centerHorizontal="true"
                 android:visibility="@{viewModel.progressBarVisibility}"
                 />
+
         </android.support.v4.widget.SwipeRefreshLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/dp_20"
+            android:onClick="@{() -> viewModel.onRegisterRequestClick()}"
+            app:srcCompat="@drawable/ic_add_white_24dp"
+            app:backgroundTint="@color/colorPrimaryDark"
+            />
+
     </RelativeLayout>
 </layout>

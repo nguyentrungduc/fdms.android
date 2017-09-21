@@ -32,6 +32,8 @@ interface UserRequestContract {
         void setRefresh(boolean refresh);
 
         void onGetRequestError();
+
+        void onRegisterRequestClick();
     }
 
     /**

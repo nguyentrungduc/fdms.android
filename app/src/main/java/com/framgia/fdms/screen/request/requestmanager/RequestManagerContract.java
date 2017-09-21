@@ -32,6 +32,8 @@ interface RequestManagerContract {
         void setRefresh(boolean isRefresh);
 
         void onGetRequestError();
+
+        void onRegisterRequestClick();
     }
 
     /**

@@ -22,6 +22,7 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
+import com.framgia.fdms.screen.requestcreation.RequestCreationActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
@@ -35,6 +36,7 @@ import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_REQUEST;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SELECTION;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
@@ -104,6 +106,12 @@ public class UserRequestViewModel extends BaseFragmentModel
     @Override
     public void onGetRequestError() {
         setEmptyViewVisible(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onRegisterRequestClick() {
+        mFragment.startActivityForResult(
+            RequestCreationActivity.getInstance(mFragment.getActivity()), REQUEST_CREATE_REQUEST);
     }
 
     @Override
@@ -181,13 +189,13 @@ public class UserRequestViewModel extends BaseFragmentModel
     }
 
     public void onSelectStatusClick() {
-        mFragment.startActivityForResult(
-            SelectionActivity.getInstance(mContext, STATUS_REQUEST), REQUEST_STATUS);
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, STATUS_REQUEST),
+            REQUEST_STATUS);
     }
 
     public void onSelectRelativeClick() {
-        mFragment.startActivityForResult(
-            SelectionActivity.getInstance(mContext, RELATIVE_STAFF), REQUEST_SELECTION);
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, RELATIVE_STAFF),
+            REQUEST_SELECTION);
     }
 
     @Bindable
