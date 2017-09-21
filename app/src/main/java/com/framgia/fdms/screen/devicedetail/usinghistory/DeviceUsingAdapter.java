@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.databinding.ItemDeviceUsingBinding;
+import com.framgia.fdms.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  */
 
 public class DeviceUsingAdapter extends RecyclerView.Adapter<DeviceUsingAdapter.ViewHolder> {
+    private static final String FORMAT_DATE = "%s -> %s";
 
     private Context mContext;
     private List<DeviceUsingHistory> mHistories = new ArrayList<>();
@@ -51,9 +53,23 @@ public class DeviceUsingAdapter extends RecyclerView.Adapter<DeviceUsingAdapter.
         }
 
         public void bindData(DeviceUsingHistory item) {
-            if (item == null) return;
+            if (item == null) {
+                return;
+            }
             mBinding.setDeviceUsingHistory(item);
+            mBinding.setTime(getStrFormatTime(item));
             mBinding.executePendingBindings();
+        }
+
+        private String getStrFormatTime(DeviceUsingHistory deviceUsingHistory) {
+            if (deviceUsingHistory == null
+                || deviceUsingHistory.getUsingDevices() == null
+                || deviceUsingHistory.getUsingDevices().size() == 0) {
+                return "";
+            }
+            return String.format(FORMAT_DATE,
+                Utils.getStringDate(deviceUsingHistory.getUsingDevices().get(0).getBorrowDate()),
+                Utils.getStringDate(deviceUsingHistory.getUsingDevices().get(0).getReturnDate()));
         }
     }
 }
