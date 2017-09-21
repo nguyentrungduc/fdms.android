@@ -92,8 +92,10 @@ public interface FDMSApi {
     @GET("api/device_history/{id}")
     Observable<Respone<List<DeviceHistoryDetail>>> getDeviceDetailHistory(@Path("id") int deviceId);
 
-    @GET("api/device_usings/{id}")
-    Observable<Respone<List<DeviceUsingHistory>>> getDeviceUsingHistory(@Path("id") int deviceId);
+    @GET("api/device_using_histories")
+    Observable<Respone<List<DeviceUsingHistory>>> getDeviceUsingHistory(
+        @Query("device_code") String deviceCode, @Query("page") int page,
+        @Query("per_page") int perPage);
 
     @GET("api/branches")
     Observable<Respone<List<Status>>> getListBranch();
@@ -173,7 +175,7 @@ public interface FDMSApi {
     Observable<Respone<List<Status>>> getCategoriesByDeviceGroupId(
         @QueryMap Map<String, String> params);
 
-    @GET("api//device_using_histories")
+    @GET("api/device_using_histories")
     Observable<Respone<List<DeviceUsingHistory>>> getAllDeviceUsingHistory(
         @QueryMap Map<String, String> params);
 }

@@ -19,11 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CODE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.STATUS;
 import static com.framgia.fdms.utils.Constant.ApiParram.TEXT_USER_SEARCH;
+import static com.framgia.fdms.utils.Constant.ApiParram.USING_HISTORY_DEVICE_CODE;
 import static com.framgia.fdms.utils.Constant.DeviceUsingStatus.ALL;
 import static com.framgia.fdms.utils.Constant.DeviceUsingStatus.RETURN;
 import static com.framgia.fdms.utils.Constant.DeviceUsingStatus.USING;
@@ -94,7 +94,7 @@ public class DeviceUsingHistoryRemoteDataSource extends BaseRemoteDataSource
                 param.put(TEXT_USER_SEARCH, filter.getStaffName());
             }
             if (!TextUtils.isEmpty(filter.getDeviceCode())) {
-                param.put(DEVICE_CODE, filter.getDeviceCode());
+                param.put(USING_HISTORY_DEVICE_CODE, filter.getDeviceCode());
             }
         }
         return param;

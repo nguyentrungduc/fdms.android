@@ -13,6 +13,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
+import static com.framgia.fdms.utils.Constant.PER_PAGE;
+
 /**
  * Listens to user actions from the UI ({@link DeviceUsingHistoryFragment}), retrieves the data and
  * updates
@@ -23,15 +25,16 @@ final class DeviceUsingHistoryPresenter implements DeviceUsingHistoryContract.Pr
     private final DeviceUsingHistoryContract.ViewModel mViewModel;
     private DeviceRepository mRepository;
     private CompositeDisposable mCompositeSubscription;
-    private int mDeviceId = -1;
+    private String mDeviceCode;
+    private int mPage = 1;
 
     public DeviceUsingHistoryPresenter(DeviceUsingHistoryContract.ViewModel viewModel,
-        DeviceRepository repository, int deviceId) {
+        DeviceRepository repository, String deviceCode) {
         mViewModel = viewModel;
         mCompositeSubscription = new CompositeDisposable();
         mRepository = repository;
-        mDeviceId = deviceId;
-        getUsingHistoryDevice(mDeviceId);
+        mDeviceCode = deviceCode;
+        getUsingHistoryDevice();
     }
 
     @Override
@@ -44,9 +47,9 @@ final class DeviceUsingHistoryPresenter implements DeviceUsingHistoryContract.Pr
     }
 
     @Override
-    public void getUsingHistoryDevice(int deviceID) {
+    public void getUsingHistoryDevice() {
         mViewModel.showProgressbar();
-        Disposable subscription = mRepository.getDeviceUsingHistory(deviceID)
+        Disposable subscription = mRepository.getDeviceUsingHistory(mDeviceCode, mPage, PER_PAGE)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<List<DeviceUsingHistory>>() {
@@ -71,8 +74,8 @@ final class DeviceUsingHistoryPresenter implements DeviceUsingHistoryContract.Pr
 
     @Override
     public void onLoadMore() {
-        // TODO: 23/05/2017 later
-        mViewModel.hideProgressbar();
+        mPage++;
+        getUsingHistoryDevice();
     }
 
     @Override

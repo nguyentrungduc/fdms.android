@@ -49,6 +49,7 @@ public class Constant {
         public static final String BUNDLE_CONTENT = "BUNDLE_CONTENT";
         public static final String BUNDLE_RESPONE = "BUNDLE_RESPONE";
         public static final String EXTRA_DEVICE_ID = "EXTRA_DEVICE_ID";
+        public static final String EXTRA_DEVICE_CODE = "EXTRA_DEVICE_CODE";
         public static final String BUNDLE_TAB = "BUNDLE_TAB";
         public static final String BUNDLE_USER = "USER_BUND";
         public static final String BUNDLE_PRODUCER = "BUNDLE_PRODUCER";
@@ -133,6 +134,7 @@ public class Constant {
         public static final String DEVICE_GROUP_ID = "device_group_id";
         public static final String STATUS = "status";
         public static final String TEXT_USER_SEARCH = "text_user_search";
+        public static final String USING_HISTORY_DEVICE_CODE = "device_code";
     }
 
     public class DeviceStatus {

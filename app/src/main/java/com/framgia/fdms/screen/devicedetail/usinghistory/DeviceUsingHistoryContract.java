@@ -21,6 +21,6 @@ interface DeviceUsingHistoryContract {
      * Presenter.
      */
     interface Presenter extends BaseFragmentContract.Presenter {
-        void getUsingHistoryDevice(int deviceID);
+        void getUsingHistoryDevice();
     }
 }

@@ -224,8 +224,9 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
     }
 
     @Override
-    public Observable<List<DeviceUsingHistory>> getDeviceUsingHistory(int deviceId) {
-        return mFDMSApi.getDeviceUsingHistory(deviceId)
+    public Observable<List<DeviceUsingHistory>> getDeviceUsingHistory(String deviceId, int page,
+        int perPage) {
+        return mFDMSApi.getDeviceUsingHistory(deviceId, page, perPage)
             .flatMap(
                 new Function<Respone<List<DeviceUsingHistory>>,
                     ObservableSource<List<DeviceUsingHistory>>>() {
