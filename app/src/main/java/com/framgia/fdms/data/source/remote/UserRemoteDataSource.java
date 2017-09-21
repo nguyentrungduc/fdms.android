@@ -28,4 +28,10 @@ public class UserRemoteDataSource implements UserDataSource.RemoteDataSource {
         // TODO: 4/4/17 replace by call API later
         return Observable.just(null);
     }
+
+    @Override
+    public Observable<Respone<User>> updateUserProfile(int userId, String gender, String address,
+        String birthday) {
+        return mFDMSApi.updateUserProfile(userId, gender, address, birthday);
+    }
 }

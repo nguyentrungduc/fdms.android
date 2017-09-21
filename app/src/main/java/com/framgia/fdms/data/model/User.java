@@ -33,6 +33,9 @@ public class User extends BaseObservable implements Parcelable {
     @SerializedName("id")
     private int mId;
     @Expose
+    @SerializedName("name")
+    private String mName;
+    @Expose
     @SerializedName("first_name")
     private String mFirstName;
     @Expose
@@ -101,12 +104,16 @@ public class User extends BaseObservable implements Parcelable {
     @Expose
     @SerializedName("card_number")
     private String mCardNumber;
+    @Expose
+    @SerializedName("branch")
+    private String mBranch;
 
     public User() {
     }
 
     protected User(Parcel in) {
         mId = in.readInt();
+        mName = in.readString();
         mFirstName = in.readString();
         mLastName = in.readString();
         mEmail = in.readString();
@@ -124,6 +131,7 @@ public class User extends BaseObservable implements Parcelable {
         mStatus = in.readString();
         mToken = in.readString();
         mCardNumber = in.readString();
+        mBranch = in.readString();
     }
 
     @Bindable
@@ -144,6 +152,16 @@ public class User extends BaseObservable implements Parcelable {
     public void setId(int id) {
         mId = id;
         notifyPropertyChanged(BR.id);
+    }
+
+    @Bindable
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String name) {
+        mName = name;
+        notifyPropertyChanged(BR.name);
     }
 
     @Bindable
@@ -357,6 +375,16 @@ public class User extends BaseObservable implements Parcelable {
     }
 
     @Bindable
+    public String getBranch() {
+        return mBranch;
+    }
+
+    public void setBranch(String branch) {
+        mBranch = branch;
+        notifyPropertyChanged(BR.branch);
+    }
+
+    @Bindable
     public String getToken() {
         return mToken;
     }
@@ -374,6 +402,7 @@ public class User extends BaseObservable implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mId);
+        dest.writeString(mName);
         dest.writeString(mFirstName);
         dest.writeString(mLastName);
         dest.writeString(mEmail);
@@ -391,6 +420,7 @@ public class User extends BaseObservable implements Parcelable {
         dest.writeString(mStatus);
         dest.writeString(mToken);
         dest.writeString(mCardNumber);
+        dest.writeString(mBranch);
     }
 
     public boolean isBo() {
