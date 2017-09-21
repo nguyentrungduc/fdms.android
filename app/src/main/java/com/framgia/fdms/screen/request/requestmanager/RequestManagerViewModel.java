@@ -20,6 +20,7 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
+import com.framgia.fdms.screen.requestcreation.RequestCreationActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
 import com.framgia.fdms.screen.request.userrequest.UserRequestAdapter;
@@ -36,6 +37,7 @@ import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_REQUEST;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SELECTION;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
@@ -106,6 +108,12 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void onGetRequestError() {
         setEmptyViewVisible(View.VISIBLE);
+    }
+
+    @Override
+    public void onRegisterRequestClick() {
+        mFragment.startActivityForResult(
+            RequestCreationActivity.getInstance(mFragment.getActivity()), REQUEST_CREATE_REQUEST);
     }
 
     @Override
