@@ -176,4 +176,9 @@ public interface FDMSApi {
     @GET("api//device_using_histories")
     Observable<Respone<List<DeviceUsingHistory>>> getAllDeviceUsingHistory(
         @QueryMap Map<String, String> params);
+
+    @PATCH("api/users/{user_id}")
+    Observable<Respone<User>> updateUserProfile(@Path("user_id") int userId,
+        @Query("user[gender]") String gender, @Query("user[address]") String address,
+        @Query("user[birthday]") String birthday);
 }

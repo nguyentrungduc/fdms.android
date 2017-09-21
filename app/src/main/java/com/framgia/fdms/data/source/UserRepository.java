@@ -23,12 +23,24 @@ public class UserRepository
         mUserLocalDataSource = userLocalDataSource;
     }
 
+    public UserRepository(UserRemoteDataSource remoteDataSource,
+        UserLocalDataSource userLocalDataSource) {
+        mUserRemoteDataSource = remoteDataSource;
+        mUserLocalDataSource = userLocalDataSource;
+    }
+
     public Observable<Respone<User>> login(String userName, String passWord) {
         return mUserRemoteDataSource.login(userName, passWord);
     }
 
     public Observable<User> register(RegisterRequest request) {
         return mUserRemoteDataSource.register(request);
+    }
+
+    @Override
+    public Observable<Respone<User>> updateUserProfile(int userId, String gender, String address,
+        String birthday) {
+        return mUserRemoteDataSource.updateUserProfile(userId, gender, address, birthday);
     }
 
     public Observable<User> getCurrentUser() {

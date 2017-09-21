@@ -42,6 +42,8 @@ public class ProfileViewModel extends BaseObservable
     private User mUser;
     private boolean mIsEdit;
     private String mBirthDay;
+    private String mContractDate;
+    private String mStartProbationDate;
     private boolean mIsRefresh;
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
@@ -90,9 +92,14 @@ public class ProfileViewModel extends BaseObservable
 
         DateFormat format = new SimpleDateFormat("dd - MM - yyyy", Locale.getDefault());
         mBirthDay = mUser.getBirthday() == null ? "" : format.format(mUser.getBirthday());
+        mContractDate =
+            mUser.getContractDate() == null ? "" : format.format(mUser.getContractDate());
+        mStartProbationDate = mUser.getStartProbationDate() == null ? ""
+            : format.format(mUser.getStartProbationDate());
 
         setUser(user);
         setRefresh(false);
+        notifyChange();
     }
 
     @Override
@@ -126,8 +133,19 @@ public class ProfileViewModel extends BaseObservable
     }
 
     @Override
+    public void onUpdateProfileSuccess(User user) {
+        mUser.setGender(user.getGender());
+        mUser.setAddress(user.getAddress());
+        mUser.setBirthday(user.getBirthday());
+        mIsEdit = !mIsEdit;
+        notifyPropertyChanged(BR.edit);
+        notifyPropertyChanged(BR.user);
+    }
+
+    @Override
     public void onClickDoneEditProfile() {
-        // TODO: 5/30/2017 work call api update profile
+        mPresenter.updateUserProfile(mUser.getId(), mUser.getGender(), mUser.getAddress(),
+            mBirthDay);
     }
 
     @Override
@@ -140,11 +158,8 @@ public class ProfileViewModel extends BaseObservable
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        mBirthDay = dayOfMonth + " - " + (monthOfYear + 1) + " - " + year;
-        mCalendar.set(Calendar.YEAR, year);
-        mCalendar.set(Calendar.MONTH, monthOfYear);
-        mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        mUser.setBirthday(mCalendar.getTime());
+        mBirthDay = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+        setBirthDay(mBirthDay);
     }
 
     @Bindable
@@ -175,6 +190,26 @@ public class ProfileViewModel extends BaseObservable
     public void setBirthDay(String birthDay) {
         mBirthDay = birthDay;
         notifyPropertyChanged(BR.birthDay);
+    }
+
+    @Bindable
+    public String getContractDate() {
+        return mContractDate;
+    }
+
+    public void setContractDate(String contractDate) {
+        mContractDate = contractDate;
+        notifyPropertyChanged(BR.contractDate);
+    }
+
+    @Bindable
+    public String getStartProbationDate() {
+        return mStartProbationDate;
+    }
+
+    public void setStartProbationDate(String startProbationDate) {
+        mStartProbationDate = startProbationDate;
+        notifyPropertyChanged(BR.startProbationDate);
     }
 
     @Bindable

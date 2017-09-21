@@ -15,6 +15,8 @@ interface ProfileContract {
     interface ViewModel extends BaseViewModel<Presenter> {
         void onClickEditProfile();
 
+        void onUpdateProfileSuccess(User user);
+
         void onClickPickAvatar();
 
         void onClickDoneEditProfile();
@@ -35,5 +37,7 @@ interface ProfileContract {
      */
     interface Presenter extends BasePresenter {
         void getCurrentUser();
+
+        void updateUserProfile(int userId, String gender, String address, String birthday);
     }
 }

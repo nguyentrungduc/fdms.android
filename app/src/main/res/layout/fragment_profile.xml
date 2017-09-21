@@ -62,8 +62,9 @@
                         android:background="@drawable/bg_circle_sprink"
                         android:elevation="@dimen/dp_3"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_edit_white_24dp"
                         android:visibility="@{viewModel.edit ? View.VISIBLE : View.GONE}"
+                        app:srcCompat="@drawable/ic_edit_white_24dp"
+                        bind:ignore="UnusedAttribute"
                         />
                 </FrameLayout>
 
@@ -103,7 +104,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_persion_teal_24dp"
+                                app:srcCompat="@drawable/ic_persion_teal_24dp"
+                                bind:ignore="ContentDescription"
                                 />
 
                             <android.support.v7.widget.AppCompatEditText
@@ -112,10 +114,10 @@
                                 android:layout_marginLeft="@dimen/dp_16"
                                 android:layout_marginRight="@dimen/dp_16"
                                 android:background="?editTextBackground"
-                                android:enabled="@{viewModel.edit}"
+                                android:enabled="false"
                                 android:imeOptions="actionDone"
                                 android:inputType="text"
-                                android:text="@{viewModel.user.lastName != null ? viewModel.user.lastName : ``}"
+                                android:text="@{viewModel.user.name != null ? viewModel.user.name : ``}"
                                 android:textColor="@color/color_grey_757575"
                                 android:textSize="@dimen/sp_16"
                                 />
@@ -132,7 +134,38 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_email_cyan_24dp"
+                                app:srcCompat="@drawable/ic_credit_card_black_24px"
+                                bind:ignore="ContentDescription"
+                                />
+
+                            <android.support.v7.widget.AppCompatEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_16"
+                                android:layout_marginRight="@dimen/dp_16"
+                                android:background="?editTextBackground"
+                                android:enabled="false"
+                                android:imeOptions="actionDone"
+                                android:inputType="text"
+                                android:text="@{viewModel.user.employeeCode}"
+                                android:textColor="@color/color_grey_757575"
+                                android:textSize="@dimen/sp_16"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/dp_8"
+                            android:paddingTop="@dimen/dp_8"
+                            >
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                app:srcCompat="@drawable/ic_email_cyan_24dp"
+                                bind:ignore="ContentDescription"
                                 />
 
                             <android.support.v7.widget.AppCompatEditText
@@ -142,7 +175,7 @@
                                 android:layout_marginLeft="@dimen/dp_16"
                                 android:layout_marginRight="@dimen/dp_16"
                                 android:background="?editTextBackground"
-                                android:enabled="@{viewModel.edit}"
+                                android:enabled="false"
                                 android:imeOptions="actionDone"
                                 android:inputType="text"
                                 android:text="@{viewModel.user.email}"
@@ -161,7 +194,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_perm_device_information_black_24px"
+                                app:srcCompat="@drawable/ic_perm_device_information_black_24px"
+                                bind:ignore="ContentDescription"
                                 />
 
                             <android.support.v7.widget.AppCompatEditText
@@ -187,7 +221,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_credit_card_black_24px"
+                                app:srcCompat="@drawable/ic_credit_card_black_24px"
+                                bind:ignore="ContentDescription"
                                 />
 
                             <android.support.v7.widget.AppCompatEditText
@@ -203,6 +238,7 @@
                                 />
 
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -214,7 +250,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_place_cyan_24dp"
+                                app:srcCompat="@drawable/ic_place_cyan_24dp"
+                                bind:ignore="ContentDescription"
                                 />
 
                             <android.support.v7.widget.AppCompatEditText
@@ -224,7 +261,7 @@
                                 android:layout_marginRight="@dimen/dp_16"
                                 android:background="?editTextBackground"
                                 android:enabled="false"
-                                android:text="@{viewModel.user.address}"
+                                android:text="@{viewModel.user.branch}"
                                 android:textColor="@color/color_grey_757575"
                                 android:textSize="@dimen/sp_16"
                                 />
@@ -241,7 +278,120 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_gender_cyan"
+                                app:srcCompat="@drawable/ic_place_cyan_24dp"
+                                bind:ignore="ContentDescription"
+                                />
+
+                            <android.support.v7.widget.AppCompatEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_16"
+                                android:layout_marginRight="@dimen/dp_16"
+                                android:background="?editTextBackground"
+                                android:enabled="false"
+                                android:text="@{viewModel.user.status}"
+                                android:textColor="@color/color_grey_757575"
+                                android:textSize="@dimen/sp_16"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/dp_8"
+                            android:paddingTop="@dimen/dp_8"
+                            >
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                app:srcCompat="@drawable/ic_date_range_cyan_24dp"
+                                bind:ignore="ContentDescription"
+                                />
+
+                            <android.support.v7.widget.AppCompatEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_16"
+                                android:layout_marginRight="@dimen/dp_16"
+                                android:background="?editTextBackground"
+                                android:enabled="false"
+                                android:text="@{viewModel.contractDate}"
+                                android:textColor="@color/color_grey_757575"
+                                android:textSize="@dimen/sp_16"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/dp_8"
+                            android:paddingTop="@dimen/dp_8"
+                            >
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                app:srcCompat="@drawable/ic_date_range_cyan_24dp"
+                                bind:ignore="ContentDescription"
+                                />
+
+                            <android.support.v7.widget.AppCompatEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_16"
+                                android:layout_marginRight="@dimen/dp_16"
+                                android:background="?editTextBackground"
+                                android:enabled="false"
+                                android:text="@{viewModel.startProbationDate}"
+                                android:textColor="@color/color_grey_757575"
+                                android:textSize="@dimen/sp_16"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/dp_8"
+                            android:paddingTop="@dimen/dp_8"
+                            >
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                app:srcCompat="@drawable/ic_place_cyan_24dp"
+                                bind:ignore="ContentDescription"
+                                />
+
+                            <android.support.v7.widget.AppCompatEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_16"
+                                android:layout_marginRight="@dimen/dp_16"
+                                android:background="?editTextBackground"
+                                android:enabled="@{viewModel.edit}"
+                                android:text="@={viewModel.user.address}"
+                                android:textColor="@color/color_grey_757575"
+                                android:textSize="@dimen/sp_16"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/dp_8"
+                            android:paddingTop="@dimen/dp_8"
+                            >
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                app:srcCompat="@drawable/ic_gender_cyan"
+                                bind:ignore="ContentDescription"
                                 />
 
                             <android.support.v7.widget.AppCompatTextView
@@ -281,7 +431,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_date_range_cyan_24dp"
+                                app:srcCompat="@drawable/ic_date_range_cyan_24dp"
+                                bind:ignore="ContentDescription"
                                 />
 
                             <android.support.v7.widget.AppCompatTextView
@@ -292,7 +443,7 @@
                                 android:background="?editTextBackground"
                                 android:clickable="@{viewModel.edit}"
                                 android:onClick="@{() -> viewModel.onPickDateTime()}"
-                                android:text="@{viewModel.birthDay}"
+                                android:text="@={viewModel.birthDay}"
                                 android:textColor="@color/color_grey_757575"
                                 android:textSize="@dimen/sp_16"
                                 />
@@ -324,7 +475,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_import_export_black_24px"
+                                app:srcCompat="@drawable/ic_import_export_black_24px"
+                                bind:ignore="ContentDescription"
                                 />
 
                             <android.support.v7.widget.AppCompatTextView
@@ -352,7 +504,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_logout_white_24dp"
+                                app:srcCompat="@drawable/ic_logout_white_24dp"
+                                bind:ignore="ContentDescription"
                                 />
 
                             <android.support.v7.widget.AppCompatTextView
@@ -379,9 +532,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_16"
             android:onClick="@{() -> viewModel.onClickEditProfile()}"
-            android:src="@drawable/ic_edit_white_24dp"
             app:layout_anchor="@id/app_bar_layout"
             app:layout_anchorGravity="bottom|end"
+            app:srcCompat="@drawable/ic_edit_white_24dp"
             />
 
         <android.support.design.widget.FloatingActionButton
@@ -390,8 +543,8 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/dp_16"
             android:onClick="@{() -> viewModel.onClickDoneEditProfile()}"
-            android:src="@drawable/ic_done_white_24dp"
             android:visibility="@{viewModel.edit ? View.VISIBLE : View.GONE}"
+            app:srcCompat="@drawable/ic_done_white_24dp"
             />
     </android.support.design.widget.CoordinatorLayout>
 </layout>
