@@ -8,7 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.RequestRepository;
+import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
+import com.framgia.fdms.data.source.local.UserLocalDataSource;
+import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.data.source.remote.RequestRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityRequestCreationBinding;
 
@@ -30,7 +33,8 @@ public class RequestCreationActivity extends AppCompatActivity {
         mViewModel = new RequestCreationViewModel(this);
 
         RequestCreationContract.Presenter presenter = new RequestCreationPresenter(mViewModel,
-            new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())));
+            new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
+            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))));
         mViewModel.setPresenter(presenter);
 
         ActivityRequestCreationBinding binding =
@@ -55,5 +59,10 @@ public class RequestCreationActivity extends AppCompatActivity {
     protected void onStop() {
         mViewModel.onStop();
         super.onStop();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mViewModel.onActivityResult(requestCode, resultCode, data);
     }
 }

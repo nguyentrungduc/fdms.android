@@ -33,6 +33,7 @@ import com.framgia.fdms.data.source.remote.StatusRemoteDataSource;
 import com.framgia.fdms.data.source.remote.VendorRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityNewStatusSelectionBinding;
 
+import static com.framgia.fdms.screen.selection.SelectionType.ASSIGNEE;
 import static com.framgia.fdms.screen.selection.SelectionType.BRANCH;
 import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
@@ -47,8 +48,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 /**
  * StatusSelection Screen.
  */
-public class SelectionActivity extends AppCompatActivity
-    implements SearchView.OnQueryTextListener {
+public class SelectionActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private static final String BUNDLE_SELECTION_TYPE = "BUNDLE_SELECTION_TYPE";
     private static final String BUNDLE_ID = "BUNDLE_ID";
     private SelectionContract.ViewModel mViewModel;
@@ -82,8 +82,7 @@ public class SelectionActivity extends AppCompatActivity
 
         mViewModel = new SelectionViewModel(this);
 
-        SelectionContract.Presenter presenter =
-            new SelectionPresenter(mViewModel, mSelectionType);
+        SelectionContract.Presenter presenter = new SelectionPresenter(mViewModel, mSelectionType);
         initPresenter((SelectionPresenter) presenter);
 
         mViewModel.setPresenter(presenter);
@@ -101,6 +100,12 @@ public class SelectionActivity extends AppCompatActivity
                 StatusRepository statusRepository = new StatusRepository(
                     new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setStatusRepository(statusRepository);
+                break;
+
+            case ASSIGNEE:
+                StatusRepository assigneeRepository = new StatusRepository(
+                    new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
+                presenter.setStatusRepository(assigneeRepository);
                 break;
 
             case CATEGORY:

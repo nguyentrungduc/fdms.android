@@ -11,6 +11,10 @@ public class RequestCreatorRequest extends BaseRequest {
     private String mTitle;
     @SerializedName("request[description]")
     private String mDescription;
+    @SerializedName("request[for_user_id]")
+    private int mRequestFor;
+    @SerializedName("request[assignee_id]")
+    private int mAssignee;
 
     public String getTitle() {
         return mTitle;
@@ -26,5 +30,21 @@ public class RequestCreatorRequest extends BaseRequest {
 
     public void setDescription(String description) {
         mDescription = description;
+    }
+
+    public int getRequestFor() {
+        return mRequestFor;
+    }
+
+    public void setRequestFor(int requestFor) {
+        mRequestFor = requestFor;
+    }
+
+    public int getAssignee() {
+        return mAssignee;
+    }
+
+    public void setAssignee(int assignee) {
+        mAssignee = assignee;
     }
 }

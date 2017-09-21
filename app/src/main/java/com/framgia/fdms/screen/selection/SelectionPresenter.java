@@ -23,6 +23,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
+import static com.framgia.fdms.screen.selection.SelectionType.ASSIGNEE;
 import static com.framgia.fdms.screen.selection.SelectionType.BRANCH;
 import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
@@ -33,6 +34,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
+import static com.framgia.fdms.utils.Constant.NONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.TITLE_ALL;
@@ -147,6 +149,9 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 break;
             case RELATIVE_STAFF:
                 getListRelative();
+                break;
+            case ASSIGNEE:
+                getListAssignee();
                 break;
             default:
                 break;
@@ -508,6 +513,38 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             .subscribe(new Consumer<List<Status>>() {
                 @Override
                 public void accept(@NonNull List<Status> statuses) throws Exception {
+                    mViewModel.onGetDataSuccess(statuses);
+                    mViewModel.hideProgress();
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onGetDataFailed(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
+                }
+            });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void getListAssignee() {
+        Disposable disposable = mStatusRepository.getListAssignee()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgress();
+                }
+            })
+            .subscribe(new Consumer<List<Status>>() {
+                @Override
+                public void accept(@NonNull List<Status> statuses) throws Exception {
+                    statuses.add(0, new Status(OUT_OF_INDEX, NONE));
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
                 }
