@@ -38,7 +38,8 @@ public class DeviceDataSource {
         Observable<List<DeviceUsingHistory>> getDeviceUsingHistory(String deviceCode, int page,
             int perPage);
 
-        Observable<List<DeviceHistoryDetail>> getDeviceDetailHistory(int deviceId);
+        Observable<List<DeviceHistoryDetail>> getDeviceDetailHistory(int deviceId, int page,
+            int perPage);
 
         Observable<Device> getDevice(int deviceId);
 

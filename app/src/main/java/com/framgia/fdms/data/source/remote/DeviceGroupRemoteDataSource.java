@@ -66,19 +66,38 @@ public class DeviceGroupRemoteDataSource extends BaseRemoteDataSource
 
     @Override
     public Observable<Producer> addDeviceGroup(Producer deviceGroup) {
-        // TODO: 9/25/2017
-        return Observable.error(new NullPointerException());
+        return mFDMSApi.addDeviceGroup(deviceGroup.getName(), deviceGroup.getDescription())
+            .flatMap(new Function<Respone<Producer>, ObservableSource<Producer>>() {
+                @Override
+                public ObservableSource<Producer> apply(Respone<Producer> producerRespone)
+                    throws Exception {
+                    return Utils.getResponse(producerRespone);
+                }
+            });
     }
 
     @Override
     public Observable<Respone<String>> deleteDeviceGroup(Producer deviceGroup) {
-        // TODO: 9/25/2017
-        return Observable.error(new NullPointerException());
+        return mFDMSApi.deleteDeviceGroup(deviceGroup.getId());
     }
 
     @Override
     public Observable<String> editDeviceGroup(Producer deviceGroup) {
-        // TODO: 9/25/2017
-        return Observable.error(new NullPointerException());
+        return mFDMSApi.editDeviceGroup(deviceGroup.getId(), deviceGroup.getName(),
+            deviceGroup.getDescription())
+            .flatMap(new Function<Respone<Producer>, ObservableSource<String>>() {
+                @Override
+                public ObservableSource<String> apply(Respone<Producer> producerRespone)
+                    throws Exception {
+                    if (producerRespone == null) {
+                        return Observable.error(new NullPointerException());
+                    } else if (producerRespone.isError()) {
+                        return Observable.error(
+                            new NullPointerException("ERROR" + producerRespone.getMessage()));
+                    } else {
+                        return Observable.just(producerRespone.getMessage());
+                    }
+                }
+            });
     }
 }
