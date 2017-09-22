@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import com.framgia.fdms.R;
 import com.framgia.fdms.databinding.FragmentMyDeviceDetailBinding;
 
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_TYPE;
+
 /**
  * MyDeviceDetail Screen.
  */
@@ -18,7 +20,11 @@ public class MyDeviceDetailFragment extends Fragment {
 
     private MyDeviceDetailContract.ViewModel mViewModel;
 
-    public static MyDeviceDetailFragment newInstance() {
+    public static MyDeviceDetailFragment newInstance(@MyDeviceType int type) {
+        MyDeviceDetailFragment fragment = new MyDeviceDetailFragment();
+        Bundle args = new Bundle();
+        args.putInt(BUNDLE_TYPE, type);
+        fragment.setArguments(args);
         return new MyDeviceDetailFragment();
     }
 

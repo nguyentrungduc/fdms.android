@@ -301,4 +301,7 @@
     <string name="title_validate_item_assignment">Please select fully(Device Group, Category, Device)</string>
     <string name="title_validate_assignment">Please add device</string>
     <string name="msg_assignment_success">Assignment Success</string>
+    <string name="title_device_all">All</string>
+    <string name="title_device_using">Using</string>
+    <string name="title_device_returned">Returned</string>
 </resources>
