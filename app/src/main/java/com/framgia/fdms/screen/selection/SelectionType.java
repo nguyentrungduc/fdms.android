@@ -2,6 +2,7 @@ package com.framgia.fdms.screen.selection;
 
 import android.support.annotation.IntDef;
 
+import static com.framgia.fdms.screen.selection.SelectionType.ASSIGNEE;
 import static com.framgia.fdms.screen.selection.SelectionType.BRANCH;
 import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
@@ -20,7 +21,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 
 @IntDef({
     STATUS, CATEGORY, VENDOR, MARKER, BRANCH, MEETING_ROOM, DEVICE_GROUP, DEVICE_USING_HISTORY,
-    STATUS_REQUEST, RELATIVE_STAFF
+    STATUS_REQUEST, RELATIVE_STAFF, ASSIGNEE
 })
 public @interface SelectionType {
     int STATUS = 0;
@@ -33,4 +34,5 @@ public @interface SelectionType {
     int DEVICE_USING_HISTORY = 7;
     int STATUS_REQUEST = 8;
     int RELATIVE_STAFF = 9;
+    int ASSIGNEE = 10;
 }

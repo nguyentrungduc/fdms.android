@@ -52,5 +52,7 @@ public interface SelectionContract {
         void getListBranch();
 
         void getListRelative();
+
+        void getListAssignee();
     }
 }

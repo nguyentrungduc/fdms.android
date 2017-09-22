@@ -2,7 +2,9 @@ package com.framgia.fdms.screen.requestcreation;
 
 import android.text.TextUtils;
 import com.framgia.fdms.data.model.Request;
+import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.RequestRepository;
+import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
@@ -22,12 +24,33 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
     private final RequestCreationContract.ViewModel mViewModel;
     private CompositeDisposable mSubscription;
     private RequestRepository mRequestRepository;
+    private UserRepository mUserRepository;
 
     public RequestCreationPresenter(RequestCreationContract.ViewModel viewModel,
-        RequestRepository requestRepository) {
+        RequestRepository requestRepository, UserRepository userRepository) {
         mViewModel = viewModel;
         mSubscription = new CompositeDisposable();
         mRequestRepository = requestRepository;
+        mUserRepository = userRepository;
+    }
+
+    @Override
+    public void getCurrentUser() {
+        Disposable subscription = mUserRepository.getCurrentUser()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<User>() {
+                @Override
+                public void accept(User user) throws Exception {
+                    mViewModel.onGetUserSuccess(user);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onLoadError(error.getMessage());
+                }
+            });
+        mSubscription.add(subscription);
     }
 
     @Override

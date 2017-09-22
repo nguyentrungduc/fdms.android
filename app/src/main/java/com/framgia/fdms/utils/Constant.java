@@ -33,6 +33,7 @@ public class Constant {
     public static final String DRAWER_IS_OPEN = "OPEN";
     public static final String TITLE_NA = "N/A";
     public static final String TITLE_ALL = "All";
+    public static final String NONE = "None";
 
     private Constant() {
         // No-op
@@ -78,6 +79,8 @@ public class Constant {
         public static final int REQUEST_DEVICE = 15;
         public static final int REQUEST_MEETING_ROOM = 16;
         public static final int REQUEST_DEVICE_USING_STATUS = 17;
+        public static final int REQUEST_REQUEST_FOR = 18;
+        public static final int REQUEST_ASSIGNEE = 19;
     }
 
     public static final class DeviceUsingStatus {

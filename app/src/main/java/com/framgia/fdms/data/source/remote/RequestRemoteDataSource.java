@@ -28,7 +28,9 @@ import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_REQUEST_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.RELATIVE_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_ASSIGNEE_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_DESCRIPTION;
+import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_FOR_USER_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_REQUEST_DETAILS;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_TITLE;
@@ -74,6 +76,8 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
 
         parrams.put(REQUEST_TITLE, request.getTitle());
         parrams.put(REQUEST_DESCRIPTION, request.getDescription());
+        parrams.put(REQUEST_FOR_USER_ID, String.valueOf(request.getRequestFor()));
+        parrams.put(REQUEST_ASSIGNEE_ID, String.valueOf(request.getAssignee()));
 
         return mFDMSApi.registerRequest(parrams)
             .flatMap(new Function<Respone<Request>, ObservableSource<Request>>() {
