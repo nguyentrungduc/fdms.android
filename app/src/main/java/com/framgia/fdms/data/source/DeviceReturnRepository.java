@@ -25,4 +25,12 @@ public class DeviceReturnRepository {
     public Observable<List<Device>> devicesOfBorrower() {
         return mDataSource.getAssigmentDevices();
     }
+
+    public Observable<String> returnDevice(List<Integer> listDeviceId) {
+        return mDataSource.returnDevice(listDeviceId);
+    }
+
+    public Observable<List<Device>> getListDevicesOfBorrower(int userId) {
+        return mDataSource.getListDevicesOfBorrower(userId);
+    }
 }

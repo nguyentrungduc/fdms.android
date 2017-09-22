@@ -8,6 +8,7 @@ import com.framgia.fdms.data.source.StatusRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -20,7 +21,7 @@ import java.util.List;
  * updates
  * the UI as required.
  */
-public final class ReturnDevicePresenter implements ReturnDeviceContract.Presenter {
+class ReturnDevicePresenter implements ReturnDeviceContract.Presenter {
     private static final String TAG = ReturnDevicePresenter.class.getName();
 
     private final ReturnDeviceContract.ViewModel mViewModel;
@@ -29,9 +30,8 @@ public final class ReturnDevicePresenter implements ReturnDeviceContract.Present
     private DeviceRepository mDeviceRepository;
     private DeviceReturnRepository mDeviceReturnRepository;
 
-    public ReturnDevicePresenter(ReturnDeviceContract.ViewModel viewModel,
-        StatusRepository repository, DeviceReturnRepository deviceReturnRepository,
-        DeviceRepository deviceRepository) {
+    ReturnDevicePresenter(ReturnDeviceContract.ViewModel viewModel, StatusRepository repository,
+        DeviceReturnRepository deviceReturnRepository, DeviceRepository deviceRepository) {
         mViewModel = viewModel;
         mRepository = repository;
         mDeviceReturnRepository = deviceReturnRepository;
@@ -72,8 +72,8 @@ public final class ReturnDevicePresenter implements ReturnDeviceContract.Present
     }
 
     @Override
-    public void getDevicesOfBorrower() {
-        Disposable subscription = mDeviceReturnRepository.devicesOfBorrower()
+    public void getDevicesOfBorrower(int userId) {
+        Disposable subscription = mDeviceReturnRepository.getListDevicesOfBorrower(userId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(new Consumer<Disposable>() {
@@ -91,6 +91,7 @@ public final class ReturnDevicePresenter implements ReturnDeviceContract.Present
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.onError(error.getMessage());
+                    mViewModel.hideProgressbar();
                 }
             }, new Action() {
                 @Override
@@ -125,6 +126,36 @@ public final class ReturnDevicePresenter implements ReturnDeviceContract.Present
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.hideProgressbar();
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            });
+        mSubscription.add(subscription);
+    }
+
+    @Override
+    public void returnDevice(List<Integer> listDeviceId) {
+        Disposable subscription = mDeviceReturnRepository.returnDevice(listDeviceId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgressbar();
+                }
+            })
+            .subscribe(new Consumer<String>() {
+                @Override
+                public void accept(@NonNull String s) throws Exception {
+                    mViewModel.onReturnDeviceSuccess(s);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onError(error.getMessage());
                 }
             }, new Action() {
                 @Override

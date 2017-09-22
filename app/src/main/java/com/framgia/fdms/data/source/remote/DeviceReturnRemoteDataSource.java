@@ -8,6 +8,7 @@ import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.utils.Utils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,23 @@ public class DeviceReturnRemoteDataSource
                 @Override
                 public ObservableSource<List<Device>> apply(Respone<List<Device>> listRespone)
                     throws Exception {
+                    return Utils.getResponse(listRespone);
+                }
+            });
+    }
+
+    @Override
+    public Observable<String> returnDevice(List<Integer> listDeviceId) {
+        return mFDMSApi.returnDevice(listDeviceId);
+    }
+
+    @Override
+    public Observable<List<Device>> getListDevicesOfBorrower(int userId) {
+        return mFDMSApi.getListDeviceOfUserBorrow(userId)
+            .flatMap(new Function<Respone<List<Device>>, ObservableSource<List<Device>>>() {
+                @Override
+                public ObservableSource<List<Device>> apply(
+                    @NonNull Respone<List<Device>> listRespone) throws Exception {
                     return Utils.getResponse(listRespone);
                 }
             });

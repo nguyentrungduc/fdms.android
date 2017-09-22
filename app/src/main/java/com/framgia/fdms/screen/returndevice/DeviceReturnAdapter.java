@@ -63,4 +63,8 @@ public class DeviceReturnAdapter
             mBinding.executePendingBindings();
         }
     }
+
+    public List<Device> getDevices() {
+        return mDevices;
+    }
 }

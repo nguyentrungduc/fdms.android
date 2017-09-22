@@ -19,7 +19,7 @@ public interface ReturnDeviceContract {
 
         void onSelectedUserReturn();
 
-        void onReturnDevice();
+        void onReturnDeviceSuccess(String s);
 
         void showProgressbar();
 
@@ -50,8 +50,10 @@ public interface ReturnDeviceContract {
     interface Presenter extends BasePresenter {
         void getListAssign();
 
-        void getDevicesOfBorrower();
+        void getDevicesOfBorrower(int userId);
 
         void getDeviceByCode(String codeDevice, boolean isUserOther);
+
+        void returnDevice(List<Integer> listDeviceId);
     }
 }

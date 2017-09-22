@@ -188,4 +188,13 @@ public interface FDMSApi {
     Observable<Respone<List<DeviceUsingHistory>>> getUserDevice(@Query("status") String status,
         @Query("text_user_search") String staffEmail, @Query("page") int page,
         @Query("per_page") int perPage);
+
+    @GET("api/return_devices")
+    Observable<Respone<List<Status>>> getListUserBorrow();
+
+    @PATCH("api/return_devices/update")
+    Observable<String> returnDevice(@Query("assignment_detail") List<Integer> listDeviceId);
+
+    @GET("api/return_devices/{user_id}")
+    Observable<Respone<List<Device>>> getListDeviceOfUserBorrow(@Path("user_id") int userId);
 }

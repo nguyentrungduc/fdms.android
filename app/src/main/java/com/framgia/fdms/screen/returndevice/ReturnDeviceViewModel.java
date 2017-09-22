@@ -3,6 +3,8 @@ package com.framgia.fdms.screen.returndevice;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
@@ -10,40 +12,45 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Status;
-import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.scanner.ScannerActivity;
+import com.framgia.fdms.screen.selection.SelectionActivity;
+import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.permission.PermissionUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_CONTENT;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SCANNER;
-import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SELECTION;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_USER_BORROW;
 import static com.framgia.fdms.utils.permission.PermissionUtil.MY_PERMISSIONS_REQUEST_CAMERA;
 
 /**
  * Exposes the data to be used in the ReturnDevice screen.
  */
 
-public class ReturnDeviceViewModel implements ReturnDeviceContract.ViewModel {
+public class ReturnDeviceViewModel extends BaseObservable
+    implements ReturnDeviceContract.ViewModel {
 
     private ReturnDeviceActivity mActivity;
     private ReturnDeviceContract.Presenter mPresenter;
     private ObservableList<Device> mDevices = new ObservableArrayList<>();
     private ObservableField<DeviceReturnAdapter> mAdapter = new ObservableField<>();
+    private boolean mProgressBarVisibility;
 
     private List<Status> mAssigners = new ArrayList<>();
     private ObservableField<Status> mNameUserReturn = new ObservableField<>();
+    private List<Integer> mListDeviceId;
 
     public ReturnDeviceViewModel(ReturnDeviceActivity activity) {
         mActivity = activity;
         mAdapter.set(new DeviceReturnAdapter(this, mDevices));
+        mListDeviceId = new ArrayList<>();
     }
 
     @Override
@@ -68,13 +75,13 @@ public class ReturnDeviceViewModel implements ReturnDeviceContract.ViewModel {
         }
         Bundle bundle = data.getExtras();
         switch (requestCode) {
-            case REQUEST_SELECTION:
+            case REQUEST_USER_BORROW:
                 Status status = bundle.getParcelable(BUNDLE_DATA);
                 if (status == null || status.getId() == OUT_OF_INDEX) {
                     return;
                 }
                 mNameUserReturn.set(status);
-                getAllDeviceBorrowOfUser(status);
+                getAllDeviceBorrowOfUser(status.getId());
                 break;
             case REQUEST_SCANNER:
                 String contextQrCode = bundle.getString(BUNDLE_CONTENT);
@@ -98,14 +105,14 @@ public class ReturnDeviceViewModel implements ReturnDeviceContract.ViewModel {
 
     @Override
     public void onCheckedChanged(boolean checked, Device device, int position) {
-        // TODO: 5/22/2017 work when checkbox item of device return
+        device.setSelected(checked);
     }
 
     @Override
     public void onSelectedUserReturn() {
         mActivity.startActivityForResult(
-            SelectionActivity.getInstance(mActivity.getApplicationContext(), RELATIVE_STAFF),
-            REQUEST_SELECTION);
+            SelectionActivity.getInstance(mActivity.getApplicationContext(),
+                SelectionType.USER_BORROW), REQUEST_USER_BORROW);
     }
 
     @Override
@@ -149,18 +156,18 @@ public class ReturnDeviceViewModel implements ReturnDeviceContract.ViewModel {
     }
 
     @Override
-    public void onReturnDevice() {
-        // TODO: 5/23/2017 work save return device
+    public void onReturnDeviceSuccess(String message) {
+        Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showProgressbar() {
-        // TODO: later
+        setProgressBarVisibility(true);
     }
 
     @Override
     public void hideProgressbar() {
-        // TODO: later
+        setProgressBarVisibility(false);
     }
 
     @Override
@@ -177,8 +184,8 @@ public class ReturnDeviceViewModel implements ReturnDeviceContract.ViewModel {
         mAssigners.addAll(assignees);
     }
 
-    private void getAllDeviceBorrowOfUser(Status assigner) {
-        mPresenter.getDevicesOfBorrower();
+    private void getAllDeviceBorrowOfUser(int userId) {
+        mPresenter.getDevicesOfBorrower(userId);
     }
 
     @Override
@@ -191,6 +198,16 @@ public class ReturnDeviceViewModel implements ReturnDeviceContract.ViewModel {
         mDevices.clear();
         mDevices.addAll(devices);
         mAdapter.get().update(mDevices);
+    }
+
+    public void onReturnDevice() {
+        mListDeviceId.clear();
+        for (Device item : mAdapter.get().getDevices()) {
+            if (item.isSelected()) {
+                mListDeviceId.add(item.getId());
+            }
+        }
+        mPresenter.returnDevice(mListDeviceId);
     }
 
     public AppCompatActivity getActivity() {
@@ -207,5 +224,15 @@ public class ReturnDeviceViewModel implements ReturnDeviceContract.ViewModel {
 
     public ObservableList<Device> getDevices() {
         return mDevices;
+    }
+
+    @Bindable
+    public boolean isProgressBarVisibility() {
+        return mProgressBarVisibility;
+    }
+
+    public void setProgressBarVisibility(boolean progressBarVisibility) {
+        mProgressBarVisibility = progressBarVisibility;
+        notifyPropertyChanged(BR.progressBarVisibility);
     }
 }

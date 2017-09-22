@@ -67,6 +67,12 @@
                     app:layoutManager="LinearLayoutManager"
                     app:recyclerAdapter="@{viewModel.adapter}"
                     />
+                <ProgressBar
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_gravity="center"
+                    android:visibility="@{viewModel.progressBarVisibility ? View.VISIBLE : View.GONE}"
+                    />
             </LinearLayout>
         </LinearLayout>
 
