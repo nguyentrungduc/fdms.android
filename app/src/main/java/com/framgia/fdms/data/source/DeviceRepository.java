@@ -87,4 +87,10 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
     public Observable<List<Status>> getDeviceGroups(String query) {
         return mDeviceRemoteDataSource.getDeviceGroups(query);
     }
+
+    @Override
+    public Observable<List<DeviceUsingHistory>> getUserDevice(String status, String staffEmail, int page,
+        int perPage) {
+        return mDeviceRemoteDataSource.getUserDevice(status, staffEmail, page, perPage);
+    }
 }
