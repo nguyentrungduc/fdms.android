@@ -32,8 +32,6 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.VISIBLE;
-import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MANAGE_DEVICE;
-import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MY_DEVICE;
 import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
@@ -65,7 +63,6 @@ public class ListDeviceViewModel extends BaseObservable
     private Context mContext;
 
     private boolean mIsBo;
-    private int mTab = TAB_MY_DEVICE;
     private int mEmptyViewVisible = View.GONE;
 
     private boolean mIsRefresh;
@@ -111,26 +108,15 @@ public class ListDeviceViewModel extends BaseObservable
             }
         };
 
-    public ListDeviceViewModel(ListDeviceFragment fragment, int tabDevice) {
+    public ListDeviceViewModel(ListDeviceFragment fragment) {
         mFragment = fragment;
         mContext = fragment.getContext();
         mAdapter = new ListDeviceAdapter(mContext, new ArrayList<Device>(), this);
         mFilterModel = new DeviceFilterModel();
-        mTab = tabDevice;
     }
 
     public void loadData() {
-        if (mPresenter == null) return;
-        switch (mTab) {
-            case TAB_MY_DEVICE:
-                mPresenter.getDevicesBorrow();
-                break;
-            case TAB_MANAGE_DEVICE:
-                mPresenter.getData(mFilterModel, FIRST_PAGE);
-                break;
-            default:
-                break;
-        }
+        mPresenter.getData(mFilterModel, FIRST_PAGE);
     }
 
     @Override
@@ -198,8 +184,8 @@ public class ListDeviceViewModel extends BaseObservable
 
     @Override
     public void onChooseMeetingRoomClick() {
-        mFragment.startActivityForResult(
-            SelectionActivity.getInstance(mContext, MEETING_ROOM), REQUEST_MEETING_ROOM);
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, MEETING_ROOM),
+            REQUEST_MEETING_ROOM);
     }
 
     @Override
@@ -326,16 +312,6 @@ public class ListDeviceViewModel extends BaseObservable
     public void setRefresh(boolean refresh) {
         mIsRefresh = refresh;
         notifyPropertyChanged(BR.refresh);
-    }
-
-    @Bindable
-    public int getTab() {
-        return mTab;
-    }
-
-    public void setTab(int tab) {
-        mTab = tab;
-        notifyPropertyChanged(BR.tab);
     }
 
     @Bindable

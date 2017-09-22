@@ -40,8 +40,6 @@ import java.util.List;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MANAGE_DEVICE;
-import static com.framgia.fdms.screen.device.DeviceViewModel.Tab.TAB_MY_DEVICE;
 import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_DASH_BOARD;
 import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_DEVICE_MANAGER;
 import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_DEVICE_USING_HISTORY;
@@ -88,11 +86,11 @@ public class MainViewModel extends BaseObservable
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(ProfileFragment.newInstance());
         fragments.add(DashboardFragment.newInstance());
-        fragments.add(ListDeviceFragment.newInstance(TAB_MANAGE_DEVICE));
+        fragments.add(ListDeviceFragment.newInstance());
         fragments.add(RequestManagerFragment.newInstance());
         fragments.add(ProducerFragment.newInstance(VENDOR));
         fragments.add(ProducerFragment.newInstance(MARKER));
-        fragments.add(ListDeviceFragment.newInstance(TAB_MY_DEVICE));
+        fragments.add(ListDeviceFragment.newInstance());
         fragments.add(UserRequestFragment.newInstance());
         fragments.add(ListMeetingRoomFragment.newInstance());
         fragments.add(DeviceUsingManagerFragment.newInstance());
