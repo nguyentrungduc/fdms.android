@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
 
@@ -13,22 +13,38 @@
             />
 
     </data>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.framgia.fdms.screen.device.mydevice.mydevicedetail.MyDeviceDetailActivity"
         >
-        <android.support.v7.widget.RecyclerView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            />
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:context="com.framgia.fdms.screen.device.mydevice.mydevicedetail.MyDeviceDetailActivity"
+            >
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                bind:adapter="@{viewModel.adapter}"
+                bind:layoutManager="LinearLayoutManager"
+                bind:scrollListenner="@{viewModel.scrollListenner}"
+                />
 
-        <ProgressBar
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_30"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            <ProgressBar
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:visibility="@{viewModel.progressVisibility}"
+                />
+        </LinearLayout>
+
+        <include
+            layout="@layout/empty_state"
+            bind:image="@{@drawable/ic_not_found_data}"
+            bind:text="@{@string/msg_no_device}"
+            bind:visibleState="@{viewModel.emptyStateVisibility}"
             />
     </RelativeLayout>
 </layout>

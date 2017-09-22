@@ -183,7 +183,7 @@
     <string name="title_employcode">Employee code:</string>
     <string name="message_export_error">Export error</string>
     <string name="title_user_not_found">User not found</string>
-    <string name="msg_no_device">Not device</string>
+    <string name="msg_no_device">There is not any device</string>
     <string name="msg_no_request">To create a new request, please click the + button bellow</string>
     <string name="msg_no_request_manager">Not request device</string>
     <string name="msg_request_write_file">Write list device using</string>
@@ -283,7 +283,7 @@
     <string name="title_manage_meeting_room">Manage Meeting Room</string>
     <string name="title_meeting_room_info">Meeting Room Info</string>
     <string name="title_device_using_history">Device Using History</string>
-    <string name="title_logout_cap">LOGOUT</string>
+    <string name="title_logout_cap">Logout</string>
     <string name="title_scan_qrcode">SCAN QRCODE</string>
     <string name="fragment_all_device_using">All</string>
     <string name="fragment_using_device_using">Using</string>
