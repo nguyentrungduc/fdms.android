@@ -52,5 +52,8 @@ public class DeviceDataSource {
         Observable<List<Status>> getDeviceGroups();
 
         Observable<List<Status>> getDeviceGroups(String query);
+
+        Observable<List<DeviceUsingHistory>> getUserDevice(String status, String staffEmail,
+            int page, int perPage);
     }
 }

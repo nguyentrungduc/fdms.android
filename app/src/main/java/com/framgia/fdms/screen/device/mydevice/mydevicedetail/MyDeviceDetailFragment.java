@@ -7,8 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.source.UserRepository;
+import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
+import com.framgia.fdms.data.source.local.UserLocalDataSource;
+import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
+import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.databinding.FragmentMyDeviceDetailBinding;
 
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_TYPE;
@@ -25,15 +30,18 @@ public class MyDeviceDetailFragment extends Fragment {
         Bundle args = new Bundle();
         args.putInt(BUNDLE_TYPE, type);
         fragment.setArguments(args);
-        return new MyDeviceDetailFragment();
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new MyDeviceDetailViewModel();
+        mViewModel = new MyDeviceDetailViewModel(this);
 
-        MyDeviceDetailContract.Presenter presenter = new MyDeviceDetailPresenter(mViewModel);
+        MyDeviceDetailContract.Presenter presenter =
+            new MyDeviceDetailPresenter(mViewModel, getArguments().getInt(BUNDLE_TYPE),
+                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))),
+                new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
     }
 

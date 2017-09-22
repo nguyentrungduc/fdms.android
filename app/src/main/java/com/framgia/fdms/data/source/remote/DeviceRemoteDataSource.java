@@ -337,6 +337,21 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
             });
     }
 
+    @Override
+    public Observable<List<DeviceUsingHistory>> getUserDevice(String status, String staffEmail,
+        int page, int perPage) {
+        return mFDMSApi.getUserDevice(status, staffEmail, page, perPage)
+            .flatMap(
+                new Function<Respone<List<DeviceUsingHistory>>,
+                    ObservableSource<List<DeviceUsingHistory>>>() {
+                    @Override
+                    public ObservableSource<List<DeviceUsingHistory>> apply(
+                        Respone<List<DeviceUsingHistory>> listRespone) throws Exception {
+                        return Utils.getResponse(listRespone);
+                    }
+                });
+    }
+
     public Map<String, String> getDeviceParams(DeviceFilterModel filterModel, int page,
         int perPage) {
         Map<String, String> parrams = new HashMap<>();
