@@ -15,9 +15,11 @@
     </data>
 
     <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        app:pagerAdapter="@{viewModel.adapter}"
         tools:context="com.framgia.fdms.screen.device.mydevice.MyDeviceActivity"
         >
 
@@ -26,7 +28,8 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             app:tabSelectedTextColor="@android:color/white"
-            app:tabTextColor="@color/color_gray"
+            app:tabTextColor="@color/color_gray_"
+            app:tabIndicatorColor="@android:color/white"
             />
 
     </android.support.v4.view.ViewPager>

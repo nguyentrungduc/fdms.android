@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.framgia.fdms.R;
 import com.framgia.fdms.databinding.FragmentMyDeviceBinding;
 
@@ -25,7 +24,7 @@ public class MyDeviceFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new MyDeviceViewModel();
+        mViewModel = new MyDeviceViewModel(this);
 
         MyDeviceContract.Presenter presenter = new MyDevicePresenter(mViewModel);
         mViewModel.setPresenter(presenter);
