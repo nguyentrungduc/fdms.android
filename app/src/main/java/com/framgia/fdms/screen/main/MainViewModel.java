@@ -22,6 +22,7 @@ import com.framgia.fdms.screen.ViewPagerScroll;
 import com.framgia.fdms.screen.authenication.login.LoginActivity;
 import com.framgia.fdms.screen.dashboard.DashboardFragment;
 import com.framgia.fdms.screen.device.listdevice.ListDeviceFragment;
+import com.framgia.fdms.screen.device.mydevice.MyDeviceFragment;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.deviceusingmanager.DeviceUsingManagerFragment;
 import com.framgia.fdms.screen.meetingroom.listmeetingroom.ListMeetingRoomFragment;
@@ -90,7 +91,7 @@ public class MainViewModel extends BaseObservable
         fragments.add(RequestManagerFragment.newInstance());
         fragments.add(ProducerFragment.newInstance(VENDOR));
         fragments.add(ProducerFragment.newInstance(MARKER));
-        fragments.add(ListDeviceFragment.newInstance());
+        fragments.add(MyDeviceFragment.newInstance());
         fragments.add(UserRequestFragment.newInstance());
         fragments.add(ListMeetingRoomFragment.newInstance());
         fragments.add(DeviceUsingManagerFragment.newInstance());
