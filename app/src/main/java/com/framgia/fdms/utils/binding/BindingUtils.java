@@ -378,7 +378,7 @@ public final class BindingUtils {
 
     /*
     * bind ViewPager to Model
-    * Device Detail ViewModel
+    * Device Detail ViewHolder
     * */
 
     @BindingAdapter("bindViewModel")

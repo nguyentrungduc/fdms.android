@@ -1,6 +1,5 @@
 package com.framgia.fdms.screen.device.mydevice.mydevicedetail;
 
-import android.util.Log;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.DeviceRepository;
@@ -35,8 +34,8 @@ final class MyDeviceDetailPresenter implements MyDeviceDetailContract.Presenter 
     private int mPage = FIRST_PAGE;
     private String mUserEmail;
 
-    MyDeviceDetailPresenter(MyDeviceDetailContract.ViewModel viewModel, @MyDeviceType int type,
-        UserRepository userRepository, DeviceRepository deviceRepository) {
+    public MyDeviceDetailPresenter(MyDeviceDetailContract.ViewModel viewModel,
+        @MyDeviceType int type, UserRepository userRepository, DeviceRepository deviceRepository) {
         mViewModel = viewModel;
         mType = getType(type);
         mUserRepository = userRepository;
@@ -81,13 +80,17 @@ final class MyDeviceDetailPresenter implements MyDeviceDetailContract.Presenter 
             .subscribe(new Consumer<List<DeviceUsingHistory>>() {
                 @Override
                 public void accept(List<DeviceUsingHistory> deviceUsingHistories) throws Exception {
-                    mViewModel.onGetDeviceSuccess(deviceUsingHistories);
+                    if (deviceUsingHistories == null || deviceUsingHistories.size() == 0) {
+                        return;
+                    }
+                    mViewModel.onGetDeviceSuccess(deviceUsingHistories.get(0).getUsingDevices());
                 }
             }, new RequestError() {
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.onGetDataFailure(error.getMessage());
                     mViewModel.hideProgress();
+                    mPage--;
                 }
             }, new Action() {
                 @Override
@@ -117,5 +120,11 @@ final class MyDeviceDetailPresenter implements MyDeviceDetailContract.Presenter 
                 }
             });
         mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void loadMoreData() {
+        mPage++;
+        getData();
     }
 }

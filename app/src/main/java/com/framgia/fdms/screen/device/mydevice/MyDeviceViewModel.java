@@ -16,6 +16,7 @@ public class MyDeviceViewModel extends BaseObservable implements MyDeviceContrac
 
     private MyDeviceContract.Presenter mPresenter;
     private MyDevicePagerAdapter mAdapter;
+    private int mCurrentTab;
 
     public MyDeviceViewModel(Fragment fragment) {
         mAdapter = new MyDevicePagerAdapter(fragment.getChildFragmentManager());
@@ -25,6 +26,7 @@ public class MyDeviceViewModel extends BaseObservable implements MyDeviceContrac
             fragment.getString(R.string.title_device_using));
         mAdapter.addFragment(MyDeviceDetailFragment.newInstance(MyDeviceType.RETURNED),
             fragment.getString(R.string.title_device_returned));
+        setCurrentTab(MyDeviceType.USING);
     }
 
     @Override
@@ -50,5 +52,15 @@ public class MyDeviceViewModel extends BaseObservable implements MyDeviceContrac
     public void setAdapter(MyDevicePagerAdapter adapter) {
         mAdapter = adapter;
         notifyPropertyChanged(BR.adapter);
+    }
+
+    @Bindable
+    public int getCurrentTab() {
+        return mCurrentTab;
+    }
+
+    public void setCurrentTab(int currentTab) {
+        mCurrentTab = currentTab;
+        notifyPropertyChanged(BR.currentTab);
     }
 }
