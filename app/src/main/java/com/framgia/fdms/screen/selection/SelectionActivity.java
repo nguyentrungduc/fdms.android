@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.BranchRepository;
 import com.framgia.fdms.data.source.CategoryRepository;
+import com.framgia.fdms.data.source.DeviceGroupRepository;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.DeviceUsingHistoryRepository;
 import com.framgia.fdms.data.source.MarkerRepository;
@@ -147,9 +148,8 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
                 break;
 
             case DEVICE_GROUP:
-                DeviceRepository deviceRepository = new DeviceRepository(
-                    new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
-                presenter.setDeviceRepository(deviceRepository);
+                DeviceGroupRepository deviceGroupRepository = DeviceGroupRepository.getInstance();
+                presenter.setDeviceGroupRepository(deviceGroupRepository);
                 break;
 
             case DEVICE_USING_HISTORY:

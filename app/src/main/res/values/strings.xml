@@ -147,7 +147,6 @@
     <string name="text_from_notification" formatted="false">From %s</string>
     <string name="text_date_time_notification" formatted="false">At %s</string>
     <string name="title_notification">Notification</string>
-    <string name="msg_load_data_fails">Load data fails</string>
     <string name="action_user_return_device">User return device</string>
     <string name="title_percent">\t%\t</string>
     <string name="text_number_notification_more">99+</string>

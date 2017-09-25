@@ -169,7 +169,7 @@ public interface FDMSApi {
         @Query("vendor[name]") String name, @Query("vendor[description]") String description);
 
     @GET("api/device_groups")
-    Observable<Respone<List<Status>>> getDeviceGroups();
+    Observable<Respone<List<Producer>>> getDeviceGroups();
 
     @GET("api/device_categories")
     Observable<Respone<List<Status>>> getCategoriesByDeviceGroupId(

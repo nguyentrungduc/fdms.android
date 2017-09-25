@@ -55,9 +55,8 @@ public class NotificationViewModel extends BaseObservable
     }
 
     @Override
-    public void onLoadNotificationFails() {
-        Toast.makeText(mActivity.getApplicationContext(), R.string.msg_load_data_fails,
-            Toast.LENGTH_SHORT).show();
+    public void onLoadNotificationFails(String msg) {
+        Toast.makeText(mActivity.getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Bindable

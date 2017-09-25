@@ -20,8 +20,8 @@ import com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailViewMode
 /**
  * Newmain Screen.
  */
-public class MainActivity extends AppCompatActivity implements
-    DashBoardDetailViewModel.OnDashBoardDetailClickListener {
+public class MainActivity extends AppCompatActivity
+    implements DashBoardDetailViewModel.OnDashBoardDetailClickListener {
     private MainContract.ViewModel mViewModel;
 
     public static Intent getInstance(Context context) {

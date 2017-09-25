@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 public class ListDeviceAdapter
-        extends BaseRecyclerViewAdapter<Device, ListDeviceAdapter.ViewHolder> {
+    extends BaseRecyclerViewAdapter<Device, ListDeviceAdapter.ViewHolder> {
 
     private OnRecyclerViewItemClickListener<Device> mItemClickListener;
     private List<Device> mDevices;
@@ -40,8 +40,8 @@ public class ListDeviceAdapter
     @Override
     public ListDeviceAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemListDeviceRoomDetailBinding binding =
-                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                        R.layout.item_list_device_room_detail, parent, false);
+            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.item_list_device_room_detail, parent, false);
         return new ListDeviceAdapter.ViewHolder(binding, mItemClickListener);
     }
 
@@ -69,7 +69,7 @@ public class ListDeviceAdapter
         private OnRecyclerViewItemClickListener<Device> mItemClickListener;
 
         public ViewHolder(ItemListDeviceRoomDetailBinding binding,
-                BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<Device> listener) {
+            BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<Device> listener) {
             super(binding.getRoot());
             mBinding = binding;
             mItemClickListener = listener;

@@ -302,42 +302,6 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
     }
 
     @Override
-    public Observable<List<Status>> getDeviceGroups() {
-        return mFDMSApi.getDeviceGroups()
-            .flatMap(new Function<Respone<List<Status>>, ObservableSource<List<Status>>>() {
-
-                @Override
-                public ObservableSource<List<Status>> apply(
-                    @NonNull Respone<List<Status>> listRespone) throws Exception {
-                    return Utils.getResponse(listRespone);
-                }
-            });
-    }
-
-    @Override
-    public Observable<List<Status>> getDeviceGroups(final String query) {
-        if (TextUtils.isEmpty(query)) {
-            return getDeviceGroups();
-        }
-        return getDeviceGroups().flatMap(
-            new Function<List<Status>, ObservableSource<List<Status>>>() {
-                @Override
-                public ObservableSource<List<Status>> apply(@NonNull List<Status> statuses)
-                    throws Exception {
-                    List<Status> data = new ArrayList<>();
-                    for (Status status : statuses) {
-                        if (status.getName()
-                            .toLowerCase(Locale.getDefault())
-                            .contains(query.toLowerCase(Locale.getDefault()))) {
-                            data.add(status);
-                        }
-                    }
-                    return Observable.just(data);
-                }
-            });
-    }
-
-    @Override
     public Observable<List<DeviceUsingHistory>> getUserDevice(String status, String staffEmail,
         int page, int perPage) {
         return mFDMSApi.getUserDevice(status, staffEmail, page, perPage)

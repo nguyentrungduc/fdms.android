@@ -51,7 +51,7 @@ public final class NotificationPresenter implements NotificationContract.Present
             }, new RequestError() {
                 @Override
                 public void onRequestError(BaseException error) {
-                    mViewModel.onLoadNotificationFails();
+                    mViewModel.onLoadNotificationFails(error.getMessage());
                 }
             });
         mSubscription.add(subscription);

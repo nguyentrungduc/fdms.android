@@ -15,7 +15,7 @@ interface ProducerContract {
     interface ViewModel extends BaseViewModel<Presenter> {
         void onLoadVendorSuccess(List<Producer> vendors);
 
-        void onLoadVendorFailed();
+        void onLoadVendorFailed(String msg);
 
         void onAddVendorFailed(String msg);
 

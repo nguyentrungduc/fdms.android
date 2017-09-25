@@ -23,8 +23,8 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.devicecreation.CreateDeviceActivity;
 import com.framgia.fdms.screen.devicecreation.DeviceStatusType;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
-import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.returndevice.ReturnDeviceActivity;
+import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import java.util.ArrayList;
@@ -56,7 +56,6 @@ public class ListDeviceViewModel extends BaseObservable
     OnSearchMenuItemClickListener, DrawerLayout.DrawerListener {
 
     private ListDeviceFragment mFragment;
-    private int mProgressBarVisibility;
     private boolean mIsLoadingMore;
     private ListDeviceAdapter mAdapter;
     private ListDeviceContract.Presenter mPresenter;
@@ -227,7 +226,7 @@ public class ListDeviceViewModel extends BaseObservable
 
     @Override
     public void showProgressbar() {
-        setProgressBarVisibility(VISIBLE);
+        setLoadingMore(true);
     }
 
     @Override
@@ -243,7 +242,7 @@ public class ListDeviceViewModel extends BaseObservable
 
     @Override
     public void hideProgressbar() {
-        setProgressBarVisibility(View.GONE);
+        setLoadingMore(false);
     }
 
     @Override
@@ -407,16 +406,6 @@ public class ListDeviceViewModel extends BaseObservable
     @Override
     public void onDrawerStateChanged(int newState) {
         // no ops
-    }
-
-    @Bindable
-    public int getProgressBarVisibility() {
-        return mProgressBarVisibility;
-    }
-
-    public void setProgressBarVisibility(int progressBarVisibility) {
-        mProgressBarVisibility = progressBarVisibility;
-        notifyPropertyChanged(BR.progressBarVisibility);
     }
 
     @Bindable
