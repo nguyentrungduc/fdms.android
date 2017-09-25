@@ -49,7 +49,7 @@ public class ProducerViewModel extends BaseObservable
                 return new ProducerViewModel[size];
             }
         };
-    private ProducerFunctionContract.ProducerPresenter mPresenter;
+    private ProducerContract.Presenter mPresenter;
     private ProducerAdapter mAdapter;
     private AppCompatActivity mActivity;
     private ProducerDialog mVendorDialog;
@@ -74,7 +74,7 @@ public class ProducerViewModel extends BaseObservable
             if (!mIsLoadMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                 mIsLoadMore = true;
                 setLoadingMoreVisibility(View.VISIBLE);
-                ((ProducerPresenter) mPresenter).loadMorePage();
+                mPresenter.loadMorePage();
             }
         }
     };
@@ -116,7 +116,7 @@ public class ProducerViewModel extends BaseObservable
     }
 
     @Override
-    public void setPresenter(ProducerFunctionContract.ProducerPresenter presenter) {
+    public void setPresenter(ProducerContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
@@ -166,7 +166,6 @@ public class ProducerViewModel extends BaseObservable
 
     @Override
     public void onDeleteVendorSuccess(Producer producer) {
-        // no ops
         mAdapter.removeData(producer);
     }
 
@@ -208,7 +207,7 @@ public class ProducerViewModel extends BaseObservable
             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    ((ProducerPresenter) mPresenter).deleteVendor(vendor);
+                    mPresenter.deleteVendor(vendor);
                 }
             })
             .setNegativeButton(android.R.string.no, null)
@@ -228,7 +227,7 @@ public class ProducerViewModel extends BaseObservable
         if (producer == null) {
             return;
         }
-        ((ProducerPresenter) mPresenter).addVendor(producer);
+        mPresenter.addVendor(producer);
     }
 
     @Override
@@ -237,7 +236,7 @@ public class ProducerViewModel extends BaseObservable
             return;
         }
         mVendorEdit = oldProducer;
-        ((ProducerContract.Presenter) mPresenter).editVendor(newProducer);
+        mPresenter.editVendor(newProducer);
     }
 
     @Bindable
@@ -253,7 +252,7 @@ public class ProducerViewModel extends BaseObservable
     @Override
     public void onSearchAction(String currentQuery) {
         mAdapter.clearData();
-        ((ProducerPresenter) mPresenter).getVendors(currentQuery);
+        mPresenter.getVendors(currentQuery);
     }
 
     @Override
@@ -266,7 +265,7 @@ public class ProducerViewModel extends BaseObservable
     @Override
     public void onClearSearchClicked() {
         mAdapter.clearData();
-        ((ProducerPresenter) mPresenter).getVendors("");
+        mPresenter.getVendors("");
     }
 
     @Override

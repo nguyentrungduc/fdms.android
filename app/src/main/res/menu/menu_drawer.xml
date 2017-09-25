@@ -32,9 +32,13 @@
                     android:icon="@drawable/ic_device_manager"
                     android:title="@string/title_manage_device"/>
                 <item
-                    android:id="@+id/item_manage_request"
-                    android:icon="@drawable/ic_request_manager"
-                    android:title="@string/title_manage_request"/>
+                    android:id="@+id/item_manage_device_group"
+                    android:icon="@drawable/ic_group"
+                    android:title="@string/title_manage_device_group"/>
+                <item
+                    android:id="@+id/item_manage_device_category"
+                    android:icon="@drawable/ic_category"
+                    android:title="@string/title_manage_device_category"/>
                 <item
                     android:id="@+id/item_manage_vendor"
                     android:icon="@drawable/ic_vendor_24dp"
@@ -44,14 +48,6 @@
                     android:icon="@drawable/ic_maker_24dp"
                     android:title="@string/title_manage_maker"/>
                 <item
-                    android:id="@+id/item_my_device"
-                    android:icon="@drawable/ic_device_24dp"
-                    android:title="@string/title_my_device"/>
-                <item
-                    android:id="@+id/item_my_request"
-                    android:icon="@drawable/ic_request_actived"
-                    android:title="@string/title_my_request"/>
-                <item
                     android:id="@+id/item_manage_meeting_room"
                     android:icon="@drawable/ic_meeting_room_24dp"
                     android:title="@string/title_manage_meeting_room"/>
@@ -59,6 +55,18 @@
                     android:id="@+id/item_device_using_history"
                     android:icon="@drawable/ic_history_black_24dp"
                     android:title="@string/title_device_using_history"/>
+                <item
+                    android:id="@+id/item_my_device"
+                    android:icon="@drawable/ic_device_24dp"
+                    android:title="@string/title_my_device"/>
+                <item
+                    android:id="@+id/item_manage_request"
+                    android:icon="@drawable/ic_request_manager"
+                    android:title="@string/title_manage_request"/>
+                <item
+                    android:id="@+id/item_my_request"
+                    android:icon="@drawable/ic_request_actived"
+                    android:title="@string/title_my_request"/>
             </group>
         </menu>
     </item>

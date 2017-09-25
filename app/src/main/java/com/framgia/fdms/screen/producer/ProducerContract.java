@@ -1,7 +1,8 @@
 package com.framgia.fdms.screen.producer;
 
+import com.framgia.fdms.BasePresenter;
+import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Producer;
-import com.framgia.fdms.screen.producer.ProducerFunctionContract;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ interface ProducerContract {
     /**
      * View.
      */
-    interface ViewModel extends ProducerFunctionContract.ViewModel<Presenter> {
+    interface ViewModel extends BaseViewModel<Presenter> {
         void onLoadVendorSuccess(List<Producer> vendors);
 
         void onLoadVendorFailed();
@@ -31,12 +32,18 @@ interface ProducerContract {
         void showProgress();
 
         void hideProgress();
+
+        void onEditProducerClick(Producer producer);
+
+        void onDeleteProducerClick(Producer producer);
+
+        void onAddProducerClick();
     }
 
     /**
      * Presenter.
      */
-    interface Presenter extends ProducerFunctionContract.ProducerPresenter {
+    interface Presenter extends BasePresenter {
         void getVendors();
 
         void loadMorePage();

@@ -2,6 +2,7 @@ package com.framgia.fdms.screen.producer;
 
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Respone;
+import com.framgia.fdms.data.source.DeviceGroupDataSource;
 import com.framgia.fdms.data.source.MarkerDataSource;
 import com.framgia.fdms.data.source.VendorDataSource;
 import com.framgia.fdms.data.source.api.error.BaseException;
@@ -26,18 +27,21 @@ final class ProducerPresenter implements ProducerContract.Presenter {
     private final ProducerContract.ViewModel mViewModel;
     private VendorDataSource.RemoteDataSource mVendorRepository;
     private MarkerDataSource mMarkerRepository;
+    private DeviceGroupDataSource mDeviceGroupRepository;
     private CompositeDisposable mSubscription;
     private int mPage;
-    @ProducerFragment.ProductType
+    @ProducerType
     private int mType;
     private String mName;
 
-    ProducerPresenter(ProducerContract.ViewModel viewModel, @ProducerFragment.ProductType int type,
-        VendorDataSource.RemoteDataSource vendorRepository, MarkerDataSource markerRepository) {
+    ProducerPresenter(ProducerContract.ViewModel viewModel, @ProducerType int type,
+        VendorDataSource.RemoteDataSource vendorRepository, MarkerDataSource markerRepository,
+        DeviceGroupDataSource deviceGroupRepository) {
         mViewModel = viewModel;
         mType = type;
         mVendorRepository = vendorRepository;
         mMarkerRepository = markerRepository;
+        mDeviceGroupRepository = deviceGroupRepository;
         mSubscription = new CompositeDisposable();
     }
 
@@ -49,18 +53,21 @@ final class ProducerPresenter implements ProducerContract.Presenter {
 
     @Override
     public void onStop() {
+        mSubscription.clear();
     }
 
     @Override
     public void getVendors() {
         Observable<List<Producer>> observable;
         switch (mType) {
-            case ProducerFragment.ProductType.VENDOR:
+            case ProducerType.VENDOR:
                 observable = mVendorRepository.getListVendor(mName, mPage, PER_PAGE);
                 break;
-
+            case ProducerType.DEVICE_GROUPS:
+                observable = mDeviceGroupRepository.getListDeviceGroup(mName, mPage, PER_PAGE);
+                break;
             default:
-            case ProducerFragment.ProductType.MARKER:
+            case ProducerType.MARKER:
                 observable = mMarkerRepository.getListMarker(mName, mPage, PER_PAGE);
                 break;
         }
@@ -106,12 +113,14 @@ final class ProducerPresenter implements ProducerContract.Presenter {
     public void addVendor(Producer producer) {
         Observable<Producer> observable;
         switch (mType) {
-            case ProducerFragment.ProductType.VENDOR:
+            case ProducerType.VENDOR:
                 observable = mVendorRepository.addVendor(producer);
                 break;
-
+            case ProducerType.DEVICE_GROUPS:
+                observable = mDeviceGroupRepository.addDeviceGroup(producer);
+                break;
             default:
-            case ProducerFragment.ProductType.MARKER:
+            case ProducerType.MARKER:
                 observable = mMarkerRepository.addMarker(producer);
                 break;
         }
@@ -136,12 +145,14 @@ final class ProducerPresenter implements ProducerContract.Presenter {
     public void deleteVendor(final Producer producer) {
         Observable<Respone<String>> observable;
         switch (mType) {
-            case ProducerFragment.ProductType.VENDOR:
+            case ProducerType.VENDOR:
                 observable = mVendorRepository.deleteVendor(producer);
                 break;
-
+            case ProducerType.DEVICE_GROUPS:
+                observable = mDeviceGroupRepository.deleteDeviceGroup(producer);
+                break;
             default:
-            case ProducerFragment.ProductType.MARKER:
+            case ProducerType.MARKER:
                 observable = mMarkerRepository.deleteMarker(producer);
                 break;
         }
@@ -169,12 +180,14 @@ final class ProducerPresenter implements ProducerContract.Presenter {
     public void editVendor(final Producer producer) {
         Observable<String> observable;
         switch (mType) {
-            case ProducerFragment.ProductType.VENDOR:
+            case ProducerType.VENDOR:
                 observable = mVendorRepository.editVendor(producer);
                 break;
-
+            case ProducerType.DEVICE_GROUPS:
+                observable = mDeviceGroupRepository.editDeviceGroup(producer);
+                break;
             default:
-            case ProducerFragment.ProductType.MARKER:
+            case ProducerType.MARKER:
                 observable = mMarkerRepository.editMarker(producer);
                 break;
         }

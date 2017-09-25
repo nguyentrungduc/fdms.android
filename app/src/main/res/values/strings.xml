@@ -305,4 +305,6 @@
     <string name="title_device_using">Using</string>
     <string name="title_device_returned">Returned</string>
     <string name="title_assignee">Assignee</string>
+    <string name="title_manage_device_group">Manage Device Groups</string>
+    <string name="title_manage_device_category">Manage Device Categories</string>
 </resources>
