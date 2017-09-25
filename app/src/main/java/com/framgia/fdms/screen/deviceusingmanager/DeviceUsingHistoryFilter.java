@@ -54,6 +54,6 @@ public class DeviceUsingHistoryFilter extends BaseObservable {
 
     public void setDeviceCode(String deviceCode) {
         mDeviceCode = deviceCode;
-        notifyPropertyChanged(BR.staffName);
+        notifyPropertyChanged(BR.deviceCode);
     }
 }
