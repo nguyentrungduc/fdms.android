@@ -43,6 +43,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.selection.SelectionType.USER_BORROW;
 import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 
 /**
@@ -106,6 +107,12 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
                 StatusRepository assigneeRepository = new StatusRepository(
                     new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setStatusRepository(assigneeRepository);
+                break;
+
+            case USER_BORROW:
+                StatusRepository userBorrowRepository = new StatusRepository(
+                    new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
+                presenter.setStatusRepository(userBorrowRepository);
                 break;
 
             case CATEGORY:

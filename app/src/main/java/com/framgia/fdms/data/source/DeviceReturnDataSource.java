@@ -19,5 +19,9 @@ public interface DeviceReturnDataSource {
         Observable<List<Status>> getBorrowers();
 
         Observable<List<Device>> getDevicesOfBorrower();
+
+        Observable<String> returnDevice(List<Integer> listDeviceId);
+
+        Observable<List<Device>> getListDevicesOfBorrower(int userId);
     }
 }

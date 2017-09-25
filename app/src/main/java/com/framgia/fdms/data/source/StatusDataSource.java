@@ -26,5 +26,7 @@ public class StatusDataSource {
         Observable<List<Status>> getListRelative(String query);
 
         Observable<List<Status>> getListAssignee();
+
+        Observable<List<Status>> getListUserBorrow();
     }
 }

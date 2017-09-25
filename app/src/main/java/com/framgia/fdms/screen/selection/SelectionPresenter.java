@@ -33,6 +33,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.selection.SelectionType.USER_BORROW;
 import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 import static com.framgia.fdms.utils.Constant.NONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
@@ -152,6 +153,9 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 break;
             case ASSIGNEE:
                 getListAssignee();
+                break;
+            case USER_BORROW:
+                getListUserBorrow();
                 break;
             default:
                 break;
@@ -552,6 +556,39 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.onGetDataFailed(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgress();
+                }
+            });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void getListUserBorrow() {
+        Disposable disposable = mStatusRepository.getListUserBorrow()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgress();
+                }
+            })
+            .subscribe(new Consumer<List<Status>>() {
+                @Override
+                public void accept(@NonNull List<Status> statuses) throws Exception {
+                    statuses.add(0, new Status(OUT_OF_INDEX, NONE));
+                    mViewModel.onGetDataSuccess(statuses);
+                    mViewModel.hideProgress();
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onGetDataFailed(error.getMessage());
+                    mViewModel.hideProgress();
                 }
             }, new Action() {
                 @Override

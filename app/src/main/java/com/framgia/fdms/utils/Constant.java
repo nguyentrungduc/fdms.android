@@ -81,6 +81,7 @@ public class Constant {
         public static final int REQUEST_DEVICE_USING_STATUS = 17;
         public static final int REQUEST_REQUEST_FOR = 18;
         public static final int REQUEST_ASSIGNEE = 19;
+        public static final int REQUEST_USER_BORROW = 20;
     }
 
     public static final class DeviceUsingStatus {

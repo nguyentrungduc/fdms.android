@@ -54,5 +54,7 @@ public interface SelectionContract {
         void getListRelative();
 
         void getListAssignee();
+
+        void getListUserBorrow();
     }
 }
