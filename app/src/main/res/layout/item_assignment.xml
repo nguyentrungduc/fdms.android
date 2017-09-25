@@ -37,7 +37,8 @@
                 android:padding="@dimen/dp_2"
                 android:text="@{viewHolderModel.position + 1 + ``}"
                 android:textColor="@color/color_white"
-                android:textSize="@dimen/sp_18"/>
+                android:textSize="@dimen/sp_18"
+                />
 
             <TextView
                 android:layout_width="0dp"
@@ -49,7 +50,8 @@
                 android:padding="@dimen/dp_3"
                 android:text="@{viewHolderModel.request.deviceCategoryGroupName}"
                 android:textColor="@color/color_black"
-                android:textSize="@dimen/sp_10"/>
+                android:textSize="@dimen/sp_10"
+                />
 
             <TextView
                 android:layout_width="0dp"
@@ -61,7 +63,8 @@
                 android:padding="@dimen/dp_3"
                 android:text="@{viewHolderModel.request.deviceCategoryName}"
                 android:textColor="@color/color_black"
-                android:textSize="@dimen/sp_10"/>
+                android:textSize="@dimen/sp_10"
+                />
 
 
             <TextView
@@ -72,7 +75,8 @@
                 android:padding="@dimen/dp_3"
                 android:text="@{viewHolderModel.request.deviceCode}"
                 android:textColor="@color/color_black"
-                android:textSize="@dimen/sp_10"/>
+                android:textSize="@dimen/sp_10"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -89,7 +93,8 @@
                 android:textAllCaps="true"
                 android:textColor="@color/color_white"
                 android:textSize="@dimen/sp_18"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

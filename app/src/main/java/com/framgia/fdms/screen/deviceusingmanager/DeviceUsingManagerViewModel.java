@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
@@ -40,7 +41,7 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_USI
 public class DeviceUsingManagerViewModel extends BaseObservable
     implements DeviceUsingManagerContract.ViewModel, SearchView.OnQueryTextListener,
     FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
-    OnSearchMenuItemClickListener, DrawerLayout.DrawerListener {
+    OnSearchMenuItemClickListener, DrawerLayout.DrawerListener, AbsListView.OnScrollListener {
 
     private DeviceUsingManagerContract.Presenter mPresenter;
     private String mDrawerStatus = DRAWER_IS_CLOSE;
@@ -53,24 +54,22 @@ public class DeviceUsingManagerViewModel extends BaseObservable
 
     private Navigator mNavigator;
 
-    private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            if (dy <= 0) {
-                return;
-            }
-            LinearLayoutManager layoutManager =
-                (LinearLayoutManager) recyclerView.getLayoutManager();
-            int visibleItemCount = layoutManager.getChildCount();
-            int totalItemCount = layoutManager.getItemCount();
-            int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-            if (!mIsLoadingMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                setLoadingMore(true);
-                mPresenter.loadMoreData();
-            }
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+        // no ops
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount,
+        int totalItemCount) {
+        if (totalItemCount == 0) {
+            return;
         }
-    };
+        if (!mIsLoadingMore && (visibleItemCount + firstVisibleItem) >= totalItemCount) {
+            setLoadingMore(true);
+            mPresenter.loadMoreData();
+        }
+    }
 
     public DeviceUsingManagerViewModel(Fragment fragment) {
         mFilterModel = new DeviceUsingHistoryFilter();
@@ -263,16 +262,6 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     public void setLoadingMore(boolean loadingMore) {
         mIsLoadingMore = loadingMore;
         notifyPropertyChanged(BR.loadingMore);
-    }
-
-    @Bindable
-    public RecyclerView.OnScrollListener getScrollListenner() {
-        return mScrollListenner;
-    }
-
-    public void setScrollListenner(RecyclerView.OnScrollListener scrollListenner) {
-        mScrollListenner = scrollListenner;
-        notifyPropertyChanged(BR.scrollListenner);
     }
 
     @Bindable

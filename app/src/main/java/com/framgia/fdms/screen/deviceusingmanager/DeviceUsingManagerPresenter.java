@@ -12,6 +12,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
+import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
 /**
@@ -24,7 +25,8 @@ final class DeviceUsingManagerPresenter implements DeviceUsingManagerContract.Pr
     private final DeviceUsingManagerContract.ViewModel mViewModel;
     private DeviceUsingHistoryDataSource.RemoteDataSource mRepository;
     private CompositeDisposable mCompositeDisposable;
-    private int mPage = 1;
+    private int mPage = FIRST_PAGE;
+    private DeviceUsingHistoryFilter mFilter;
 
     DeviceUsingManagerPresenter(DeviceUsingManagerContract.ViewModel viewModel,
         DeviceUsingHistoryDataSource.RemoteDataSource repository) {
@@ -44,7 +46,12 @@ final class DeviceUsingManagerPresenter implements DeviceUsingManagerContract.Pr
 
     @Override
     public void getDeviceUsingHistory(DeviceUsingHistoryFilter filter) {
-        Disposable disposable = mRepository.getListDeviceHistory(filter, mPage, PER_PAGE)
+        mFilter = filter;
+        getData();
+    }
+
+    private void getData() {
+        Disposable disposable = mRepository.getListDeviceHistory(mFilter, mPage, PER_PAGE)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(new Consumer<Disposable>() {
@@ -63,6 +70,7 @@ final class DeviceUsingManagerPresenter implements DeviceUsingManagerContract.Pr
                 public void onRequestError(BaseException error) {
                     mViewModel.onGetDeviceUsingHistoryFailed(error.getMessage());
                     mViewModel.hideProgress();
+                    mPage--;
                 }
             }, new Action() {
                 @Override
@@ -75,6 +83,7 @@ final class DeviceUsingManagerPresenter implements DeviceUsingManagerContract.Pr
 
     @Override
     public void loadMoreData() {
-        //// TODO: 9/16/2017
+        mPage++;
+        getData();
     }
 }

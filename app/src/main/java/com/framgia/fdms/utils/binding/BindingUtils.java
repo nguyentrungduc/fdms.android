@@ -570,6 +570,12 @@ public final class BindingUtils {
     }
 
     @BindingAdapter("scrollListener")
+    public static void setExpandableScrollListener(ExpandableListView expandableListView,
+        AbsListView.OnScrollListener listener) {
+        expandableListView.setOnScrollListener(listener);
+    }
+
+    @BindingAdapter("scrollListener")
     public static void setOnScrollListener(ExpandableListView expandableListView,
         AbsListView.OnScrollListener listener) {
         expandableListView.setOnScrollListener(listener);

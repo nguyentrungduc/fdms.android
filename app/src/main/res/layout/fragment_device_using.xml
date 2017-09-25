@@ -52,6 +52,7 @@
                         bind:clearListenner="@{viewModel}"
                         bind:menuItemClick="@{viewModel}"
                         bind:searchListenner="@{viewModel}"
+                        bind:searchText="@{viewModel.filterModel.staffName}"
                         />
                 </android.support.design.widget.CollapsingToolbarLayout>
             </android.support.design.widget.AppBarLayout>
@@ -70,12 +71,13 @@
                 android:groupIndicator="@null"
                 android:scrollbars="vertical"
                 bind:adapter="@{viewModel.adapter}"
+                bind:scrollListener="@{viewModel}"
                 />
 
             <ProgressBar
                 android:id="@+id/progress_loading_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
                 android:layout_gravity="center"
                 android:visibility="@{viewModel.isLoadingMore ? View.VISIBLE : View.GONE}"
                 />
