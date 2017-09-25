@@ -34,7 +34,7 @@
             android:layout_marginTop="@dimen/dp_20"
             android:onClick="@{() -> viewModel.onProfileClick()}"
             android:scaleType="centerCrop"
-            bind:imageUrl="@{viewModel.user.avatar.url}"
+            bind:imageUrl="@{viewModel.user.avatar}"
             />
 
         <LinearLayout

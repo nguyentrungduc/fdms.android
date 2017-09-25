@@ -52,7 +52,7 @@
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
                         bind:error="@{@drawable/ic_logo_user}"
-                        bind:imageUrl="@{viewModel.user.avatar.url}"
+                        bind:imageUrl="@{viewModel.user.avatar}"
                         />
 
                     <android.support.v7.widget.AppCompatImageButton

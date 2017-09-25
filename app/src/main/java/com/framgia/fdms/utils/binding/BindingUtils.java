@@ -107,11 +107,17 @@ public final class BindingUtils {
         if (error == null) {
             Glide.with(view.getContext())
                 .load(imageUrl)
+                .asBitmap()
                 .centerCrop()
                 .placeholder(R.drawable.ic_no_image)
                 .into(view);
         } else {
-            Glide.with(view.getContext()).load(imageUrl).centerCrop().placeholder(error).into(view);
+            Glide.with(view.getContext())
+                .load(imageUrl)
+                .asBitmap()
+                .centerCrop()
+                .placeholder(error)
+                .into(view);
         }
     }
 

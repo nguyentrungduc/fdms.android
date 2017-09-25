@@ -70,7 +70,7 @@ public class User extends BaseObservable implements Parcelable {
     private String mRememberDigest;
     @Expose
     @SerializedName("avatar")
-    private Picture mAvatar;
+    private String mAvatar;
     @Expose
     @SerializedName("from_excel")
     private boolean mFromExcel;
@@ -123,7 +123,7 @@ public class User extends BaseObservable implements Parcelable {
         mCreatedBy = in.readString();
         mUpdatedBy = in.readString();
         mRememberDigest = in.readString();
-        mAvatar = in.readParcelable(Picture.class.getClassLoader());
+        mAvatar = in.readString();
         mFromExcel = in.readByte() != 0;
         mGender = in.readString();
         mRole = in.readString();
@@ -275,11 +275,11 @@ public class User extends BaseObservable implements Parcelable {
     }
 
     @Bindable
-    public Picture getAvatar() {
+    public String getAvatar() {
         return mAvatar;
     }
 
-    public void setAvatar(Picture avatar) {
+    public void setAvatar(String avatar) {
         mAvatar = avatar;
         notifyPropertyChanged(BR.avatar);
     }
@@ -412,7 +412,7 @@ public class User extends BaseObservable implements Parcelable {
         dest.writeString(mCreatedBy);
         dest.writeString(mUpdatedBy);
         dest.writeString(mRememberDigest);
-        dest.writeParcelable(mAvatar, flags);
+        dest.writeString(mAvatar);
         dest.writeByte((byte) (mFromExcel ? 1 : 0));
         dest.writeString(mGender);
         dest.writeString(mRole);

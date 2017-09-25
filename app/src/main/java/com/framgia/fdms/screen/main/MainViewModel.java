@@ -42,6 +42,8 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_DASH_BOARD;
+import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_DEVICE_CATEGORY;
+import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_DEVICE_GROUP;
 import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_DEVICE_MANAGER;
 import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_DEVICE_USING_HISTORY;
 import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_MAKER_MANAGE;
@@ -51,8 +53,9 @@ import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_MY_REQUESTS;
 import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_PROFILE;
 import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_REQUEST_MANAGER;
 import static com.framgia.fdms.screen.main.MainViewModel.Tab.TAB_VENDOR_MANAGE;
-import static com.framgia.fdms.screen.producer.ProducerFragment.ProductType.MARKER;
-import static com.framgia.fdms.screen.producer.ProducerFragment.ProductType.VENDOR;
+import static com.framgia.fdms.screen.producer.ProducerType.DEVICE_GROUPS;
+import static com.framgia.fdms.screen.producer.ProducerType.MARKER;
+import static com.framgia.fdms.screen.producer.ProducerType.VENDOR;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_CONTENT;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
@@ -88,13 +91,15 @@ public class MainViewModel extends BaseObservable
         fragments.add(ProfileFragment.newInstance());
         fragments.add(DashboardFragment.newInstance());
         fragments.add(ListDeviceFragment.newInstance());
-        fragments.add(RequestManagerFragment.newInstance());
+        fragments.add(ProducerFragment.newInstance(DEVICE_GROUPS));
+        fragments.add(ProducerFragment.newInstance(DEVICE_GROUPS));
         fragments.add(ProducerFragment.newInstance(VENDOR));
         fragments.add(ProducerFragment.newInstance(MARKER));
-        fragments.add(MyDeviceFragment.newInstance());
-        fragments.add(UserRequestFragment.newInstance());
         fragments.add(ListMeetingRoomFragment.newInstance());
         fragments.add(DeviceUsingManagerFragment.newInstance());
+        fragments.add(MyDeviceFragment.newInstance());
+        fragments.add(RequestManagerFragment.newInstance());
+        fragments.add(UserRequestFragment.newInstance());
         mPagerAdapter = new ViewPagerAdapter(activity.getSupportFragmentManager(), fragments);
         mActivity = activity;
         mNavigator = new Navigator(activity);
@@ -185,6 +190,14 @@ public class MainViewModel extends BaseObservable
                 mActivity.startActivity(LoginActivity.getInstance(mNavigator.getContext()));
                 mActivity.finish();
                 break;
+            case R.id.item_manage_device_category:
+                setTab(TAB_DEVICE_CATEGORY);
+                mActivity.setTitle(R.string.title_manage_device_category);
+                break;
+            case R.id.item_manage_device_group:
+                setTab(TAB_DEVICE_GROUP);
+                mActivity.setTitle(R.string.title_manage_device_group);
+                break;
             default:
                 break;
         }
@@ -202,27 +215,6 @@ public class MainViewModel extends BaseObservable
 
     public void onProfileClick() {
         // TODO: 07/09/2017 show profile screen
-    }
-
-    public void onDirectChildTab(@Tab int tab, ViewPager viewPager) {
-        if (mPagerAdapter == null) return;
-        viewPager.setCurrentItem(tab);
-        switch (tab) {
-            case TAB_DASH_BOARD:
-                // TODO: 07/07/2017  call onShowCase
-                break;
-            case TAB_REQUEST_MANAGER:
-                if (!isShowCaseRequest()) {
-                    ((RequestFragment) mPagerAdapter.getItem(TAB_REQUEST_MANAGER)).onShowCase();
-                }
-                break;
-            case TAB_DEVICE_MANAGER:
-                // TODO: 07/07/2017  call onShowCase
-                break;
-            case TAB_PROFILE:
-                // TODO: 07/07/2017  call onShowCase
-                break;
-        }
     }
 
     @Override
@@ -384,18 +376,20 @@ public class MainViewModel extends BaseObservable
     @IntDef({
         TAB_DASH_BOARD, TAB_REQUEST_MANAGER, TAB_DEVICE_MANAGER, TAB_PROFILE, TAB_VENDOR_MANAGE,
         TAB_MAKER_MANAGE, TAB_MY_DEVICES, TAB_MY_REQUESTS, TAB_MANAGE_MEETING_ROOM,
-        TAB_DEVICE_USING_HISTORY
+        TAB_DEVICE_USING_HISTORY, TAB_DEVICE_GROUP, TAB_DEVICE_CATEGORY
     })
     public @interface Tab {
         int TAB_PROFILE = 0;
         int TAB_DASH_BOARD = 1;
         int TAB_DEVICE_MANAGER = 2;
-        int TAB_REQUEST_MANAGER = 3;
-        int TAB_VENDOR_MANAGE = 4;
-        int TAB_MAKER_MANAGE = 5;
-        int TAB_MY_DEVICES = 6;
-        int TAB_MY_REQUESTS = 7;
-        int TAB_MANAGE_MEETING_ROOM = 8;
-        int TAB_DEVICE_USING_HISTORY = 9;
+        int TAB_DEVICE_GROUP = 3;
+        int TAB_DEVICE_CATEGORY = 4;
+        int TAB_VENDOR_MANAGE = 5;
+        int TAB_MAKER_MANAGE = 6;
+        int TAB_MANAGE_MEETING_ROOM = 7;
+        int TAB_DEVICE_USING_HISTORY = 8;
+        int TAB_MY_DEVICES = 9;
+        int TAB_REQUEST_MANAGER = 10;
+        int TAB_MY_REQUESTS = 11;
     }
 }
