@@ -6,8 +6,6 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +26,7 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_USING_HISTORY;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
@@ -101,12 +100,14 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     public void onGetDeviceUsingHistorySuccess(List<DeviceUsingHistory> deviceUsingHistories) {
         mAdapter.updateData(deviceUsingHistories);
         mIsFilterChanged = false;
+        setEmptyViewVisible(mAdapter.getGroupCount() > 0 ? GONE : VISIBLE);
     }
 
     @Override
     public void onGetDeviceUsingHistoryFailed(String msg) {
         mNavigator.showToast(msg);
         mIsFilterChanged = false;
+        setEmptyViewVisible(mAdapter.getGroupCount() > 0 ? GONE : VISIBLE);
     }
 
     @Override

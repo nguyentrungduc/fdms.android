@@ -59,7 +59,7 @@
 
             <include
                 layout="@layout/empty_state"
-                bind:image="@{@drawable/ic_no_report}"
+                bind:image="@{@drawable/ic_not_found_data}"
                 bind:text="@{@string/msg_no_device}"
                 bind:visibleState="@{viewModel.emptyViewVisible}"
                 />
