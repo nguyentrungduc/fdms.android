@@ -18,7 +18,7 @@ public interface RequestRepositoryContract {
      * Use on remote request to get list request
      */
     Observable<List<Request>> getRequests(int requestType, int requestStatusId, int relativeId,
-        int perPage, int page);
+        int page, int perPage);
 
     Observable<List<Status>> getStatus();
 

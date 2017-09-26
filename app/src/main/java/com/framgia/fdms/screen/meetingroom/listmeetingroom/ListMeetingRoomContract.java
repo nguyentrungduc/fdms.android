@@ -38,6 +38,8 @@ interface ListMeetingRoomContract {
         void onEditMeetingRoomClick(Producer meetingRoom);
 
         void onDeleteMeetingRoomClick(Producer meetingRoom);
+
+        void setAllowLoadMore(boolean allowLoadMore);
     }
 
     /**

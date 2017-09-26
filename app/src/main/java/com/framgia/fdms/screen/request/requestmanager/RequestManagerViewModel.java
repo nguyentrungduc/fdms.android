@@ -101,12 +101,14 @@ public class RequestManagerViewModel extends BaseFragmentModel
 
     @Override
     public void onGetRequestSuccess(List<Request> requests) {
+        setLoadMore(false);
         setEmptyViewVisible(requests.isEmpty() ? View.VISIBLE : View.GONE);
         mAdapter.onUpdatePage(requests);
     }
 
     @Override
     public void onGetRequestError() {
+        setLoadMore(false);
         setEmptyViewVisible(View.VISIBLE);
     }
 
@@ -114,6 +116,11 @@ public class RequestManagerViewModel extends BaseFragmentModel
     public void onRegisterRequestClick() {
         mFragment.startActivityForResult(
             RequestCreationActivity.getInstance(mFragment.getActivity()), REQUEST_CREATE_REQUEST);
+    }
+
+    @Override
+    public void setAllowLoadMore(boolean allowLoadMore) {
+        mIsAllowLoadMore = allowLoadMore;
     }
 
     @Override

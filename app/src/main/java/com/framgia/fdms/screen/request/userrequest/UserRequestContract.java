@@ -34,6 +34,8 @@ interface UserRequestContract {
         void onGetRequestError();
 
         void onRegisterRequestClick();
+
+        void setAllowLoadMore(boolean allowLoadMore);
     }
 
     /**

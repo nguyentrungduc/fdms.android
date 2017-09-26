@@ -56,6 +56,7 @@ public class ProducerViewModel extends BaseObservable
     private int mPositionScroll = OUT_OF_INDEX;
     private Producer mVendorEdit;
     private boolean mIsLoadMore;
+    private boolean mIsAllowLoadMore;
     private int mLoadingMoreVisibility;
     private Navigator mNavigator;
 
@@ -71,7 +72,9 @@ public class ProducerViewModel extends BaseObservable
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-            if (!mIsLoadMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+            if (mIsAllowLoadMore
+                && !mIsLoadMore
+                && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                 mIsLoadMore = true;
                 setLoadingMoreVisibility(View.VISIBLE);
                 mPresenter.loadMorePage();
@@ -220,6 +223,11 @@ public class ProducerViewModel extends BaseObservable
         mVendorDialog = ProducerDialog.newInstant(new Producer(OUT_OF_INDEX, ""),
             mActivity.getResources().getString(R.string.title_add_producer), this);
         mVendorDialog.show(mActivity.getSupportFragmentManager(), TAG_MAKER_DIALOG);
+    }
+
+    @Override
+    public void setAllowLoadMore(boolean isAllowLoadMore) {
+        mIsAllowLoadMore = isAllowLoadMore;
     }
 
     @Override

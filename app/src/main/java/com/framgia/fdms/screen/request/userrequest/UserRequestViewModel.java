@@ -115,6 +115,11 @@ public class UserRequestViewModel extends BaseFragmentModel
     }
 
     @Override
+    public void setAllowLoadMore(boolean allowLoadMore) {
+        mIsAllowLoadMore = allowLoadMore;
+    }
+
+    @Override
     public void onLoadError(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
     }

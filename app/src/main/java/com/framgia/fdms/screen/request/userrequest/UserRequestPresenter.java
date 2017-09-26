@@ -77,7 +77,7 @@ public final class UserRequestPresenter implements UserRequestContract.Presenter
     }
 
     @Override
-    public void getMyRequest(int requestStatusId, int relativeId, int perPage, int page) {
+    public void getMyRequest(int requestStatusId, int relativeId, final int perPage, int page) {
         mViewModel.setRefresh(true);
         Disposable subscription =
             mRequestRepository.getRequests(USER_REQUEST, requestStatusId, relativeId, page, perPage)
@@ -93,6 +93,7 @@ public final class UserRequestPresenter implements UserRequestContract.Presenter
                     @Override
                     public void accept(List<Request> requests) throws Exception {
                         mViewModel.onGetRequestSuccess(requests);
+                        mViewModel.setAllowLoadMore(requests != null && requests.size() == perPage);
                     }
                 }, new RequestError() {
                     @Override

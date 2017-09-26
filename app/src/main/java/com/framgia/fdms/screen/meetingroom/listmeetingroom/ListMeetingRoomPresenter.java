@@ -43,7 +43,7 @@ final class ListMeetingRoomPresenter implements ListMeetingRoomContract.Presente
     }
 
     @Override
-    public void getListMeetingRoom(String roomName, int page, int perPage) {
+    public void getListMeetingRoom(String roomName, int page, final int perPage) {
         Disposable subscription = mMeetingRoomRepository.getListMeetingRoom(roomName, page, perPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -57,6 +57,8 @@ final class ListMeetingRoomPresenter implements ListMeetingRoomContract.Presente
                 @Override
                 public void accept(List<Producer> meetingRooms) throws Exception {
                     mViewModel.onGetListMeetingRoomSuccess(meetingRooms);
+                    mViewModel.setAllowLoadMore(
+                        meetingRooms != null && meetingRooms.size() == perPage);
                 }
             }, new RequestError() {
                 @Override

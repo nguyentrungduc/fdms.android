@@ -84,6 +84,8 @@ final class MyDeviceDetailPresenter implements MyDeviceDetailContract.Presenter 
                         return;
                     }
                     mViewModel.onGetDeviceSuccess(deviceUsingHistories.get(0).getUsingDevices());
+                    mViewModel.setAllowLoadMore(
+                        deviceUsingHistories != null && deviceUsingHistories.size() == PER_PAGE);
                 }
             }, new RequestError() {
                 @Override

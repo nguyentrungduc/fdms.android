@@ -20,6 +20,8 @@ interface DetailMeetingRoomContract {
         void showProgressbar();
 
         void hideProgressbar();
+
+        void setAllowLoadMore(boolean allowLoadMore);
     }
 
     /**

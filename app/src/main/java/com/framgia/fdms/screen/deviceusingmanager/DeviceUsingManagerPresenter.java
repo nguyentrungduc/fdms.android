@@ -64,6 +64,8 @@ final class DeviceUsingManagerPresenter implements DeviceUsingManagerContract.Pr
                 @Override
                 public void accept(List<DeviceUsingHistory> deviceUsingHistories) throws Exception {
                     mViewModel.onGetDeviceUsingHistorySuccess(deviceUsingHistories);
+                    mViewModel.setAllowLoadMore(
+                        deviceUsingHistories != null && deviceUsingHistories.size() == PER_PAGE);
                 }
             }, new RequestError() {
                 @Override

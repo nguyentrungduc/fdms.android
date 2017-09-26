@@ -47,6 +47,7 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     private String mDrawerStatus = DRAWER_IS_CLOSE;
     private int mEmptyViewVisible = GONE;
     private boolean mIsLoadingMore;
+    private boolean mIsAllowLoadMore;
 
     private DeviceUsingHistoryAdapter mAdapter;
     private DeviceUsingHistoryFilter mFilterModel;
@@ -65,7 +66,9 @@ public class DeviceUsingManagerViewModel extends BaseObservable
         if (totalItemCount == 0) {
             return;
         }
-        if (!mIsLoadingMore && (visibleItemCount + firstVisibleItem) >= totalItemCount) {
+        if (mIsAllowLoadMore
+            && !mIsLoadingMore
+            && (visibleItemCount + firstVisibleItem) >= totalItemCount) {
             setLoadingMore(true);
             mPresenter.loadMoreData();
         }
@@ -145,6 +148,11 @@ public class DeviceUsingManagerViewModel extends BaseObservable
         Status status = bundle.getParcelable(BUNDLE_DATA);
         mFilterModel.setStatus(status);
         setDrawerStatus(DRAWER_IS_CLOSE);
+    }
+
+    @Override
+    public void setAllowLoadMore(boolean allowLoadMore) {
+        mIsAllowLoadMore = allowLoadMore;
     }
 
     @Override

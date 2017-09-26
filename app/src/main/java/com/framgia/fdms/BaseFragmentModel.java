@@ -5,6 +5,7 @@ package com.framgia.fdms;
  */
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.databinding.ObservableField;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +13,8 @@ import android.view.View;
 
 public abstract class BaseFragmentModel extends BaseObservable
     implements BaseFragmentContract.ViewModel {
-    protected ObservableField<Boolean> mIsLoadMore = new ObservableField<>(false);
+    protected boolean mIsLoadMore;
+    protected boolean mIsAllowLoadMore;
     protected BaseFragmentContract.Presenter mPresenter;
     private ObservableField<Integer> mProgressBarVisibility = new ObservableField<>();
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
@@ -30,8 +32,10 @@ public abstract class BaseFragmentModel extends BaseObservable
             int totalItemCount = layoutManager.getItemCount();
             int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
 
-            if (!mIsLoadMore.get() && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                mIsLoadMore.set(true);
+            if (mIsAllowLoadMore
+                && !mIsLoadMore
+                && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                setLoadMore(true);
                 mPresenter.onLoadMore();
             }
         }
@@ -53,7 +57,6 @@ public abstract class BaseFragmentModel extends BaseObservable
 
     @Override
     public void onStart() {
-
     }
 
     @Override
@@ -68,5 +71,15 @@ public abstract class BaseFragmentModel extends BaseObservable
 
     public ObservableField<Integer> getProgressBarVisibility() {
         return mProgressBarVisibility;
+    }
+
+    @Bindable
+    public boolean isLoadMore() {
+        return mIsLoadMore;
+    }
+
+    public void setLoadMore(boolean loadMore) {
+        mIsLoadMore = loadMore;
+        notifyPropertyChanged(BR.loadMore);
     }
 }

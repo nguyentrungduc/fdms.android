@@ -106,7 +106,7 @@ public final class RequestManagerPresenter implements RequestManagerContract.Pre
     }
 
     @Override
-    public void getRequest(int requestStatusId, int relativeId, int perPage, int page) {
+    public void getRequest(int requestStatusId, final int relativeId, int page, final int perPage) {
         Disposable subscription =
             mRequestRepository.getRequests(MANAGER_REQUEST, requestStatusId, relativeId, page,
                 perPage)
@@ -122,6 +122,7 @@ public final class RequestManagerPresenter implements RequestManagerContract.Pre
                     @Override
                     public void accept(List<Request> requests) throws Exception {
                         mViewModel.onGetRequestSuccess(requests);
+                        mViewModel.setAllowLoadMore(requests != null && requests.size() == perPage);
                     }
                 }, new RequestError() {
                     @Override
