@@ -84,6 +84,7 @@ public class Device extends BaseObservable implements Parcelable {
     @Expose
     @SerializedName("summary")
     private Summary mSummary;
+    @Expose
     @SerializedName("user")
     private UserBorrow mUser;
     @Expose
@@ -458,6 +459,7 @@ public class Device extends BaseObservable implements Parcelable {
         mBorrowDate = borrowDate;
         notifyPropertyChanged(BR.borrowDate);
     }
+
     @Bindable
     public Date getReturnDate() {
         return mReturnDate;
@@ -483,8 +485,8 @@ public class Device extends BaseObservable implements Parcelable {
         return new Gson().toJson(this);
     }
 
-    public class UserBorrow implements Parcelable {
-        public final Creator<UserBorrow> CREATOR = new Creator<UserBorrow>() {
+    public static class UserBorrow implements Parcelable {
+        public static final Creator<UserBorrow> CREATOR = new Creator<UserBorrow>() {
             @Override
             public UserBorrow createFromParcel(Parcel in) {
                 return new UserBorrow(in);
@@ -495,14 +497,27 @@ public class Device extends BaseObservable implements Parcelable {
                 return new UserBorrow[size];
             }
         };
+        @Expose
         @SerializedName("id")
         private String mId;
+        @Expose
         @SerializedName("name")
         private String mName;
 
         protected UserBorrow(Parcel in) {
             mId = in.readString();
             mName = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(mId);
+            dest.writeString(mName);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
         public String getId() {
@@ -519,17 +534,6 @@ public class Device extends BaseObservable implements Parcelable {
 
         public void setName(String name) {
             mName = name;
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(mId);
-            dest.writeString(mName);
         }
     }
 }
