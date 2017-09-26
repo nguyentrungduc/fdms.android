@@ -32,18 +32,16 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
     private RequestRepository mRequestRepository;
     private UserRepository mUserRepository;
     private CompositeDisposable mSubscription;
-    private DeviceRepository mDeviceRepository;
-    private CategoryRepository mCategoryRepository;
+    @AssignmentType
+    private int mAssignmentType;
 
-    public AssignmentPresenter(AssignmentContract.ViewModel viewModel, int requestId,
-        RequestRepository requestRepository, UserRepository userRepository,
-        DeviceRepository deviceRepository, CategoryRepository categoryRepository) {
+    AssignmentPresenter(AssignmentContract.ViewModel viewModel,
+        @AssignmentType int assignmentType, int requestId, RequestRepository requestRepository,
+        UserRepository userRepository) {
         mViewModel = viewModel;
         mRequestId = requestId;
         mRequestRepository = requestRepository;
         mUserRepository = userRepository;
-        mDeviceRepository = deviceRepository;
-        mCategoryRepository = categoryRepository;
         mSubscription = new CompositeDisposable();
         getRequest(mRequestId);
     }

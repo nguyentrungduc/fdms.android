@@ -19,6 +19,8 @@ import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.data.source.remote.RequestRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityAssignmentBinding;
 
+import static com.framgia.fdms.screen.assignment.AssignmentType.ASSIGN_BY_REQUEST;
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_TYPE;
 import static com.framgia.fdms.utils.Utils.hideSoftKeyboard;
 
 /**
@@ -29,31 +31,39 @@ public class AssignmentActivity extends AppCompatActivity {
     private static final String EXTRA_REQUEST_ID = "EXTRA_REQUEST_ID";
     private AssignmentContract.ViewModel mViewModel;
 
-    public static Intent getInstance(Context context, int requestId) {
-        Intent intent =
-            new Intent(context, AssignmentActivity.class).putExtra(EXTRA_REQUEST_ID, requestId);
-        return intent;
+    public static Intent getInstance(Context context, @AssignmentType int assignmentType,
+        int requestId) {
+        return new Intent(context, AssignmentActivity.class).putExtra(BUNDLE_TYPE, assignmentType)
+            .putExtra(EXTRA_REQUEST_ID, requestId);
+    }
+
+    public static Intent getInstance(Context context, @AssignmentType int assignmentType) {
+        return new Intent(context, AssignmentActivity.class).putExtra(BUNDLE_TYPE, assignmentType);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        @AssignmentType int assignmentType =
+            getIntent().getExtras().getInt(BUNDLE_TYPE, ASSIGN_BY_REQUEST);
         int deviceId = getIntent().getIntExtra(EXTRA_REQUEST_ID, 0);
 
         mViewModel = new AssignmentViewModel(this);
 
-        AssignmentContract.Presenter presenter = new AssignmentPresenter(mViewModel, deviceId,
-            new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
-            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))),
-            new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
-            new CategoryRepository(new CategoryRemoteDataSource(FDMSServiceClient.getInstance())));
+        AssignmentContract.Presenter presenter =
+            new AssignmentPresenter(mViewModel, assignmentType, deviceId,
+                new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
+                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))));
         mViewModel.setPresenter(presenter);
 
         ActivityAssignmentBinding binding =
             DataBindingUtil.setContentView(this, R.layout.activity_assignment);
         binding.setViewModel((AssignmentViewModel) mViewModel);
-        setTitle(getString(R.string.title_assignment));
+
+        String title = assignmentType == ASSIGN_BY_REQUEST ? getString(R.string.title_assignment)
+            : getString(R.string.title_assignment_for_new_member);
+        setTitle(title);
     }
 
     @Override

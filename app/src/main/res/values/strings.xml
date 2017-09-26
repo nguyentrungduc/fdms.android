@@ -86,7 +86,7 @@
     <string name="title_request_status">Status</string>
     <string name="title_request_relative">Relative to</string>
     <string name="title_request_off_your">Request Manager</string>
-    <string name="title_request" formatted="false"><![CDATA[<b><i>%s</i></b> request <b>%s</b> for <b>%s</b>]]></string>
+    <string formatted="false" name="title_request"><![CDATA[<b><i>%s</i></b> request <b>%s</b> for <b>%s</b>]]></string>
     <string name="action_filter_status">Request</string>
     <string name="action_filter_relative">Relative</string>
     <string name="title_assign_to">Assign to</string>
@@ -106,7 +106,7 @@
     <string name="title_using_history">Using History</string>
     <string name="title_device_infomation">Infomation</string>
     <string name="title_device_detail">Device Detail</string>
-    <string name="using_device_time" formatted="false">%s -> %s</string>
+    <string formatted="false" name="using_device_time">%s -> %s</string>
     <string name="title_device_return">Return device</string>
     <string name="action_return_device">Return device</string>
     <string name="text_assign_to">Assign to</string>
@@ -117,7 +117,6 @@
     <string name="title_printed_code">Printed Code</string>
     <string name="title_device_category">Device Category</string>
     <string name="title_unknown">Unknown</string>
-    <string name="text_name_status_selection" formatted="false">%d.    %s</string>
     <string name="hint_search">Search</string>
     <string name="missing_data">No data to display</string>
     <string name="title_create_by">Create by</string>
@@ -143,23 +142,24 @@
     <string name="title_assignt">Assignt</string>
     <string name="title_available">Available</string>
     <string name="title_using">\tUsing</string>
-    <string name="text_request_title_notification" formatted="false">Request %s is created</string>
-    <string name="text_from_notification" formatted="false">From %s</string>
-    <string name="text_date_time_notification" formatted="false">At %s</string>
+    <string formatted="false" name="text_request_title_notification">Request %s is created</string>
+    <string formatted="false" name="text_from_notification">From %s</string>
+    <string formatted="false" name="text_date_time_notification">At %s</string>
     <string name="title_notification">Notification</string>
     <string name="action_user_return_device">User return device</string>
     <string name="title_percent">\t%\t</string>
     <string name="text_number_notification_more">99+</string>
     <string name="title_empty">""</string>
     <string name="title_remember_me">Remember Me</string>
-    <string name="msg_not_device_in_device_brorows" formatted="false">This device is on the list of staff %s who is on the staff %s</string>
+    <string formatted="false" name="msg_not_device_in_device_brorows">This device is on the list of staff %s who is on the staff %s</string>
     <string name="title_no_history">No history to display</string>
     <string name="msg_request_read_camera">Please grant permission open camera permission  to scan qr code</string>
     <string name="msg_denied_read_camera">You were denied camera permission</string>
     <string name="title_request_assignment">Request</string>
     <string name="title_staff">Staff</string>
     <string name="title_add_new_device">Add New Device</string>
-    <string name="title_assignment">Assignment</string>
+    <string name="title_assignment">Assign devices</string>
+    <string name="title_assignment_for_new_member">Assign devices for new member</string>
     <string name="title_device_code">Device Code</string>
     <string name="title_add_device">Add Device</string>
     <string name="title_branch">Branch: </string>

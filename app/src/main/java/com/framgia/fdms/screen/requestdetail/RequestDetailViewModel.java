@@ -18,6 +18,7 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
+import com.framgia.fdms.screen.assignment.AssignmentType;
 import com.framgia.fdms.utils.Constant;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -219,8 +220,8 @@ public class RequestDetailViewModel extends BaseObservable
                 @Override
                 public void onClick(View v) {
                     mActivity.startActivityForResult(
-                        AssignmentActivity.getInstance(mContext, mRequest.getId()),
-                        REQUEST_CREATE_ASSIGNMENT);
+                        AssignmentActivity.getInstance(mContext, AssignmentType.ASSIGN_BY_REQUEST,
+                            mRequest.getId()), REQUEST_CREATE_ASSIGNMENT);
                 }
             });
             return;

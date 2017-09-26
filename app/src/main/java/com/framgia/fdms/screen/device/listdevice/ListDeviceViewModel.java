@@ -20,13 +20,15 @@ import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
+import com.framgia.fdms.screen.assignment.AssignmentActivity;
+import com.framgia.fdms.screen.assignment.AssignmentType;
 import com.framgia.fdms.screen.devicecreation.CreateDeviceActivity;
 import com.framgia.fdms.screen.devicecreation.DeviceStatusType;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.returndevice.ReturnDeviceActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.github.clans.fab.FloatingActionMenu;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -243,16 +245,23 @@ public class ListDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onStartReturnDevice(FloatingActionsMenu floatingActionsMenu) {
-        floatingActionsMenu.collapse();
+    public void onStartReturnDevice(FloatingActionMenu floatingActionsMenu) {
+        floatingActionsMenu.close(true);
         mFragment.startActivity(ReturnDeviceActivity.newIntent(mFragment.getContext()));
     }
 
     @Override
-    public void onRegisterDeviceClick(FloatingActionsMenu floatingActionsMenu) {
-        floatingActionsMenu.collapse();
+    public void onRegisterDeviceClick(FloatingActionMenu floatingActionsMenu) {
+        floatingActionsMenu.close(true);
         mFragment.startActivity(
             CreateDeviceActivity.getInstance(mFragment.getContext(), DeviceStatusType.CREATE));
+    }
+
+    @Override
+    public void onAssignDeviceForNewMemberClick(FloatingActionMenu floatingActionsMenu) {
+        floatingActionsMenu.close(true);
+        mFragment.startActivity(AssignmentActivity.getInstance(mFragment.getContext(),
+            AssignmentType.ASSIGN_BY_NEW_MEMBER));
     }
 
     @Override
