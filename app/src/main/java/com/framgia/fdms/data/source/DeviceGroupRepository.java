@@ -24,8 +24,8 @@ public final class DeviceGroupRepository implements DeviceGroupDataSource {
     }
 
     @Override
-    public Observable<List<Producer>> getListDeviceGroup(String name, int page, int perPage) {
-        return mRemoteDataSource.getListDeviceGroup(name, page, perPage);
+    public Observable<List<Producer>> getListDeviceGroup(String name) {
+        return mRemoteDataSource.getListDeviceGroup(name);
     }
 
     @Override

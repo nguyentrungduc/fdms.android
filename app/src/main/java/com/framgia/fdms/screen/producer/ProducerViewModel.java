@@ -143,9 +143,9 @@ public class ProducerViewModel extends BaseObservable
     }
 
     @Override
-    public void onLoadVendorFailed() {
-        Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.msg_load_data_fails,
-            Snackbar.LENGTH_SHORT).show();
+    public void onLoadVendorFailed(String msg) {
+        Snackbar.make(mActivity.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT)
+            .show();
         setLoadingMoreVisibility(GONE);
     }
 

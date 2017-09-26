@@ -39,6 +39,7 @@ public interface RequestCreationContract {
      */
     interface Presenter extends BasePresenter {
         void getCurrentUser();
+
         void registerRequest(RequestCreatorRequest request);
 
         boolean validateDataInput(RequestCreatorRequest request);

@@ -12,10 +12,10 @@ import com.framgia.fdms.data.model.Device;
 public class ItemListDeviceViewModel extends BaseObservable {
     private Device mDevice;
     private final BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<Device>
-            mItemClickListener;
+        mItemClickListener;
 
     public ItemListDeviceViewModel(Device device,
-            BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<Device> itemClickListener) {
+        BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<Device> itemClickListener) {
         mDevice = device;
         mItemClickListener = itemClickListener;
     }

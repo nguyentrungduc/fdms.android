@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public interface DeviceGroupDataSource {
-    Observable<List<Producer>> getListDeviceGroup(String name, int page, int perPage);
+    Observable<List<Producer>> getListDeviceGroup(String name);
 
     Observable<Producer> addDeviceGroup(Producer deviceGroup);
 

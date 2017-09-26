@@ -77,8 +77,8 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     }
 
     public void onShowDeviceGroups() {
-        mNavigator.startActivityForResult(
-            SelectionActivity.getInstance(mContext, DEVICE_GROUP), REQUEST_DEVICE_GROUPS);
+        mNavigator.startActivityForResult(SelectionActivity.getInstance(mContext, DEVICE_GROUP),
+            REQUEST_DEVICE_GROUPS);
     }
 
     public void onShowCategories() {

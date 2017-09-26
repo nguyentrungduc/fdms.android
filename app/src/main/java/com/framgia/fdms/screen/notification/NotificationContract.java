@@ -17,7 +17,7 @@ public interface NotificationContract {
 
         void onLoadNotificationSuccess(List<Notification> notifications);
 
-        void onLoadNotificationFails();
+        void onLoadNotificationFails(String msg);
     }
 
     /**

@@ -57,9 +57,8 @@ public class RequestDetailViewModel extends BaseObservable
     private Request mRequestTemp;
     private int mActionMenuVisibility;
 
-    public RequestDetailViewModel(AppCompatActivity activity,
-        List<Request.RequestAction> actions, String statusRequest, Request actionRequest,
-        FloatingActionMenu floatingActionsMenu) {
+    public RequestDetailViewModel(AppCompatActivity activity, List<Request.RequestAction> actions,
+        String statusRequest, Request actionRequest, FloatingActionMenu floatingActionsMenu) {
         mContext = activity;
         mActivity = activity;
         setRequest(actionRequest);
@@ -187,8 +186,7 @@ public class RequestDetailViewModel extends BaseObservable
                         initEditRequest();
                         return;
                     }
-                    mPresenter.updateActionRequest(mRequest.getId(),
-                        requestAction.getId());
+                    mPresenter.updateActionRequest(mRequest.getId(), requestAction.getId());
                     mFloatingActionsMenu.hideMenu(true);
                 }
             });

@@ -194,13 +194,13 @@ public class RequestManagerViewModel extends BaseFragmentModel
     }
 
     public void onSelectStatusClick() {
-        mFragment.startActivityForResult(
-            SelectionActivity.getInstance(mContext, STATUS_REQUEST), REQUEST_STATUS);
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, STATUS_REQUEST),
+            REQUEST_STATUS);
     }
 
     public void onSelectRelativeClick() {
-        mFragment.startActivityForResult(
-            SelectionActivity.getInstance(mContext, RELATIVE_STAFF), REQUEST_SELECTION);
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, RELATIVE_STAFF),
+            REQUEST_SELECTION);
     }
 
     @Bindable

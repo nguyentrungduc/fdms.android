@@ -5,6 +5,7 @@ import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.BranchRepository;
 import com.framgia.fdms.data.source.CategoryRepository;
+import com.framgia.fdms.data.source.DeviceGroupRepository;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.DeviceUsingHistoryRepository;
 import com.framgia.fdms.data.source.MarkerRepository;
@@ -61,7 +62,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
     private int mPage = 1;
     private String mKeySearch;
     private int mDeviceGroupId;
-    private DeviceRepository mDeviceRepository;
+    private DeviceGroupRepository mDeviceGroupRepository;
     private DeviceUsingHistoryRepository mDeviceUsingHistoryRepository;
 
     public SelectionPresenter(SelectionContract.ViewModel viewModel,
@@ -95,8 +96,8 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
         mMeetingRoomRepository = meetingRoomRepository;
     }
 
-    public void setDeviceRepository(DeviceRepository deviceRepository) {
-        mDeviceRepository = deviceRepository;
+    public void setDeviceGroupRepository(DeviceGroupRepository deviceGroupRepository) {
+        mDeviceGroupRepository = deviceGroupRepository;
     }
 
     public void setDeviceGroupId(int deviceGroupId) {
@@ -471,7 +472,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
 
     @Override
     public void getDeviceGroups() {
-        Disposable disposable = mDeviceRepository.getDeviceGroups(mKeySearch)
+        Disposable disposable = mDeviceGroupRepository.getListDeviceGroup(mKeySearch)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(new Consumer<Disposable>() {
@@ -480,11 +481,11 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                     mViewModel.showProgress();
                 }
             })
-            .subscribe(new Consumer<List<Status>>() {
+            .subscribe(new Consumer<List<Producer>>() {
                 @Override
-                public void accept(@NonNull List<Status> statuses) throws Exception {
+                public void accept(@NonNull List<Producer> statuses) throws Exception {
                     if (TextUtils.isEmpty(mKeySearch) && statuses != null && statuses.size() != 0) {
-                        statuses.add(0, new Status(OUT_OF_INDEX, TITLE_ALL));
+                        statuses.add(0, new Producer(OUT_OF_INDEX, TITLE_ALL));
                     }
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();

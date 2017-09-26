@@ -12,8 +12,7 @@ import java.util.List;
  * <></>
  */
 
-public class SelectionAdapter
-    extends RecyclerView.Adapter<SelectionAdapter.SelectionHolder> {
+public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.SelectionHolder> {
 
     private LayoutInflater mInflater;
     private List<Status> mDatas;

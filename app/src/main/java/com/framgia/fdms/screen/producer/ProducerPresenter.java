@@ -43,12 +43,12 @@ final class ProducerPresenter implements ProducerContract.Presenter {
         mMarkerRepository = markerRepository;
         mDeviceGroupRepository = deviceGroupRepository;
         mSubscription = new CompositeDisposable();
+        mPage++;
+        getVendors();
     }
 
     @Override
     public void onStart() {
-        mPage++;
-        getVendors();
     }
 
     @Override
@@ -64,7 +64,7 @@ final class ProducerPresenter implements ProducerContract.Presenter {
                 observable = mVendorRepository.getListVendor(mName, mPage, PER_PAGE);
                 break;
             case ProducerType.DEVICE_GROUPS:
-                observable = mDeviceGroupRepository.getListDeviceGroup(mName, mPage, PER_PAGE);
+                observable = mDeviceGroupRepository.getListDeviceGroup(mName);
                 break;
             default:
             case ProducerType.MARKER:
@@ -91,7 +91,7 @@ final class ProducerPresenter implements ProducerContract.Presenter {
             }, new RequestError() {
                 @Override
                 public void onRequestError(BaseException error) {
-                    mViewModel.onLoadVendorFailed();
+                    mViewModel.onLoadVendorFailed(error.getMessage());
                     mPage--;
                 }
             }, new Action() {
@@ -105,6 +105,10 @@ final class ProducerPresenter implements ProducerContract.Presenter {
 
     @Override
     public void loadMorePage() {
+        if (mType == ProducerType.DEVICE_GROUPS) {
+            mViewModel.hideProgress();
+            return;
+        }
         mPage++;
         getVendors();
     }

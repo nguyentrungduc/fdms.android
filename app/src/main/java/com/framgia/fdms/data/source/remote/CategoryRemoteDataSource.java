@@ -53,7 +53,9 @@ public class CategoryRemoteDataSource extends BaseRemoteDataSource
                     throws Exception {
                     List<Status> data = new ArrayList<>();
                     for (Status status : statuses) {
-                        if (status.getName().contains(query)) {
+                        if (status.getName()
+                            .toLowerCase(Locale.getDefault())
+                            .contains(query.toLowerCase(Locale.getDefault()))) {
                             data.add(status);
                         }
                     }

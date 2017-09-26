@@ -28,7 +28,7 @@ public class ListDeviceFragment extends Fragment {
     private ListDeviceContract.ViewModel mViewModel;
 
     public static ListDeviceFragment newInstance() {
-        return  new ListDeviceFragment();
+        return new ListDeviceFragment();
     }
 
     @Override

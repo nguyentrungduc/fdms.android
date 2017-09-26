@@ -21,8 +21,7 @@ import static android.view.View.VISIBLE;
  * Exposes the data to be used in the StatusSelection screen.
  */
 
-public class SelectionViewModel extends BaseObservable
-    implements SelectionContract.ViewModel {
+public class SelectionViewModel extends BaseObservable implements SelectionContract.ViewModel {
     public static final String BUNDLE_DATA = "BUNDLE_DATA";
     private SelectionContract.Presenter mPresenter;
     private SelectionAdapter mAdapter;
