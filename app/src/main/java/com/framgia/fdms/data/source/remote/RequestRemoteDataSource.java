@@ -52,7 +52,7 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
 
     @Override
     public Observable<List<Request>> getRequests(int requestType, int requestStatusId,
-        int relativeId, int perPage, int page) {
+        int relativeId, int page, int perPage) {
         return mFDMSApi.getRequests(
             getRequestParams(requestType, requestStatusId, relativeId, page, perPage))
             .flatMap(new Function<Respone<List<Request>>, ObservableSource<List<Request>>>() {

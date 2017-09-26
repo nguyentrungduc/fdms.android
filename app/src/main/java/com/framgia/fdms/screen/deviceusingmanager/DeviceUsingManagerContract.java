@@ -31,6 +31,8 @@ public interface DeviceUsingManagerContract {
         void hideProgress();
 
         void onActivityResult(int requestCode, int resultCode, Intent data);
+
+        void setAllowLoadMore(boolean allowLoadMore);
     }
 
     /**

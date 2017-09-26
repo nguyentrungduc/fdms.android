@@ -30,6 +30,7 @@ public class MyDeviceDetailViewModel extends BaseObservable
     private Navigator mNavigator;
     private MyDeviceDetailAdapter mAdapter;
     private boolean mIsLoadingMore;
+    private boolean mIsAllowLoadMore;
     private int mEmptyStateVisibility = GONE;
 
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
@@ -44,7 +45,9 @@ public class MyDeviceDetailViewModel extends BaseObservable
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-            if (!mIsLoadingMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+            if (mIsAllowLoadMore
+                && !mIsLoadingMore
+                && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                 mIsLoadingMore = true;
                 mPresenter.loadMoreData();
             }
@@ -93,6 +96,11 @@ public class MyDeviceDetailViewModel extends BaseObservable
         mIsLoadingMore = false;
         mAdapter.updateData(devices);
         setEmptyStateVisibility(mAdapter != null && mAdapter.getItemCount() == 0 ? VISIBLE : GONE);
+    }
+
+    @Override
+    public void setAllowLoadMore(boolean allowLoadMore) {
+        mIsAllowLoadMore = allowLoadMore;
     }
 
     @Bindable

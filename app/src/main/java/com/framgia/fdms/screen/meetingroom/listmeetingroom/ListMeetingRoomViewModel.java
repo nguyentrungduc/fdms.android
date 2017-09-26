@@ -62,6 +62,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
     private int mPage;
     private boolean mIsRefresh;
     private boolean mIsLoadingMore;
+    private boolean mAllowLoadMore;
     private Navigator mNavigator;
     private String mRoomName;
     private ProducerDialog mMeetingRoomDialog;
@@ -204,7 +205,9 @@ public class ListMeetingRoomViewModel extends BaseObservable
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
-            if (!isLoadingMore() && (visibleItemCount + pastVisibleItems) >= totalItemCount) {
+            if (mAllowLoadMore
+                && !isLoadingMore()
+                && (visibleItemCount + pastVisibleItems) >= totalItemCount) {
                 setLoadingMore(true);
                 loadMore();
             }
@@ -272,6 +275,11 @@ public class ListMeetingRoomViewModel extends BaseObservable
             .setNegativeButton(android.R.string.no, null)
             .create()
             .show();
+    }
+
+    @Override
+    public void setAllowLoadMore(boolean allowLoadMore) {
+        mAllowLoadMore = allowLoadMore;
     }
 
     @Override

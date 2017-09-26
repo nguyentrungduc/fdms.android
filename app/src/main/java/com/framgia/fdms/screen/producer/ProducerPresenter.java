@@ -87,6 +87,7 @@ final class ProducerPresenter implements ProducerContract.Presenter {
                         mPage--;
                     }
                     mViewModel.onLoadVendorSuccess(producers);
+                    mViewModel.setAllowLoadMore(producers != null && producers.size() == PER_PAGE);
                 }
             }, new RequestError() {
                 @Override

@@ -37,7 +37,7 @@ public class DetailMeetingRoomViewModel extends BaseObservable
     private int mPage;
     private boolean mIsRefresh;
     private boolean mIsLoadingMore;
-    private boolean mProgressBarVisibility;
+    private boolean mIsAllowLoadMore;
     private boolean mIsVisibleLayoutDataNotFound;
     private String mNotificationLoadData;
     private List<Device> mDevices;
@@ -104,16 +104,6 @@ public class DetailMeetingRoomViewModel extends BaseObservable
         notifyPropertyChanged(BR.loadingMore);
     }
 
-    @Bindable
-    public boolean isProgressBarVisibility() {
-        return mProgressBarVisibility;
-    }
-
-    public void setProgressBarVisibility(boolean progressBarVisibility) {
-        mProgressBarVisibility = progressBarVisibility;
-        notifyPropertyChanged(BR.progressBarVisibility);
-    }
-
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
         new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -136,7 +126,9 @@ public class DetailMeetingRoomViewModel extends BaseObservable
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
-            if (!isLoadingMore() && (visibleItemCount + pastVisibleItems) >= totalItemCount) {
+            if (mIsAllowLoadMore
+                && !isLoadingMore()
+                && (visibleItemCount + pastVisibleItems) >= totalItemCount) {
                 setLoadingMore(true);
                 loadMore();
             }
@@ -182,12 +174,17 @@ public class DetailMeetingRoomViewModel extends BaseObservable
 
     @Override
     public void showProgressbar() {
-        setProgressBarVisibility(true);
+        setLoadingMore(true);
     }
 
     @Override
     public void hideProgressbar() {
-        setProgressBarVisibility(false);
+        setLoadingMore(false);
+    }
+
+    @Override
+    public void setAllowLoadMore(boolean allowLoadMore) {
+        mIsAllowLoadMore = allowLoadMore;
     }
 
     @Bindable

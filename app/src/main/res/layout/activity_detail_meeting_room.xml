@@ -217,20 +217,13 @@
                             app:recyclerAdapter="@{viewModel.listDeviceAdapter}"
                             app:scrollListenner="@{viewModel.scrollListener}"
                             />
-                        <ProgressBar
-                            android:id="@+id/progressBar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:visibility="@{viewModel.progressBarVisibility ? View.VISIBLE : View.GONE}"
-                            />
+
                         <ProgressBar
                             android:id="@+id/progress_loading_bottom"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignEnd="@+id/progressBar"
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_30"
                             android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
                             android:layout_gravity="center"
                             android:visibility="@{viewModel.isLoadingMore ? View.VISIBLE : View.GONE}"
                             />

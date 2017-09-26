@@ -38,6 +38,8 @@ interface ProducerContract {
         void onDeleteProducerClick(Producer producer);
 
         void onAddProducerClick();
+
+        void setAllowLoadMore(boolean isAllowLoadMore);
     }
 
     /**

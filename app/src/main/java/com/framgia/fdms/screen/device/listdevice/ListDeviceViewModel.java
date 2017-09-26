@@ -57,6 +57,7 @@ public class ListDeviceViewModel extends BaseObservable
 
     private ListDeviceFragment mFragment;
     private boolean mIsLoadingMore;
+    private boolean mIsAllowLoadMore = true;
     private ListDeviceAdapter mAdapter;
     private ListDeviceContract.Presenter mPresenter;
     private Context mContext;
@@ -81,7 +82,9 @@ public class ListDeviceViewModel extends BaseObservable
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-            if (!mIsLoadingMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+            if (mIsAllowLoadMore
+                && !mIsLoadingMore
+                && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                 setLoadingMore(true);
                 mPresenter.loadMoreData();
             }
@@ -195,12 +198,6 @@ public class ListDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onReset() {
-        mAdapter.clear();
-        mPresenter.getData(mFilterModel, FIRST_PAGE);
-    }
-
-    @Override
     public void onStart() {
         mPresenter.onStart();
     }
@@ -246,13 +243,6 @@ public class ListDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onSearch(String keyWord) {
-        mAdapter.clear();
-        mFilterModel.setStaffName(keyWord);
-        mPresenter.getData(mFilterModel, FIRST_PAGE);
-    }
-
-    @Override
     public void onStartReturnDevice(FloatingActionsMenu floatingActionsMenu) {
         floatingActionsMenu.collapse();
         mFragment.startActivity(ReturnDeviceActivity.newIntent(mFragment.getContext()));
@@ -282,6 +272,11 @@ public class ListDeviceViewModel extends BaseObservable
     @Override
     public void onStartGetData() {
         mIsChangeFilter = false;
+    }
+
+    @Override
+    public void setAllowLoadMore(boolean allowLoadMore) {
+        mIsAllowLoadMore = allowLoadMore;
     }
 
     public RecyclerView.OnScrollListener getScrollListenner() {

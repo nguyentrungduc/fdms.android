@@ -57,36 +57,6 @@ final class ListDevicePresenter implements ListDeviceContract.Presenter {
     }
 
     @Override
-    public void getDevicesBorrow() {
-        Disposable subscription = mReturnRepository.devicesOfBorrower()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(new Consumer<Disposable>() {
-                @Override
-                public void accept(Disposable disposable) throws Exception {
-                    mViewModel.showProgressbar();
-                }
-            })
-            .subscribe(new Consumer<List<Device>>() {
-                @Override
-                public void accept(List<Device> devices) throws Exception {
-                    mViewModel.onDeviceLoaded(devices);
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mViewModel.onError(error.getMessage());
-                }
-            }, new Action() {
-                @Override
-                public void run() throws Exception {
-                    mViewModel.hideProgressbar();
-                }
-            });
-        mCompositeSubscriptions.add(subscription);
-    }
-
-    @Override
     public void loadMoreData() {
         mPage++;
         getData(mFilterModel, mPage);
@@ -112,6 +82,7 @@ final class ListDevicePresenter implements ListDeviceContract.Presenter {
                 @Override
                 public void accept(List<Device> devices) throws Exception {
                     mViewModel.onDeviceLoaded(devices);
+                    mViewModel.setAllowLoadMore(devices != null && devices.size() == PER_PAGE);
                 }
             }, new RequestError() {
                 @Override

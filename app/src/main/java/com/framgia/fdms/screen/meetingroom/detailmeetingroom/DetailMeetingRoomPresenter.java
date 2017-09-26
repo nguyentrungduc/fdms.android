@@ -42,7 +42,7 @@ final class DetailMeetingRoomPresenter implements DetailMeetingRoomContract.Pres
     }
 
     @Override
-    public void getListDevice(int meetingRoomId, int page, int perPage) {
+    public void getListDevice(int meetingRoomId, int page, final int perPage) {
         Disposable subscription =
             mDeviceRepository.getListDeviceByMeetingRoomId(meetingRoomId, page, perPage)
                 .subscribeOn(Schedulers.io())
@@ -57,6 +57,7 @@ final class DetailMeetingRoomPresenter implements DetailMeetingRoomContract.Pres
                     @Override
                     public void accept(@NonNull List<Device> devices) throws Exception {
                         mViewModel.onGetListDeviceSuccess(devices);
+                        mViewModel.setAllowLoadMore(devices != null && devices.size() == perPage);
                     }
                 }, new RequestError() {
                     @Override

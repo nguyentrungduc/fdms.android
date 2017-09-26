@@ -21,6 +21,8 @@ interface MyDeviceDetailContract {
         void showProgress();
 
         void onGetDeviceSuccess(List<Device> devices);
+
+        void setAllowLoadMore(boolean allowLoadMore);
     }
 
     /**

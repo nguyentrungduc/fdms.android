@@ -25,8 +25,6 @@ interface ListDeviceContract {
 
         void hideProgressbar();
 
-        void onSearch(String keyWord);
-
         void onChooseCategoryClick();
 
         void onChooseStatusClick();
@@ -38,8 +36,6 @@ interface ListDeviceContract {
         void onChooseMeetingRoomClick();
 
         void onClearFilterClick();
-
-        void onReset();
 
         void onActivityResult(int requestCode, int resultCode, Intent data);
 
@@ -54,6 +50,8 @@ interface ListDeviceContract {
         void getDataWithDevice(Device device);
 
         void onStartGetData();
+
+        void setAllowLoadMore(boolean allowLoadMore);
     }
 
     /**
@@ -65,7 +63,5 @@ interface ListDeviceContract {
         void getData(DeviceFilterModel filterModel, int page);
 
         void getCurrentUser();
-
-        void getDevicesBorrow();
     }
 }
