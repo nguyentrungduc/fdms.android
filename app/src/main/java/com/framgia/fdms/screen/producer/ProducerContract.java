@@ -40,6 +40,8 @@ interface ProducerContract {
         void onAddProducerClick();
 
         void setAllowLoadMore(boolean isAllowLoadMore);
+
+        void setShowCategoryFilter(boolean isShowCategoryFilter);
     }
 
     /**

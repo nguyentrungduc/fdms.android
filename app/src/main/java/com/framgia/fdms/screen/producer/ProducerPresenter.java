@@ -2,6 +2,7 @@ package com.framgia.fdms.screen.producer;
 
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Respone;
+import com.framgia.fdms.data.source.CategoryDataSource;
 import com.framgia.fdms.data.source.DeviceGroupDataSource;
 import com.framgia.fdms.data.source.MarkerDataSource;
 import com.framgia.fdms.data.source.VendorDataSource;
@@ -28,20 +29,24 @@ final class ProducerPresenter implements ProducerContract.Presenter {
     private VendorDataSource.RemoteDataSource mVendorRepository;
     private MarkerDataSource mMarkerRepository;
     private DeviceGroupDataSource mDeviceGroupRepository;
+    private CategoryDataSource.RemoteDataSource mCategoryRepository;
     private CompositeDisposable mSubscription;
     private int mPage;
     @ProducerType
     private int mType;
     private String mName;
+    private int mGroupTypeId;
 
     ProducerPresenter(ProducerContract.ViewModel viewModel, @ProducerType int type,
         VendorDataSource.RemoteDataSource vendorRepository, MarkerDataSource markerRepository,
-        DeviceGroupDataSource deviceGroupRepository) {
+        DeviceGroupDataSource deviceGroupRepository,
+        CategoryDataSource.RemoteDataSource categoryRepository) {
         mViewModel = viewModel;
         mType = type;
         mVendorRepository = vendorRepository;
         mMarkerRepository = markerRepository;
         mDeviceGroupRepository = deviceGroupRepository;
+        mCategoryRepository = categoryRepository;
         mSubscription = new CompositeDisposable();
         mPage++;
         getVendors();
@@ -65,6 +70,10 @@ final class ProducerPresenter implements ProducerContract.Presenter {
                 break;
             case ProducerType.DEVICE_GROUPS:
                 observable = mDeviceGroupRepository.getListDeviceGroup(mName);
+                break;
+            case ProducerType.CATEGORIES_GROUPS:
+                observable = mCategoryRepository.getListCategory();
+                mViewModel.setShowCategoryFilter(true);
                 break;
             default:
             case ProducerType.MARKER:

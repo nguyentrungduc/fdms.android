@@ -1,7 +1,6 @@
 package com.framgia.fdms.data.source;
 
-import com.framgia.fdms.data.model.Status;
-import com.framgia.fdms.data.source.remote.CategoryRemoteDataSource;
+import com.framgia.fdms.data.model.Producer;
 import io.reactivex.Observable;
 import java.util.List;
 
@@ -10,23 +9,32 @@ import java.util.List;
  */
 
 public class CategoryRepository implements CategoryDataSource.RemoteDataSource {
-    private CategoryRemoteDataSource mCategoryRemoteDataSource;
+    private static CategoryRepository sInstance;
+    private CategoryDataSource.RemoteDataSource mCategoryRemoteDataSource;
 
-    public CategoryRepository(CategoryRemoteDataSource categoryRemoteDataSource) {
+    public static CategoryRepository getInstance(
+        CategoryDataSource.RemoteDataSource categoryRemoteDataSource) {
+        if (sInstance == null) {
+            sInstance = new CategoryRepository(categoryRemoteDataSource);
+        }
+        return sInstance;
+    }
+
+    public CategoryRepository(CategoryDataSource.RemoteDataSource categoryRemoteDataSource) {
         mCategoryRemoteDataSource = categoryRemoteDataSource;
     }
 
-    public Observable<List<Status>> getListCategory() {
+    public Observable<List<Producer>> getListCategory() {
         return mCategoryRemoteDataSource.getListCategory();
     }
 
     @Override
-    public Observable<List<Status>> getListCategory(String query) {
+    public Observable<List<Producer>> getListCategory(String query) {
         return mCategoryRemoteDataSource.getListCategory(query);
     }
 
     @Override
-    public Observable<List<Status>> getListCategory(String query, int deviceGroupId) {
-        return  mCategoryRemoteDataSource.getListCategory(query, deviceGroupId);
+    public Observable<List<Producer>> getListCategory(String query, int deviceGroupId) {
+        return mCategoryRemoteDataSource.getListCategory(query, deviceGroupId);
     }
 }

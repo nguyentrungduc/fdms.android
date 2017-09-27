@@ -6,7 +6,6 @@ import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.BranchRepository;
 import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.DeviceGroupRepository;
-import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.DeviceUsingHistoryRepository;
 import com.framgia.fdms.data.source.MarkerRepository;
 import com.framgia.fdms.data.source.MeetingRoomRepository;
@@ -392,7 +391,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
 
     @Override
     public void getListCategory() {
-        Observable<List<Status>> observable;
+        Observable<List<Producer>> observable;
         final String titleFirstItem;
         final boolean isInsertFirstItem;
         if (mDeviceGroupId != 0) {
@@ -410,16 +409,16 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 public void accept(Disposable disposable) throws Exception {
                     mViewModel.showProgress();
                 }
-            }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<List<Status>>() {
+            }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<List<Producer>>() {
                 @Override
-                public void accept(List<Status> statuses) throws Exception {
+                public void accept(List<Producer> producers) throws Exception {
                     if (TextUtils.isEmpty(mKeySearch)
-                        && statuses != null
-                        && statuses.size() != 0
+                        && producers != null
+                        && producers.size() != 0
                         && isInsertFirstItem) {
-                        statuses.add(0, new Status(OUT_OF_INDEX, titleFirstItem));
+                        producers.add(0, new Producer(OUT_OF_INDEX, titleFirstItem));
                     }
-                    mViewModel.onGetDataSuccess(statuses);
+                    mViewModel.onGetDataSuccess(producers);
                 }
             }, new RequestError() {
                 @Override

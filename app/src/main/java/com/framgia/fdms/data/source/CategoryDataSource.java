@@ -1,6 +1,6 @@
 package com.framgia.fdms.data.source;
 
-import com.framgia.fdms.data.model.Status;
+import com.framgia.fdms.data.model.Producer;
 import io.reactivex.Observable;
 import java.util.List;
 
@@ -13,10 +13,10 @@ public class CategoryDataSource {
     }
 
     public interface RemoteDataSource {
-        Observable<List<Status>> getListCategory();
+        Observable<List<Producer>> getListCategory();
 
-        Observable<List<Status>> getListCategory(String query);
+        Observable<List<Producer>> getListCategory(String query);
 
-        Observable<List<Status>> getListCategory(String query, int deviceGroupId);
+        Observable<List<Producer>> getListCategory(String query, int deviceGroupId);
     }
 }
