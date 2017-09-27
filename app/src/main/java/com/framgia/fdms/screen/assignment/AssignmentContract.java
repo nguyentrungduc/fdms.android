@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.View;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
+import com.framgia.fdms.data.model.AssignmentItemRequest;
 import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Request;
@@ -23,7 +24,7 @@ interface AssignmentContract {
 
         void onAddItemClick();
 
-        void onSaveClick(View view);
+        void onSaveClick();
 
         void onLoadError(String msg);
 
@@ -45,6 +46,8 @@ interface AssignmentContract {
      */
     interface Presenter extends BasePresenter {
         void registerAssignment(AssignmentRequest request);
+
+        void registerAssignment(Status staff, List<AssignmentItemRequest> requests);
 
         void getRequest(int requestId);
 

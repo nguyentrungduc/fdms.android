@@ -1,6 +1,7 @@
 package com.framgia.fdms.screen.assignment;
 
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.model.AssignmentItemRequest;
 import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Request;
@@ -32,18 +33,17 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
     private RequestRepository mRequestRepository;
     private UserRepository mUserRepository;
     private CompositeDisposable mSubscription;
-    @AssignmentType
-    private int mAssignmentType;
 
-    AssignmentPresenter(AssignmentContract.ViewModel viewModel,
-        @AssignmentType int assignmentType, int requestId, RequestRepository requestRepository,
-        UserRepository userRepository) {
+    AssignmentPresenter(AssignmentContract.ViewModel viewModel, @AssignmentType int assignmentType,
+        int requestId, RequestRepository requestRepository, UserRepository userRepository) {
         mViewModel = viewModel;
         mRequestId = requestId;
         mRequestRepository = requestRepository;
         mUserRepository = userRepository;
         mSubscription = new CompositeDisposable();
-        getRequest(mRequestId);
+        if (assignmentType == AssignmentType.ASSIGN_BY_REQUEST) {
+            getRequest(mRequestId);
+        }
     }
 
     @Override
@@ -57,7 +57,7 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
 
     @Override
     public void registerAssignment(AssignmentRequest request) {
-        if (!validateAssignment(request)) {
+        if (!validateAssignment(request.getItemRequests())) {
             return;
         }
         Disposable subscription = mRequestRepository.registerAssignment(request)
@@ -75,6 +75,17 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
                 }
             });
         mSubscription.add(subscription);
+    }
+
+    @Override
+    public void registerAssignment(Status staff, List<AssignmentItemRequest> requests) {
+        if (!validateStaff(staff)) {
+            return;
+        }
+        if (!validateAssignment(requests)) {
+            return;
+        }
+        // TODO: 9/27/2017
     }
 
     @Override
@@ -125,11 +136,20 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
         return isValid;
     }
 
-    public boolean validateAssignment(AssignmentRequest request) {
+    public boolean validateAssignment(List<AssignmentItemRequest> items ) {
         boolean isValid = true;
-        if (request.getItemRequests().size() == 0) {
+        if (items.size() == 0) {
             isValid = false;
             mViewModel.onError(R.string.title_validate_assignment);
+        }
+        return isValid;
+    }
+
+    public boolean validateStaff(Status staff) {
+        boolean isValid = true;
+        if (staff == null) {
+            isValid = false;
+            mViewModel.onError(R.string.msg_input_staff_error);
         }
         return isValid;
     }
