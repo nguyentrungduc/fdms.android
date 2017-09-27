@@ -12,7 +12,7 @@
             type="com.framgia.fdms.screen.producer.ProducerViewModel"
             />
         <variable
-            name="vendor"
+            name="producer"
             type="com.framgia.fdms.data.model.Producer"
             />
     </data>
@@ -50,7 +50,7 @@
                     android:layout_weight="1"
                     android:maxLines="2"
                     android:padding="@dimen/dp_10"
-                    android:text='@{vendor.name}'
+                    android:text='@{producer.name}'
                     android:textColor="@color/color_gray"
                     android:textSize="@dimen/sp_16"
                     android:textStyle="bold"
@@ -61,7 +61,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="@dimen/dp_7"
                     android:layout_marginRight="@dimen/dp_7"
-                    android:onClick="@{() -> viewModel.onEditProducerClick(vendor)}"
+                    android:onClick="@{() -> viewModel.onEditProducerClick(producer)}"
                     android:padding="@dimen/dp_5"
                     car_view:srcCompat="@drawable/ic_edit"
                     tools:ignore="ContentDescription"
@@ -70,7 +70,7 @@
                     android:layout_width="@dimen/dp_30"
                     android:layout_height="@dimen/dp_30"
                     android:layout_gravity="center_vertical"
-                    android:onClick="@{() -> viewModel.onDeleteProducerClick(vendor)}"
+                    android:onClick="@{() -> viewModel.onDeleteProducerClick(producer)}"
                     android:padding="@dimen/dp_5"
                     car_view:srcCompat="@drawable/ic_x_button"
                     tools:ignore="ContentDescription"
@@ -84,9 +84,9 @@
                 android:layout_marginStart="@dimen/dp_60"
                 android:maxLines="2"
                 android:paddingBottom="@dimen/dp_10"
-                android:text='@{vendor.description}'
+                android:text='@{producer.description}'
                 android:textSize="@dimen/sp_12"
-                android:visibility="@{TextUtils.isEmpty(vendor.description)? View.GONE : View.VISIBLE}"
+                android:visibility="@{TextUtils.isEmpty(producer.description)? View.GONE : View.VISIBLE}"
                 />
         </LinearLayout>
     </android.support.v7.widget.CardView>

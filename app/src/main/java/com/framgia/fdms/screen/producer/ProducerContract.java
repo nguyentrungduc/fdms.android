@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.producer;
 
+import android.content.Intent;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Producer;
@@ -13,21 +14,21 @@ interface ProducerContract {
      * View.
      */
     interface ViewModel extends BaseViewModel<Presenter> {
-        void onLoadVendorSuccess(List<Producer> vendors);
+        void onLoadProducerSuccess(List<Producer> producers);
 
-        void onLoadVendorFailed(String msg);
+        void onLoadProducerFailed(String msg);
 
-        void onAddVendorFailed(String msg);
+        void onAddProducerFailed(String msg);
 
-        void onAddVendorSuccess(Producer vendor);
+        void onAddProducerSuccess(Producer producer);
 
-        void onDeleteVendorFailed(String message);
+        void onDeleteProducerFailed(String message);
 
-        void onDeleteVendorSuccess(Producer vendor);
+        void onDeleteProducerSuccess(Producer producer);
 
-        void onUpdateVendorSuccess(Producer vendor, String message);
+        void onUpdateProducerSuccess(Producer producer, String message);
 
-        void onUpdateVendorFailed(String message);
+        void onUpdateProducerFailed(String message);
 
         void showProgress();
 
@@ -42,22 +43,24 @@ interface ProducerContract {
         void setAllowLoadMore(boolean isAllowLoadMore);
 
         void setShowCategoryFilter(boolean isShowCategoryFilter);
+
+        void onActivityResult(int requestCode, int resultCode, Intent data);
     }
 
     /**
      * Presenter.
      */
     interface Presenter extends BasePresenter {
-        void getVendors();
+        void getProducer();
 
         void loadMorePage();
 
-        void addVendor(Producer producer);
+        void addProducer(Producer producer);
 
-        void deleteVendor(Producer producer);
+        void deleteProducer(Producer producer);
 
-        void editVendor(Producer producer);
+        void editProducer(Producer producer);
 
-        void getVendors(String name);
+        void getProducer(String name, int groupTypeId);
     }
 }

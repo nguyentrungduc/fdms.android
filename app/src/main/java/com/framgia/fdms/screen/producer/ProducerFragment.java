@@ -1,6 +1,7 @@
 package com.framgia.fdms.screen.producer;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,7 +21,7 @@ import com.framgia.fdms.data.source.remote.VendorRemoteDataSource;
 import com.framgia.fdms.databinding.FragmentProducerBinding;
 
 /**
- * Vendor Screen.
+ * Producer Screen.
  */
 public class ProducerFragment extends Fragment {
     private static final String ARGUMENT_TYPE = "ARGUMENT_TYPE";
@@ -40,7 +41,7 @@ public class ProducerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new ProducerViewModel(getActivity());
+        mViewModel = new ProducerViewModel(this);
         getDataIntent();
 
         ProducerContract.Presenter presenter = new ProducerPresenter(mViewModel, mFragmentType,
@@ -80,5 +81,11 @@ public class ProducerFragment extends Fragment {
     public void onStop() {
         mViewModel.onStop();
         super.onStop();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mViewModel.onActivityResult(requestCode, resultCode, data);
     }
 }

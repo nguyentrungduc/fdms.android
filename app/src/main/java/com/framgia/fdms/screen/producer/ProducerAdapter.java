@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Producer;
-import com.framgia.fdms.databinding.ItemVendorBinding;
+import com.framgia.fdms.databinding.ItemProducerBinding;
 import java.util.List;
 
 /**
@@ -17,22 +17,22 @@ import java.util.List;
  */
 
 public class ProducerAdapter extends BaseRecyclerViewAdapter<Producer, ProducerAdapter.ViewHolder> {
-    private List<Producer> mVendors;
+    private List<Producer> mProducers;
     private ProducerContract.ViewModel mViewModel;
 
     public ProducerAdapter(@NonNull Context context, @NonNull ProducerContract.ViewModel viewModel,
-        @NonNull List<Producer> vendors) {
+        @NonNull List<Producer> producers) {
         super(context);
         mViewModel = viewModel;
-        mVendors = vendors;
+        mProducers = producers;
     }
 
     public void onUpdateItem(Producer old, Producer producer) {
-        int pos = mVendors.indexOf(old);
+        int pos = mProducers.indexOf(old);
         if (pos < 0) {
             return;
         }
-        mVendors.add(pos, producer);
+        mProducers.add(pos, producer);
         notifyItemChanged(pos);
     }
 
@@ -41,70 +41,70 @@ public class ProducerAdapter extends BaseRecyclerViewAdapter<Producer, ProducerA
         if (datas == null) {
             return;
         }
-        mVendors.addAll(datas);
+        mProducers.addAll(datas);
         notifyDataSetChanged();
     }
 
     public void clearData() {
-        if (mVendors == null) {
+        if (mProducers == null) {
             return;
         }
-        mVendors.clear();
+        mProducers.clear();
         notifyDataSetChanged();
     }
 
     public void addData(int position, Producer producer) {
-        if (producer == null || position < 0 || position > mVendors.size()) {
+        if (producer == null || position < 0 || position > mProducers.size()) {
             return;
         }
-        mVendors.add(position, producer);
+        mProducers.add(position, producer);
         notifyItemInserted(position);
     }
 
     public void removeData(Producer producer) {
-        if (mVendors == null || mVendors.size() == 0 || producer == null) {
+        if (mProducers == null || mProducers.size() == 0 || producer == null) {
             return;
         }
-        int index = mVendors.indexOf(producer);
+        int index = mProducers.indexOf(producer);
         if (index < 0) {
             return;
         }
-        mVendors.remove(index);
+        mProducers.remove(index);
         notifyItemRemoved(index);
     }
 
     @Override
     public ProducerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ItemVendorBinding binding =
-            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.item_vendor,
-                parent, false);
+        ItemProducerBinding binding =
+            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.item_producer, parent, false);
         binding.setViewModel((ProducerViewModel) mViewModel);
         return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(ProducerAdapter.ViewHolder holder, int position) {
-        holder.bindData(mVendors.get(position));
+        holder.bindData(mProducers.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mVendors == null ? 0 : mVendors.size();
+        return mProducers == null ? 0 : mProducers.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private ItemVendorBinding mBinding;
+        private ItemProducerBinding mBinding;
 
-        public ViewHolder(ItemVendorBinding binding) {
+        public ViewHolder(ItemProducerBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
         }
 
-        void bindData(Producer device) {
-            if (device == null) {
+        void bindData(Producer producer) {
+            if (producer == null) {
                 return;
             }
-            mBinding.setVendor(device);
+            mBinding.setProducer(producer);
             mBinding.executePendingBindings();
         }
     }
