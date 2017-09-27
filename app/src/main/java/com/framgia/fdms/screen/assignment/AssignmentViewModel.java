@@ -16,9 +16,11 @@ import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
+import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.deviceselection.DeviceSelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.profile.chooseexport.ChooseExportActivity;
+import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
@@ -31,6 +33,7 @@ import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORIES;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_GROUPS;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_USER_BORROW;
 import static com.framgia.fdms.utils.Utils.hideSoftKeyboard;
 
 /**
@@ -50,15 +53,18 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     private String mDeviceGroupHint;
     private String mCategoryHint;
     private String mDeviceHint;
+    @AssignmentType
+    private int mAssignmentType;
+    private Status mStaff;
 
     public AssignmentViewModel(AppCompatActivity activity) {
         mActivity = activity;
         mNavigator = new Navigator(activity);
         mContext = activity.getApplicationContext();
         mAdapter = new AssignmentAdapter(mContext, this);
-        setDeviceGroupHint(mContext.getString(R.string.title_request_assignment));
-        setCategoryHint(mContext.getString(R.string.title_btn_category));
-        setDeviceHint(mContext.getString(R.string.title_device_code));
+        setDeviceGroupHint(mContext.getString(R.string.title_assign_group));
+        setCategoryHint(mContext.getString(R.string.title_assign_cagegory));
+        setDeviceHint(mContext.getString(R.string.title_assign_device));
     }
 
     @Override
@@ -127,6 +133,13 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
                     setDevice(device);
                 }
                 break;
+
+            case REQUEST_USER_BORROW:
+                status = bundle.getParcelable(BUNDLE_DATA);
+                if (status != null) {
+                    setStaff(status);
+                }
+                break;
             default:
                 break;
         }
@@ -151,13 +164,25 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     }
 
     @Override
-    public void onSaveClick(View view) {
-        FloatingActionsMenu fapMenu = (FloatingActionsMenu) view.getParent();
-        fapMenu.toggle();
-        AssignmentRequest assignmentRequest =
-            new AssignmentRequest(mRequest.getId(), mRequest.getAssigneeId(),
-                mRequest.getDescription(), mAdapter.getData());
-        mPresenter.registerAssignment(assignmentRequest);
+    public void onSaveClick() {
+        switch (mAssignmentType) {
+            default:
+            case AssignmentType.ASSIGN_BY_REQUEST:
+                AssignmentRequest assignmentRequest =
+                    new AssignmentRequest(mRequest.getId(), mRequest.getAssigneeId(),
+                        mRequest.getDescription(), mAdapter.getData());
+                mPresenter.registerAssignment(assignmentRequest);
+                break;
+            case AssignmentType.ASSIGN_BY_NEW_MEMBER:
+                mPresenter.registerAssignment(mStaff, mAdapter.getData());
+                break;
+        }
+    }
+
+    public void onChooseStaffClick() {
+        mNavigator.startActivityForResult(
+            SelectionActivity.getInstance(mActivity.getApplicationContext(),
+                SelectionType.USER_BORROW), REQUEST_USER_BORROW);
     }
 
     @Override
@@ -174,11 +199,17 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
 
     @Override
     public void openChooseExportActivity() {
+        if (mAdapter.getItemCount() == 0) {
+            return;
+        }
         mPresenter.chooseExportActivity();
     }
 
     @Override
     public void openChooseExportActivitySuccess(User user) {
+        if (mAdapter.getItemCount() == 0) {
+            return;
+        }
         mActivity.startActivity(ChooseExportActivity.newInstance(mContext, user));
     }
 
@@ -309,5 +340,25 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     public void setDeviceHint(String deviceHint) {
         mDeviceHint = deviceHint;
         notifyPropertyChanged(BR.deviceHint);
+    }
+
+    @Bindable
+    public int getAssignmentType() {
+        return mAssignmentType;
+    }
+
+    public void setAssignmentType(int assignmentType) {
+        mAssignmentType = assignmentType;
+        notifyPropertyChanged(BR.assignmentType);
+    }
+
+    @Bindable
+    public Status getStaff() {
+        return mStaff;
+    }
+
+    public void setStaff(Status staff) {
+        mStaff = staff;
+        notifyPropertyChanged(BR.staff);
     }
 }

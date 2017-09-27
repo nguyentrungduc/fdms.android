@@ -301,6 +301,7 @@
     <string name="title_device_group_type">Device Group Type</string>
     <string name="title_validate_item_assignment">Please select fully(Device Group, Category, Device)</string>
     <string name="title_validate_assignment">Please add device</string>
+    <string name="msg_input_staff_error">Please add staff to assign device</string>
     <string name="msg_assignment_success">Assignment Success</string>
     <string name="title_device_all">All</string>
     <string name="title_device_using">Using</string>
@@ -308,4 +309,7 @@
     <string name="title_assignee">Assignee</string>
     <string name="title_manage_device_group">Manage Device Groups</string>
     <string name="title_manage_device_category">Manage Device Categories</string>
+    <string name="title_assign_group">Group</string>
+    <string name="title_assign_cagegory">Category</string>
+    <string name="title_assign_device">Device</string>
 </resources>

@@ -56,6 +56,7 @@ public class AssignmentActivity extends AppCompatActivity {
                 new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
                 new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))));
         mViewModel.setPresenter(presenter);
+        ((AssignmentViewModel) mViewModel).setAssignmentType(assignmentType);
 
         ActivityAssignmentBinding binding =
             DataBindingUtil.setContentView(this, R.layout.activity_assignment);

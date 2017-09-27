@@ -8,6 +8,8 @@
     >
 
     <data>
+        <import type="com.framgia.fdms.screen.assignment.AssignmentType"/>
+        <import type="android.view.View"/>
 
         <variable
             name="viewModel"
@@ -16,253 +18,278 @@
 
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         >
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:activity="@{viewModel.activity}"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            />
-
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             >
 
-            <LinearLayout
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:activity="@{viewModel.activity}"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                />
+
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/nested_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/toolbar"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 >
 
-                <android.support.v7.widget.CardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dp_10"
-                    app:contentPadding="@dimen/dp_10"
-                    car_view:cardElevation="@dimen/dp1"
+                    android:orientation="vertical"
                     >
 
-                    <LinearLayout
+                    <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        >
-
-                        <include
-                            layout="@layout/text_image"
-                            bind:image="@{@drawable/ic_list_24dp}"
-                            bind:text="@{viewModel.request.title}"
-                            />
-
-                        <include
-                            layout="@layout/text_image"
-                            bind:image="@{@drawable/ic_person_24dp}"
-                            bind:text="@{viewModel.request.requestFor}"
-                            />
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_10"
-                            android:textColorHint="@color/color_brown"
-                            >
-
-                            <android.support.design.widget.TextInputEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/title_description"
-                                android:imeOptions="actionDone"
-                                android:inputType="text"
-                                android:text="@={viewModel.request.description}"
-                                />
-                        </android.support.design.widget.TextInputLayout>
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:contentPadding="@dimen/dp_5"
-                    car_view:cardElevation="@dimen/dp1"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:visibility="@{viewModel.assignmentType == AssignmentType.ASSIGN_BY_REQUEST? View.VISIBLE: View.GONE}"
+                        app:contentPadding="@dimen/dp_10"
+                        car_view:cardElevation="@dimen/dp1"
                         >
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:padding="@dimen/dp_5"
                             >
 
-                            <android.support.v7.widget.CardView
+                            <include
+                                layout="@layout/text_image"
+                                bind:image="@{@drawable/ic_list_24dp}"
+                                bind:text="@{viewModel.request.title}"
+                                />
+
+                            <include
+                                layout="@layout/text_image"
+                                bind:image="@{@drawable/ic_person_24dp}"
+                                bind:text="@{viewModel.request.requestFor}"
+                                />
+
+                            <android.support.design.widget.TextInputLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/dp_10"
-                                android:layout_marginEnd="@dimen/dp_10"
-                                android:layout_marginLeft="@dimen/dp_10"
-                                android:layout_marginRight="@dimen/dp_10"
-                                android:layout_marginStart="@dimen/dp_10"
-                                android:layout_marginTop="@dimen/dp_5"
-                                app:cardBackgroundColor="@color/color_grey_100"
-                                app:contentPadding="@dimen/dp_5"
-                                car_view:cardElevation="@dimen/dp1"
+                                android:layout_marginTop="@dimen/dp_10"
+                                android:textColorHint="@color/color_brown"
                                 >
 
-                                <TextView
+                                <android.support.design.widget.TextInputEditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:onClick="@{() -> viewModel.onShowDeviceGroups()}"
-                                    android:text="@={viewModel.deviceGroup.name}"
-                                    android:textColorHint="@color/colorAccent"
-                                    android:textSize="@dimen/sp_12"
-                                    bind:hint="@{viewModel.deviceGroupHint}"
+                                    android:hint="@string/title_description"
+                                    android:imeOptions="actionDone"
+                                    android:inputType="text"
+                                    android:text="@={viewModel.request.description}"
                                     />
-                            </android.support.v7.widget.CardView>
+                            </android.support.design.widget.TextInputLayout>
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
 
-                            <android.support.v7.widget.CardView
-                                android:layout_width="match_parent"
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dp_5"
+                        android:paddingEnd="@dimen/dp_10"
+                        android:paddingLeft="@dimen/dp_10"
+                        android:paddingRight="@dimen/dp_10"
+                        android:paddingStart="@dimen/dp_10"
+                        android:textColorHint="@color/colorAccent"
+                        android:visibility="@{viewModel.assignmentType == AssignmentType.ASSIGN_BY_NEW_MEMBER? View.VISIBLE: View.GONE}"
+                        >
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="true"
+                            android:focusable="false"
+                            android:hint="@string/title_assign_to"
+                            android:inputType="textAutoComplete|textAutoCorrect"
+                            android:onClick="@{() -> viewModel.onChooseStaffClick()}"
+                            android:text="@{viewModel.staff.name}"
+                            android:textSize="@dimen/sp_15"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:contentPadding="@dimen/dp_5"
+                        car_view:cardElevation="@dimen/dp1"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            >
+
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/dp_10"
-                                android:layout_marginEnd="@dimen/dp_10"
-                                android:layout_marginLeft="@dimen/dp_10"
-                                android:layout_marginRight="@dimen/dp_10"
-                                android:layout_marginStart="@dimen/dp_10"
-                                android:layout_marginTop="@dimen/dp_5"
-                                app:cardBackgroundColor="@color/color_grey_100"
-                                app:contentPadding="@dimen/dp_5"
-                                car_view:cardElevation="@dimen/dp1"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:padding="@dimen/dp_5"
                                 >
 
-                                <TextView
-                                    android:id="@+id/textView"
+                                <android.support.v7.widget.CardView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:onClick="@{() -> viewModel.onShowCategories()}"
-                                    android:text="@={viewModel.category.name}"
-                                    android:textColorHint="@color/colorAccent"
-                                    android:textSize="@dimen/sp_12"
-                                    bind:hint="@{viewModel.categoryHint}"
-                                    />
-                            </android.support.v7.widget.CardView>
+                                    android:layout_marginBottom="@dimen/dp_10"
+                                    android:layout_marginEnd="@dimen/dp_10"
+                                    android:layout_marginLeft="@dimen/dp_10"
+                                    android:layout_marginRight="@dimen/dp_10"
+                                    android:layout_marginStart="@dimen/dp_10"
+                                    android:layout_marginTop="@dimen/dp_5"
+                                    app:cardBackgroundColor="@color/color_grey_100"
+                                    app:contentPadding="@dimen/dp_5"
+                                    car_view:cardElevation="@dimen/dp1"
+                                    >
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:onClick="@{() -> viewModel.onShowDeviceGroups()}"
+                                        android:text="@={viewModel.deviceGroup.name}"
+                                        android:textColorHint="@color/colorAccent"
+                                        android:textSize="@dimen/sp_12"
+                                        bind:hint="@{viewModel.deviceGroupHint}"
+                                        />
+                                </android.support.v7.widget.CardView>
+
+                                <android.support.v7.widget.CardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/dp_10"
+                                    android:layout_marginEnd="@dimen/dp_10"
+                                    android:layout_marginLeft="@dimen/dp_10"
+                                    android:layout_marginRight="@dimen/dp_10"
+                                    android:layout_marginStart="@dimen/dp_10"
+                                    android:layout_marginTop="@dimen/dp_5"
+                                    app:cardBackgroundColor="@color/color_grey_100"
+                                    app:contentPadding="@dimen/dp_5"
+                                    car_view:cardElevation="@dimen/dp1"
+                                    >
+
+                                    <TextView
+                                        android:id="@+id/textView"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:onClick="@{() -> viewModel.onShowCategories()}"
+                                        android:text="@={viewModel.category.name}"
+                                        android:textColorHint="@color/colorAccent"
+                                        android:textSize="@dimen/sp_12"
+                                        bind:hint="@{viewModel.categoryHint}"
+                                        />
+                                </android.support.v7.widget.CardView>
+
+                                <android.support.v7.widget.CardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/dp_10"
+                                    android:layout_marginEnd="@dimen/dp_10"
+                                    android:layout_marginLeft="@dimen/dp_10"
+                                    android:layout_marginRight="@dimen/dp_10"
+                                    android:layout_marginStart="@dimen/dp_10"
+                                    android:layout_marginTop="@dimen/dp_5"
+                                    app:cardBackgroundColor="@color/color_grey_100"
+                                    app:contentPadding="@dimen/dp_5"
+                                    car_view:cardElevation="@dimen/dp1"
+                                    >
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:onClick="@{() -> viewModel.onShowDevices()}"
+                                        android:text="@={viewModel.device.deviceCode}"
+                                        android:textColorHint="@color/colorAccent"
+                                        android:textSize="@dimen/sp_12"
+                                        bind:hint="@{viewModel.deviceHint}"
+                                        />
+                                </android.support.v7.widget.CardView>
+                            </LinearLayout>
 
                             <android.support.v7.widget.CardView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/dp_10"
-                                android:layout_marginEnd="@dimen/dp_10"
-                                android:layout_marginLeft="@dimen/dp_10"
-                                android:layout_marginRight="@dimen/dp_10"
-                                android:layout_marginStart="@dimen/dp_10"
-                                android:layout_marginTop="@dimen/dp_5"
-                                app:cardBackgroundColor="@color/color_grey_100"
-                                app:contentPadding="@dimen/dp_5"
-                                car_view:cardElevation="@dimen/dp1"
+                                app:cardBackgroundColor="@color/colorPrimary"
+                                app:cardCornerRadius="@dimen/dp_5"
+                                app:contentPadding="@dimen/dp_10"
+                                car_view:cardElevation="@dimen/dp_2"
                                 >
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:onClick="@{() -> viewModel.onShowDevices()}"
-                                    android:text="@={viewModel.device.deviceCode}"
-                                    android:textColorHint="@color/colorAccent"
-                                    android:textSize="@dimen/sp_12"
-                                    bind:hint="@{viewModel.deviceHint}"
+                                <ImageView
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:onClick="@{()-> viewModel.onAddItemClick()}"
+                                    app:srcCompat="@drawable/ic_add_mobile_40dp"
+                                    tools:ignore="@null"
                                     />
                             </android.support.v7.widget.CardView>
                         </LinearLayout>
+                    </android.support.v7.widget.CardView>
 
-                        <android.support.v7.widget.CardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:cardBackgroundColor="@color/colorPrimary"
-                            app:cardCornerRadius="@dimen/dp_5"
-                            app:contentPadding="@dimen/dp_10"
-                            car_view:cardElevation="@dimen/dp_2"
-                            >
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:padding="@dimen/dp_5"
+                        app:layoutManager="LinearLayoutManager"
+                        app:recyclerAdapter="@{viewModel.adapter}"
+                        />
 
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:onClick="@{()-> viewModel.onAddItemClick()}"
-                                app:srcCompat="@drawable/ic_add_mobile_40dp"
-                                tools:ignore="@null"
-                                />
-                        </android.support.v7.widget.CardView>
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
 
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
-                    android:padding="@dimen/dp_5"
-                    app:layoutManager="LinearLayoutManager"
-                    app:recyclerAdapter="@{viewModel.adapter}"
-                    />
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
-
-        <com.getbase.floatingactionbutton.FloatingActionsMenu
-            android:id="@+id/float_action_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/dp_16"
-            app:backgroundTint="@color/colorPrimaryDark"
-            app:fab_addButtonColorNormal="@color/colorPrimary"
-            app:fab_addButtonColorPressed="@color/color_grey_757575"
-            app:fab_addButtonPlusIconColor="@color/color_white"
-            app:fab_labelStyle="@style/FloatMenuTitleStyle"
-            >
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
+            <com.github.clans.fab.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{(view)->viewModel.onSaveClick(view)}"
-                app:fab_colorNormal="@android:color/white"
-                app:fab_colorPressed="@color/color_seashell"
-                app:fab_icon="@drawable/ic_save_24dp"
-                app:fab_size="mini"
-                app:fab_title="@string/action_save_assigment"
-                />
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
                 android:onClick="@{()->viewModel.openChooseExportActivity()}"
-                app:fab_colorNormal="@android:color/white"
-                app:fab_colorPressed="@color/color_seashell"
-                app:fab_icon="@drawable/ic_import_export_black_24px"
-                app:fab_size="mini"
+                android:src="@drawable/ic_print_white_24dp"
+                app:fab_colorNormal="@color/colorPrimary"
+                app:fab_colorPressed="@color/color_red_200"
+                app:fab_size="normal"
                 app:fab_title="@string/action_export_file"
                 />
-        </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
-        <ProgressBar
-            android:layout_width="wrap_content"
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:indeterminateDrawable="@drawable/rotate_progressbar"
+                android:visibility="@{viewModel.progressBarVisibility}"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:indeterminateDrawable="@drawable/rotate_progressbar"
-            android:visibility="@{viewModel.progressBarVisibility}"
+            android:layout_below="@+id/nested_scroll_view"
+            android:layout_marginTop="@dimen/dp_20"
+            android:background="@drawable/boder_title"
+            android:fontFamily="serif"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.onSaveClick()}"
+            android:padding="@dimen/dp_10"
+            android:text="@string/action_save_assigment"
+            android:textAllCaps="true"
+            android:textColor="@color/color_white"
+            android:textStyle="bold"
             />
-    </RelativeLayout>
+    </LinearLayout>
 </layout>
