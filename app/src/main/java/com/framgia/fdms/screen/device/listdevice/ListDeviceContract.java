@@ -4,9 +4,8 @@ import android.content.Intent;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Device;
-import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.github.clans.fab.FloatingActionMenu;
 import java.util.List;
 
 /**
@@ -43,9 +42,11 @@ interface ListDeviceContract {
 
         void loadData();
 
-        void onStartReturnDevice(FloatingActionsMenu floatingActionsMenu);
+        void onStartReturnDevice(FloatingActionMenu floatingActionsMenu);
 
-        void onRegisterDeviceClick(FloatingActionsMenu floatingActionsMenu);
+        void onRegisterDeviceClick(FloatingActionMenu floatingActionsMenu);
+
+        void onAssignDeviceForNewMemberClick(FloatingActionMenu floatingActionsMenu);
 
         void getDataWithDevice(Device device);
 

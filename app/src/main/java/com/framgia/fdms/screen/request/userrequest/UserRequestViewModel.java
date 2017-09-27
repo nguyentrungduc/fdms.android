@@ -22,6 +22,7 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
+import com.framgia.fdms.screen.assignment.AssignmentType;
 import com.framgia.fdms.screen.requestcreation.RequestCreationActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
@@ -257,7 +258,8 @@ public class UserRequestViewModel extends BaseFragmentModel
 
     @Override
     public void onAddDeviceClick(int requestId) {
-        mFragment.startActivityForResult(AssignmentActivity.getInstance(mContext, requestId),
+        mFragment.startActivityForResult(
+            AssignmentActivity.getInstance(mContext, AssignmentType.ASSIGN_BY_REQUEST, requestId),
             REQUEST_CREATE_ASSIGNMENT);
     }
 
