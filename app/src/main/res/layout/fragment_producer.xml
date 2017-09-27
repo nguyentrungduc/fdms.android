@@ -10,74 +10,109 @@
             name="viewModel"
             type="com.framgia.fdms.screen.producer.ProducerViewModel"
             />
-    </data>
 
-    <LinearLayout
+        <import type="android.view.View"/>
+
+        <import type="android.support.v4.view.GravityCompat"/>
+    </data>
+    <android.support.v4.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        bind:drawerListener="@{viewModel}"
+        bind:side="@{GravityCompat.END}"
+        bind:statusDrawerLayout="@{viewModel.drawerStatus}"
         >
-
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:layout_height="match_parent"
             >
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-                >
-                <com.arlib.floatingsearchview.FloatingSearchView
-                    android:id="@+id/floating_search_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_50"
-                    app:floatingSearch_leftActionMode="noLeftAction"
-                    app:floatingSearch_menu="@menu/menu_search"
-                    app:floatingSearch_searchHint="@string/title_searching"
-                    app:floatingSearch_showSearchKey="true"
-                    app:backgroundTint="@color/colorPrimaryDark"
-                    bind:clearListenner="@{viewModel}"
-                    bind:searchListenner="@{viewModel}"
-                    bind:menuItemClick="@{viewModel}"
-                    />
-            </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            >
-            <android.support.v7.widget.RecyclerView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:hideButton="@{fabAdd}"
-                app:layoutManager="LinearLayoutManager"
-                app:recyclerAdapter="@{viewModel.adapter}"
-                app:scrollListenner="@{viewModel.scrollListener}"
-                app:scrollPosition="@{viewModel.positionScroll}"
-                />
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/dp_16"
-                android:onClick="@{() -> viewModel.onAddProducerClick()}"
-                android:src="@drawable/fab_add"
-                app:backgroundTint="@color/colorPrimary"
-                />
-        </FrameLayout>
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminateDrawable="@drawable/rotate_progressbar"
-            android:visibility="@{viewModel.loadingMoreVisibility}"
+                android:orientation="vertical"
+                >
+
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/appbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    >
+                    <android.support.design.widget.CollapsingToolbarLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        app:contentScrim="?attr/colorPrimary"
+                        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                        >
+                        <com.arlib.floatingsearchview.FloatingSearchView
+                            android:id="@+id/floating_search_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_50"
+                            android:visibility="@{viewModel.showCategoryFilter ? View.GONE : View.VISIBLE}"
+                            app:backgroundTint="@color/colorPrimaryDark"
+                            app:floatingSearch_leftActionMode="noLeftAction"
+                            app:floatingSearch_menu="@menu/menu_search"
+                            app:floatingSearch_searchHint="@string/title_searching"
+                            app:floatingSearch_showSearchKey="true"
+                            bind:clearListenner="@{viewModel}"
+                            bind:menuItemClick="@{viewModel}"
+                            bind:searchListenner="@{viewModel}"
+                            />
+                        <com.arlib.floatingsearchview.FloatingSearchView
+                            android:id="@+id/floating_search_view_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_50"
+                            android:visibility="@{viewModel.showCategoryFilter ? View.VISIBLE : View.GONE}"
+                            app:backgroundTint="@color/colorPrimaryDark"
+                            app:floatingSearch_leftActionMode="noLeftAction"
+                            app:floatingSearch_menu="@menu/menu_device_manager"
+                            app:floatingSearch_searchHint="@string/title_searching"
+                            app:floatingSearch_showSearchKey="true"
+                            bind:clearListenner="@{viewModel}"
+                            bind:menuItemClick="@{viewModel}"
+                            bind:searchListenner="@{viewModel}"
+                            />
+                    </android.support.design.widget.CollapsingToolbarLayout>
+                </android.support.design.widget.AppBarLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    >
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:hideButton="@{fabAdd}"
+                        app:layoutManager="LinearLayoutManager"
+                        app:recyclerAdapter="@{viewModel.adapter}"
+                        app:scrollListenner="@{viewModel.scrollListener}"
+                        app:scrollPosition="@{viewModel.positionScroll}"
+                        />
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fab_add"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="@dimen/dp_16"
+                        android:onClick="@{() -> viewModel.onAddProducerClick()}"
+                        android:src="@drawable/fab_add"
+                        app:backgroundTint="@color/colorPrimary"
+                        />
+                </FrameLayout>
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminateDrawable="@drawable/rotate_progressbar"
+                    android:visibility="@{viewModel.loadingMoreVisibility}"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+        <include
+            layout="@layout/filter_category"
+            bind:viewModel="@{viewModel}"
             />
-    </LinearLayout>
+    </android.support.v4.widget.DrawerLayout>
 </layout>

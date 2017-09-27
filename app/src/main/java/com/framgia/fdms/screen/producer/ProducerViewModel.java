@@ -8,6 +8,7 @@ import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +27,8 @@ import java.util.List;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
+import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.TAG_MAKER_DIALOG;
 
@@ -35,7 +38,7 @@ import static com.framgia.fdms.utils.Constant.TAG_MAKER_DIALOG;
 public class ProducerViewModel extends BaseObservable
     implements ProducerContract.ViewModel, ProducerDialogContract.ActionCallback,
     FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
-    OnSearchMenuItemClickListener {
+    OnSearchMenuItemClickListener, DrawerLayout.DrawerListener {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<ProducerViewModel> CREATOR =
         new Parcelable.Creator<ProducerViewModel>() {
@@ -59,6 +62,8 @@ public class ProducerViewModel extends BaseObservable
     private boolean mIsAllowLoadMore;
     private int mLoadingMoreVisibility;
     private Navigator mNavigator;
+    private boolean mIsShowCategoryFilter;
+    private String mDrawerStatus = DRAWER_IS_CLOSE;
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -265,8 +270,16 @@ public class ProducerViewModel extends BaseObservable
 
     @Override
     public void onActionMenuItemSelected(FloatingSearchView searchView, MenuItem item) {
-        if (item.getItemId() == R.id.action_search) {
-            onSearchAction(searchView.getQuery());
+        switch (item.getItemId()) {
+            case R.id.action_filter:
+                setDrawerStatus(
+                    mDrawerStatus == DRAWER_IS_CLOSE ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
+                break;
+            case R.id.action_search:
+                onSearchAction(searchView.getQuery());
+                break;
+            default:
+                break;
         }
     }
 
@@ -287,5 +300,45 @@ public class ProducerViewModel extends BaseObservable
         dest.writeValue(mAdapter);
         dest.writeValue(mActivity);
         dest.writeValue(mVendorDialog);
+    }
+
+    @Bindable
+    public boolean isShowCategoryFilter() {
+        return mIsShowCategoryFilter;
+    }
+
+    public void setShowCategoryFilter(boolean showCategoryFilter) {
+        mIsShowCategoryFilter = showCategoryFilter;
+        notifyPropertyChanged(BR.showCategoryFilter);
+    }
+
+    @Bindable
+    public String getDrawerStatus() {
+        return mDrawerStatus;
+    }
+
+    public void setDrawerStatus(String drawerStatus) {
+        mDrawerStatus = drawerStatus;
+        notifyPropertyChanged(BR.drawerStatus);
+    }
+
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+        // no ops
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+        setDrawerStatus(DRAWER_IS_OPEN);
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+        setDrawerStatus(DRAWER_IS_CLOSE);
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+        // no ops
     }
 }

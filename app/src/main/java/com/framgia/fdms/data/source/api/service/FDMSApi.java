@@ -36,7 +36,7 @@ public interface FDMSApi {
     Observable<Respone<List<Device>>> getListDevices(@QueryMap Map<String, String> parrams);
 
     @GET("api/device_categories")
-    Observable<Respone<List<Status>>> getListCategory();
+    Observable<Respone<List<Producer>>> getListCategory();
 
     @GET("api/device_statuses")
     Observable<Respone<List<Status>>> getListStatus();
@@ -172,7 +172,7 @@ public interface FDMSApi {
     Observable<Respone<List<Producer>>> getDeviceGroups();
 
     @GET("api/device_categories")
-    Observable<Respone<List<Status>>> getCategoriesByDeviceGroupId(
+    Observable<Respone<List<Producer>>> getCategoriesByDeviceGroupId(
         @QueryMap Map<String, String> params);
 
     @GET("api/device_using_histories")

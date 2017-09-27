@@ -298,6 +298,7 @@
     <string name="action_all">All</string>
     <string name="title_no_category">No Category</string>
     <string name="title_no_device_group">No Device Group</string>
+    <string name="title_device_group_type">Device Group Type</string>
     <string name="title_validate_item_assignment">Please select fully(Device Group, Category, Device)</string>
     <string name="title_validate_assignment">Please add device</string>
     <string name="msg_assignment_success">Assignment Success</string>

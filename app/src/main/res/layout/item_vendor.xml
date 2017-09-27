@@ -58,6 +58,7 @@
                 <ImageView
                     android:layout_width="@dimen/dp_30"
                     android:layout_height="@dimen/dp_30"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginEnd="@dimen/dp_7"
                     android:layout_marginRight="@dimen/dp_7"
                     android:onClick="@{() -> viewModel.onEditProducerClick(vendor)}"
@@ -68,6 +69,7 @@
                 <ImageView
                     android:layout_width="@dimen/dp_30"
                     android:layout_height="@dimen/dp_30"
+                    android:layout_gravity="center_vertical"
                     android:onClick="@{() -> viewModel.onDeleteProducerClick(vendor)}"
                     android:padding="@dimen/dp_5"
                     car_view:srcCompat="@drawable/ic_x_button"
