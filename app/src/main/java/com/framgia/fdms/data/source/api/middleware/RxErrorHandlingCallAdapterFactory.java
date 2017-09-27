@@ -138,7 +138,7 @@ public final class RxErrorHandlingCallAdapterFactory extends CallAdapter.Factory
         }
 
         private BaseException convertToBaseException(Throwable throwable) {
-           if (throwable instanceof BaseException) {
+            if (throwable instanceof BaseException) {
                 return (BaseException) throwable;
             }
 

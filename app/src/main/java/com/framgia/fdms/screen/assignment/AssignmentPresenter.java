@@ -7,14 +7,11 @@ import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
-import com.framgia.fdms.data.source.CategoryRepository;
-import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.RequestRepository;
 import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -136,7 +133,7 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
         return isValid;
     }
 
-    public boolean validateAssignment(List<AssignmentItemRequest> items ) {
+    public boolean validateAssignment(List<AssignmentItemRequest> items) {
         boolean isValid = true;
         if (items.size() == 0) {
             isValid = false;

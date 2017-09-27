@@ -62,20 +62,19 @@ public class MarkerRemoteDataSource extends BaseRemoteDataSource implements Mark
     @Override
     public Observable<String> editMarker(Producer marker) {
         return mFDMSApi.updateMarker(marker.getId(), marker.getName(), marker.getDescription())
-            .flatMap(
-                new Function<Respone<List<String>>, ObservableSource<String>>() {
-                    @Override
-                    public ObservableSource<String> apply(Respone<List<String>> listRespone)
-                        throws Exception {
-                        if (listRespone == null) {
-                            return Observable.error(new NullPointerException());
-                        }
-                        if (listRespone.isError()) {
-                            return Observable.error(
-                                new NullPointerException("ERROR" + listRespone.getStatus()));
-                        }
-                        return Observable.just(getStringFromList(listRespone.getData()));
+            .flatMap(new Function<Respone<List<String>>, ObservableSource<String>>() {
+                @Override
+                public ObservableSource<String> apply(Respone<List<String>> listRespone)
+                    throws Exception {
+                    if (listRespone == null) {
+                        return Observable.error(new NullPointerException());
                     }
-                });
+                    if (listRespone.isError()) {
+                        return Observable.error(
+                            new NullPointerException("ERROR" + listRespone.getStatus()));
+                    }
+                    return Observable.just(getStringFromList(listRespone.getData()));
+                }
+            });
     }
 }

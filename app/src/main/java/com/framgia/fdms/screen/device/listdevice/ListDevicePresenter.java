@@ -1,12 +1,9 @@
 package com.framgia.fdms.screen.device.listdevice;
 
 import com.framgia.fdms.data.model.Device;
-import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
-import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.DeviceReturnRepository;
-import com.framgia.fdms.data.source.StatusRepository;
 import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
@@ -19,8 +16,6 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
-import static com.framgia.fdms.utils.Constant.NOT_SEARCH;
-import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
 /**

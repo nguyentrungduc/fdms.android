@@ -154,6 +154,7 @@ public class TopSheetBehavior<V extends View> extends CoordinatorLayout.Behavior
             }
         }
     };
+
     /**
      * Default constructor for instantiating TopSheetBehaviors.
      */

@@ -19,8 +19,6 @@ import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.databinding.FragmentListDeviceBinding;
 
-import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_TAB;
-
 /**
  * ListDevice Screen.
  */

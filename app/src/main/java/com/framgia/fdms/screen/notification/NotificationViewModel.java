@@ -5,7 +5,6 @@ import android.databinding.Bindable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 import com.android.databinding.library.baseAdapters.BR;
-import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Notification;
 import java.util.ArrayList;
 import java.util.List;

@@ -22,8 +22,7 @@ public class AssignmentItemRequest {
     private String mDeviceCode;
 
     public AssignmentItemRequest(int deviceId, int deviceCategoryId, int deviceCategoryGroupId,
-                             String deviceCategoryName, String deviceCategoryGroupName,
-                             String deviceCode) {
+        String deviceCategoryName, String deviceCategoryGroupName, String deviceCode) {
         mDeviceId = deviceId;
         mDeviceCategoryId = deviceCategoryId;
         mDeviceCategoryGroupId = deviceCategoryGroupId;
@@ -127,11 +126,8 @@ public class AssignmentItemRequest {
         }
 
         public AssignmentItemRequest create() {
-            return new AssignmentItemRequest(mNestedDeviceId,
-                mNestedDeviceCategoryId,
-                mNestedCategoryGroupId,
-                mNestedDeviceCategoryName,
-                mNestedDeviceCategoryGroupName,
+            return new AssignmentItemRequest(mNestedDeviceId, mNestedDeviceCategoryId,
+                mNestedCategoryGroupId, mNestedDeviceCategoryName, mNestedDeviceCategoryGroupName,
                 mNestedDeviceCode);
         }
     }

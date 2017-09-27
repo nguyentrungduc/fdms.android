@@ -1,7 +1,6 @@
 package com.framgia.fdms.screen.assignment;
 
 import android.content.Intent;
-import android.view.View;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.AssignmentItemRequest;

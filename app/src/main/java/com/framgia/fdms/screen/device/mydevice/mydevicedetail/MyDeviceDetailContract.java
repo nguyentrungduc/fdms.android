@@ -3,7 +3,6 @@ package com.framgia.fdms.screen.device.mydevice.mydevicedetail;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Device;
-import com.framgia.fdms.data.model.DeviceUsingHistory;
 import java.util.List;
 
 /**

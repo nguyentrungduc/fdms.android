@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.Picture;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.screen.authenication.login.LoginActivity;

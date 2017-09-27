@@ -14,7 +14,6 @@ import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.local.UserLocalDataSource;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.databinding.ActivityRequestDetailBinding;
-import com.github.clans.fab.FloatingActionMenu;
 
 import static com.framgia.fdms.utils.Constant.BundleRequest.BUND_REQUEST;
 
