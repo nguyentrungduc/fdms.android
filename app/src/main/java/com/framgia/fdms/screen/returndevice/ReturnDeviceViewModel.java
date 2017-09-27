@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
-import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -39,17 +36,18 @@ public class ReturnDeviceViewModel extends BaseObservable
 
     private ReturnDeviceActivity mActivity;
     private ReturnDeviceContract.Presenter mPresenter;
-    private ObservableList<Device> mDevices = new ObservableArrayList<>();
-    private ObservableField<DeviceReturnAdapter> mAdapter = new ObservableField<>();
+    private List<Device> mDevices = new ArrayList<>();
+    private DeviceReturnAdapter mAdapter;
     private boolean mProgressBarVisibility;
 
     private List<Status> mAssigners = new ArrayList<>();
-    private ObservableField<Status> mNameUserReturn = new ObservableField<>();
+    private Status mNameUserReturn;
     private List<Integer> mListDeviceId;
+    private String mContextQrCode;
 
     public ReturnDeviceViewModel(ReturnDeviceActivity activity) {
         mActivity = activity;
-        mAdapter.set(new DeviceReturnAdapter(this, mDevices));
+        mAdapter = new DeviceReturnAdapter(this, mDevices);
         mListDeviceId = new ArrayList<>();
     }
 
@@ -80,22 +78,24 @@ public class ReturnDeviceViewModel extends BaseObservable
                 if (status == null || status.getId() == OUT_OF_INDEX) {
                     return;
                 }
-                mNameUserReturn.set(status);
+                setNameUserReturn(status);
                 getAllDeviceBorrowOfUser(status.getId());
                 break;
             case REQUEST_SCANNER:
-                String contextQrCode = bundle.getString(BUNDLE_CONTENT);
-                if (mNameUserReturn.get() == null) {
-                    mPresenter.getDeviceByCode(contextQrCode, false);
+                mContextQrCode = bundle.getString(BUNDLE_CONTENT);
+                if (getNameUserReturn() == null) {
+                    mPresenter.getDeviceByCode(mContextQrCode, false);
                 } else {
                     for (Device item : mDevices) {
-                        if (item.getDeviceCode().equals(contextQrCode)) {
+                        if (item.getDeviceCode().equals(mContextQrCode)) {
                             item.setSelected(true);
-                            mAdapter.get().notifyDataSetChanged();
+                            mAdapter.notifyItemChanged(mDevices.indexOf(item));
+                            Toast.makeText(mActivity, mActivity.getString(R.string.msg_scan_sucess,
+                                item.getProductionName()), Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
-                    mPresenter.getDeviceByCode(contextQrCode, true);
+                    mPresenter.getDeviceByCode(mContextQrCode, true);
                 }
                 break;
             default:
@@ -142,16 +142,18 @@ public class ReturnDeviceViewModel extends BaseObservable
 
     @Override
     public void onGetDeviceSuccess(Device device) {
-        mDevices.clear();
-        device.setSelected(true);
-        mDevices.add(device);
-        mAdapter.get().notifyDataSetChanged();
+        getAllDeviceBorrowOfUser(Integer.parseInt(device.getUser().getId()));
+        if (device.getUser() == null) {
+            return;
+        }
+        setNameUserReturn(
+            new Status(Integer.parseInt(device.getUser().getId()), device.getUser().getName()));
     }
 
     @Override
     public void onGetDeviceUserOtherSuccess(Device device) {
-        if (mNameUserReturn.get() != null) {
-            mActivity.show(mNameUserReturn.get().getName(), device);
+        if (getNameUserReturn() != null) {
+            mActivity.show(getNameUserReturn().getName(), device);
         }
     }
 
@@ -197,12 +199,23 @@ public class ReturnDeviceViewModel extends BaseObservable
     public void onDeviceLoaded(List<Device> devices) {
         mDevices.clear();
         mDevices.addAll(devices);
-        mAdapter.get().update(mDevices);
+        setDevices(mDevices);
+        for (Device item : mDevices) {
+            if (item.getDeviceCode().equals(mContextQrCode)) {
+                item.setSelected(true);
+                mAdapter.notifyItemChanged(mDevices.indexOf(item));
+                Toast.makeText(mActivity,
+                    mActivity.getString(R.string.msg_scan_sucess, item.getProductionName()),
+                    Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        mAdapter.update(mDevices);
     }
 
     public void onReturnDevice() {
         mListDeviceId.clear();
-        for (Device item : mAdapter.get().getDevices()) {
+        for (Device item : mAdapter.getDevices()) {
             if (item.isSelected()) {
                 mListDeviceId.add(item.getId());
             }
@@ -214,16 +227,28 @@ public class ReturnDeviceViewModel extends BaseObservable
         return mActivity;
     }
 
-    public ObservableField<DeviceReturnAdapter> getAdapter() {
+    public DeviceReturnAdapter getAdapter() {
         return mAdapter;
     }
 
-    public ObservableField<Status> getNameUserReturn() {
+    @Bindable
+    public Status getNameUserReturn() {
         return mNameUserReturn;
     }
 
-    public ObservableList<Device> getDevices() {
+    public void setNameUserReturn(Status nameUserReturn) {
+        mNameUserReturn = nameUserReturn;
+        notifyPropertyChanged(BR.nameUserReturn);
+    }
+
+    @Bindable
+    public List<Device> getDevices() {
         return mDevices;
+    }
+
+    public void setDevices(List<Device> devices) {
+        mDevices = devices;
+        notifyPropertyChanged(BR.devices);
     }
 
     @Bindable
