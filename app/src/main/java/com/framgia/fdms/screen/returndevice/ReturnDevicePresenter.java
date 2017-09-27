@@ -1,7 +1,6 @@
 package com.framgia.fdms.screen.returndevice;
 
 import com.framgia.fdms.data.model.Device;
-import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.DeviceReturnRepository;
 import com.framgia.fdms.data.source.StatusRepository;
@@ -26,49 +25,15 @@ class ReturnDevicePresenter implements ReturnDeviceContract.Presenter {
 
     private final ReturnDeviceContract.ViewModel mViewModel;
     private CompositeDisposable mSubscription;
-    private StatusRepository mRepository;
     private DeviceRepository mDeviceRepository;
     private DeviceReturnRepository mDeviceReturnRepository;
 
-    ReturnDevicePresenter(ReturnDeviceContract.ViewModel viewModel, StatusRepository repository,
+    ReturnDevicePresenter(ReturnDeviceContract.ViewModel viewModel,
         DeviceReturnRepository deviceReturnRepository, DeviceRepository deviceRepository) {
         mViewModel = viewModel;
-        mRepository = repository;
         mDeviceReturnRepository = deviceReturnRepository;
         mDeviceRepository = deviceRepository;
         mSubscription = new CompositeDisposable();
-        getListAssign();
-    }
-
-    @Override
-    public void getListAssign() {
-        Disposable subscription = mDeviceReturnRepository.getBorrowers()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(new Consumer<Disposable>() {
-                @Override
-                public void accept(Disposable disposable) throws Exception {
-                    mViewModel.showProgressbar();
-                }
-            })
-            .subscribe(new Consumer<List<Status>>() {
-                @Override
-                public void accept(List<Status> statuses) throws Exception {
-                    mViewModel.onGetAssignedSuccess(statuses);
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mViewModel.hideProgressbar();
-                    mViewModel.onLoadError(error.getMessage());
-                }
-            }, new Action() {
-                @Override
-                public void run() throws Exception {
-                    mViewModel.hideProgressbar();
-                }
-            });
-        mSubscription.add(subscription);
     }
 
     @Override
@@ -103,7 +68,7 @@ class ReturnDevicePresenter implements ReturnDeviceContract.Presenter {
     }
 
     @Override
-    public void getDeviceByCode(String codeDevice, final boolean isUserOther) {
+    public void getDeviceByCode(String codeDevice) {
         Disposable subscription = mDeviceRepository.getDeviceByQrCode(codeDevice)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -116,11 +81,7 @@ class ReturnDevicePresenter implements ReturnDeviceContract.Presenter {
             .subscribe(new Consumer<Device>() {
                 @Override
                 public void accept(Device device) throws Exception {
-                    if (isUserOther) {
-                        mViewModel.onGetDeviceUserOtherSuccess(device);
-                    } else {
-                        mViewModel.onGetDeviceSuccess(device);
-                    }
+                    mViewModel.onGetDeviceSuccess(device);
                 }
             }, new RequestError() {
                 @Override
@@ -138,6 +99,9 @@ class ReturnDevicePresenter implements ReturnDeviceContract.Presenter {
 
     @Override
     public void returnDevice(List<Integer> listDeviceId) {
+        if (!validateListDevice(listDeviceId)) {
+            return;
+        }
         Disposable subscription = mDeviceReturnRepository.returnDevice(listDeviceId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -156,6 +120,7 @@ class ReturnDevicePresenter implements ReturnDeviceContract.Presenter {
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.onError(error.getMessage());
+                    mViewModel.hideProgressbar();
                 }
             }, new Action() {
                 @Override
@@ -166,9 +131,16 @@ class ReturnDevicePresenter implements ReturnDeviceContract.Presenter {
         mSubscription.add(subscription);
     }
 
+    private boolean validateListDevice(List<Integer> listDeviceId) {
+        if (listDeviceId == null || listDeviceId.size() == 0) {
+            mViewModel.onReturnDeviceEmpty();
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public void onStart() {
-        getListAssign();
     }
 
     @Override

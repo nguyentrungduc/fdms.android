@@ -9,23 +9,27 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
-import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Status;
+import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.scanner.ScannerActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
+import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.utils.permission.PermissionUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.View.GONE;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_CONTENT;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SCANNER;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_USER_BORROW;
 import static com.framgia.fdms.utils.permission.PermissionUtil.MY_PERMISSIONS_REQUEST_CAMERA;
+
+import com.framgia.fdms.BR;
 
 /**
  * Exposes the data to be used in the ReturnDevice screen.
@@ -36,19 +40,21 @@ public class ReturnDeviceViewModel extends BaseObservable
 
     private ReturnDeviceActivity mActivity;
     private ReturnDeviceContract.Presenter mPresenter;
-    private List<Device> mDevices = new ArrayList<>();
     private DeviceReturnAdapter mAdapter;
     private boolean mProgressBarVisibility;
 
-    private List<Status> mAssigners = new ArrayList<>();
-    private Status mNameUserReturn;
+    private Status mStaff;
     private List<Integer> mListDeviceId;
     private String mContextQrCode;
+    private Navigator mNavigator;
+    private int mEmptyViewVisible;
 
     public ReturnDeviceViewModel(ReturnDeviceActivity activity) {
         mActivity = activity;
-        mAdapter = new DeviceReturnAdapter(this, mDevices);
+        mAdapter = new DeviceReturnAdapter(this, new ArrayList<Device>());
         mListDeviceId = new ArrayList<>();
+        mNavigator = new Navigator(activity);
+        mEmptyViewVisible = GONE;
     }
 
     @Override
@@ -74,33 +80,30 @@ public class ReturnDeviceViewModel extends BaseObservable
         Bundle bundle = data.getExtras();
         switch (requestCode) {
             case REQUEST_USER_BORROW:
+                mContextQrCode = "";
                 Status status = bundle.getParcelable(BUNDLE_DATA);
                 if (status == null || status.getId() == OUT_OF_INDEX) {
                     return;
                 }
-                setNameUserReturn(status);
-                getAllDeviceBorrowOfUser(status.getId());
+                setStaff(status);
+                mPresenter.getDevicesOfBorrower(status.getId());
                 break;
             case REQUEST_SCANNER:
                 mContextQrCode = bundle.getString(BUNDLE_CONTENT);
-                if (getNameUserReturn() == null) {
-                    mPresenter.getDeviceByCode(mContextQrCode, false);
-                } else {
-                    for (Device item : mDevices) {
-                        if (item.getDeviceCode().equals(mContextQrCode)) {
-                            item.setSelected(true);
-                            mAdapter.notifyItemChanged(mDevices.indexOf(item));
-                            Toast.makeText(mActivity, mActivity.getString(R.string.msg_scan_sucess,
-                                item.getProductionName()), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    }
-                    mPresenter.getDeviceByCode(mContextQrCode, true);
+                if (mAdapter.updateScanDevice(mContextQrCode)) {
+                    mNavigator.showToast(mActivity.getString(R.string.msg_scan_sucess));
+                    return;
                 }
+                mPresenter.getDeviceByCode(mContextQrCode);
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onItemDeviceClick(Device device) {
+        mNavigator.startActivity(DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
     }
 
     @Override
@@ -129,6 +132,11 @@ public class ReturnDeviceViewModel extends BaseObservable
     }
 
     @Override
+    public void onReturnDeviceEmpty() {
+        mNavigator.showToast(R.string.msg_device_empty);
+    }
+
+    @Override
     public void onStartScannerDevice() {
         if (PermissionUtil.checkCameraPermission(mActivity)) {
             startScannerActivity();
@@ -142,24 +150,31 @@ public class ReturnDeviceViewModel extends BaseObservable
 
     @Override
     public void onGetDeviceSuccess(Device device) {
-        getAllDeviceBorrowOfUser(Integer.parseInt(device.getUser().getId()));
-        if (device.getUser() == null) {
+        if (mStaff == null) {
+            setStaff(
+                new Status(Integer.parseInt(device.getUser().getId()), device.getUser().getName()));
+            mPresenter.getDevicesOfBorrower(Integer.parseInt(device.getUser().getId()));
             return;
         }
-        setNameUserReturn(
-            new Status(Integer.parseInt(device.getUser().getId()), device.getUser().getName()));
-    }
-
-    @Override
-    public void onGetDeviceUserOtherSuccess(Device device) {
-        if (getNameUserReturn() != null) {
-            mActivity.show(getNameUserReturn().getName(), device);
+        if (device.getUser() == null) {
+            mNavigator.showToast(
+                mActivity.getString(R.string.msg_not_device_in_device_brorows_available,
+                    mStaff.getName()));
+            return;
         }
+        if (String.valueOf(mStaff.getId()).equals(device.getUser().getId())) {
+            mAdapter.updateScanDevice(device.getDeviceCode());
+            return;
+        }
+        mNavigator.showToast(
+            mActivity.getString(R.string.msg_not_device_in_device_brorows, mStaff.getName(),
+                device.getUser().getName()));
     }
 
     @Override
     public void onReturnDeviceSuccess(String message) {
-        Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
+        mNavigator.showToast(message);
+        mPresenter.getDevicesOfBorrower(mStaff.getId());
     }
 
     @Override
@@ -177,15 +192,6 @@ public class ReturnDeviceViewModel extends BaseObservable
         Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onGetAssignedSuccess(List<Status> assignees) {
-        if (assignees == null) {
-            return;
-        }
-        mAssigners.clear();
-        mAssigners.addAll(assignees);
-    }
-
     private void getAllDeviceBorrowOfUser(int userId) {
         mPresenter.getDevicesOfBorrower(userId);
     }
@@ -197,23 +203,13 @@ public class ReturnDeviceViewModel extends BaseObservable
 
     @Override
     public void onDeviceLoaded(List<Device> devices) {
-        mDevices.clear();
-        mDevices.addAll(devices);
-        setDevices(mDevices);
-        for (Device item : mDevices) {
-            if (item.getDeviceCode().equals(mContextQrCode)) {
-                item.setSelected(true);
-                mAdapter.notifyItemChanged(mDevices.indexOf(item));
-                Toast.makeText(mActivity,
-                    mActivity.getString(R.string.msg_scan_sucess, item.getProductionName()),
-                    Toast.LENGTH_SHORT).show();
-                return;
-            }
+        if (mAdapter.updateWithDeviceCode(devices, mContextQrCode)) {
+            mNavigator.showToast(mActivity.getString(R.string.msg_scan_sucess));
         }
-        mAdapter.update(mDevices);
     }
 
-    public void onReturnDevice() {
+    @Override
+    public void onReturnDeviceClick() {
         mListDeviceId.clear();
         for (Device item : mAdapter.getDevices()) {
             if (item.isSelected()) {
@@ -232,23 +228,13 @@ public class ReturnDeviceViewModel extends BaseObservable
     }
 
     @Bindable
-    public Status getNameUserReturn() {
-        return mNameUserReturn;
+    public Status getStaff() {
+        return mStaff;
     }
 
-    public void setNameUserReturn(Status nameUserReturn) {
-        mNameUserReturn = nameUserReturn;
-        notifyPropertyChanged(BR.nameUserReturn);
-    }
-
-    @Bindable
-    public List<Device> getDevices() {
-        return mDevices;
-    }
-
-    public void setDevices(List<Device> devices) {
-        mDevices = devices;
-        notifyPropertyChanged(BR.devices);
+    public void setStaff(Status staff) {
+        mStaff = staff;
+        notifyPropertyChanged(BR.staff);
     }
 
     @Bindable
@@ -259,5 +245,15 @@ public class ReturnDeviceViewModel extends BaseObservable
     public void setProgressBarVisibility(boolean progressBarVisibility) {
         mProgressBarVisibility = progressBarVisibility;
         notifyPropertyChanged(BR.progressBarVisibility);
+    }
+
+    @Bindable
+    public int getEmptyViewVisible() {
+        return mEmptyViewVisible;
+    }
+
+    public void setEmptyViewVisible(int emptyViewVisible) {
+        mEmptyViewVisible = emptyViewVisible;
+        notifyPropertyChanged(BR.emptyViewVisible);
     }
 }

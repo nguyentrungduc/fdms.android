@@ -5,18 +5,14 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.DeviceReturnRepository;
-import com.framgia.fdms.data.source.StatusRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
-import com.framgia.fdms.data.source.remote.StatusRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityReturnDeviceBinding;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -41,10 +37,9 @@ public class ReturnDeviceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mViewModel = new ReturnDeviceViewModel(this);
 
-        ReturnDeviceContract.Presenter presenter = new ReturnDevicePresenter(mViewModel,
-            new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance())),
-            new DeviceReturnRepository(),
-            new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())));
+        ReturnDeviceContract.Presenter presenter =
+            new ReturnDevicePresenter(mViewModel, new DeviceReturnRepository(),
+                new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_return_device);
@@ -97,11 +92,5 @@ public class ReturnDeviceActivity extends AppCompatActivity {
         if (mViewModel != null) {
             mViewModel.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-    }
-
-    public void show(String name, Device device) {
-        Snackbar.make(mBinding.coordinatorLayout,
-            getString(R.string.msg_not_device_in_device_brorows, name, device.getUser().getName()),
-            Snackbar.LENGTH_LONG).show();
     }
 }

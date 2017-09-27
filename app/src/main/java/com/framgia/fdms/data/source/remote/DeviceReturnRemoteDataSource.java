@@ -32,19 +32,6 @@ public class DeviceReturnRemoteDataSource
     }
 
     @Override
-    public Observable<List<Status>> getBorrowers() {
-        // TODO: later
-        List<Status> borrowers = new ArrayList<>();
-        borrowers.add(new Status(1, "Chu Anh Tuan"));
-        borrowers.add(new Status(2, "Tran Xuan Thang"));
-        borrowers.add(new Status(3, "Nguyen Binh Dieu"));
-        borrowers.add(new Status(4, "Nguyen Van Tuan"));
-        borrowers.add(new Status(5, "Doan Van Toan"));
-        borrowers.add(new Status(6, "Nguyen Thi Thuy Dung"));
-        return Observable.just(borrowers);
-    }
-
-    @Override
     public Observable<List<Device>> getDevicesOfBorrower() {
         return mFDMSApi.getDevicesBorrow()
             .flatMap(new Function<Respone<List<Device>>, ObservableSource<List<Device>>>() {
@@ -58,7 +45,19 @@ public class DeviceReturnRemoteDataSource
 
     @Override
     public Observable<String> returnDevice(List<Integer> listDeviceId) {
-        return mFDMSApi.returnDevice(listDeviceId);
+        return mFDMSApi.returnDevice(listDeviceId).flatMap(new Function<Respone<String>,
+            ObservableSource<String>>() {
+            @Override
+            public ObservableSource<String> apply(Respone<String> stringRespone) throws Exception {
+                if (stringRespone == null) {
+                    return Observable.error(new NullPointerException());
+                } else if (stringRespone.isError()) {
+                    return Observable.error(new NullPointerException(stringRespone.getMessage()));
+                } else {
+                    return Observable.just(stringRespone.getMessage());
+                }
+            }
+        });
     }
 
     @Override

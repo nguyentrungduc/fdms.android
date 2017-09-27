@@ -151,11 +151,12 @@
     <string name="text_number_notification_more">99+</string>
     <string name="title_empty">""</string>
     <string name="title_remember_me">Remember Me</string>
-    <string name="msg_not_device_in_device_brorows" formatted="false">This device isn\'t on the list of staff %s which is on the staff %s</string>
+    <string formatted="false" name="msg_not_device_in_device_brorows">This device isn\'t on the list of  %s which is on the %s</string>
+    <string formatted="false" name="msg_not_device_in_device_brorows_available">This device isn\'t on the list of  %s, this device availale</string>
     <string name="title_no_history">No history to display</string>
     <string name="msg_request_read_camera">Please grant permission open camera permission  to scan qr code</string>
     <string name="msg_denied_read_camera">You were denied camera permission</string>
-    <string name="msg_scan_sucess">The device was scanned is %s</string>
+    <string name="msg_scan_sucess">Scan device successful!</string>
     <string name="title_request_assignment">Request</string>
     <string name="title_staff">Staff</string>
     <string name="title_add_new_device">Add New Device</string>
@@ -312,4 +313,5 @@
     <string name="title_assign_group">Group</string>
     <string name="title_assign_cagegory">Category</string>
     <string name="title_assign_device">Device</string>
+    <string name="msg_device_empty">Devices returned is empty!</string>
 </resources>

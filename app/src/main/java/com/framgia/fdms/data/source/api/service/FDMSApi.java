@@ -193,7 +193,8 @@ public interface FDMSApi {
     Observable<Respone<List<Status>>> getListUserBorrow();
 
     @PATCH("api/return_devices/update")
-    Observable<String> returnDevice(@Query("assignment_detail") List<Integer> listDeviceId);
+    Observable<Respone<String>> returnDevice(
+        @Query("assignment_detail") List<Integer> listDeviceId);
 
     @GET("api/return_devices/{user_id}")
     Observable<Respone<List<Device>>> getListDeviceOfUserBorrow(@Path("user_id") int userId);
