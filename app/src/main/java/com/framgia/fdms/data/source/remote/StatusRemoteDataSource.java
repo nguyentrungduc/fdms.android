@@ -12,6 +12,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by MyPC on 05/05/2017.
@@ -48,7 +49,9 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
                     throws Exception {
                     List<Status> data = new ArrayList<>();
                     for (Status status : statuses) {
-                        if (status.getName().contains(query)) {
+                        if (status.getName()
+                            .toLowerCase(Locale.getDefault())
+                            .contains(query.toLowerCase(Locale.getDefault()))) {
                             data.add(status);
                         }
                     }
@@ -81,7 +84,9 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
                     throws Exception {
                     List<Status> data = new ArrayList<>();
                     for (Status status : statuses) {
-                        if (status.getName().contains(query)) {
+                        if (status.getName()
+                            .toLowerCase(Locale.getDefault())
+                            .contains(query.toLowerCase(Locale.getDefault()))) {
                             data.add(status);
                         }
                     }
@@ -114,7 +119,9 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
                     throws Exception {
                     List<Status> data = new ArrayList<>();
                     for (Status status : statuses) {
-                        if (status.getName().contains(query)) {
+                        if (status.getName()
+                            .toLowerCase(Locale.getDefault())
+                            .contains(query.toLowerCase(Locale.getDefault()))) {
                             data.add(status);
                         }
                     }
@@ -143,6 +150,29 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
                 public ObservableSource<List<Status>> apply(
                     @NonNull Respone<List<Status>> listRespone) throws Exception {
                     return Utils.getResponse(listRespone);
+                }
+            });
+    }
+
+    @Override
+    public Observable<List<Status>> getListUserBorrow(final String query) {
+        if (TextUtils.isEmpty(query)) {
+            return getListUserBorrow();
+        }
+        return getListUserBorrow().flatMap(
+            new Function<List<Status>, ObservableSource<List<Status>>>() {
+                @Override
+                public ObservableSource<List<Status>> apply(List<Status> statuses)
+                    throws Exception {
+                    List<Status> data = new ArrayList<>();
+                    for (Status status : statuses) {
+                        if (status.getName()
+                            .toLowerCase(Locale.getDefault())
+                            .contains(query.toLowerCase(Locale.getDefault()))) {
+                            data.add(status);
+                        }
+                    }
+                    return Observable.just(data);
                 }
             });
     }

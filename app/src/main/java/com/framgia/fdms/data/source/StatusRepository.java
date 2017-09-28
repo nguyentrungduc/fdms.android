@@ -46,4 +46,7 @@ public class StatusRepository {
     public Observable<List<Status>> getListUserBorrow() {
         return mStatusRemoteDataSource.getListUserBorrow();
     }
+    public Observable<List<Status>> getListUserBorrow(String query) {
+        return mStatusRemoteDataSource.getListUserBorrow(query);
+    }
 }

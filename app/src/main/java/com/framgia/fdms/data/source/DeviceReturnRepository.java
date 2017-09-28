@@ -18,10 +18,6 @@ public class DeviceReturnRepository {
         mDataSource = DeviceReturnRemoteDataSource.getInstances();
     }
 
-    public Observable<List<Status>> getBorrowers() {
-        return mDataSource.getBorrowers();
-    }
-
     public Observable<List<Device>> devicesOfBorrower() {
         return mDataSource.getAssigmentDevices();
     }

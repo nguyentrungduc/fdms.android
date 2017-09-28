@@ -568,7 +568,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
 
     @Override
     public void getListUserBorrow() {
-        Disposable disposable = mStatusRepository.getListUserBorrow()
+        Disposable disposable = mStatusRepository.getListUserBorrow(mKeySearch)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(new Consumer<Disposable>() {

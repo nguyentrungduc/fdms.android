@@ -16,7 +16,6 @@ public interface DeviceReturnDataSource {
     }
 
     interface RemoteDataSource {
-        Observable<List<Status>> getBorrowers();
 
         Observable<List<Device>> getDevicesOfBorrower();
 

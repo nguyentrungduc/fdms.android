@@ -4,7 +4,6 @@ import android.content.Intent;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Device;
-import com.framgia.fdms.data.model.Status;
 import java.util.List;
 
 /**
@@ -27,8 +26,6 @@ public interface ReturnDeviceContract {
 
         void onLoadError(String message);
 
-        void onGetAssignedSuccess(List<Status> statuses);
-
         void onError(String message);
 
         void onDeviceLoaded(List<Device> devices);
@@ -39,20 +36,22 @@ public interface ReturnDeviceContract {
 
         void onGetDeviceSuccess(Device device);
 
-        void onGetDeviceUserOtherSuccess(Device device);
-
         void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults);
+
+        void onReturnDeviceEmpty();
+
+        void onReturnDeviceClick();
+
+        void onItemDeviceClick(Device device);
     }
 
     /**
      * Presenter.
      */
     interface Presenter extends BasePresenter {
-        void getListAssign();
-
         void getDevicesOfBorrower(int userId);
 
-        void getDeviceByCode(String codeDevice, boolean isUserOther);
+        void getDeviceByCode(String codeDevice);
 
         void returnDevice(List<Integer> listDeviceId);
     }

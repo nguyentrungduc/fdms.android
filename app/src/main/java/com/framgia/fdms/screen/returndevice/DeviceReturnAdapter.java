@@ -24,9 +24,32 @@ public class DeviceReturnAdapter
         mViewModel = viewModel;
     }
 
-    public void update(List<Device> devices) {
-        mDevices = devices;
+    public boolean updateWithDeviceCode(List<Device> devices, String deviceCode) {
+        boolean isExit = false;
+        for (Device item : devices) {
+            if (item.getDeviceCode().equals(deviceCode)) {
+                item.setSelected(true);
+                isExit = true;
+                break;
+            }
+        }
+        mDevices.addAll(devices);
         notifyDataSetChanged();
+        return isExit;
+    }
+
+    public boolean updateScanDevice(String deviceCode) {
+        boolean isExit = false;
+        for (int i = 0; i < mDevices.size(); i++) {
+            Device item = mDevices.get(i);
+            if (item.getDeviceCode().equals(deviceCode)) {
+                item.setSelected(true);
+                notifyItemChanged(i);
+                isExit = true;
+                break;
+            }
+        }
+        return isExit;
     }
 
     @Override
