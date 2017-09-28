@@ -26,7 +26,7 @@ public class Constant {
     public static final String TYPE_PDF = "application/pdf";
     public static final String TYPE_WORD = "application/msword";
     public static final String TITLE_NOW = "Now";
-    public static final String TAG_MAKER_DIALOG = "MAKER_DIALOG";
+    public static final String TAG_PRODUCER_DIALOG = "PRODUCER_DIALOG";
     public static final String TAG_MEETING_ROOM_DIALOG = "TAG_MEETING_ROOM_DIALOG";
     public static final int FIRST_INDEX = 0;
     public static final String DRAWER_IS_CLOSE = "CLOSE";

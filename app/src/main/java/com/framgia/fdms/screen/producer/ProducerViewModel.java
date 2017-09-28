@@ -1,13 +1,14 @@
 package com.framgia.fdms.screen.producer;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,20 +21,27 @@ import com.framgia.fdms.BR;
 import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Producer;
+import com.framgia.fdms.data.model.Status;
+import com.framgia.fdms.screen.selection.SelectionActivity;
+import com.framgia.fdms.utils.Constant;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
+import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
-import static com.framgia.fdms.utils.Constant.TAG_MAKER_DIALOG;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_GROUPS;
+import static com.framgia.fdms.utils.Constant.TAG_PRODUCER_DIALOG;
 
 /**
- * Exposes the data to be used in the Vendor screen.
+ * Exposes the data to be used in the Producer screen.
  */
 public class ProducerViewModel extends BaseObservable
     implements ProducerContract.ViewModel, ProducerDialogContract.ActionCallback,
@@ -54,16 +62,19 @@ public class ProducerViewModel extends BaseObservable
         };
     private ProducerContract.Presenter mPresenter;
     private ProducerAdapter mAdapter;
-    private AppCompatActivity mActivity;
-    private ProducerDialog mVendorDialog;
+    private ProducerFragment mFragment;
+    private ProducerDialog mProducerDialog;
     private int mPositionScroll = OUT_OF_INDEX;
-    private Producer mVendorEdit;
+    private Producer mProducerEdit;
     private boolean mIsLoadMore;
     private boolean mIsAllowLoadMore;
     private int mLoadingMoreVisibility;
     private Navigator mNavigator;
     private boolean mIsShowCategoryFilter;
     private String mDrawerStatus = DRAWER_IS_CLOSE;
+    private Producer mGroupType;
+    private Context mContext;
+    private String mKeySearch;
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -87,20 +98,22 @@ public class ProducerViewModel extends BaseObservable
         }
     };
 
-    public ProducerViewModel(Activity activity) {
-        mActivity = (AppCompatActivity) activity;
-        mNavigator = new Navigator(mActivity);
+    public ProducerViewModel(ProducerFragment producerFragment) {
+        mFragment = producerFragment;
+        mContext = producerFragment.getContext();
+        mNavigator = new Navigator(mFragment);
         mAdapter =
             new ProducerAdapter(FDMSApplication.getInstant(), this, new ArrayList<Producer>());
         setLoadingMoreVisibility(GONE);
+        mGroupType = new Producer(OUT_OF_INDEX, Constant.DeviceUsingStatus.ALL);
     }
 
     protected ProducerViewModel(Parcel in) {
         mPresenter = (ProducerContract.Presenter) in.readValue(
             ProducerContract.Presenter.class.getClassLoader());
         mAdapter = (ProducerAdapter) in.readValue(ProducerAdapter.class.getClassLoader());
-        mActivity = (AppCompatActivity) in.readValue(AppCompatActivity.class.getClassLoader());
-        mVendorDialog = (ProducerDialog) in.readValue(ProducerDialog.class.getClassLoader());
+        mFragment = (ProducerFragment) in.readValue(AppCompatActivity.class.getClassLoader());
+        mProducerDialog = (ProducerDialog) in.readValue(ProducerDialog.class.getClassLoader());
     }
 
     @Bindable
@@ -144,50 +157,49 @@ public class ProducerViewModel extends BaseObservable
     }
 
     @Override
-    public void onLoadVendorSuccess(List<Producer> vendors) {
-        mAdapter.onUpdatePage(vendors);
+    public void onLoadProducerSuccess(List<Producer> producers) {
+        mAdapter.onUpdatePage(producers);
         mIsLoadMore = false;
         setLoadingMoreVisibility(GONE);
     }
 
     @Override
-    public void onLoadVendorFailed(String msg) {
-        Snackbar.make(mActivity.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT)
-            .show();
+    public void onLoadProducerFailed(String msg) {
+        mNavigator.showToast(msg);
         setLoadingMoreVisibility(GONE);
     }
 
     @Override
-    public void onAddVendorFailed(String msg) {
+    public void onAddProducerFailed(String msg) {
         mNavigator.showToast(msg);
     }
 
     @Override
-    public void onAddVendorSuccess(Producer vendor) {
-        mAdapter.addData(0, vendor);
+    public void onAddProducerSuccess(Producer producer) {
+        mAdapter.addData(0, producer);
         setPositionScroll(0);
     }
 
-    public void onDeleteVendorFailed(String message) {
+    public void onDeleteProducerFailed(String message) {
         mNavigator.showToast(message);
     }
 
     @Override
-    public void onDeleteVendorSuccess(Producer producer) {
+    public void onDeleteProducerSuccess(Producer producer) {
         mAdapter.removeData(producer);
     }
 
     @Override
-    public void onUpdateVendorSuccess(Producer vendor, String message) {
-        if (vendor == null || mVendorEdit == null) {
+    public void onUpdateProducerSuccess(Producer producer, String message) {
+        if (producer == null || mProducerEdit == null) {
             return;
         }
-        mAdapter.onUpdateItem(mVendorEdit, vendor);
+        mAdapter.onUpdateItem(mProducerEdit, producer);
         mNavigator.showToast(message);
     }
 
     @Override
-    public void onUpdateVendorFailed(String message) {
+    public void onUpdateProducerFailed(String message) {
         mNavigator.showToast(message);
     }
 
@@ -202,20 +214,22 @@ public class ProducerViewModel extends BaseObservable
     }
 
     @Override
-    public void onEditProducerClick(Producer vendor) {
-        mVendorDialog = ProducerDialog.newInstant(vendor,
-            mActivity.getResources().getString(R.string.action_edit), this);
-        mVendorDialog.show(mActivity.getSupportFragmentManager(), TAG_MAKER_DIALOG);
+    public void onEditProducerClick(Producer producer) {
+        mProducerDialog = ProducerDialog.newInstant(producer,
+            mFragment.getResources().getString(R.string.action_edit), this);
+        mProducerDialog.show(mFragment.getFragmentManager(), TAG_PRODUCER_DIALOG);
     }
 
     @Override
-    public void onDeleteProducerClick(final Producer vendor) {
-        new AlertDialog.Builder(mActivity).setTitle(mActivity.getString(R.string.title_delete))
-            .setMessage(mActivity.getString(R.string.msg_delete_producer) + " " + vendor.getName())
+    public void onDeleteProducerClick(final Producer producer) {
+        new AlertDialog.Builder(mFragment.getActivity()).setTitle(
+            mFragment.getString(R.string.title_delete))
+            .setMessage(
+                mFragment.getString(R.string.msg_delete_producer) + " " + producer.getName())
             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    mPresenter.deleteVendor(vendor);
+                    mPresenter.deleteProducer(producer);
                 }
             })
             .setNegativeButton(android.R.string.no, null)
@@ -225,9 +239,9 @@ public class ProducerViewModel extends BaseObservable
 
     @Override
     public void onAddProducerClick() {
-        mVendorDialog = ProducerDialog.newInstant(new Producer(OUT_OF_INDEX, ""),
-            mActivity.getResources().getString(R.string.title_add_producer), this);
-        mVendorDialog.show(mActivity.getSupportFragmentManager(), TAG_MAKER_DIALOG);
+        mProducerDialog = ProducerDialog.newInstant(new Producer(OUT_OF_INDEX, ""),
+            mFragment.getResources().getString(R.string.title_add_producer), this);
+        mProducerDialog.show(mFragment.getFragmentManager(), TAG_PRODUCER_DIALOG);
     }
 
     @Override
@@ -240,7 +254,7 @@ public class ProducerViewModel extends BaseObservable
         if (producer == null) {
             return;
         }
-        mPresenter.addVendor(producer);
+        mPresenter.addProducer(producer);
     }
 
     @Override
@@ -248,8 +262,8 @@ public class ProducerViewModel extends BaseObservable
         if (oldProducer == null || newProducer == null) {
             return;
         }
-        mVendorEdit = oldProducer;
-        mPresenter.editVendor(newProducer);
+        mProducerEdit = oldProducer;
+        mPresenter.editProducer(newProducer);
     }
 
     @Bindable
@@ -264,8 +278,9 @@ public class ProducerViewModel extends BaseObservable
 
     @Override
     public void onSearchAction(String currentQuery) {
+        setKeySearch(currentQuery);
         mAdapter.clearData();
-        mPresenter.getVendors(currentQuery);
+        mPresenter.getProducer(currentQuery, mGroupType.getId());
     }
 
     @Override
@@ -273,7 +288,7 @@ public class ProducerViewModel extends BaseObservable
         switch (item.getItemId()) {
             case R.id.action_filter:
                 setDrawerStatus(
-                    mDrawerStatus == DRAWER_IS_CLOSE ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
+                    mDrawerStatus.equals(DRAWER_IS_CLOSE) ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
                 break;
             case R.id.action_search:
                 onSearchAction(searchView.getQuery());
@@ -286,7 +301,7 @@ public class ProducerViewModel extends BaseObservable
     @Override
     public void onClearSearchClicked() {
         mAdapter.clearData();
-        mPresenter.getVendors("");
+        mPresenter.getProducer("", OUT_OF_INDEX);
     }
 
     @Override
@@ -298,8 +313,8 @@ public class ProducerViewModel extends BaseObservable
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(mPresenter);
         dest.writeValue(mAdapter);
-        dest.writeValue(mActivity);
-        dest.writeValue(mVendorDialog);
+        dest.writeValue(mFragment);
+        dest.writeValue(mProducerDialog);
     }
 
     @Bindable
@@ -310,6 +325,19 @@ public class ProducerViewModel extends BaseObservable
     public void setShowCategoryFilter(boolean showCategoryFilter) {
         mIsShowCategoryFilter = showCategoryFilter;
         notifyPropertyChanged(BR.showCategoryFilter);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        Bundle bundle = data.getExtras();
+        Status status = bundle.getParcelable(BUNDLE_DATA);
+        if (status != null) {
+            setGroupType((Producer) status);
+        }
+        setDrawerStatus(DRAWER_IS_CLOSE);
     }
 
     @Bindable
@@ -335,10 +363,43 @@ public class ProducerViewModel extends BaseObservable
     @Override
     public void onDrawerClosed(View drawerView) {
         setDrawerStatus(DRAWER_IS_CLOSE);
+        mAdapter.clearData();
+        mPresenter.getProducer(getKeySearch(), mGroupType.getId());
     }
 
     @Override
     public void onDrawerStateChanged(int newState) {
         // no ops
+    }
+
+    @Bindable
+    public Producer getGroupType() {
+        return mGroupType;
+    }
+
+    public void setGroupType(Producer groupType) {
+        mGroupType = groupType;
+        notifyPropertyChanged(BR.groupType);
+    }
+
+    public void onChooseGroupTypeClick() {
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, DEVICE_GROUP),
+            REQUEST_DEVICE_GROUPS);
+    }
+
+    public void onClearFilterClick() {
+        mAdapter.clearData();
+        mGroupType = new Producer(OUT_OF_INDEX, Constant.DeviceUsingStatus.ALL);
+        setDrawerStatus(DRAWER_IS_CLOSE);
+    }
+
+    @Bindable
+    public String getKeySearch() {
+        return mKeySearch;
+    }
+
+    public void setKeySearch(String keySearch) {
+        mKeySearch = keySearch;
+        notifyPropertyChanged(BR.keySearch);
     }
 }

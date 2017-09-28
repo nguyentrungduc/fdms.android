@@ -18,6 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
+import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
 /**
@@ -35,7 +36,7 @@ final class ProducerPresenter implements ProducerContract.Presenter {
     @ProducerType
     private int mType;
     private String mName;
-    private int mGroupTypeId;
+    private int mGroupTypeId = OUT_OF_INDEX;
 
     ProducerPresenter(ProducerContract.ViewModel viewModel, @ProducerType int type,
         VendorDataSource.RemoteDataSource vendorRepository, MarkerDataSource markerRepository,
@@ -49,7 +50,7 @@ final class ProducerPresenter implements ProducerContract.Presenter {
         mCategoryRepository = categoryRepository;
         mSubscription = new CompositeDisposable();
         mPage++;
-        getVendors();
+        getProducer();
     }
 
     @Override
@@ -62,7 +63,7 @@ final class ProducerPresenter implements ProducerContract.Presenter {
     }
 
     @Override
-    public void getVendors() {
+    public void getProducer() {
         Observable<List<Producer>> observable;
         switch (mType) {
             case ProducerType.VENDOR:
@@ -72,7 +73,11 @@ final class ProducerPresenter implements ProducerContract.Presenter {
                 observable = mDeviceGroupRepository.getListDeviceGroup(mName);
                 break;
             case ProducerType.CATEGORIES_GROUPS:
-                observable = mCategoryRepository.getListCategory();
+                if (mGroupTypeId == OUT_OF_INDEX) {
+                    observable = mCategoryRepository.getListCategory(mName);
+                } else {
+                    observable = mCategoryRepository.getListCategory(mName, mGroupTypeId);
+                }
                 mViewModel.setShowCategoryFilter(true);
                 break;
             default:
@@ -95,13 +100,13 @@ final class ProducerPresenter implements ProducerContract.Presenter {
                     if (producers == null || producers.size() == 0) {
                         mPage--;
                     }
-                    mViewModel.onLoadVendorSuccess(producers);
+                    mViewModel.onLoadProducerSuccess(producers);
                     mViewModel.setAllowLoadMore(producers != null && producers.size() == PER_PAGE);
                 }
             }, new RequestError() {
                 @Override
                 public void onRequestError(BaseException error) {
-                    mViewModel.onLoadVendorFailed(error.getMessage());
+                    mViewModel.onLoadProducerFailed(error.getMessage());
                     mPage--;
                 }
             }, new Action() {
@@ -120,11 +125,11 @@ final class ProducerPresenter implements ProducerContract.Presenter {
             return;
         }
         mPage++;
-        getVendors();
+        getProducer();
     }
 
     @Override
-    public void addVendor(Producer producer) {
+    public void addProducer(Producer producer) {
         Observable<Producer> observable;
         switch (mType) {
             case ProducerType.VENDOR:
@@ -144,19 +149,19 @@ final class ProducerPresenter implements ProducerContract.Presenter {
             .subscribe(new Consumer<Producer>() {
                 @Override
                 public void accept(Producer producer) throws Exception {
-                    mViewModel.onAddVendorSuccess(producer);
+                    mViewModel.onAddProducerSuccess(producer);
                 }
             }, new RequestError() {
                 @Override
                 public void onRequestError(BaseException error) {
-                    mViewModel.onAddVendorFailed(error.getMessage());
+                    mViewModel.onAddProducerFailed(error.getMessage());
                 }
             });
         mSubscription.add(subscription);
     }
 
     @Override
-    public void deleteVendor(final Producer producer) {
+    public void deleteProducer(final Producer producer) {
         Observable<Respone<String>> observable;
         switch (mType) {
             case ProducerType.VENDOR:
@@ -177,13 +182,13 @@ final class ProducerPresenter implements ProducerContract.Presenter {
                 @Override
                 public void accept(Respone<String> respone) throws Exception {
                     if (!respone.isError()) {
-                        mViewModel.onDeleteVendorSuccess(producer);
+                        mViewModel.onDeleteProducerSuccess(producer);
                     }
                 }
             }, new RequestError() {
                 @Override
                 public void onRequestError(BaseException error) {
-                    mViewModel.onDeleteVendorFailed(error.getMessage());
+                    mViewModel.onDeleteProducerFailed(error.getMessage());
                 }
             });
 
@@ -191,7 +196,7 @@ final class ProducerPresenter implements ProducerContract.Presenter {
     }
 
     @Override
-    public void editVendor(final Producer producer) {
+    public void editProducer(final Producer producer) {
         Observable<String> observable;
         switch (mType) {
             case ProducerType.VENDOR:
@@ -210,21 +215,22 @@ final class ProducerPresenter implements ProducerContract.Presenter {
             .subscribe(new Consumer<String>() {
                 @Override
                 public void accept(String respone) throws Exception {
-                    mViewModel.onUpdateVendorSuccess(producer, respone);
+                    mViewModel.onUpdateProducerSuccess(producer, respone);
                 }
             }, new RequestError() {
                 @Override
                 public void onRequestError(BaseException error) {
-                    mViewModel.onUpdateVendorFailed(error.getMessage());
+                    mViewModel.onUpdateProducerFailed(error.getMessage());
                 }
             });
         mSubscription.add(subscription);
     }
 
     @Override
-    public void getVendors(String name) {
+    public void getProducer(String name, int groupTypeId) {
         mName = name;
+        mGroupTypeId = groupTypeId;
         mPage = FIRST_PAGE;
-        getVendors();
+        getProducer();
     }
 }
