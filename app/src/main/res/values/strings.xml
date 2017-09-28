@@ -9,6 +9,8 @@
     <string name="title_first_name">First Name</string>
     <string name="title_last_name">Last Name</string>
     <string name="title_email">Email</string>
+    <string name="title_from">From</string>
+    <string name="title_to">To</string>
     <string name="title_confirm_password">Confirm Password</string>
     <string name="title_adress">Adress</string>
     <string name="title_role">Role</string>

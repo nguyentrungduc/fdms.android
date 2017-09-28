@@ -23,11 +23,13 @@ import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
 import com.framgia.fdms.screen.assignment.AssignmentType;
-import com.framgia.fdms.screen.requestcreation.RequestCreationActivity;
-import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
+import com.framgia.fdms.screen.requestcreation.RequestCreationActivity;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
+import com.framgia.fdms.screen.selection.SelectionActivity;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -47,7 +49,8 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
  */
 
 public class UserRequestViewModel extends BaseFragmentModel
-    implements UserRequestContract.ViewModel, OnRequestClickListenner {
+    implements UserRequestContract.ViewModel, OnRequestClickListenner,
+    DatePickerDialog.OnDateSetListener {
 
     private final Context mContext;
     private final Fragment mFragment;
@@ -58,6 +61,10 @@ public class UserRequestViewModel extends BaseFragmentModel
     private boolean mIsRefresh;
     private ObservableField<User> mUser = new ObservableField<>();
     private int mEmptyViewVisible = View.GONE; // show empty state when no date
+    private Calendar mCalendar;
+    private String mFromTime;
+    private String mToTime;
+    private boolean mFlagTime;
     private SwipeRefreshLayout.OnRefreshListener mRefreshLayout =
         new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -73,6 +80,7 @@ public class UserRequestViewModel extends BaseFragmentModel
         mAdapter = new UserRequestAdapter(mContext, new ArrayList<Request>(), this, new User());
         setStatus(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_request_status)));
         setRelative(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_request_relative)));
+        mCalendar = Calendar.getInstance();
     }
 
     @Override
@@ -290,5 +298,73 @@ public class UserRequestViewModel extends BaseFragmentModel
     public void setEmptyViewVisible(int emptyViewVisible) {
         mEmptyViewVisible = emptyViewVisible;
         notifyPropertyChanged(BR.emptyViewVisible);
+    }
+
+    private void datePickerDialog() {
+        if (mCalendar == null) {
+            mCalendar = Calendar.getInstance();
+        }
+        DatePickerDialog datePicker =
+            DatePickerDialog.newInstance(this, mCalendar.get(Calendar.YEAR),
+                mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+        datePicker.show(mFragment.getActivity().getFragmentManager(), "");
+    }
+
+    public void onPickFromTime() {
+        setFlagTime(true);
+        datePickerDialog();
+    }
+
+    public void onPickToTime() {
+        setFlagTime(false);
+        datePickerDialog();
+    }
+
+    public void onClearFromTime() {
+        setFromTime("");
+    }
+
+    public void onClearToTime() {
+        setToTime("");
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        String time = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+        if (mFlagTime) {
+            setFromTime(time);
+            return;
+        }
+        setToTime(time);
+    }
+
+    @Bindable
+    public String getFromTime() {
+        return mFromTime;
+    }
+
+    private void setFromTime(String fromTime) {
+        mFromTime = fromTime;
+        notifyPropertyChanged(BR.fromTime);
+    }
+
+    @Bindable
+    public String getToTime() {
+        return mToTime;
+    }
+
+    private void setToTime(String toTime) {
+        mToTime = toTime;
+        notifyPropertyChanged(BR.toTime);
+    }
+
+    @Bindable
+    public boolean isFlagTime() {
+        return mFlagTime;
+    }
+
+    private void setFlagTime(boolean flagTime) {
+        mFlagTime = flagTime;
+        notifyPropertyChanged(BR.flagTime);
     }
 }
