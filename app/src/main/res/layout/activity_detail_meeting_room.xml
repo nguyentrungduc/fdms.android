@@ -18,6 +18,7 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
         app:refreshAble="@{viewModel.refresh}"
         app:swipeRefreshListener="@{viewModel.onRefreshListener}"
         >
@@ -28,7 +29,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/color_white_light"
+                android:background="@color/cardview_light_background"
                 android:orientation="vertical"
                 >
                 <android.support.design.widget.AppBarLayout
@@ -64,51 +65,27 @@
                     android:id="@+id/linearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:orientation="horizontal"
                     >
-                    <ImageView
-                        android:layout_width="@dimen/dp_35"
-                        android:layout_height="@dimen/dp_35"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/dp_5"
-                        app:srcCompat="@drawable/ic_title"
-                        tools:ignore="ContentDescription,VectorDrawableCompat"
-                        />
-                    <LinearLayout
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:layout_marginStart="@dimen/dp_5"
+                        android:hint="@string/title_room_name"
                         >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/dp_5"
-                            android:layout_marginStart="@dimen/dp_3"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@string/title_room_name"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="@dimen/sp_16"
-                            />
-                        <TextView
+                        <android.support.design.widget.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/dp_30"
-                            android:layout_marginStart="@dimen/dp_5"
-                            android:ellipsize="end"
-                            android:maxLines="1"
+                            android:drawablePadding="@dimen/dp_10"
+                            android:drawableStart="@drawable/ic_title"
+                            android:enabled="false"
                             android:text="@{viewModel.meetingRoom.name}"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sp_18"
+                            android:textColor="@color/color_blued"
+                            android:textSize="@dimen/sp_16"
+                            android:textStyle="bold"
                             />
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_1"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/dp_5"
-                            android:background="@color/color_gray"
-                            />
-                    </LinearLayout>
+                    </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/linearLayout2"
@@ -116,49 +93,24 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
-                    <ImageView
-                        android:layout_width="@dimen/dp_35"
-                        android:layout_height="@dimen/dp_35"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/dp_5"
-                        app:srcCompat="@drawable/ic_description"
-                        tools:ignore="ContentDescription,VectorDrawableCompat"
-                        />
-                    <LinearLayout
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:layout_marginStart="@dimen/dp_5"
+                        android:hint="@string/title_description"
                         >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/dp_5"
-                            android:layout_marginStart="@dimen/dp_3"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@string/title_description"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="@dimen/sp_16"
-                            />
-                        <TextView
+                        <android.support.design.widget.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/dp_30"
-                            android:layout_marginStart="@dimen/dp_5"
-                            android:ellipsize="end"
-                            android:maxLines="1"
+                            android:drawablePadding="@dimen/dp_10"
+                            android:drawableStart="@drawable/ic_description"
+                            android:enabled="false"
                             android:text="@{viewModel.meetingRoom.description}"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sp_18"
+                            android:textColor="@color/color_blued"
+                            android:textSize="@dimen/sp_16"
+                            android:textStyle="bold"
                             />
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_1"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/dp_5"
-                            android:background="@color/color_gray"
-                            />
-                    </LinearLayout>
+                    </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
                 <TextView
                     android:layout_width="match_parent"
