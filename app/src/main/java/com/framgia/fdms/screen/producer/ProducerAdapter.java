@@ -33,6 +33,7 @@ public class ProducerAdapter extends BaseRecyclerViewAdapter<Producer, ProducerA
             return;
         }
         mProducers.add(pos, producer);
+        mProducers.remove(pos + 1);
         notifyItemChanged(pos);
     }
 

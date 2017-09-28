@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +37,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
+import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_GROUPS;
 import static com.framgia.fdms.utils.Constant.TAG_PRODUCER_DIALOG;
@@ -75,6 +77,7 @@ public class ProducerViewModel extends BaseObservable
     private Producer mGroupType;
     private Context mContext;
     private String mKeySearch;
+    private boolean mIsRefresh;
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -97,6 +100,15 @@ public class ProducerViewModel extends BaseObservable
             }
         }
     };
+
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
+        new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mAdapter.clearData();
+                mPresenter.getProducer(mKeySearch, FIRST_PAGE);
+            }
+        };
 
     public ProducerViewModel(ProducerFragment producerFragment) {
         mFragment = producerFragment;
@@ -161,6 +173,7 @@ public class ProducerViewModel extends BaseObservable
         mAdapter.onUpdatePage(producers);
         mIsLoadMore = false;
         setLoadingMoreVisibility(GONE);
+        setRefresh(false);
     }
 
     @Override
@@ -401,5 +414,20 @@ public class ProducerViewModel extends BaseObservable
     public void setKeySearch(String keySearch) {
         mKeySearch = keySearch;
         notifyPropertyChanged(BR.keySearch);
+    }
+
+    @Bindable
+    public SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
+        return mOnRefreshListener;
+    }
+
+    @Bindable
+    public boolean isRefresh() {
+        return mIsRefresh;
+    }
+
+    public void setRefresh(boolean refresh) {
+        mIsRefresh = refresh;
+        notifyPropertyChanged(BR.refresh);
     }
 }
