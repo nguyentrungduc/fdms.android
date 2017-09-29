@@ -57,8 +57,12 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import java.util.Calendar;
 import java.util.Date;
 import uk.co.deanwild.materialshowcaseview.IShowcaseListener;
@@ -209,12 +213,13 @@ public final class BindingUtils {
     }
 
     @BindingAdapter({ "pieData", "totalValue", "description" })
-    public static void setData(PieChart pieChart, PieData pieData, int total, String description) {
-        Resources resources = pieChart.getContext().getResources();
+    public static void setData(final PieChart pieChart, PieData pieData, final int total,
+        String description) {
+        final Resources resources = pieChart.getContext().getResources();
         if (pieData.getDataSetCount() > 0) {
             pieChart.setUsePercentValues(true);
             pieChart.setDrawEntryLabels(false);
-            pieChart.getDescription().setEnabled(false);
+            pieChart.getDescription().setEnabled(true);
             pieChart.setDragDecelerationFrictionCoef(DECELERATION_FRICTION_COEF);
             pieChart.setDrawHoleEnabled(true);
             pieChart.setHoleColor(Color.WHITE);
@@ -239,6 +244,18 @@ public final class BindingUtils {
             pieData.setValueTextColor(Color.WHITE);
             pieChart.setData(pieData);
             pieChart.invalidate();
+            pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+                @Override
+                public void onValueSelected(Entry entry, Highlight highlight) {
+                    PieEntry pieEntry = (PieEntry) entry;
+                    pieChart.setCenterText(pieEntry.getLabel() + " " + ((int) pieEntry.getY()));
+                }
+
+                @Override
+                public void onNothingSelected() {
+                    pieChart.setCenterText(resources.getString(R.string.title_total) + total);
+                }
+            });
         }
     }
 
@@ -605,6 +622,10 @@ public final class BindingUtils {
         }
         MenuItem manageDevice = navigationView.getMenu().findItem(R.id.item_manage_device);
         MenuItem manageRequest = navigationView.getMenu().findItem(R.id.item_manage_request);
+        MenuItem manageDeviceGroup =
+            navigationView.getMenu().findItem(R.id.item_manage_device_group);
+        MenuItem manageDeviceCategory =
+            navigationView.getMenu().findItem(R.id.item_manage_device_category);
         MenuItem manageVendor = navigationView.getMenu().findItem(R.id.item_manage_vendor);
         MenuItem manageMaker = navigationView.getMenu().findItem(R.id.item_manage_maker);
         MenuItem manageMeetingRoom =
@@ -617,6 +638,8 @@ public final class BindingUtils {
         manageMaker.setVisible(false);
         manageMeetingRoom.setVisible(false);
         deviceUsingHistory.setVisible(false);
+        manageDeviceGroup.setVisible(false);
+        manageDeviceCategory.setVisible(false);
         switch (staffType) {
             case BO_MANAGER:
             case BO_STAFF:
@@ -627,6 +650,8 @@ public final class BindingUtils {
                 manageMaker.setVisible(true);
                 manageMeetingRoom.setVisible(true);
                 deviceUsingHistory.setVisible(true);
+                manageDeviceGroup.setVisible(true);
+                manageDeviceCategory.setVisible(true);
                 break;
             case DIVISION_MANAGER:
                 manageDevice.setVisible(true);
