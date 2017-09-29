@@ -107,6 +107,11 @@ public class ReturnDeviceViewModel extends BaseObservable
     }
 
     @Override
+    public void onGetDeviceFailure(String message) {
+        mNavigator.showToast(message);
+    }
+
+    @Override
     public void onCheckedChanged(boolean checked, Device device, int position) {
         device.setSelected(checked);
     }
