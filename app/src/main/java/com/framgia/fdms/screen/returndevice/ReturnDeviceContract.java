@@ -43,6 +43,8 @@ public interface ReturnDeviceContract {
         void onReturnDeviceClick();
 
         void onItemDeviceClick(Device device);
+
+        void onGetDeviceFailure(String message);
     }
 
     /**

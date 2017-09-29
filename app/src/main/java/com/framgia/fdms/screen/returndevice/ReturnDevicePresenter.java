@@ -87,6 +87,7 @@ class ReturnDevicePresenter implements ReturnDeviceContract.Presenter {
                 @Override
                 public void onRequestError(BaseException error) {
                     mViewModel.hideProgressbar();
+                    mViewModel.onGetDeviceFailure(error.getMessage());
                 }
             }, new Action() {
                 @Override
