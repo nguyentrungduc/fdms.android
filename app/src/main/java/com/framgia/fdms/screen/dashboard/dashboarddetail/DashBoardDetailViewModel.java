@@ -165,8 +165,7 @@ public class DashBoardDetailViewModel extends BaseObservable
         }
         for (int i = 0; i < dashboards.size(); i++) {
             Dashboard dashboard = dashboards.get(i);
-            float percent = (float) dashboard.getCount() / total * 100f;
-            values.add(new PieEntry(percent, dashboard.getTitle(), i));
+            values.add(new PieEntry(dashboard.getCount(), dashboard.getTitle(), i));
             colors.add(Color.parseColor(dashboard.getBackgroundColor()));
         }
         PieDataSet dataSet = new PieDataSet(values, mContext.getString(R.string.title_chart));
@@ -184,14 +183,12 @@ public class DashBoardDetailViewModel extends BaseObservable
 
     @Override
     public void onGetTopRequestSuccess(List<Request> requests) {
-        // TODO: 29/05/2017
         if (requests == null) return;
         mAdapterTopRequest.onUpdatePage(requests);
     }
 
     @Override
     public void onGetTopDeviceSuccess(List<Device> devices) {
-        // TODO: 29/05/2017
         if (devices == null) return;
         mAdapterTopDevice.onUpdatePage(devices);
     }
@@ -272,7 +269,6 @@ public class DashBoardDetailViewModel extends BaseObservable
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        // TODO: 22/05/2017 update request status
                         mPresenter.updateActionRequest(request.getRequest().getId(),
                             action.getId());
                         return false;
