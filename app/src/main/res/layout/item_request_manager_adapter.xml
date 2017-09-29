@@ -21,8 +21,8 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginRight="@dimen/dp_5"
         android:layout_marginTop="@dimen/dp_5"
         car_view:cardCornerRadius="@dimen/dp1"
         car_view:cardElevation="@dimen/dp1"
@@ -49,6 +49,7 @@
                     android:layout_width="@dimen/dp_20"
                     android:layout_height="@dimen/dp_20"
                     bind:srcCompat="@drawable/ic_title"
+                    car_view:ignore="ContentDescription"
                     />
 
                 <TextView
@@ -73,6 +74,7 @@
                     android:padding="@dimen/dp_3"
                     android:src="@drawable/ic_more_menu"
                     android:visibility="@{requestModel.request.requestActionList.size()>0 ? View.VISIBLE: View.GONE}"
+                    car_view:ignore="ContentDescription"
                     />
 
                 <ImageView
@@ -80,10 +82,10 @@
                     android:layout_height="@dimen/dp_30"
                     android:onClick="@{()-> listenner.onAddDeviceClick(requestModel.request.id)}"
                     android:padding="@dimen/dp_3"
-                    bind:srcCompat="@drawable/ic_add_device_24dp"
                     android:visibility="@{requestModel.showAddDevice? View.VISIBLE : View.GONE}"
+                    bind:srcCompat="@drawable/ic_add_device_24dp"
+                    car_view:ignore="ContentDescription"
                     />
-
             </LinearLayout>
 
             <LinearLayout
@@ -92,6 +94,7 @@
                 android:layout_marginTop="@dimen/dp_5"
                 android:gravity="center"
                 android:orientation="horizontal"
+                car_view:ignore="UseCompoundDrawables"
                 >
 
                 <ImageView
@@ -99,6 +102,7 @@
                     android:layout_height="@dimen/dp_20"
                     android:padding="@dimen/dp_3"
                     bind:srcCompat="@drawable/ic_profile_grey"
+                    car_view:ignore="ContentDescription"
                     />
 
                 <TextView
@@ -126,6 +130,7 @@
                     android:layout_height="@dimen/dp_20"
                     android:padding="@dimen/dp_3"
                     bind:srcCompat="@drawable/ic_timer"
+                    car_view:ignore="ContentDescription"
                     />
 
                 <TextView
@@ -144,7 +149,6 @@
                     android:text="@{requestModel.request.requestStatus}"
                     android:textSize="@dimen/sp_14"
                     />
-
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
