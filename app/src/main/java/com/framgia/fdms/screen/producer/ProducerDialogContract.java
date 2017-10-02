@@ -16,8 +16,11 @@ public interface ProducerDialogContract {
      * after pressing submiting button of dialog
      */
     interface ActionCallback extends Parcelable {
-        void onAddCallback(Producer producer);
+        void onAddCallback(Producer producer, Producer tempGroupDevice);
 
-        void onEditCallback(Producer oldProducer, Producer newProducer);
+        void onEditCallback(Producer oldProducer, Producer newProducer, Producer tempGroupType);
+
+        void onChooseGroupTypeClickDialog(Producer tempDeviceCategory, Producer tempGroupType,
+            String title);
     }
 }

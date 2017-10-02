@@ -171,6 +171,7 @@
     <string name="title_qrcode">QRCode</string>
     <string name="title_barcode">BarCode</string>
     <string name="title_profile">Profile</string>
+    <string name="title_computer_device">Thiết bị máy tính</string>
     <string name="title_device_code_staff">ID- %d</string>
     <string name="title_id_card_staff">Card ID- %s</string>
     <string name="title_export">Export device </string>
@@ -302,6 +303,7 @@
     <string name="title_no_category">No Category</string>
     <string name="title_no_device_group">No Device Group</string>
     <string name="title_device_group_type">Device Group Type</string>
+    <string name="title_full_template_code">Full Template Code</string>
     <string name="title_validate_item_assignment">Please select fully(Device Group, Category, Device)</string>
     <string name="title_validate_assignment">Please add device</string>
     <string name="msg_input_staff_error">Please add staff to assign device</string>

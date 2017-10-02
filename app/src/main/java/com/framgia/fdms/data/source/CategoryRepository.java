@@ -1,6 +1,7 @@
 package com.framgia.fdms.data.source;
 
 import com.framgia.fdms.data.model.Producer;
+import com.framgia.fdms.data.model.Respone;
 import io.reactivex.Observable;
 import java.util.List;
 
@@ -24,17 +25,24 @@ public class CategoryRepository implements CategoryDataSource.RemoteDataSource {
         mCategoryRemoteDataSource = categoryRemoteDataSource;
     }
 
-    public Observable<List<Producer>> getListCategory() {
-        return mCategoryRemoteDataSource.getListCategory();
+    @Override
+    public Observable<List<Producer>> getListCategory(String query, int deviceGroupId, int page,
+        int perPage) {
+        return mCategoryRemoteDataSource.getListCategory(query, deviceGroupId, page, perPage);
     }
 
     @Override
-    public Observable<List<Producer>> getListCategory(String query) {
-        return mCategoryRemoteDataSource.getListCategory(query);
+    public Observable<Producer> addDeviceCategory(Producer deviceCategory, int deviceGroupId) {
+        return mCategoryRemoteDataSource.addDeviceCategory(deviceCategory, deviceGroupId);
     }
 
     @Override
-    public Observable<List<Producer>> getListCategory(String query, int deviceGroupId) {
-        return mCategoryRemoteDataSource.getListCategory(query, deviceGroupId);
+    public Observable<String> editDeviceCategory(Producer deviceCategory, int deviceGroupId) {
+        return mCategoryRemoteDataSource.editDeviceCategory(deviceCategory, deviceGroupId);
+    }
+
+    @Override
+    public Observable<Respone<String>> deleteDeviceCategory(Producer deviceCategory) {
+        return mCategoryRemoteDataSource.deleteDeviceCategory(deviceCategory);
     }
 }

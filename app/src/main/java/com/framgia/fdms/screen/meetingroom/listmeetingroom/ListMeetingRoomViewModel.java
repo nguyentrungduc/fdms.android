@@ -250,14 +250,14 @@ public class ListMeetingRoomViewModel extends BaseObservable
 
     public void onAddMeetingRoomClick() {
         mMeetingRoomDialog = ProducerDialog.newInstant(new Producer(OUT_OF_INDEX, ""),
-            mActivity.getResources().getString(R.string.title_add_producer), this);
+            mActivity.getResources().getString(R.string.title_add_producer), this, null, false);
         mMeetingRoomDialog.show(mActivity.getSupportFragmentManager(), TAG_MEETING_ROOM_DIALOG);
     }
 
     @Override
     public void onEditMeetingRoomClick(Producer meetingRoom) {
         mMeetingRoomDialog = ProducerDialog.newInstant(meetingRoom,
-            mActivity.getResources().getString(R.string.action_edit), this);
+            mActivity.getResources().getString(R.string.action_edit), this, null, false);
         mMeetingRoomDialog.show(mActivity.getSupportFragmentManager(), TAG_MEETING_ROOM_DIALOG);
     }
 
@@ -324,7 +324,7 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     @Override
-    public void onAddCallback(Producer meetingRoom) {
+    public void onAddCallback(Producer meetingRoom, Producer tempGroupDevice) {
         if (meetingRoom == null) {
             return;
         }
@@ -333,12 +333,18 @@ public class ListMeetingRoomViewModel extends BaseObservable
     }
 
     @Override
-    public void onEditCallback(Producer oldMeetingRoom, Producer newMeetingRoom) {
+    public void onEditCallback(Producer oldMeetingRoom, Producer newMeetingRoom,
+        Producer producer) {
         if (oldMeetingRoom == null || newMeetingRoom == null) {
             return;
         }
         mMeetingRoom = oldMeetingRoom;
         mPresenter.editMeetingRoom(newMeetingRoom);
+    }
+
+    @Override
+    public void onChooseGroupTypeClickDialog(Producer producer, Producer status, String title) {
+        //no ops
     }
 
     @Bindable

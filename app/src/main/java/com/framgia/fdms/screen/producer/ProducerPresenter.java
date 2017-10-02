@@ -73,11 +73,8 @@ final class ProducerPresenter implements ProducerContract.Presenter {
                 observable = mDeviceGroupRepository.getListDeviceGroup(mName);
                 break;
             case ProducerType.CATEGORIES_GROUPS:
-                if (mGroupTypeId == OUT_OF_INDEX) {
-                    observable = mCategoryRepository.getListCategory(mName);
-                } else {
-                    observable = mCategoryRepository.getListCategory(mName, mGroupTypeId);
-                }
+                observable =
+                    mCategoryRepository.getListCategory(mName, mGroupTypeId, mPage, PER_PAGE);
                 mViewModel.setShowCategoryFilter(true);
                 break;
             default:
@@ -129,7 +126,7 @@ final class ProducerPresenter implements ProducerContract.Presenter {
     }
 
     @Override
-    public void addProducer(Producer producer) {
+    public void addProducer(Producer producer, Producer tempProductGroup) {
         Observable<Producer> observable;
         switch (mType) {
             case ProducerType.VENDOR:
@@ -137,6 +134,10 @@ final class ProducerPresenter implements ProducerContract.Presenter {
                 break;
             case ProducerType.DEVICE_GROUPS:
                 observable = mDeviceGroupRepository.addDeviceGroup(producer);
+                break;
+            case ProducerType.CATEGORIES_GROUPS:
+                observable =
+                    mCategoryRepository.addDeviceCategory(producer, tempProductGroup.getId());
                 break;
             default:
             case ProducerType.MARKER:
@@ -170,6 +171,9 @@ final class ProducerPresenter implements ProducerContract.Presenter {
             case ProducerType.DEVICE_GROUPS:
                 observable = mDeviceGroupRepository.deleteDeviceGroup(producer);
                 break;
+            case ProducerType.CATEGORIES_GROUPS:
+                observable = mCategoryRepository.deleteDeviceCategory(producer);
+                break;
             default:
             case ProducerType.MARKER:
                 observable = mMarkerRepository.deleteMarker(producer);
@@ -196,7 +200,7 @@ final class ProducerPresenter implements ProducerContract.Presenter {
     }
 
     @Override
-    public void editProducer(final Producer producer) {
+    public void editProducer(final Producer producer, Producer temProductGroup) {
         Observable<String> observable;
         switch (mType) {
             case ProducerType.VENDOR:
@@ -205,12 +209,17 @@ final class ProducerPresenter implements ProducerContract.Presenter {
             case ProducerType.DEVICE_GROUPS:
                 observable = mDeviceGroupRepository.editDeviceGroup(producer);
                 break;
+            case ProducerType.CATEGORIES_GROUPS:
+                observable =
+                    mCategoryRepository.editDeviceCategory(producer, temProductGroup.getId());
+                break;
             default:
             case ProducerType.MARKER:
                 observable = mMarkerRepository.editMarker(producer);
                 break;
         }
-        Disposable subscription = observable.subscribeOn(Schedulers.io())
+        Disposable subscription = observable
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<String>() {
                 @Override

@@ -35,9 +35,6 @@ public interface FDMSApi {
     @GET("api/devices")
     Observable<Respone<List<Device>>> getListDevices(@QueryMap Map<String, String> parrams);
 
-    @GET("api/device_categories")
-    Observable<Respone<List<Producer>>> getListCategory();
-
     @GET("api/device_statuses")
     Observable<Respone<List<Status>>> getListStatus();
 
@@ -198,4 +195,14 @@ public interface FDMSApi {
 
     @GET("api/return_devices/{user_id}")
     Observable<Respone<List<Device>>> getListDeviceOfUserBorrow(@Path("user_id") int userId);
+
+    @POST("api/device_categories")
+    Observable<Respone<Producer>> addDeviceCategory(@QueryMap Map<String, String> params);
+
+    @PATCH("api/device_categories/{category_id}")
+    Observable<Respone<String>> updateDeviceCategory(@Path("category_id") int categoryId,
+        @QueryMap Map<String, String> params);
+
+    @DELETE("api/device_categories/{category_id}")
+    Observable<Respone<String>> deleteDeviceCategory(@Path("category_id") int categoryId);
 }
