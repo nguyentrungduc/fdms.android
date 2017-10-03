@@ -55,11 +55,11 @@ interface ProducerContract {
 
         void loadMorePage();
 
-        void addProducer(Producer producer);
+        void addProducer(Producer producer, Producer temProductGroup);
 
         void deleteProducer(Producer producer);
 
-        void editProducer(Producer producer);
+        void editProducer(Producer producer, Producer temProductGroup);
 
         void getProducer(String name, int groupTypeId);
     }

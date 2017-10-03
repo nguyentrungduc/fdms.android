@@ -11,13 +11,17 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
+import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CATEGORY_DESCRIPTION_MANAGER;
+import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CATEGORY_GROUP_ID_MANAGER;
+import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CATEGORY_NAME;
+import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CATEGORY_NAME_MANAGER;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_GROUP_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
+import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 /**
@@ -41,47 +45,12 @@ public class CategoryRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<List<Producer>> getListCategory() {
-        return mFDMSApi.getListCategory()
-            .flatMap(new Function<Respone<List<Producer>>, ObservableSource<List<Producer>>>() {
-                @Override
-                public ObservableSource<List<Producer>> apply(Respone<List<Producer>> listRespone)
-                    throws Exception {
-                    return Utils.getResponse(listRespone);
-                }
-            });
-    }
+    public Observable<List<Producer>> getListCategory(final String query, int deviceGroupId,
+        int page, int perPage) {
+        return mFDMSApi.getCategoriesByDeviceGroupId(
+            getCategoryParams(query, deviceGroupId, page, perPage)).flatMap(
 
-    @Override
-    public Observable<List<Producer>> getListCategory(final String query) {
-        if (TextUtils.isEmpty(query)) {
-            return getListCategory();
-        }
-        return getListCategory().flatMap(
-            new Function<List<Producer>, ObservableSource<List<Producer>>>() {
-                @Override
-                public ObservableSource<List<Producer>> apply(List<Producer> producers)
-                    throws Exception {
-                    List<Producer> data = new ArrayList<>();
-                    for (Producer producer : producers) {
-                        if (producer.getName()
-                            .toLowerCase(Locale.getDefault())
-                            .contains(query.toLowerCase(Locale.getDefault()))) {
-                            data.add(producer);
-                        }
-                    }
-                    return Observable.just(data);
-                }
-            });
-    }
-
-    public Observable<List<Producer>> getListCategory(int deviceGroupId) {
-        Map<String, String> parrams = new HashMap();
-        if (deviceGroupId != OUT_OF_INDEX) {
-            parrams.put(DEVICE_GROUP_ID, String.valueOf(deviceGroupId));
-        }
-        return mFDMSApi.getCategoriesByDeviceGroupId(parrams)
-            .flatMap(new Function<Respone<List<Producer>>, ObservableSource<List<Producer>>>() {
+            new Function<Respone<List<Producer>>, ObservableSource<List<Producer>>>() {
                 @Override
                 public ObservableSource<List<Producer>> apply(
                     @NonNull Respone<List<Producer>> listRespone) throws Exception {
@@ -91,25 +60,62 @@ public class CategoryRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<List<Producer>> getListCategory(final String query, int deviceGroupId) {
-        if (TextUtils.isEmpty(query)) {
-            return getListCategory(deviceGroupId);
-        }
-        return getListCategory(deviceGroupId).flatMap(
-            new Function<List<Producer>, ObservableSource<List<Producer>>>() {
+    public Observable<Producer> addDeviceCategory(Producer deviceCategory, int deviceGroupId) {
+        return mFDMSApi.addDeviceCategory(
+            setCategoryParams(deviceCategory.getName(), deviceCategory.getDescription(),
+                String.valueOf(deviceGroupId)))
+            .flatMap(new Function<Respone<Producer>, ObservableSource<Producer>>() {
                 @Override
-                public ObservableSource<List<Producer>> apply(@NonNull List<Producer> producers)
+                public ObservableSource<Producer> apply(@NonNull Respone<Producer> producerRespone)
                     throws Exception {
-                    List<Producer> data = new ArrayList<>();
-                    for (Producer producer : producers) {
-                        if (producer.getName()
-                            .toLowerCase(Locale.getDefault())
-                            .contains(query.toLowerCase(Locale.getDefault()))) {
-                            data.add(producer);
-                        }
-                    }
-                    return Observable.just(data);
+                    return Utils.getResponse(producerRespone);
                 }
             });
+    }
+
+    @Override
+    public Observable<String> editDeviceCategory(Producer deviceCategory, int deviceGroupId) {
+        return mFDMSApi.updateDeviceCategory(deviceCategory.getId(),
+            setCategoryParams(deviceCategory.getName(), deviceCategory.getDescription(),
+                String.valueOf(deviceGroupId)))
+            .flatMap(new Function<Respone<String>, ObservableSource<String>>() {
+                @Override
+                public ObservableSource<String> apply(@NonNull Respone<String> stringRespone)
+                    throws Exception {
+                    return Utils.getResponse(stringRespone);
+                }
+            });
+    }
+
+    @Override
+    public Observable<Respone<String>> deleteDeviceCategory(Producer deviceCategory) {
+        return mFDMSApi.deleteDeviceCategory(deviceCategory.getId());
+    }
+
+    private Map<String, String> getCategoryParams(final String query, int deviceGroupId, int page,
+        int perPage) {
+        Map<String, String> parrams = new HashMap<>();
+        if (!TextUtils.isEmpty(query)) {
+            parrams.put(DEVICE_CATEGORY_NAME, query);
+        }
+        if (deviceGroupId != OUT_OF_INDEX) {
+            parrams.put(DEVICE_GROUP_ID, String.valueOf(deviceGroupId));
+        }
+        if (page != OUT_OF_INDEX) {
+            parrams.put(PAGE, String.valueOf(page));
+        }
+        if (perPage != OUT_OF_INDEX) {
+            parrams.put(PER_PAGE, String.valueOf(perPage));
+        }
+        return parrams;
+    }
+
+    private Map<String, String> setCategoryParams(final String nameCategory, String description,
+        String groupId) {
+        Map<String, String> params = new HashMap<>();
+        params.put(DEVICE_CATEGORY_NAME_MANAGER, nameCategory);
+        params.put(DEVICE_CATEGORY_DESCRIPTION_MANAGER, description);
+        params.put(DEVICE_CATEGORY_GROUP_ID_MANAGER, groupId);
+        return params;
     }
 }

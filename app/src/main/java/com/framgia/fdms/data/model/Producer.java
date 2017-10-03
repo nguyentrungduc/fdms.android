@@ -47,7 +47,7 @@ public class Producer extends Status implements Parcelable {
 
     @Bindable
     public String getDescription() {
-        return mDescription;
+        return mDescription == null ? "" : mDescription;
     }
 
     public void setDescription(String description) {

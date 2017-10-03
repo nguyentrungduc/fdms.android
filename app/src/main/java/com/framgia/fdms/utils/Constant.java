@@ -59,6 +59,8 @@ public class Constant {
         public static final String BUNDLE_DEVICES = "BUNDLE_DEVICES";
         public static final String BUNDLE_CATEGORY_ID = "BUNDLE_CATEGORY_ID";
         public static final String BUNDLE_SUCCESS = "BUNDLE_SUCCESS";
+        public static final String BUNDLE_SHOW_GROUP_DEVICE = "BUNDLE_SHOW_GROUP_DEVICE";
+        public static final String BUNDLE_DEVICE_GROUP_TYPE = "BUNDLE_DEVICE_GROUP_TYPE";
     }
 
     public static final class RequestConstant {
@@ -82,6 +84,7 @@ public class Constant {
         public static final int REQUEST_REQUEST_FOR = 18;
         public static final int REQUEST_ASSIGNEE = 19;
         public static final int REQUEST_USER_BORROW = 20;
+        public static final int REQUEST_DEVICE_GROUPS_DIALOG = 21;
     }
 
     public static final class DeviceUsingStatus {
@@ -136,6 +139,12 @@ public class Constant {
         public static final String ASSIGNMENT_ASSIGNMENT_DETAILS =
             "assignment[assignment_details_attributes]";
         public static final String DEVICE_GROUP_ID = "device_group_id";
+        public static final String DEVICE_CATEGORY_NAME = "device_category_name";
+        public static final String DEVICE_CATEGORY_NAME_MANAGER = "device_category[name]";
+        public static final String DEVICE_CATEGORY_DESCRIPTION_MANAGER =
+            "device_category[description]";
+        public static final String DEVICE_CATEGORY_GROUP_ID_MANAGER =
+            "device_category[device_group_id]";
         public static final String STATUS = "status";
         public static final String TEXT_USER_SEARCH = "text_user_search";
         public static final String USING_HISTORY_DEVICE_CODE = "device_code";

@@ -38,6 +38,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.ASSIGNEE;
 import static com.framgia.fdms.screen.selection.SelectionType.BRANCH;
 import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
+import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_DIALOG;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_USING_HISTORY;
 import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
@@ -147,6 +148,7 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
                 presenter.setMeetingRoomRepository(meetingRoomRepository);
                 break;
 
+            case DEVICE_GROUP_DIALOG:
             case DEVICE_GROUP:
                 DeviceGroupRepository deviceGroupRepository = DeviceGroupRepository.getInstance();
                 presenter.setDeviceGroupRepository(deviceGroupRepository);

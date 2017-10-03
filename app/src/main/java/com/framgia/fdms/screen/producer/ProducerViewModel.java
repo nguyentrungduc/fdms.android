@@ -24,6 +24,7 @@ import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.screen.selection.SelectionActivity;
+import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.Constant;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
@@ -37,9 +38,9 @@ import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
-import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_GROUPS;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_GROUPS_DIALOG;
 import static com.framgia.fdms.utils.Constant.TAG_PRODUCER_DIALOG;
 
 /**
@@ -74,10 +75,11 @@ public class ProducerViewModel extends BaseObservable
     private Navigator mNavigator;
     private boolean mIsShowCategoryFilter;
     private String mDrawerStatus = DRAWER_IS_CLOSE;
-    private Producer mGroupType;
+    private Producer mGroupType, mCategory, mTempGroupType;
     private Context mContext;
     private String mKeySearch;
     private boolean mIsRefresh;
+    private String mTitle;
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -106,7 +108,7 @@ public class ProducerViewModel extends BaseObservable
             @Override
             public void onRefresh() {
                 mAdapter.clearData();
-                mPresenter.getProducer(mKeySearch, FIRST_PAGE);
+                mPresenter.getProducer(mKeySearch, mGroupType.getId());
             }
         };
 
@@ -228,8 +230,15 @@ public class ProducerViewModel extends BaseObservable
 
     @Override
     public void onEditProducerClick(Producer producer) {
+        if (getGroupType().getId() == OUT_OF_INDEX) {
+            mTempGroupType =
+                new Producer(1, mFragment.getResources().getString(R.string.title_computer_device));
+        } else {
+            mTempGroupType = getGroupType();
+        }
         mProducerDialog = ProducerDialog.newInstant(producer,
-            mFragment.getResources().getString(R.string.action_edit), this);
+            mFragment.getResources().getString(R.string.action_edit), this, mTempGroupType,
+            isShowCategoryFilter());
         mProducerDialog.show(mFragment.getFragmentManager(), TAG_PRODUCER_DIALOG);
     }
 
@@ -252,8 +261,11 @@ public class ProducerViewModel extends BaseObservable
 
     @Override
     public void onAddProducerClick() {
+        mTempGroupType =
+            new Producer(1, mFragment.getResources().getString(R.string.title_computer_device));
         mProducerDialog = ProducerDialog.newInstant(new Producer(OUT_OF_INDEX, ""),
-            mFragment.getResources().getString(R.string.title_add_producer), this);
+            mFragment.getResources().getString(R.string.title_add_producer), this,
+            getTempGroupType(), isShowCategoryFilter());
         mProducerDialog.show(mFragment.getFragmentManager(), TAG_PRODUCER_DIALOG);
     }
 
@@ -263,20 +275,31 @@ public class ProducerViewModel extends BaseObservable
     }
 
     @Override
-    public void onAddCallback(Producer producer) {
+    public void onAddCallback(Producer producer, Producer tempGroupDevice) {
         if (producer == null) {
             return;
         }
-        mPresenter.addProducer(producer);
+        mPresenter.addProducer(producer, tempGroupDevice);
     }
 
     @Override
-    public void onEditCallback(Producer oldProducer, Producer newProducer) {
+    public void onEditCallback(Producer oldProducer, Producer newProducer, Producer tempGroupType) {
         if (oldProducer == null || newProducer == null) {
             return;
         }
         mProducerEdit = oldProducer;
-        mPresenter.editProducer(newProducer);
+        mPresenter.editProducer(newProducer, tempGroupType);
+    }
+
+    @Override
+    public void onChooseGroupTypeClickDialog(Producer tempDeviceCategory, Producer tempGroupType,
+        String title) {
+        mTitle = title;
+        mCategory = tempDeviceCategory;
+        mTempGroupType = tempGroupType;
+        mFragment.startActivityForResult(
+            SelectionActivity.getInstance(mContext, SelectionType.DEVICE_GROUP_DIALOG),
+            REQUEST_DEVICE_GROUPS_DIALOG);
     }
 
     @Bindable
@@ -347,8 +370,18 @@ public class ProducerViewModel extends BaseObservable
         }
         Bundle bundle = data.getExtras();
         Status status = bundle.getParcelable(BUNDLE_DATA);
-        if (status != null) {
-            setGroupType((Producer) status);
+        switch (requestCode) {
+            case REQUEST_DEVICE_GROUPS:
+                setGroupType((Producer) status);
+                break;
+            case REQUEST_DEVICE_GROUPS_DIALOG:
+                setTempGroupType((Producer) status);
+                mProducerDialog = ProducerDialog.newInstant(mCategory, mTitle, this, mTempGroupType,
+                    isShowCategoryFilter());
+                mProducerDialog.show(mFragment.getFragmentManager(), TAG_PRODUCER_DIALOG);
+                break;
+            default:
+                break;
         }
         setDrawerStatus(DRAWER_IS_CLOSE);
     }
@@ -402,7 +435,7 @@ public class ProducerViewModel extends BaseObservable
 
     public void onClearFilterClick() {
         mAdapter.clearData();
-        mGroupType = new Producer(OUT_OF_INDEX, Constant.DeviceUsingStatus.ALL);
+        setGroupType(new Producer(OUT_OF_INDEX, Constant.DeviceUsingStatus.ALL));
         setDrawerStatus(DRAWER_IS_CLOSE);
     }
 
@@ -429,5 +462,15 @@ public class ProducerViewModel extends BaseObservable
     public void setRefresh(boolean refresh) {
         mIsRefresh = refresh;
         notifyPropertyChanged(BR.refresh);
+    }
+
+    @Bindable
+    public Producer getTempGroupType() {
+        return mTempGroupType;
+    }
+
+    public void setTempGroupType(Producer tempGroupType) {
+        mTempGroupType = tempGroupType;
+        notifyPropertyChanged(BR.tempGroupType);
     }
 }

@@ -27,6 +27,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.ASSIGNEE;
 import static com.framgia.fdms.screen.selection.SelectionType.BRANCH;
 import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
+import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_DIALOG;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_USING_HISTORY;
 import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
@@ -140,6 +141,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 getListMeetingRoom();
                 break;
             case DEVICE_GROUP:
+            case DEVICE_GROUP_DIALOG:
                 getDeviceGroups();
                 break;
             case DEVICE_USING_HISTORY:
@@ -395,14 +397,14 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
         final String titleFirstItem;
         final boolean isInsertFirstItem;
         if (mDeviceGroupId != 0) {
-            observable = mCategoryRepository.getListCategory(mKeySearch, mDeviceGroupId);
             titleFirstItem = TITLE_ALL;
             isInsertFirstItem = mDeviceGroupId == OUT_OF_INDEX;
         } else {
-            observable = mCategoryRepository.getListCategory(mKeySearch);
             titleFirstItem = TITLE_NA;
             isInsertFirstItem = true;
         }
+        observable =
+            mCategoryRepository.getListCategory(mKeySearch, mDeviceGroupId, mPage, PER_PAGE);
         Disposable disposable =
             observable.subscribeOn(Schedulers.io()).doOnSubscribe(new Consumer<Disposable>() {
                 @Override
