@@ -21,14 +21,10 @@ public class StatusDataSource {
 
         Observable<List<Status>> getListStatusRequest(String query);
 
-        Observable<List<Status>> getListRelative();
-
-        Observable<List<Status>> getListRelative(String query);
+        Observable<List<Status>> getListRelative(String query, int page, int perPage);
 
         Observable<List<Status>> getListAssignee();
 
-        Observable<List<Status>> getListUserBorrow();
-
-        Observable<List<Status>> getListUserBorrow(String name);
+        Observable<List<Status>> getListUserBorrow(String name, int page, int perPage);
     }
 }

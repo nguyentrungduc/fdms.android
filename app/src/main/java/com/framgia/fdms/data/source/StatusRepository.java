@@ -27,26 +27,20 @@ public class StatusRepository {
     public Observable<List<Status>> getListStatusRequest() {
         return mStatusRemoteDataSource.getListStatusRequest();
     }
+
     public Observable<List<Status>> getListStatusRequest(String query) {
         return mStatusRemoteDataSource.getListStatusRequest(query);
     }
 
-    public Observable<List<Status>> getListRelative() {
-        return mStatusRemoteDataSource.getListRelative();
-    }
-
-    public Observable<List<Status>> getListRelative(String query) {
-        return mStatusRemoteDataSource.getListRelative(query);
+    public Observable<List<Status>> getListRelative(String query, int page, int perPage) {
+        return mStatusRemoteDataSource.getListRelative(query, page, perPage);
     }
 
     public Observable<List<Status>> getListAssignee() {
         return mStatusRemoteDataSource.getListAssignee();
     }
 
-    public Observable<List<Status>> getListUserBorrow() {
-        return mStatusRemoteDataSource.getListUserBorrow();
-    }
-    public Observable<List<Status>> getListUserBorrow(String query) {
-        return mStatusRemoteDataSource.getListUserBorrow(query);
+    public Observable<List<Status>> getListUserBorrow(String query, int page, int perPage) {
+        return mStatusRemoteDataSource.getListUserBorrow(query, page, perPage);
     }
 }

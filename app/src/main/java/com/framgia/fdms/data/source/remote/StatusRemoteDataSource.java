@@ -11,8 +11,15 @@ import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CATEGORY_NAME;
+import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
+import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
+import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 /**
  * Created by MyPC on 05/05/2017.
@@ -96,36 +103,13 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<List<Status>> getListRelative() {
-        return mFDMSApi.getListRelative()
+    public Observable<List<Status>> getListRelative(final String query, int page, int perPage) {
+        return mFDMSApi.getListRelative(getParams(query, page, perPage))
             .flatMap(new Function<Respone<List<Status>>, ObservableSource<List<Status>>>() {
                 @Override
-                public ObservableSource<List<Status>> apply(Respone<List<Status>> listRespone)
-                    throws Exception {
+                public ObservableSource<List<Status>> apply(
+                    @NonNull Respone<List<Status>> listRespone) throws Exception {
                     return Utils.getResponse(listRespone);
-                }
-            });
-    }
-
-    @Override
-    public Observable<List<Status>> getListRelative(final String query) {
-        if (TextUtils.isEmpty(query)) {
-            return getListRelative();
-        }
-        return getListRelative().flatMap(
-            new Function<List<Status>, ObservableSource<List<Status>>>() {
-                @Override
-                public ObservableSource<List<Status>> apply(List<Status> statuses)
-                    throws Exception {
-                    List<Status> data = new ArrayList<>();
-                    for (Status status : statuses) {
-                        if (status.getName()
-                            .toLowerCase(Locale.getDefault())
-                            .contains(query.toLowerCase(Locale.getDefault()))) {
-                            data.add(status);
-                        }
-                    }
-                    return Observable.just(data);
                 }
             });
     }
@@ -143,8 +127,8 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<List<Status>> getListUserBorrow() {
-        return mFDMSApi.getListUserBorrow()
+    public Observable<List<Status>> getListUserBorrow(final String query, int page, int perPage) {
+        return mFDMSApi.getListUserBorrow(getParams(query, page, perPage))
             .flatMap(new Function<Respone<List<Status>>, ObservableSource<List<Status>>>() {
                 @Override
                 public ObservableSource<List<Status>> apply(
@@ -154,26 +138,17 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
             });
     }
 
-    @Override
-    public Observable<List<Status>> getListUserBorrow(final String query) {
-        if (TextUtils.isEmpty(query)) {
-            return getListUserBorrow();
+    private Map<String, String> getParams(final String query, int page, int perPage) {
+        Map<String, String> params = new HashMap<>();
+        if (!TextUtils.isEmpty(query)) {
+            params.put(DEVICE_CATEGORY_NAME, query);
         }
-        return getListUserBorrow().flatMap(
-            new Function<List<Status>, ObservableSource<List<Status>>>() {
-                @Override
-                public ObservableSource<List<Status>> apply(List<Status> statuses)
-                    throws Exception {
-                    List<Status> data = new ArrayList<>();
-                    for (Status status : statuses) {
-                        if (status.getName()
-                            .toLowerCase(Locale.getDefault())
-                            .contains(query.toLowerCase(Locale.getDefault()))) {
-                            data.add(status);
-                        }
-                    }
-                    return Observable.just(data);
-                }
-            });
+        if (page != OUT_OF_INDEX) {
+            params.put(PAGE, String.valueOf(page));
+        }
+        if (perPage != OUT_OF_INDEX) {
+            params.put(PER_PAGE, String.valueOf(perPage));
+        }
+        return params;
     }
 }
