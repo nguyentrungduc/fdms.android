@@ -35,6 +35,7 @@ import static com.framgia.fdms.FDMSApplication.sUpdatedDevice;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.CREATE;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.EDIT;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
+import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_BRANCH;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MAKER;
@@ -139,7 +140,8 @@ public class CreateDeviceViewModel extends BaseObservable
             return;
         }
         mActivity.startActivityForResult(
-            SelectionActivity.getInstance(mContext, SelectionType.CATEGORY), REQUEST_CATEGORY);
+            SelectionActivity.getInstance(mContext, SelectionType.CATEGORY, OUT_OF_INDEX),
+            REQUEST_CATEGORY);
     }
 
     public void onChooseMeetingRoom() {
@@ -311,51 +313,54 @@ public class CreateDeviceViewModel extends BaseObservable
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK || data == null) return;
+        Bundle bundle = data.getExtras();
+        Status status = bundle.getParcelable(BUNDLE_DATA);
+        assert status != null;
         switch (requestCode) {
             case REQUEST_CATEGORY:
-                Bundle bundle = data.getExtras();
-                Status category = bundle.getParcelable(BUNDLE_DATA);
-                if (category.getName().equals(mContext.getString(R.string.action_clear))) {
-                    category.setName(mContext.getString(R.string.title_empty));
+                if (status.getName().equals(mContext.getString(R.string.action_clear))
+                    || status.getId() == OUT_OF_INDEX) {
+                    status.setName(mContext.getString(R.string.title_empty));
                 }
-                setCategory(category);
+                setCategory(status);
                 mPresenter.getDeviceCode(mCategory.getId(), mBranch.getId());
                 break;
+            case REQUEST_BRANCH:
+                if (status.getName().equals(mContext.getString(R.string.action_clear))) {
+                    status.setId(DEFAULT_BRANCH_ID);
+                    status.setName(DEFAULT_BRANCH_NAME);
+                }
+                setBranch(status);
+                if (mCategory != null && mCategory.getId() > 0) {
+                    mPresenter.getDeviceCode(mCategory.getId(), mBranch.getId());
+                }
+                break;
             case REQUEST_STATUS:
-                bundle = data.getExtras();
-                Status status = bundle.getParcelable(BUNDLE_DATA);
                 if (status.getName().equals(mContext.getString(R.string.action_clear))) {
                     status.setName(mContext.getString(R.string.title_empty));
                 }
                 setStatus(status);
                 break;
-            case REQUEST_BRANCH:
-                bundle = data.getExtras();
-                Status branch = bundle.getParcelable(BUNDLE_DATA);
-                if (branch.getName().equals(mContext.getString(R.string.action_clear))) {
-                    branch.setId(DEFAULT_BRANCH_ID);
-                    branch.setName(DEFAULT_BRANCH_NAME);
-                }
-                setBranch(branch);
-                if (mCategory != null && mCategory.getId() > 0) {
-                    mPresenter.getDeviceCode(mCategory.getId(), mBranch.getId());
-                }
-                break;
             case REQUEST_VENDOR:
-                bundle = data.getExtras();
-                Status vendor = bundle.getParcelable(BUNDLE_DATA);
-                if (vendor.getName().equals(mContext.getString(R.string.action_clear))) {
-                    vendor.setName(mContext.getString(R.string.title_empty));
+                if (status.getName().equals(mContext.getString(R.string.action_clear))
+                    || status.getId() == OUT_OF_INDEX) {
+                    status.setName(mContext.getString(R.string.title_empty));
                 }
-                setVendor(vendor);
+                setVendor(status);
                 break;
             case REQUEST_MAKER:
-                bundle = data.getExtras();
-                Status maker = bundle.getParcelable(BUNDLE_DATA);
-                if (maker.getName().equals(mContext.getString(R.string.action_clear))) {
-                    maker.setName(mContext.getString(R.string.title_empty));
+                if (status.getName().equals(mContext.getString(R.string.action_clear))
+                    || status.getId() == OUT_OF_INDEX) {
+                    status.setName(mContext.getString(R.string.title_empty));
                 }
-                setMarker(maker);
+                setMarker(status);
+                break;
+            case REQUEST_MEETING_ROOM:
+                if (status.getName().equals(mContext.getString(R.string.action_clear))
+                    || status.getId() == OUT_OF_INDEX) {
+                    status.setName(mContext.getString(R.string.title_empty));
+                }
+                setMeetingRoom(status);
                 break;
             default:
                 break;

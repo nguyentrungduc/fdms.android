@@ -23,6 +23,8 @@ public interface SelectionContract {
         void showProgress();
 
         void hideProgress();
+
+        void setSelectedType(int selectedType);
     }
 
     /**

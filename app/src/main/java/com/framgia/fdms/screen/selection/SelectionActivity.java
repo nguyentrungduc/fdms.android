@@ -17,7 +17,6 @@ import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.BranchRepository;
 import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.DeviceGroupRepository;
-import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.DeviceUsingHistoryRepository;
 import com.framgia.fdms.data.source.MarkerRepository;
 import com.framgia.fdms.data.source.MeetingRoomRepository;
@@ -26,7 +25,6 @@ import com.framgia.fdms.data.source.VendorRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.remote.BranchRemoteDataSource;
 import com.framgia.fdms.data.source.remote.CategoryRemoteDataSource;
-import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.data.source.remote.DeviceUsingHistoryRemoteDataSource;
 import com.framgia.fdms.data.source.remote.MarkerRemoteDataSource;
 import com.framgia.fdms.data.source.remote.MeetingRoomRemoteDataSource;
@@ -87,7 +85,7 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
 
         SelectionContract.Presenter presenter = new SelectionPresenter(mViewModel, mSelectionType);
         initPresenter((SelectionPresenter) presenter);
-
+        mViewModel.setSelectedType(mSelectionType);
         mViewModel.setPresenter(presenter);
 
         ActivityNewStatusSelectionBinding binding =
@@ -100,21 +98,11 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
             case STATUS:
             case STATUS_REQUEST:
             case RELATIVE_STAFF:
+            case ASSIGNEE:
+            case USER_BORROW:
                 StatusRepository statusRepository = new StatusRepository(
                     new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
                 presenter.setStatusRepository(statusRepository);
-                break;
-
-            case ASSIGNEE:
-                StatusRepository assigneeRepository = new StatusRepository(
-                    new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
-                presenter.setStatusRepository(assigneeRepository);
-                break;
-
-            case USER_BORROW:
-                StatusRepository userBorrowRepository = new StatusRepository(
-                    new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
-                presenter.setStatusRepository(userBorrowRepository);
                 break;
 
             case CATEGORY:

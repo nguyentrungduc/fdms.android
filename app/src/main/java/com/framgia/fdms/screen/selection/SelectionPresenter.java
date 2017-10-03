@@ -1,6 +1,5 @@
 package com.framgia.fdms.screen.selection;
 
-import android.text.TextUtils;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.BranchRepository;
@@ -36,11 +35,8 @@ import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.USER_BORROW;
 import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
-import static com.framgia.fdms.utils.Constant.NONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
-import static com.framgia.fdms.utils.Constant.TITLE_ALL;
-import static com.framgia.fdms.utils.Constant.TITLE_NA;
 
 /**
  * Listens to user actions from the UI ({@link SelectionActivity}), retrieves the data and
@@ -61,7 +57,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
     private MeetingRoomRepository mMeetingRoomRepository;
     private int mPage = 1;
     private String mKeySearch;
-    private int mDeviceGroupId;
+    private int mDeviceGroupId = OUT_OF_INDEX;
     private DeviceGroupRepository mDeviceGroupRepository;
     private DeviceUsingHistoryRepository mDeviceUsingHistoryRepository;
 
@@ -165,16 +161,51 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
     }
 
     @Override
+    public void loadMoreData() {
+        if (mSelectionType == STATUS
+            || mSelectionType == DEVICE_USING_HISTORY
+            || mSelectionType == BRANCH
+            || mSelectionType == DEVICE_GROUP
+            || mSelectionType == STATUS_REQUEST
+            || mSelectionType == DEVICE_GROUP_DIALOG
+            || mSelectionType == ASSIGNEE) {
+            mViewModel.onGetDataFailed(null);
+            mViewModel.hideProgress();
+            return;
+        }
+        mPage++;
+        switch (mSelectionType) {
+            case CATEGORY:
+                getListCategory();
+                break;
+            case VENDOR:
+                getListVendor();
+                break;
+            case MARKER:
+                getListMarker();
+                break;
+            case MEETING_ROOM:
+                getListMeetingRoom();
+                break;
+            case RELATIVE_STAFF:
+                getListRelative();
+                break;
+            case USER_BORROW:
+                getListUserBorrow();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public void getListRelative() {
-        Disposable subscription = mStatusRepository.getListRelative(mKeySearch)
+        Disposable subscription = mStatusRepository.getListRelative(mKeySearch, mPage, PER_PAGE)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<List<Status>>() {
                 @Override
                 public void accept(List<Status> statuses) throws Exception {
-                    if (TextUtils.isEmpty(mKeySearch) && statuses != null && statuses.size() != 0) {
-                        statuses.add(0, new Status(OUT_OF_INDEX, TITLE_NA));
-                    }
                     mViewModel.onGetDataSuccess(statuses);
                 }
             }, new RequestError() {
@@ -206,9 +237,6 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             .subscribe(new Consumer<List<Status>>() {
                 @Override
                 public void accept(List<Status> statuses) throws Exception {
-                    if (TextUtils.isEmpty(mKeySearch) && statuses != null && statuses.size() != 0) {
-                        statuses.add(0, new Status(OUT_OF_INDEX, TITLE_NA));
-                    }
                     mViewModel.onGetDataSuccess(statuses);
                 }
             }, new RequestError() {
@@ -258,35 +286,6 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
     }
 
     @Override
-    public void loadMoreData() {
-        if (mSelectionType == STATUS
-            || mSelectionType == CATEGORY
-            || mSelectionType == DEVICE_USING_HISTORY
-            || mSelectionType == BRANCH
-            || mSelectionType == DEVICE_GROUP
-            || mSelectionType == STATUS_REQUEST
-            || mSelectionType == RELATIVE_STAFF) {
-            mViewModel.onGetDataFailed(null);
-            mViewModel.hideProgress();
-            return;
-        }
-        mPage++;
-        switch (mSelectionType) {
-            case VENDOR:
-                getListVendor();
-                break;
-            case MARKER:
-                getListMarker();
-                break;
-            case MEETING_ROOM:
-                getListMeetingRoom();
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
     public void getListMarker() {
         Disposable disposable = mMarkerRepository.getListMarker(mKeySearch, mPage, PER_PAGE)
             .subscribeOn(Schedulers.io())
@@ -300,9 +299,6 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             .subscribe(new Consumer<List<Producer>>() {
                 @Override
                 public void accept(List<Producer> statuses) throws Exception {
-                    if (TextUtils.isEmpty(mKeySearch) && statuses != null && statuses.size() != 0) {
-                        statuses.add(0, (Producer) new Producer(OUT_OF_INDEX, TITLE_NA));
-                    }
                     mViewModel.onGetDataSuccess(statuses);
                 }
             }, new RequestError() {
@@ -335,11 +331,6 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 .subscribe(new Consumer<List<Producer>>() {
                     @Override
                     public void accept(List<Producer> statuses) throws Exception {
-                        if (TextUtils.isEmpty(mKeySearch)
-                            && statuses != null
-                            && statuses.size() != 0) {
-                            statuses.add(0, (Producer) new Producer(OUT_OF_INDEX, TITLE_NA));
-                        }
                         mViewModel.onGetDataSuccess(statuses);
                         mViewModel.hideProgress();
                     }
@@ -371,9 +362,6 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             .subscribe(new Consumer<List<Producer>>() {
                 @Override
                 public void accept(List<Producer> statuses) throws Exception {
-                    if (TextUtils.isEmpty(mKeySearch) && statuses != null && statuses.size() != 0) {
-                        statuses.add(0, (Producer) new Producer(OUT_OF_INDEX, TITLE_NA));
-                    }
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
                 }
@@ -394,15 +382,6 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
     @Override
     public void getListCategory() {
         Observable<List<Producer>> observable;
-        final String titleFirstItem;
-        final boolean isInsertFirstItem;
-        if (mDeviceGroupId != 0) {
-            titleFirstItem = TITLE_ALL;
-            isInsertFirstItem = mDeviceGroupId == OUT_OF_INDEX;
-        } else {
-            titleFirstItem = TITLE_NA;
-            isInsertFirstItem = true;
-        }
         observable =
             mCategoryRepository.getListCategory(mKeySearch, mDeviceGroupId, mPage, PER_PAGE);
         Disposable disposable =
@@ -414,12 +393,6 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<List<Producer>>() {
                 @Override
                 public void accept(List<Producer> producers) throws Exception {
-                    if (TextUtils.isEmpty(mKeySearch)
-                        && producers != null
-                        && producers.size() != 0
-                        && isInsertFirstItem) {
-                        producers.add(0, new Producer(OUT_OF_INDEX, titleFirstItem));
-                    }
                     mViewModel.onGetDataSuccess(producers);
                 }
             }, new RequestError() {
@@ -451,9 +424,6 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             .subscribe(new Consumer<List<Status>>() {
                 @Override
                 public void accept(List<Status> statuses) throws Exception {
-                    if (TextUtils.isEmpty(mKeySearch) && statuses != null && statuses.size() != 0) {
-                        statuses.add(0, new Status(OUT_OF_INDEX, TITLE_NA));
-                    }
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
                 }
@@ -485,9 +455,6 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             .subscribe(new Consumer<List<Producer>>() {
                 @Override
                 public void accept(@NonNull List<Producer> statuses) throws Exception {
-                    if (TextUtils.isEmpty(mKeySearch) && statuses != null && statuses.size() != 0) {
-                        statuses.add(0, new Producer(OUT_OF_INDEX, TITLE_ALL));
-                    }
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
                 }
@@ -550,7 +517,6 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             .subscribe(new Consumer<List<Status>>() {
                 @Override
                 public void accept(@NonNull List<Status> statuses) throws Exception {
-                    statuses.add(0, new Status(OUT_OF_INDEX, NONE));
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
                 }
@@ -570,7 +536,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
 
     @Override
     public void getListUserBorrow() {
-        Disposable disposable = mStatusRepository.getListUserBorrow(mKeySearch)
+        Disposable disposable = mStatusRepository.getListUserBorrow(mKeySearch, mPage, PER_PAGE)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(new Consumer<Disposable>() {
@@ -582,7 +548,6 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             .subscribe(new Consumer<List<Status>>() {
                 @Override
                 public void accept(@NonNull List<Status> statuses) throws Exception {
-                    statuses.add(0, new Status(OUT_OF_INDEX, NONE));
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
                 }

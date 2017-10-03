@@ -64,7 +64,7 @@ public interface FDMSApi {
     Observable<Respone<List<Status>>> getListStatusRequest();
 
     @GET("api/user_groups")
-    Observable<Respone<List<Status>>> getListRelative();
+    Observable<Respone<List<Status>>> getListRelative(@QueryMap Map<String, String> params);
 
     @GET("api/user_assigns")
     Observable<Respone<List<Status>>> getListAssign();
@@ -187,7 +187,7 @@ public interface FDMSApi {
         @Query("per_page") int perPage);
 
     @GET("api/return_devices")
-    Observable<Respone<List<Status>>> getListUserBorrow();
+    Observable<Respone<List<Status>>> getListUserBorrow(@QueryMap Map<String, String> params);
 
     @PATCH("api/return_devices/update")
     Observable<Respone<String>> returnDevice(
