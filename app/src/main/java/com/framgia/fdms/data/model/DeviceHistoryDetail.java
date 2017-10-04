@@ -6,11 +6,6 @@ import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by Hoang Van Nha on 5/23/2017.
@@ -30,12 +25,11 @@ public class DeviceHistoryDetail extends BaseObservable {
     private Device mDevice;
 
     public int getStatusImage() {
-        if (mHistoryInfo == null
-            || mHistoryInfo.getHistoryData() == null
-            || mHistoryInfo.getHistoryData().getStatus() == null) {
+        if (mHistoryInfo.getHistoryContent() == null) {
             return R.drawable.ic_avaiable;
         }
-        switch (mHistoryInfo.getHistoryData().getStatus()) {
+
+        switch (mHistoryInfo.getHistoryContent().getContent()) {
             case STATUS_USING:
                 return R.drawable.ic_using;
             case STATUS_AVAILABLE:
