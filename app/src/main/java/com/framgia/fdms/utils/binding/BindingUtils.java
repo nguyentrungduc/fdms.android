@@ -50,7 +50,7 @@ import com.framgia.fdms.screen.ViewPagerScroll;
 import com.framgia.fdms.screen.dashboard.DashboardViewModel;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailViewModel;
 import com.framgia.fdms.screen.main.MainViewModel;
-import com.framgia.fdms.screen.requestdetail.RequestDetailViewModel;
+import com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -450,7 +450,7 @@ public final class BindingUtils {
 
     @BindingAdapter("setVisibility")
     public static void setVisibility(com.github.clans.fab.FloatingActionButton view,
-        RequestDetailViewModel viewModel) {
+        RequestInformationViewModel viewModel) {
         int visibility = viewModel.getStatusRequest().equals(DONE) || viewModel.getStatusRequest()
             .equals(APPROVED) ? View.GONE : View.VISIBLE;
         view.setVisibility(visibility);

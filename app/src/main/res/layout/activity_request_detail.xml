@@ -1,238 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <data>
+
+        <import type="com.framgia.fdms.utils.Constant"/>
 
         <variable
             name="viewModel"
             type="com.framgia.fdms.screen.requestdetail.RequestDetailViewModel"
             />
 
-        <import type="android.view.View"/>
-
-        <import type="com.framgia.fdms.utils.Constant"/>
     </data>
 
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:fitsSystemWindows="true"
         >
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_red"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:title="@string/title_request_detail"
-            />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            app:elevation="@dimen/dp_0"
             >
 
-            <android.support.v4.widget.NestedScrollView
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:theme="@style/ToolbarTheme"
                 >
 
-                <LinearLayout
-                    android:id="@+id/ontent"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    >
+                <ImageView
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
+                    android:onClick="@{()-> viewModel.onClickArrowBack()}"
+                    app:srcCompat="@drawable/ic_arrow_back_white_24dp"
+                    tools:ignore="@null,ContentDescription"
+                    />
 
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dp_5"
-                        >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_30"
+                    android:text="@string/title_request_detail"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_20"
+                    />
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:paddingLeft="@dimen/dp_5"
-                            android:paddingTop="@dimen/dp_10"
-                            >
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:adapter="@{viewModel.adapter}"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context="com.framgia.fdms.screen.requestdetail.RequestDetailActivity"
+            >
 
-                            <include
-                                layout="@layout/edittext_input"
-                                bind:enabled="@{viewModel.isEdit}"
-                                bind:image="@{@drawable/ic_title}"
-                                bind:text="@={viewModel.request.title}"
-                                bind:title="@{@string/title_title}"
-                                />
-
-                            <include
-                                layout="@layout/edittext_input"
-                                bind:enabled="@{viewModel.isEdit}"
-                                bind:image="@{@drawable/ic_description_24dp}"
-                                bind:text="@={viewModel.request.description}"
-                                bind:title="@{@string/title_description}"
-                                />
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@{viewModel.isEdit ? @color/color_blue_grey_50 : @android:color/transparent }"
-                            android:orientation="vertical"
-                            android:paddingLeft="@dimen/dp_5"
-                            >
-
-                            <include
-                                layout="@layout/text_input"
-                                bind:image="@{@drawable/ic_profile_24dp}"
-                                bind:text="@{viewModel.request.requestFor}"
-                                bind:title="@{@string/title_request_for}"
-                                />
-
-                            <include
-                                layout="@layout/text_input"
-                                bind:image="@{@drawable/ic_profile_24dp}"
-                                bind:text="@{viewModel.request.creater}"
-                                bind:title="@{@string/title_create_by}"
-                                />
-
-                            <include
-                                layout="@layout/text_input"
-                                bind:image="@{@drawable/ic_update_24dp}"
-                                bind:text="@{viewModel.request.updater}"
-                                bind:title="@{@string/title_update_by}"
-                                />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/dp_10"
-                                android:orientation="horizontal"
-                                android:padding="@dimen/dp_8"
-                                >
-
-                                <android.support.v7.widget.AppCompatImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_list_24dp"
-                                    />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:paddingLeft="@dimen/dp_16"
-                                    >
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="vertical"
-                                        >
-
-                                        <android.support.v7.widget.AppCompatTextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginRight="@dimen/dp_5"
-                                            android:text="@string/title_request_status"
-                                            android:textColor="@color/color_brown"
-                                            android:textSize="@dimen/sp_12"
-                                            />
-
-                                        <android.support.v7.widget.AppCompatTextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="@dimen/dp_5"
-                                            android:text="@{viewModel.request.requestStatus}"
-                                            android:textSize="@dimen/sp_16"
-                                            bind:deviceStatus="@{viewModel.request.requestStatus}"
-                                            />
-                                    </LinearLayout>
-
-                                    <android.support.design.widget.TextInputLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        >
-
-                                        <android.support.v7.widget.AppCompatTextView
-                                            android:id="@+id/appCompatTextView"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="@dimen/dp_1"
-                                            android:layout_marginTop="@dimen/dp_2"
-                                            android:background="@color/color_gray_mos"
-                                            />
-                                    </android.support.design.widget.TextInputLayout>
-                                </LinearLayout>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
-                </LinearLayout>
-
-            </android.support.v4.widget.NestedScrollView>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab_accep"
+            <android.support.design.widget.TabLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="@dimen/dp_16"
-                android:layout_marginLeft="@dimen/dp_5"
-                android:layout_marginRight="@dimen/dp_16"
-                android:clickable="true"
-                android:onClick="@{() -> viewModel.onSubmitEditClick()}"
-                android:src="@drawable/ic_accept"
-                app:backgroundTint="@color/color_green_600"
-                app:fabSize="mini"
-                app:rippleColor="@color/color_green_600"
-                app:visibleAnim="@{viewModel.isEdit}"
+                android:background="@color/colorPrimary"
+                app:tabIndicatorColor="@android:color/white"
+                app:tabSelectedTextColor="@android:color/white"
+                app:tabTextColor="@android:color/darker_gray"
                 />
-
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="@dimen/dp_16"
-                android:layout_toLeftOf="@+id/fab_accep"
-                android:clickable="true"
-                android:onClick="@{() -> viewModel.onCancelEditClick()}"
-                android:src="@drawable/ic_cancel"
-                app:backgroundTint="@color/color_red_aceent_700"
-                app:fabSize="mini"
-                app:rippleColor="@color/color_red_500"
-                app:visibleAnim="@{viewModel.isEdit}"
-                />
-
-            <com.github.clans.fab.FloatingActionMenu
-                android:id="@+id/float_action_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:visibility="@{viewModel.actionMenuVisibility}"
-                app:menu_colorNormal="@color/color_red_500"
-                />
-
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="@{viewModel.progressBarVisibility}"
-                />
-        </RelativeLayout>
-
-    </LinearLayout>
+        </android.support.v4.view.ViewPager>
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

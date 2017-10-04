@@ -11,7 +11,6 @@ import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment;
-import com.framgia.fdms.screen.notification.NotificationActivity;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
 import java.util.ArrayList;
 import java.util.List;
