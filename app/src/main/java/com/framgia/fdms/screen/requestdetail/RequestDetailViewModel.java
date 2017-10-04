@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.screen.requestdetail.information.RequestInformationFragment;
+import com.framgia.fdms.screen.requestdetail.listdeviceassignment.ListDeviceAssignmentFragment;
 import com.framgia.fdms.utils.navigator.Navigator;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,6 @@ public class RequestDetailViewModel extends BaseObservable
     private RequestDetailPagerAdapter mAdapter;
     private Context mContext;
     private AppCompatActivity mActivity;
-    private RequestInformationFragment mRequestInformationFragment;
     private Request mRequest;
     private Navigator mNavigator;
     private ObservableField<Integer> mProgressBarVisibility = new ObservableField<>();
@@ -33,10 +33,9 @@ public class RequestDetailViewModel extends BaseObservable
         mContext = mActivity.getApplicationContext();
         mRequest = request;
         mNavigator = navigator;
-        mRequestInformationFragment = RequestInformationFragment.newInstance(mContext, mRequest);
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(mRequestInformationFragment);
-        fragments.add(new Fragment()); //TODO: Assignment device Fragment
+        fragments.add(RequestInformationFragment.newInstance(mRequest));
+        fragments.add(ListDeviceAssignmentFragment.newInstance(mRequest));
         mAdapter = new RequestDetailPagerAdapter(mContext, mActivity.getSupportFragmentManager(),
             fragments);
     }
