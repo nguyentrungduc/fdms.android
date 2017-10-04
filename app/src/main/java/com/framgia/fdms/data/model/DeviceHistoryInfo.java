@@ -3,6 +3,7 @@ package com.framgia.fdms.data.model;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import com.framgia.fdms.BR;
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Date;
@@ -20,7 +21,7 @@ public class DeviceHistoryInfo extends BaseObservable {
     private int mDmsObjectId;
     @Expose
     @SerializedName("dms_history_data")
-    private Content mHistoryData;
+    private String mHistoryData;
     @Expose
     @SerializedName("dms_object_type")
     private int mDmsObjectType;
@@ -84,11 +85,11 @@ public class DeviceHistoryInfo extends BaseObservable {
     }
 
     @Bindable
-    public Content getHistoryData() {
+    public String getHistoryData() {
         return mHistoryData;
     }
 
-    public void setHistoryData(Content historyData) {
+    public void setHistoryData(String historyData) {
         mHistoryData = historyData;
         notifyPropertyChanged(BR.historyData);
     }
@@ -121,5 +122,13 @@ public class DeviceHistoryInfo extends BaseObservable {
     public void setUpdatedAt(Date updatedAt) {
         mUpdatedAt = updatedAt;
         notifyPropertyChanged(BR.updatedAt);
+    }
+
+    @Bindable
+    public DeviceHistoryInfo.Content getHistoryContent() {
+        if (getHistoryData() == null) {
+            return null;
+        }
+        return new Gson().fromJson(getHistoryData(), DeviceHistoryInfo.Content.class);
     }
 }

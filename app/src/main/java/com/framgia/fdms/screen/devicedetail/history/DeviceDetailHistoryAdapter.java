@@ -1,8 +1,10 @@
 package com.framgia.fdms.screen.devicedetail.history;
 
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.databinding.ItemHistoryDetailBinding;
 import java.util.ArrayList;
@@ -15,37 +17,45 @@ import java.util.List;
 
 public class DeviceDetailHistoryAdapter
     extends RecyclerView.Adapter<DeviceDetailHistoryAdapter.HistoryDetailHolder> {
-    private List<DeviceHistoryDetail> mDeviceHistoryDetails = new ArrayList<>();
+    private List<DeviceHistoryDetail> mData;
     private LayoutInflater mInflater;
 
+    public DeviceDetailHistoryAdapter() {
+        mData = new ArrayList<>();
+    }
+
     public void addData(List<DeviceHistoryDetail> deviceHistoryDetails) {
-        if (deviceHistoryDetails == null) return;
-        mDeviceHistoryDetails.addAll(deviceHistoryDetails);
+        if (deviceHistoryDetails == null) {
+            return;
+        }
+        mData.addAll(deviceHistoryDetails);
         notifyDataSetChanged();
     }
 
     @Override
     public HistoryDetailHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (mInflater == null) mInflater = LayoutInflater.from(parent.getContext());
+        if (mInflater == null) {
+            mInflater = LayoutInflater.from(parent.getContext());
+        }
         ItemHistoryDetailBinding binding =
-            ItemHistoryDetailBinding.inflate(mInflater, parent, false);
+            DataBindingUtil.inflate(mInflater, R.layout.item_history_detail, parent, false);
         return new HistoryDetailHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(HistoryDetailHolder holder, int position) {
-        DeviceHistoryDetail deviceHistoryDetail = mDeviceHistoryDetails.get(position);
-        if (mDeviceHistoryDetails != null) holder.bind(deviceHistoryDetail, position);
+        DeviceHistoryDetail deviceHistoryDetail = mData.get(position);
+        holder.bind(deviceHistoryDetail, position);
     }
 
     @Override
     public int getItemCount() {
-        return mDeviceHistoryDetails == null ? 0 : mDeviceHistoryDetails.size();
+        return mData != null ? mData.size() : 0;
     }
 
     public class HistoryDetailHolder extends RecyclerView.ViewHolder {
 
-        private final ItemHistoryDetailBinding mBinding;
+        private ItemHistoryDetailBinding mBinding;
 
         public HistoryDetailHolder(ItemHistoryDetailBinding binding) {
             super(binding.getRoot());

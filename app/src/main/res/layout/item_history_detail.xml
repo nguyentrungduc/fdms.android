@@ -4,6 +4,7 @@
     xmlns:bind="http://schemas.android.com/tools"
     >
     <data>
+        <import type="com.framgia.fdms.utils.Utils"/>
         <variable
             name="deviceHistoryDetail"
             type="com.framgia.fdms.data.model.DeviceHistoryDetail"
@@ -51,7 +52,7 @@
                     android:paddingBottom="@dimen/dp_4"
                     android:paddingLeft="@dimen/dp_16"
                     android:paddingTop="@dimen/dp_4"
-                    android:text="@{deviceHistoryDetail.historyInfo.historyData.content}"
+                    android:text="@{deviceHistoryDetail.historyInfo.historyContent.content}"
                     android:textSize="@dimen/sp_16"
                     />
             </LinearLayout>
@@ -81,7 +82,7 @@
                     android:paddingLeft="@dimen/dp_16"
                     android:paddingTop="@dimen/dp_4"
                     android:textSize="@dimen/sp_14"
-                    bind:dateCreate="@{deviceHistoryDetail.historyInfo.createdAt"
+                    android:text="@{Utils.getStringDate(deviceHistoryDetail.historyInfo.updatedAt)}"
                     />
 
                 <LinearLayout
@@ -97,7 +98,7 @@
                         android:gravity="center_vertical"
                         android:lines="1"
                         android:paddingRight="@dimen/dp_10"
-                        android:text='@{deviceHistoryDetail.historyInfo.historyData.status}'
+                        android:text='@{deviceHistoryDetail.historyInfo.historyContent.status}'
                         android:textColor="@color/color_grey_700"
                         android:textSize="@dimen/sp_13"
                         android:textStyle="italic"

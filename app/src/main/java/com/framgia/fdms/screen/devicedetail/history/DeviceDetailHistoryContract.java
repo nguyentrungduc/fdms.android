@@ -20,6 +20,8 @@ public interface DeviceDetailHistoryContract {
         void showProgress();
 
         void hideProgress();
+
+        void setAllowLoadMore(boolean isAllowLoadMore);
     }
 
     /**

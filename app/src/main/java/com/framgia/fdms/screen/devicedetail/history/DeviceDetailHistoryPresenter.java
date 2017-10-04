@@ -61,6 +61,8 @@ public final class DeviceDetailHistoryPresenter implements DeviceDetailHistoryCo
                 public void accept(List<DeviceHistoryDetail> deviceHistoryDetails)
                     throws Exception {
                     mViewModel.onGetDeviceHistorySuccess(deviceHistoryDetails);
+                    mViewModel.setAllowLoadMore(
+                        deviceHistoryDetails != null && deviceHistoryDetails.size() == PER_PAGE);
                 }
             }, new RequestError() {
                 @Override

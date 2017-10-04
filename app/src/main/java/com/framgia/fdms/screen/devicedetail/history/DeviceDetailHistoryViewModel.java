@@ -5,7 +5,6 @@ import android.databinding.Bindable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.utils.navigator.Navigator;
@@ -27,6 +26,7 @@ public class DeviceDetailHistoryViewModel extends BaseObservable
     private int mProgressStatus = GONE;
     private Navigator mNavigator;
     private boolean mIsLoadingMore;
+    private boolean mIsAllowLoadMore = true;
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -40,7 +40,9 @@ public class DeviceDetailHistoryViewModel extends BaseObservable
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-            if (!mIsLoadingMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+            if (mIsAllowLoadMore
+                && !mIsLoadingMore
+                && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                 setLoadingMore(true);
                 mPresenter.loadMoreData();
             }
@@ -74,12 +76,8 @@ public class DeviceDetailHistoryViewModel extends BaseObservable
 
     @Override
     public void onGetDeviceHistorySuccess(List<DeviceHistoryDetail> deviceHistoryDetails) {
-        if (deviceHistoryDetails != null && deviceHistoryDetails.size() != 0) {
-            setEmptyViewVisible(GONE);
-            mAdapter.addData(deviceHistoryDetails);
-        } else {
-            setEmptyViewVisible(View.VISIBLE);
-        }
+        mAdapter.addData(deviceHistoryDetails);
+        setEmptyViewVisible(mAdapter.getItemCount() != 0 ? GONE : VISIBLE);
     }
 
     @Override
@@ -90,6 +88,11 @@ public class DeviceDetailHistoryViewModel extends BaseObservable
     @Override
     public void hideProgress() {
         setProgressStatus(GONE);
+    }
+
+    @Override
+    public void setAllowLoadMore(boolean allowLoadMore) {
+        mIsAllowLoadMore = allowLoadMore;
     }
 
     @Bindable
