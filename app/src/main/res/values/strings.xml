@@ -130,6 +130,7 @@
     <string name="title_device_request__name">Name </string>
     <string name="title_device_number_dt">Number: %d </string>
     <string name="title_request_detail">Request detail</string>
+    <string name="title_device_assignment">Device Assignment</string>
     <string name="action_edit">Edit</string>
     <string name="action_reject">Reject</string>
     <string name="title_serial_number">Serial Number</string>
