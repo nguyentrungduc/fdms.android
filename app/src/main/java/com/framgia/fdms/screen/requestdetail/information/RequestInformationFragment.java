@@ -1,6 +1,5 @@
 package com.framgia.fdms.screen.requestdetail.information;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -29,7 +28,7 @@ public class RequestInformationFragment extends Fragment {
         return new RequestInformationFragment();
     }
 
-    public static RequestInformationFragment newInstance(Context context, Request request) {
+    public static RequestInformationFragment newInstance(Request request) {
         RequestInformationFragment fragment = new RequestInformationFragment();
         Bundle args = new Bundle();
         args.putSerializable(BUND_REQUEST, request);

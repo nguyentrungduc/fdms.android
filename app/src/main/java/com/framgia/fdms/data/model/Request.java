@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.R;
+import com.framgia.fdms.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -12,6 +13,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static com.framgia.fdms.utils.Utils.FORMAT_DATE_DD_MM_YYYY;
+import static com.framgia.fdms.utils.Utils.INPUT_TIME_FORMAT;
 
 /**
  * Created by beepi on 09/05/2017.
@@ -46,7 +50,7 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     @SerializedName("updater")
     private String mUpdater;
     @Expose
-    @SerializedName("devices")
+    @SerializedName("device_assignment")
     private List<DeviceRequest> mDevices;
     @Expose
     @SerializedName("created_at")
@@ -216,14 +220,20 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
         @SerializedName("id")
         private int mId;
         @Expose
+        @SerializedName("product_name")
+        private String mDeviceName;
+        @Expose
         @SerializedName("description")
         private String mDescription;
         @Expose
         @SerializedName("number")
         private int mNumber;
         @Expose
-        @SerializedName("category_name")
+        @SerializedName("device_category")
         private String mCategoryName;
+        @Expose
+        @SerializedName("device_category_id")
+        private int mCategoryId;
         private Status mCategory;
 
         @Override
@@ -277,6 +287,26 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
         public void setCategoryName(String categoryName) {
             mCategoryName = categoryName;
             notifyPropertyChanged(BR.categoryName);
+        }
+
+        @Bindable
+        public String getDeviceName() {
+            return mDeviceName;
+        }
+
+        public void setDeviceName(String deviceName) {
+            mDeviceName = deviceName;
+            notifyPropertyChanged(BR.deviceName);
+        }
+
+        @Bindable
+        public int getCategoryId() {
+            return mCategoryId;
+        }
+
+        public void setCategoryId(int categoryId) {
+            mCategoryId = categoryId;
+            notifyPropertyChanged(BR.categoryId);
         }
 
         public void onDecrement() {

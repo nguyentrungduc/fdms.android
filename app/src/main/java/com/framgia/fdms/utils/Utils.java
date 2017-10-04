@@ -5,14 +5,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.inputmethod.InputMethodManager;
 import com.framgia.fdms.data.model.Respone;
 import io.reactivex.Observable;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static com.framgia.fdms.utils.Constant.PERCENT;
 import static com.framgia.fdms.utils.Constant.TITLE_NOW;
@@ -22,6 +25,10 @@ import static com.framgia.fdms.utils.Constant.TITLE_NOW;
  */
 
 public class Utils {
+    private static final String TIME_ZONE_GMT = "GMT";
+    public static final String INPUT_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+    public static final String FORMAT_DATE_DD_MM_YYYY = "dd/MM/yyyy";
+
     public static <T> Observable<T> getResponse(Respone<T> listRespone) {
         if (listRespone == null) {
             return Observable.error(new NullPointerException());
@@ -102,5 +109,22 @@ public class Utils {
             result += str + "\n";
         }
         return result;
+    }
+
+    public static String convertUiFormatToDataFormat(String time, String inputFormat,
+        String outputFormat) {
+        if (TextUtils.isEmpty(time)) {
+            return "";
+        }
+        TimeZone gmtTime = TimeZone.getTimeZone(TIME_ZONE_GMT);
+        SimpleDateFormat sdf = new SimpleDateFormat(inputFormat, Locale.getDefault());
+        sdf.setTimeZone(gmtTime);
+        SimpleDateFormat newSdf = new SimpleDateFormat(outputFormat, Locale.getDefault());
+        newSdf.setTimeZone(gmtTime);
+        try {
+            return newSdf.format(sdf.parse(time));
+        } catch (ParseException e) {
+            return null;
+        }
     }
 }
