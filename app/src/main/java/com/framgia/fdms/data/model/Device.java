@@ -106,6 +106,12 @@ public class Device extends BaseObservable implements Parcelable {
     @Expose
     @SerializedName("warranty")
     private String mWarranty;
+    @Expose
+    @SerializedName("ram")
+    private String mRam;
+    @Expose
+    @SerializedName("hard_driver")
+    private String mHardDriver;
 
     public Device() {
     }
@@ -135,6 +141,8 @@ public class Device extends BaseObservable implements Parcelable {
         setMeetingRoomId(device.getMeetingRoomId());
         setDeviceMeetingRoom(device.isDeviceMeetingRoom());
         setWarranty(device.getWarranty());
+        setRam(device.getRam());
+        setHardDriver(device.getHardDriver());
     }
 
     public Device(String deviceCode, String productionName, String deviceCategoryName) {
@@ -167,6 +175,8 @@ public class Device extends BaseObservable implements Parcelable {
         mVendorId = in.readInt();
         mMarkerId = in.readInt();
         mWarranty = in.readString();
+        mRam = in.readString();
+        mHardDriver = in.readString();
     }
 
     @Override
@@ -194,6 +204,8 @@ public class Device extends BaseObservable implements Parcelable {
         dest.writeInt(mVendorId);
         dest.writeInt(mMarkerId);
         dest.writeString(mWarranty);
+        dest.writeString(mRam);
+        dest.writeString(mHardDriver);
     }
 
     @Override
@@ -468,6 +480,26 @@ public class Device extends BaseObservable implements Parcelable {
     public void setReturnDate(Date returnDate) {
         mReturnDate = returnDate;
         notifyPropertyChanged(BR.returnDate);
+    }
+
+    @Bindable
+    public String getRam() {
+        return mRam;
+    }
+
+    public void setRam(String ram) {
+        mRam = ram;
+        notifyPropertyChanged(BR.ram);
+    }
+
+    @Bindable
+    public String getHardDriver() {
+        return mHardDriver;
+    }
+
+    public void setHardDriver(String hardDriver) {
+        mHardDriver = hardDriver;
+        notifyPropertyChanged(BR.hardDriver);
     }
 
     @Bindable
