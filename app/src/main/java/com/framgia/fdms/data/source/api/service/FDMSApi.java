@@ -86,8 +86,9 @@ public interface FDMSApi {
     Observable<Respone<Request>> updateActionRequest(@Path("id") int requestId,
         @Field("request[request_status_id]") int actionId);
 
-    @GET("api/device_history/{id}")
-    Observable<Respone<List<DeviceHistoryDetail>>> getDeviceDetailHistory(@Path("id") int deviceId);
+    @GET("api/device_histories/{id}")
+    Observable<Respone<List<DeviceHistoryDetail>>> getDeviceDetailHistory(@Path("id") int deviceId,
+        @Query("page") int page, @Query("per_page") int perPage);
 
     @GET("api/device_using_histories")
     Observable<Respone<List<DeviceUsingHistory>>> getDeviceUsingHistory(
@@ -205,4 +206,16 @@ public interface FDMSApi {
 
     @DELETE("api/device_categories/{category_id}")
     Observable<Respone<String>> deleteDeviceCategory(@Path("category_id") int categoryId);
+
+    @POST("api/device_groups")
+    Observable<Respone<Producer>> addDeviceGroup(@Query("device_group[name]") String name,
+        @Query("device_group[description]") String description);
+
+    @PATCH("api/device_groups/{id}")
+    Observable<Respone<Producer>> editDeviceGroup(@Path("id") int deviceGroupId,
+        @Query("device_group[name]") String name,
+        @Query("device_group[description]") String description);
+
+    @DELETE("api/device_groups/{id}")
+    Observable<Respone<String>> deleteDeviceGroup(@Path("id") int deviceGroupId);
 }

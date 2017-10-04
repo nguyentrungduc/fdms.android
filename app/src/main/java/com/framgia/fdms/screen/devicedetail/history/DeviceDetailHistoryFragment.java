@@ -35,7 +35,7 @@ public class DeviceDetailHistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new DeviceDetailHistoryViewModel();
+        mViewModel = new DeviceDetailHistoryViewModel(this);
 
         DeviceRepository repository =
             new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));

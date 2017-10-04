@@ -23,47 +23,19 @@ public class DeviceHistoryDetail extends BaseObservable {
     private final String STATUS_BROKEN = "broken";
 
     @Expose
-    @SerializedName("date_time")
-    private Date mDateTime;
+    @SerializedName("history_infor")
+    private DeviceHistoryInfo mHistoryInfo;
     @Expose
-    @SerializedName("description")
-    private String mDescription;
-    @Expose
-    @SerializedName("device_status")
-    private String mDeviceStatus;
-
-    @Bindable
-    public Date getDateTime() {
-        return mDateTime;
-    }
-
-    public void setDateTime(Date dateTime) {
-        mDateTime = dateTime;
-        notifyPropertyChanged(BR.dateTime);
-    }
-
-    @Bindable
-    public String getDescription() {
-        return mDescription;
-    }
-
-    public void setDescription(String description) {
-        mDescription = description;
-        notifyPropertyChanged(BR.description);
-    }
-
-    @Bindable
-    public String getDeviceStatus() {
-        return mDeviceStatus;
-    }
-
-    public void setDeviceStatus(String deviceStatus) {
-        mDeviceStatus = deviceStatus;
-        notifyPropertyChanged(BR.deviceStatus);
-    }
+    @SerializedName("device_content")
+    private Device mDevice;
 
     public int getStatusImage() {
-        switch (mDeviceStatus) {
+        if (mHistoryInfo == null
+            || mHistoryInfo.getHistoryData() == null
+            || mHistoryInfo.getHistoryData().getStatus() == null) {
+            return R.drawable.ic_avaiable;
+        }
+        switch (mHistoryInfo.getHistoryData().getStatus()) {
             case STATUS_USING:
                 return R.drawable.ic_using;
             case STATUS_AVAILABLE:
@@ -75,13 +47,23 @@ public class DeviceHistoryDetail extends BaseObservable {
         }
     }
 
-    private Date convertToDate(String dateString) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        try {
-            return dateFormat.parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Bindable
+    public DeviceHistoryInfo getHistoryInfo() {
+        return mHistoryInfo;
+    }
+
+    public void setHistoryInfo(DeviceHistoryInfo historyInfo) {
+        mHistoryInfo = historyInfo;
+        notifyPropertyChanged(BR.historyInfo);
+    }
+
+    @Bindable
+    public Device getDevice() {
+        return mDevice;
+    }
+
+    public void setDevice(Device device) {
+        mDevice = device;
+        notifyPropertyChanged(BR.device);
     }
 }

@@ -16,12 +16,18 @@ public interface DeviceDetailHistoryContract {
         void onGetDeviceHistoryFailed(String message);
 
         void onGetDeviceHistorySuccess(List<DeviceHistoryDetail> deviceHistoryDetails);
+
+        void showProgress();
+
+        void hideProgress();
     }
 
     /**
      * Presenter.
      */
     interface Presenter extends BasePresenter {
-        void getDetailHistory(int deviceId);
+        void getDetailHistory();
+
+        void loadMoreData();
     }
 }

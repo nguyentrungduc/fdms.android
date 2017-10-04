@@ -57,8 +57,9 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
         return mDeviceRemoteDataSource.getDeviceUsingHistory(deviceCode, page, perPage);
     }
 
-    public Observable<List<DeviceHistoryDetail>> getDeviceDetailHistory(int deviceId) {
-        return mDeviceRemoteDataSource.getDeviceDetailHistory(deviceId);
+    public Observable<List<DeviceHistoryDetail>> getDeviceDetailHistory(int deviceId, int page,
+        int perPage) {
+        return mDeviceRemoteDataSource.getDeviceDetailHistory(deviceId, page, perPage);
     }
 
     public Observable<Device> getDevice(int deviceId) {
