@@ -104,7 +104,7 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         RequestBody warranty = createPartFromString(device.getWarranty());
         RequestBody ranm = createPartFromString(device.getRam());
         RequestBody hardDrive = createPartFromString(device.getHardDriver());
-        RequestBody description = createPartFromString(device.getDescription());
+        RequestBody description = createPartFromString(device.getDeviceDescription());
 
         parrams.put(PRODUCTION_NAME, productionName);
         parrams.put(DEVICE_STATUS_ID, deviceStatusId);

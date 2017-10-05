@@ -114,7 +114,7 @@ public class Device extends BaseObservable implements Parcelable {
     private String mHardDriver;
     @Expose
     @SerializedName("description")
-    private String mDescription;
+    private String mDeviceDescription;
 
     public Device() {
     }
@@ -146,7 +146,7 @@ public class Device extends BaseObservable implements Parcelable {
         setWarranty(device.getWarranty());
         setRam(device.getRam());
         setHardDriver(device.getHardDriver());
-        setDescription(device.getDescription());
+        setDeviceDescription(device.getDeviceDescription());
     }
 
     public Device(String deviceCode, String productionName, String deviceCategoryName) {
@@ -181,13 +181,14 @@ public class Device extends BaseObservable implements Parcelable {
         mWarranty = in.readString();
         mRam = in.readString();
         mHardDriver = in.readString();
-        mDescription = in.readString();
+        mDeviceDescription = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mId);
         dest.writeString(mDeviceCode);
+        dest.writeString(mDeviceDescription);
         dest.writeString(mProductionName);
         dest.writeInt(mDeviceStatusId);
         dest.writeInt(mDeviceCategoryId);
@@ -211,7 +212,6 @@ public class Device extends BaseObservable implements Parcelable {
         dest.writeString(mWarranty);
         dest.writeString(mRam);
         dest.writeString(mHardDriver);
-        dest.writeString(mDescription);
     }
 
     @Override
@@ -519,13 +519,13 @@ public class Device extends BaseObservable implements Parcelable {
     }
 
     @Bindable
-    public String getDescription() {
-        return mDescription;
+    public String getDeviceDescription() {
+        return mDeviceDescription;
     }
 
-    public void setDescription(String description) {
-        mDescription = description;
-        notifyPropertyChanged(BR.description);
+    public void setDeviceDescription(String deviceDescription) {
+        mDeviceDescription = deviceDescription;
+        notifyPropertyChanged(BR.deviceDescription);
     }
 
     @Override

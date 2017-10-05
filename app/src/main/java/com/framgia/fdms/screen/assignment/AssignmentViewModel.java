@@ -16,13 +16,11 @@ import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
-import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.deviceselection.DeviceSelectionActivity;
-import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.profile.chooseexport.ChooseExportActivity;
+import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.navigator.Navigator;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
@@ -220,7 +218,7 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     }
 
     @Override
-    public void onAssignmentSuccess(Request request) {
+    public void onAssignmentSuccess() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putInt(BUNDLE_SUCCESS, R.string.msg_assignment_success);

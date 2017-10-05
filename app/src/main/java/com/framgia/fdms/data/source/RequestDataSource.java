@@ -1,5 +1,6 @@
 package com.framgia.fdms.data.source;
 
+import com.framgia.fdms.data.model.AssignmentItemRequest;
 import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Request;
@@ -36,5 +37,7 @@ public interface RequestDataSource {
         Observable<Request> getRequest(int requetsId);
 
         Observable<Request> registerAssignment(AssignmentRequest request);
+
+        Observable<String> registerAssignment(int staffId, List<AssignmentItemRequest> items);
     }
 }

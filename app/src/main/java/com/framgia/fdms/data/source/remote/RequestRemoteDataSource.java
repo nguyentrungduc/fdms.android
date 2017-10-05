@@ -1,5 +1,6 @@
 package com.framgia.fdms.data.source.remote;
 
+import com.framgia.fdms.data.model.AssignmentItemRequest;
 import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Request;
@@ -9,6 +10,7 @@ import com.framgia.fdms.data.source.RequestDataSource;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.utils.Utils;
+import com.google.gson.Gson;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
@@ -23,8 +25,10 @@ import static com.framgia.fdms.utils.Constant.ALL_RELATIVE_ID;
 import static com.framgia.fdms.utils.Constant.ALL_REQUEST_STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_ASSIGNEE_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_ASSIGNMENT_DETAILS;
+import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_ASSIGNMENT_DEVICE_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_DESCRIPTION;
 import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_REQUEST_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_STAFF_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.RELATIVE_ID;
@@ -152,6 +156,30 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
             .flatMap(new Function<Respone<Request>, ObservableSource<Request>>() {
                 @Override
                 public ObservableSource<Request> apply(@NonNull Respone<Request> requestRespone)
+                    throws Exception {
+                    return Utils.getResponse(requestRespone);
+                }
+            });
+    }
+
+    @Override
+    public Observable<String> registerAssignment(int staffId, List<AssignmentItemRequest> items) {
+        Map<String, String> parrams = new HashMap<>();
+
+        parrams.put(ASSIGNMENT_STAFF_ID, String.valueOf(staffId));
+
+        List<String> deviceIds = new ArrayList<>();
+        if (items != null && items.size() > 0) {
+            for (AssignmentItemRequest item : items) {
+                deviceIds.add(String.valueOf(item.getDeviceId()));
+            }
+        }
+
+        parrams.put(ASSIGNMENT_ASSIGNMENT_DEVICE_ID, new Gson().toJson(deviceIds));
+        return mFDMSApi.registerAssignmentForStaff(parrams)
+            .flatMap(new Function<Respone<String>, ObservableSource<String>>() {
+                @Override
+                public ObservableSource<String> apply(@NonNull Respone<String> requestRespone)
                     throws Exception {
                     return Utils.getResponse(requestRespone);
                 }
