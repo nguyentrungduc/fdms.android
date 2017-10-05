@@ -23,13 +23,9 @@ public class DeviceDataSource {
         Observable<List<Device>> getListDevices(String deviceName, int categoryId, int statusId,
             int page, int perPage);
 
-        Observable<List<Status>> getListCategory();
-
-        Observable<List<Status>> getListStatus();
-
         Observable<Device> registerdevice(Device registerdevice);
 
-        Observable<Device> updateDevice(Device device);
+        Observable<String> updateDevice(Device device);
 
         Observable<Device> getDeviceByQrCode(String qrCode);
 

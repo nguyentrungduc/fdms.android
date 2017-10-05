@@ -191,6 +191,7 @@
     <string name="message_export_error">Export error</string>
     <string name="title_user_not_found">User not found</string>
     <string name="msg_no_device">There is not any device</string>
+    <string name="msg_no_device_with_request">There is not any device with this request</string>
     <string name="msg_no_request">To create a new request, please click the + button bellow</string>
     <string name="msg_no_request_manager">Not request device</string>
     <string name="msg_request_write_file">Write list device using</string>
@@ -321,4 +322,6 @@
     <string name="title_assign_cagegory">Category</string>
     <string name="title_assign_device">Device</string>
     <string name="msg_device_empty">Devices returned is empty!</string>
+    <string name="hint_product_description">Description</string>
+    <string name="action_create_device">Create device</string>
 </resources>

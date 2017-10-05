@@ -108,6 +108,9 @@ public class Constant {
         public static final String VENDOR_ID = "device[vendor_id]";
         public static final String MAKER_ID = "device[maker_id]";
         public static final String WARRANTY = "device[warranty]";
+        public static final String RAM = "device[ram]";
+        public static final String HARD_DRIVE = "device[hard_driver]";
+        public static final String DESCRIPTION = "device[description]";
         public static final String IS_BAR_CODE = "device[is_barcode]";
         public static final String IS_MEETING_ROOM = "device[is_meeting_room]";
         public static final String MEETING_ROOM_ID = "device[meeting_room_id]";

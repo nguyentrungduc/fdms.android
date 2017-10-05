@@ -20,6 +20,7 @@ import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.Utils;
+import com.framgia.fdms.utils.navigator.Navigator;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -48,7 +49,7 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_VENDOR;
  */
 public class CreateDeviceViewModel extends BaseObservable
     implements CreateDeviceContract.ViewModel, DatePickerDialog.OnDateSetListener {
-    private static final int DEFAULT_STATUS_ID = 2;
+    public static final int DEFAULT_STATUS_ID = 2;
     private static final String DEFAULT_STATUS_NAME = "available";
     private static final int DEFAULT_BRANCH_ID = 1;
     private static final String DEFAULT_BRANCH_NAME = "Hanoi";
@@ -85,6 +86,7 @@ public class CreateDeviceViewModel extends BaseObservable
     private boolean mIsQrCode = true;
     private Bitmap mDeviceCode;
     private int mProgressBarVisibility = GONE;
+    private Navigator mNavigator;
 
     public CreateDeviceViewModel(CreateDeviceActivity activity, Device device,
         DeviceStatusType type) {
@@ -102,6 +104,7 @@ public class CreateDeviceViewModel extends BaseObservable
             mStatus = new Status(device.getDeviceStatusId(), device.getDeviceStatusName());
         }
         mDeviceType = type;
+        mNavigator = new Navigator(activity);
     }
 
     @Override
@@ -471,19 +474,16 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onUpdateSuccess(Device device) {
-        sUpdatedDevice.cloneDevice(device);
-        mDevice = device;
+    public void onUpdateSuccess(String message) {
+        sUpdatedDevice.cloneDevice(mDevice);
         setProgressBarVisibility(GONE);
-        Snackbar.make(mActivity.findViewById(android.R.id.content),
-            R.string.msg_update_device_success, Snackbar.LENGTH_LONG).show();
+        mNavigator.showToast(message);
     }
 
     @Override
-    public void onUpdateError() {
+    public void onUpdateError(String message) {
         setProgressBarVisibility(GONE);
-        Snackbar.make(mActivity.findViewById(android.R.id.content),
-            R.string.msg_update_device_error, Snackbar.LENGTH_LONG).show();
+        mNavigator.showToast(message);
     }
 
     public AppCompatActivity getActivity() {

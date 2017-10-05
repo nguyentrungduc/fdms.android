@@ -45,9 +45,9 @@ interface CreateDeviceContract {
 
         void onActivityResult(int requestCode, int resultCode, Intent data);
 
-        void onUpdateError();
+        void onUpdateError(String message);
 
-        void onUpdateSuccess(Device device);
+        void onUpdateSuccess(String device);
 
         void onPickDateTimeClick();
 

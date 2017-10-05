@@ -112,6 +112,9 @@ public class Device extends BaseObservable implements Parcelable {
     @Expose
     @SerializedName("hard_driver")
     private String mHardDriver;
+    @Expose
+    @SerializedName("description")
+    private String mDescription;
 
     public Device() {
     }
@@ -143,6 +146,7 @@ public class Device extends BaseObservable implements Parcelable {
         setWarranty(device.getWarranty());
         setRam(device.getRam());
         setHardDriver(device.getHardDriver());
+        setDescription(device.getDescription());
     }
 
     public Device(String deviceCode, String productionName, String deviceCategoryName) {
@@ -177,6 +181,7 @@ public class Device extends BaseObservable implements Parcelable {
         mWarranty = in.readString();
         mRam = in.readString();
         mHardDriver = in.readString();
+        mDescription = in.readString();
     }
 
     @Override
@@ -206,6 +211,7 @@ public class Device extends BaseObservable implements Parcelable {
         dest.writeString(mWarranty);
         dest.writeString(mRam);
         dest.writeString(mHardDriver);
+        dest.writeString(mDescription);
     }
 
     @Override
@@ -510,6 +516,16 @@ public class Device extends BaseObservable implements Parcelable {
     public void setDeviceMeetingRoom(boolean deviceMeetingRoom) {
         mIsDeviceMeetingRoom = deviceMeetingRoom;
         notifyPropertyChanged(BR.deviceMeetingRoom);
+    }
+
+    @Bindable
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String description) {
+        mDescription = description;
+        notifyPropertyChanged(BR.description);
     }
 
     @Override
