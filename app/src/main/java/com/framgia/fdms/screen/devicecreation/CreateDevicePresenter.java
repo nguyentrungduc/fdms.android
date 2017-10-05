@@ -91,16 +91,15 @@ final class CreateDevicePresenter implements CreateDeviceContract.Presenter {
                     mViewModel.setProgressBar(VISIBLE);
                 }
             })
-            .subscribe(new Consumer<Device>() {
+            .subscribe(new Consumer<String>() {
                 @Override
-                public void accept(Device device) throws Exception {
-                    localDevice.cloneDevice(device);
-                    mViewModel.onUpdateSuccess(localDevice);
+                public void accept(String message) throws Exception {
+                    mViewModel.onUpdateSuccess(message);
                 }
             }, new RequestError() {
                 @Override
                 public void onRequestError(BaseException error) {
-                    mViewModel.onUpdateError();
+                    mViewModel.onUpdateError(error.getMessage());
                 }
             }, new Action() {
                 @Override

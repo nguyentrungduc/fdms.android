@@ -28,19 +28,11 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
             perPage);
     }
 
-    public Observable<List<Status>> getListCategory() {
-        return mDeviceRemoteDataSource.getListCategory();
-    }
-
-    public Observable<List<Status>> getListStatus() {
-        return mDeviceRemoteDataSource.getListStatus();
-    }
-
     public Observable<Device> registerdevice(Device device) {
         return mDeviceRemoteDataSource.registerdevice(device);
     }
 
-    public Observable<Device> updateDevice(Device device) {
+    public Observable<String> updateDevice(Device device) {
         return mDeviceRemoteDataSource.updateDevice(device);
     }
 

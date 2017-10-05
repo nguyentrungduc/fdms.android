@@ -27,5 +27,13 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:recyclerAdapter="@{viewModel.adapter}"
             />
+
+        <include
+            layout="@layout/empty_state"
+            app:image="@{@drawable/ic_not_found_data}"
+            app:text="@{@string/msg_no_device}"
+            app:visibleState="@{viewModel.emptyViewVisible}"
+            />
+
     </RelativeLayout>
 </layout>

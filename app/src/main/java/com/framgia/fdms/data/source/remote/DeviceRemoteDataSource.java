@@ -27,10 +27,12 @@ import okhttp3.RequestBody;
 
 import static com.framgia.fdms.utils.Constant.ApiParram.BOUGHT_DATE;
 import static com.framgia.fdms.utils.Constant.ApiParram.CATEGORY_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.DESCRIPTION;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CATEGORY_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CODE;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_NAME;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_STATUS_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.HARD_DRIVE;
 import static com.framgia.fdms.utils.Constant.ApiParram.IS_BAR_CODE;
 import static com.framgia.fdms.utils.Constant.ApiParram.IS_MEETING_ROOM;
 import static com.framgia.fdms.utils.Constant.ApiParram.MAKER_ID;
@@ -41,6 +43,7 @@ import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PICTURE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PRODUCTION_NAME;
+import static com.framgia.fdms.utils.Constant.ApiParram.RAM;
 import static com.framgia.fdms.utils.Constant.ApiParram.SERIAL_NUMBER;
 import static com.framgia.fdms.utils.Constant.ApiParram.STAFF_USING_NAME;
 import static com.framgia.fdms.utils.Constant.ApiParram.STATUS_ID;
@@ -76,20 +79,6 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
     }
 
     @Override
-    public Observable<List<Status>> getListCategory() {
-        // TODO: replace by call API later
-        List<Status> categories = new ArrayList<>();
-        return Observable.just(categories);
-    }
-
-    @Override
-    public Observable<List<Status>> getListStatus() {
-        // TODO: replace by call API later
-        List<Status> statuses = new ArrayList<>();
-        return Observable.just(statuses);
-    }
-
-    @Override
     public Observable<Device> registerdevice(final Device device) {
         Map<String, RequestBody> parrams = new HashMap<>();
 
@@ -113,6 +102,9 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
             createPartFromString(String.valueOf(format.format(device.getBoughtDate())));
         RequestBody originalPrice = createPartFromString(device.getOriginalPrice());
         RequestBody warranty = createPartFromString(device.getWarranty());
+        RequestBody ranm = createPartFromString(device.getRam());
+        RequestBody hardDrive = createPartFromString(device.getHardDriver());
+        RequestBody description = createPartFromString(device.getDescription());
 
         parrams.put(PRODUCTION_NAME, productionName);
         parrams.put(DEVICE_STATUS_ID, deviceStatusId);
@@ -128,6 +120,9 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         parrams.put(BOUGHT_DATE, boughtDate);
         parrams.put(ORIGINAL_PRICE, originalPrice);
         parrams.put(WARRANTY, warranty);
+        parrams.put(RAM, ranm);
+        parrams.put(HARD_DRIVE, hardDrive);
+        parrams.put(DESCRIPTION, description);
 
         MultipartBody.Part filePart = null;
 
@@ -152,7 +147,7 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
     }
 
     @Override
-    public Observable<Device> updateDevice(Device device) {
+    public Observable<String> updateDevice(Device device) {
         Map<String, RequestBody> parrams = new HashMap<>();
         RequestBody productionName = null, deviceStatusId = null, deviceCategoryId = null,
             deviceCode = null;
@@ -189,11 +184,18 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         }
 
         return mFDMSApi.updateDevice(device.getId(), parrams, filePart)
-            .flatMap(new Function<Respone<Device>, ObservableSource<Device>>() {
+            .flatMap(new Function<Respone<String>, ObservableSource<String>>() {
                 @Override
-                public ObservableSource<Device> apply(Respone<Device> deviceRespone)
+                public ObservableSource<String> apply(Respone<String> deviceRespone)
                     throws Exception {
-                    return Utils.getResponse(deviceRespone);
+                    if (deviceRespone == null) {
+                        return Observable.error(new NullPointerException());
+                    }
+                    if (deviceRespone.isError()) {
+                        return Observable.error(
+                            new NullPointerException("ERROR" + deviceRespone.getStatus()));
+                    }
+                    return Observable.just(deviceRespone.getMessage());
                 }
             });
     }

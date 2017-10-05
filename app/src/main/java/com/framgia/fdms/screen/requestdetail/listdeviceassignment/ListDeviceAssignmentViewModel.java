@@ -1,12 +1,13 @@
 package com.framgia.fdms.screen.requestdetail.listdeviceassignment;
 
-import android.content.Context;
 import android.databinding.BaseObservable;
-import android.databinding.ObservableField;
+import android.databinding.Bindable;
 import android.support.v4.app.Fragment;
+import com.framgia.fdms.BR;
 import com.framgia.fdms.data.model.Request;
-import com.framgia.fdms.screen.requestdetail.information.RequestInformationFragment;
-import com.framgia.fdms.utils.navigator.Navigator;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 /**
  * Exposes the data to be used in the Devicedetail screen.
@@ -16,17 +17,14 @@ public class ListDeviceAssignmentViewModel extends BaseObservable
     implements ListDeviceAssignmentContract.ViewModel {
 
     private ListDeviceAssignmentContract.Presenter mPresenter;
-    private Context mContext;
-    private Fragment mFragment;
-    private Request.DeviceRequest mDeviceRequest;
     private ListDeviceAssignmentAdapter mAdapter;
-    private ObservableField<Integer> mProgressBarVisibility = new ObservableField<>();
+    private int mEmptyViewVisible = GONE;
 
     public ListDeviceAssignmentViewModel(Fragment fragment, Request request) {
-        mFragment = fragment;
-        mContext = mFragment.getContext();
-        mAdapter = new ListDeviceAssignmentAdapter(mContext, this);
+        mAdapter = new ListDeviceAssignmentAdapter(fragment.getContext(), this);
         mAdapter.onUpdatePage(request.getDevices());
+        setEmptyViewVisible(
+            request.getDevice() != null && request.getDevice().size() != 0 ? GONE : VISIBLE);
     }
 
     @Override
@@ -44,11 +42,17 @@ public class ListDeviceAssignmentViewModel extends BaseObservable
         mPresenter = presenter;
     }
 
-    public ObservableField<Integer> getProgressBarVisibility() {
-        return mProgressBarVisibility;
-    }
-
     public ListDeviceAssignmentAdapter getAdapter() {
         return mAdapter;
+    }
+
+    @Bindable
+    public int getEmptyViewVisible() {
+        return mEmptyViewVisible;
+    }
+
+    public void setEmptyViewVisible(int emptyViewVisible) {
+        mEmptyViewVisible = emptyViewVisible;
+        notifyPropertyChanged(BR.emptyStateVisibility);
     }
 }

@@ -48,7 +48,7 @@ public interface FDMSApi {
 
     @Multipart
     @PATCH("api/devices/{id}")
-    Observable<Respone<Device>> updateDevice(@Path("id") int id,
+    Observable<Respone<String>> updateDevice(@Path("id") int id,
         @PartMap Map<String, RequestBody> params, @Part MultipartBody.Part picture);
 
     @GET("/api/request_dashboards")
