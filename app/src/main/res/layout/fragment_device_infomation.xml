@@ -84,6 +84,20 @@
 
                 <include
                     layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_ram}"
+                    bind:text="@{viewModel.device.ram}"
+                    bind:title="@{@string/title_ram}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_hard_drive}"
+                    bind:text="@{viewModel.device.hardDriver}"
+                    bind:title="@{@string/title_hard_drive}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
                     bind:image="@{@drawable/ic_vendor_24dp}"
                     bind:text="@{viewModel.device.vendor.name}"
                     bind:title="@{@string/title_vendor}"
