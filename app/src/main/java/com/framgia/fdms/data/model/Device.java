@@ -19,17 +19,6 @@ import static com.framgia.fdms.utils.Constant.USING;
  * Created by Age on 4/1/2017.
  */
 public class Device extends BaseObservable implements Parcelable {
-    public static final Creator<Device> CREATOR = new Creator<Device>() {
-        @Override
-        public Device createFromParcel(Parcel in) {
-            return new Device(in);
-        }
-
-        @Override
-        public Device[] newArray(int size) {
-            return new Device[size];
-        }
-    };
     @Expose
     @SerializedName("id")
     private int mId;
@@ -119,6 +108,47 @@ public class Device extends BaseObservable implements Parcelable {
     public Device() {
     }
 
+    protected Device(Parcel in) {
+        mId = in.readInt();
+        mDeviceCode = in.readString();
+        mProductionName = in.readString();
+        mDeviceStatusId = in.readInt();
+        mDeviceCategoryId = in.readInt();
+        mMeetingRoomId = in.readInt();
+        mPicture = in.readParcelable(Picture.class.getClassLoader());
+        mOriginalPrice = in.readString();
+        mPrintedCode = in.readString();
+        mIsBarcode = in.readByte() != 0;
+        mIsDeviceMeetingRoom = in.readByte() != 0;
+        mDeviceStatusName = in.readString();
+        mDeviceCategoryName = in.readString();
+        mSerialNumber = in.readString();
+        mModelNumber = in.readString();
+        mStatus = in.readInt();
+        mUser = in.readParcelable(UserBorrow.class.getClassLoader());
+        mIsSelected = in.readByte() != 0;
+        mVendor = in.readParcelable(Status.class.getClassLoader());
+        mMarker = in.readParcelable(Status.class.getClassLoader());
+        mVendorId = in.readInt();
+        mMarkerId = in.readInt();
+        mWarranty = in.readString();
+        mRam = in.readString();
+        mHardDriver = in.readString();
+        mDeviceDescription = in.readString();
+    }
+
+    public static final Creator<Device> CREATOR = new Creator<Device>() {
+        @Override
+        public Device createFromParcel(Parcel in) {
+            return new Device(in);
+        }
+
+        @Override
+        public Device[] newArray(int size) {
+            return new Device[size];
+        }
+    };
+
     public void cloneDevice(Device device) {
         setId(device.getId());
         setDeviceCode(device.getDeviceCode());
@@ -155,69 +185,6 @@ public class Device extends BaseObservable implements Parcelable {
         mDeviceCategoryName = deviceCategoryName;
     }
 
-    protected Device(Parcel in) {
-        mId = in.readInt();
-        mDeviceCode = in.readString();
-        mProductionName = in.readString();
-        mDeviceStatusId = in.readInt();
-        mDeviceCategoryId = in.readInt();
-        mMeetingRoomId = in.readInt();
-        mPicture = in.readParcelable(Picture.class.getClassLoader());
-        mOriginalPrice = in.readString();
-        mPrintedCode = in.readString();
-        mIsBarcode = in.readByte() != 0;
-        mIsDeviceMeetingRoom = in.readByte() != 0;
-        mDeviceStatusName = in.readString();
-        mDeviceCategoryName = in.readString();
-        mSerialNumber = in.readString();
-        mModelNumber = in.readString();
-        mStatus = in.readInt();
-        mIsSelected = in.readByte() != 0;
-        mUser = in.readParcelable(UserBorrow.class.getClassLoader());
-        mVendor = in.readParcelable(Status.class.getClassLoader());
-        mMarker = in.readParcelable(Status.class.getClassLoader());
-        mVendorId = in.readInt();
-        mMarkerId = in.readInt();
-        mWarranty = in.readString();
-        mRam = in.readString();
-        mHardDriver = in.readString();
-        mDeviceDescription = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mId);
-        dest.writeString(mDeviceCode);
-        dest.writeString(mDeviceDescription);
-        dest.writeString(mProductionName);
-        dest.writeInt(mDeviceStatusId);
-        dest.writeInt(mDeviceCategoryId);
-        dest.writeInt(mMeetingRoomId);
-        dest.writeParcelable(mPicture, flags);
-        dest.writeString(mOriginalPrice);
-        dest.writeString(mPrintedCode);
-        dest.writeByte((byte) (mIsBarcode ? 1 : 0));
-        dest.writeByte((byte) (mIsDeviceMeetingRoom ? 1 : 0));
-        dest.writeString(mDeviceStatusName);
-        dest.writeString(mDeviceCategoryName);
-        dest.writeString(mSerialNumber);
-        dest.writeString(mModelNumber);
-        dest.writeInt(mStatus);
-        dest.writeByte((byte) (mIsSelected ? 1 : 0));
-        dest.writeParcelable(mUser, flags);
-        dest.writeParcelable(mVendor, flags);
-        dest.writeParcelable(mMarker, flags);
-        dest.writeInt(mVendorId);
-        dest.writeInt(mMarkerId);
-        dest.writeString(mWarranty);
-        dest.writeString(mRam);
-        dest.writeString(mHardDriver);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
     @Bindable
     public int getId() {
@@ -531,6 +498,41 @@ public class Device extends BaseObservable implements Parcelable {
     @Override
     public String toString() {
         return new Gson().toJson(this);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mId);
+        parcel.writeString(mDeviceCode);
+        parcel.writeString(mProductionName);
+        parcel.writeInt(mDeviceStatusId);
+        parcel.writeInt(mDeviceCategoryId);
+        parcel.writeInt(mMeetingRoomId);
+        parcel.writeParcelable(mPicture, i);
+        parcel.writeString(mOriginalPrice);
+        parcel.writeString(mPrintedCode);
+        parcel.writeByte((byte) (mIsBarcode ? 1 : 0));
+        parcel.writeByte((byte) (mIsDeviceMeetingRoom ? 1 : 0));
+        parcel.writeString(mDeviceStatusName);
+        parcel.writeString(mDeviceCategoryName);
+        parcel.writeString(mSerialNumber);
+        parcel.writeString(mModelNumber);
+        parcel.writeInt(mStatus);
+        parcel.writeParcelable(mUser, i);
+        parcel.writeByte((byte) (mIsSelected ? 1 : 0));
+        parcel.writeParcelable(mVendor, i);
+        parcel.writeParcelable(mMarker, i);
+        parcel.writeInt(mVendorId);
+        parcel.writeInt(mMarkerId);
+        parcel.writeString(mWarranty);
+        parcel.writeString(mRam);
+        parcel.writeString(mHardDriver);
+        parcel.writeString(mDeviceDescription);
     }
 
     public static class UserBorrow implements Parcelable {

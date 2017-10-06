@@ -25,6 +25,8 @@ public interface SelectionContract {
         void hideProgress();
 
         void setSelectedType(int selectedType);
+
+        void setAllowLoadMore(boolean allowLoadMore);
     }
 
     /**

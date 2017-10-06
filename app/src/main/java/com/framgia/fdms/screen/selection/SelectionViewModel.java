@@ -48,6 +48,7 @@ public class SelectionViewModel extends BaseObservable implements SelectionContr
     private boolean mIsLoadMore;
     private int mLoadingMoreVisibility;
     private int mSelectedType;
+    private boolean mAllowLoadMore = true;
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -61,7 +62,9 @@ public class SelectionViewModel extends BaseObservable implements SelectionContr
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-            if (!mIsLoadMore && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+            if (mAllowLoadMore
+                && !mIsLoadMore
+                && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                 setLoadingMoreVisibility(VISIBLE);
                 mPresenter.loadMoreData();
             }
@@ -206,5 +209,10 @@ public class SelectionViewModel extends BaseObservable implements SelectionContr
     public void setSelectedType(int selectedType) {
         mSelectedType = selectedType;
         notifyPropertyChanged(BR.selectedType);
+    }
+
+    @Override
+    public void setAllowLoadMore(boolean allowLoadMore) {
+        mAllowLoadMore = allowLoadMore;
     }
 }

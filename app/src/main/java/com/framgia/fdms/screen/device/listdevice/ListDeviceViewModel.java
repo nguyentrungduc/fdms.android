@@ -27,6 +27,7 @@ import com.framgia.fdms.screen.devicecreation.DeviceStatusType;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.returndevice.ReturnDeviceActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
+import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import com.github.clans.fab.FloatingActionMenu;
 import java.util.ArrayList;
@@ -40,10 +41,12 @@ import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MAKER;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MEETING_ROOM;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
@@ -71,6 +74,7 @@ public class ListDeviceViewModel extends BaseObservable
     private String mDrawerStatus = DRAWER_IS_CLOSE;
     private DeviceFilterModel mFilterModel;
     private boolean mIsChangeFilter;
+    private Navigator mNavigator;
 
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
         @Override
@@ -117,6 +121,7 @@ public class ListDeviceViewModel extends BaseObservable
         mContext = fragment.getContext();
         mAdapter = new ListDeviceAdapter(mContext, new ArrayList<Device>(), this);
         mFilterModel = new DeviceFilterModel();
+        mNavigator = new Navigator(fragment);
     }
 
     public void loadData() {
@@ -146,6 +151,11 @@ public class ListDeviceViewModel extends BaseObservable
                 break;
             case REQUEST_MEETING_ROOM:
                 mFilterModel.setMeetingRoom((Producer) data);
+                break;
+            case REQUEST_CREATE_ASSIGNMENT:
+                mNavigator.showToast(bundle.getInt(BUNDLE_SUCCESS));
+                mAdapter.clear();
+                mPresenter.getData(mFilterModel, FIRST_PAGE);
                 break;
             default:
                 break;
@@ -260,8 +270,8 @@ public class ListDeviceViewModel extends BaseObservable
     @Override
     public void onAssignDeviceForNewMemberClick(FloatingActionMenu floatingActionsMenu) {
         floatingActionsMenu.close(true);
-        mFragment.startActivity(AssignmentActivity.getInstance(mFragment.getContext(),
-            AssignmentType.ASSIGN_BY_NEW_MEMBER));
+        mFragment.startActivityForResult(AssignmentActivity.getInstance(mFragment.getContext(),
+            AssignmentType.ASSIGN_BY_NEW_MEMBER), REQUEST_CREATE_ASSIGNMENT);
     }
 
     @Override

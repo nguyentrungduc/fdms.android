@@ -90,9 +90,7 @@ public class DeviceSelectionActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        if (mViewModel != null) {
-            mViewModel.onSearchData(query);
-        }
+        mViewModel.onSearchData(query);
         return true;
     }
 

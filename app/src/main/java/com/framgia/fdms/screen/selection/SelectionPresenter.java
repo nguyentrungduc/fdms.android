@@ -207,6 +207,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 @Override
                 public void accept(List<Status> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
+                    mViewModel.setAllowLoadMore(statuses != null && statuses.size() == PER_PAGE);
                 }
             }, new RequestError() {
                 @Override
@@ -238,6 +239,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 @Override
                 public void accept(List<Status> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
+                    mViewModel.setAllowLoadMore(false);
                 }
             }, new RequestError() {
                 @Override
@@ -269,6 +271,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 @Override
                 public void accept(List<Status> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
+                    mViewModel.setAllowLoadMore(false);
                     mViewModel.hideProgress();
                 }
             }, new RequestError() {
@@ -300,6 +303,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 @Override
                 public void accept(List<Producer> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
+                    mViewModel.setAllowLoadMore(statuses != null && statuses.size() == PER_PAGE);
                 }
             }, new RequestError() {
                 @Override
@@ -333,6 +337,8 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                     public void accept(List<Producer> statuses) throws Exception {
                         mViewModel.onGetDataSuccess(statuses);
                         mViewModel.hideProgress();
+                        mViewModel.setAllowLoadMore(
+                            statuses != null && statuses.size() == PER_PAGE);
                     }
                 }, new RequestError() {
                     @Override
@@ -364,6 +370,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 public void accept(List<Producer> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
+                    mViewModel.setAllowLoadMore(statuses != null && statuses.size() == PER_PAGE);
                 }
             }, new RequestError() {
                 @Override
@@ -394,6 +401,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 @Override
                 public void accept(List<Producer> producers) throws Exception {
                     mViewModel.onGetDataSuccess(producers);
+                    mViewModel.setAllowLoadMore(producers != null && producers.size() == PER_PAGE);
                 }
             }, new RequestError() {
                 @Override
@@ -426,6 +434,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 public void accept(List<Status> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
+                    mViewModel.setAllowLoadMore(false);
                 }
             }, new RequestError() {
                 @Override
@@ -457,6 +466,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 public void accept(@NonNull List<Producer> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
+                    mViewModel.setAllowLoadMore(false);
                 }
             }, new RequestError() {
                 @Override
@@ -488,6 +498,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 public void accept(@NonNull List<Status> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
+                    mViewModel.setAllowLoadMore(false);
                 }
             }, new RequestError() {
                 @Override
@@ -519,6 +530,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 public void accept(@NonNull List<Status> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
+                    mViewModel.setAllowLoadMore(false);
                 }
             }, new RequestError() {
                 @Override
@@ -550,6 +562,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 public void accept(@NonNull List<Status> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
+                    mViewModel.setAllowLoadMore(statuses != null && statuses.size() == PER_PAGE);
                 }
             }, new RequestError() {
                 @Override

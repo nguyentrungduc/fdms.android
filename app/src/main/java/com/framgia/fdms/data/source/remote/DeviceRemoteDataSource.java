@@ -321,6 +321,7 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
     public Map<String, String> getDeviceParams(DeviceFilterModel filterModel, int page,
         int perPage) {
         Map<String, String> parrams = new HashMap<>();
+
         if (filterModel.getCategory() != null
             && filterModel.getCategory().getId() != OUT_OF_INDEX) {
             parrams.put(CATEGORY_ID, String.valueOf(filterModel.getCategory().getId()));

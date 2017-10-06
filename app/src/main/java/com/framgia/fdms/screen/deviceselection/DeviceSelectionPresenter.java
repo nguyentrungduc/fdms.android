@@ -1,6 +1,5 @@
 package com.framgia.fdms.screen.deviceselection;
 
-import android.text.TextUtils;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.DeviceRepository;
@@ -15,9 +14,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
+import static com.framgia.fdms.utils.Constant.AVAIABLE;
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
-import static com.framgia.fdms.utils.Constant.NOT_SEARCH;
-import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
 /**
@@ -25,13 +23,10 @@ import static com.framgia.fdms.utils.Constant.PER_PAGE;
  * updates the UI as required.
  */
 public class DeviceSelectionPresenter implements DeviceSelectionContract.Presenter {
-    private static final String TAG = DeviceSelectionPresenter.class.getName();
+
     private final DeviceSelectionContract.ViewModel mViewModel;
     private CompositeDisposable mCompositeSubscriptions = new CompositeDisposable();
     private int mPage = FIRST_PAGE;
-    private String mKeyWord = NOT_SEARCH;
-    private int mCategoryId = OUT_OF_INDEX;
-    private int mStatusId = OUT_OF_INDEX;
     private DeviceRepository mDeviceRepository;
     private DeviceFilterModel mFilterModel;
 
@@ -39,9 +34,9 @@ public class DeviceSelectionPresenter implements DeviceSelectionContract.Present
         DeviceRepository deviceRepository, int categoryId) {
         mViewModel = viewModel;
         mDeviceRepository = deviceRepository;
-        mCategoryId = categoryId;
         mFilterModel = new DeviceFilterModel();
         mFilterModel.setCategory(new Status(categoryId));
+        mFilterModel.setStatus(new Status(AVAIABLE));
         getData(null);
     }
 
@@ -86,7 +81,6 @@ public class DeviceSelectionPresenter implements DeviceSelectionContract.Present
 
     @Override
     public void getData(String keyWord) {
-        mKeyWord = TextUtils.isEmpty(keyWord) ? NOT_SEARCH : keyWord;
         mPage = FIRST_PAGE;
         mFilterModel.setDeviceName(keyWord);
         getListDevice(mFilterModel, mPage);
