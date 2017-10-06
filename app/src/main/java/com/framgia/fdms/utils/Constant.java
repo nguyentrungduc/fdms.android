@@ -144,6 +144,7 @@ public class Constant {
             "assignment[assignment_details_attributes]";
         public static final String ASSIGNMENT_ASSIGNMENT_DEVICE_ID = "device_ids[]";
         public static final String DEVICE_GROUP_ID = "device_group_id";
+        public static final String USER_NAME = "username";
         public static final String DEVICE_CATEGORY_NAME = "device_category_name";
         public static final String DEVICE_CATEGORY_NAME_MANAGER = "device_category[name]";
         public static final String DEVICE_CATEGORY_DESCRIPTION_MANAGER =

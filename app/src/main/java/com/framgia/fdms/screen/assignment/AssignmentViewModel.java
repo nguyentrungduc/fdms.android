@@ -28,6 +28,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICES;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
+import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORIES;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_GROUPS;
@@ -134,7 +135,7 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
 
             case REQUEST_USER_BORROW:
                 status = bundle.getParcelable(BUNDLE_DATA);
-                if (status != null) {
+                if (status != null && status.getId() != OUT_OF_INDEX) {
                     setStaff(status);
                 }
                 break;

@@ -39,6 +39,16 @@ public class Utils {
         }
     }
 
+    public static <T> Observable<String> getMesssage(Respone<T> listRespone) {
+        if (listRespone == null) {
+            return Observable.error(new NullPointerException());
+        } else if (listRespone.isError()) {
+            return Observable.error(new NullPointerException("ERROR" + listRespone.getStatus()));
+        } else {
+            return Observable.just(listRespone.getMessage());
+        }
+    }
+
     public static String getStringPercent(int count, int total) {
         float percent;
         if (total == 0) {

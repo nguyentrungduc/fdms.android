@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CATEGORY_NAME;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
+import static com.framgia.fdms.utils.Constant.ApiParram.USER_NAME;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 /**
@@ -141,7 +141,7 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
     private Map<String, String> getParams(final String query, int page, int perPage) {
         Map<String, String> params = new HashMap<>();
         if (!TextUtils.isEmpty(query)) {
-            params.put(DEVICE_CATEGORY_NAME, query);
+            params.put(USER_NAME, query);
         }
         if (page != OUT_OF_INDEX) {
             params.put(PAGE, String.valueOf(page));

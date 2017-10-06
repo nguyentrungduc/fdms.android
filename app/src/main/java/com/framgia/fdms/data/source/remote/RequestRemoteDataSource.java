@@ -167,21 +167,18 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
         Map<String, String> parrams = new HashMap<>();
 
         parrams.put(ASSIGNMENT_STAFF_ID, String.valueOf(staffId));
-
-        List<String> deviceIds = new ArrayList<>();
         if (items != null && items.size() > 0) {
             for (AssignmentItemRequest item : items) {
-                deviceIds.add(String.valueOf(item.getDeviceId()));
+                parrams.put(ASSIGNMENT_ASSIGNMENT_DEVICE_ID, String.valueOf(item.getDeviceId()));
             }
         }
 
-        parrams.put(ASSIGNMENT_ASSIGNMENT_DEVICE_ID, new Gson().toJson(deviceIds));
         return mFDMSApi.registerAssignmentForStaff(parrams)
             .flatMap(new Function<Respone<String>, ObservableSource<String>>() {
                 @Override
                 public ObservableSource<String> apply(@NonNull Respone<String> requestRespone)
                     throws Exception {
-                    return Utils.getResponse(requestRespone);
+                    return Utils.getMesssage(requestRespone);
                 }
             });
     }
