@@ -91,7 +91,7 @@ public class SelectionViewModel extends BaseObservable implements SelectionContr
     @Override
     public void setPresenter(SelectionContract.Presenter presenter) {
         mPresenter = presenter;
-        mPresenter.getData("");
+        mPresenter.getData("", false);
     }
 
     public void onSelectedItem(Status data) {
@@ -123,9 +123,9 @@ public class SelectionViewModel extends BaseObservable implements SelectionContr
     }
 
     @Override
-    public void onSearch(String query) {
+    public void onSearch(String query, boolean isClickSearch) {
         mAdapter.clearData();
-        mPresenter.getData(query);
+        mPresenter.getData(query, isClickSearch);
     }
 
     @Override

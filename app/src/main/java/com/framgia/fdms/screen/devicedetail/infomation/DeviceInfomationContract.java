@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.devicedetail.infomation;
 
+import android.content.Intent;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Device;
@@ -17,6 +18,8 @@ interface DeviceInfomationContract {
         void onError();
 
         void onEditDevice();
+
+        void onActivityResult(int requestCode, int resultCode, Intent data);
     }
 
     /**

@@ -45,6 +45,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.USER_BORROW;
 import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
+import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 /**
  * StatusSelection Screen.
@@ -159,6 +160,10 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
             return;
         }
         mSelectionType = bundle.getInt(BUNDLE_SELECTION_TYPE);
+        if (bundle.getInt(BUNDLE_ID) == 0) {
+            mDeviceGroupId = OUT_OF_INDEX;
+            return;
+        }
         mDeviceGroupId = bundle.getInt(BUNDLE_ID);
     }
 
@@ -181,7 +186,7 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
                 mSearchView.setQuery("", false);
                 mSearchView.onActionViewCollapsed();
                 mSearchMenu.collapseActionView();
-                mViewModel.onSearch("");
+                mViewModel.onSearch("", false);
             }
         });
         return true;
@@ -209,7 +214,7 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        mViewModel.onSearch(query);
+        mViewModel.onSearch(query, true);
         return false;
     }
 

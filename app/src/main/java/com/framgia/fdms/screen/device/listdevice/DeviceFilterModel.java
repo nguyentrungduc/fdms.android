@@ -17,6 +17,7 @@ public class DeviceFilterModel extends BaseObservable {
     private String mStaffName;
     private Status mStatus;
     private Status mCategory;
+    private Status mBranch;
     private Producer mVendor;
     private Producer mMarker;
     private Producer mMeetingRoom;
@@ -32,6 +33,7 @@ public class DeviceFilterModel extends BaseObservable {
         setMeetingRoom(new Producer(OUT_OF_INDEX, TITLE_NA));
         setVendor(new Producer(OUT_OF_INDEX, TITLE_NA));
         setMarker(new Producer(OUT_OF_INDEX, TITLE_NA));
+        setBranch(new Status(OUT_OF_INDEX, ""));
         setDeviceName("");
         setStaffName("");
     }
@@ -104,5 +106,15 @@ public class DeviceFilterModel extends BaseObservable {
     public void setDeviceName(String deviceName) {
         mDeviceName = deviceName;
         notifyPropertyChanged(BR.deviceName);
+    }
+
+    @Bindable
+    public Status getBranch() {
+        return mBranch;
+    }
+
+    public void setBranch(Status branch) {
+        mBranch = branch;
+        notifyPropertyChanged(BR.branch);
     }
 }

@@ -41,7 +41,7 @@ interface CreateDeviceContract {
 
         void onInputWarrantyError();
 
-        void onCreateDeviceClick();
+        void onActionDeviceClick();
 
         void onActivityResult(int requestCode, int resultCode, Intent data);
 

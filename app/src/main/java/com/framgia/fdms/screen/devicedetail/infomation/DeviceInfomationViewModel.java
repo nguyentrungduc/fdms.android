@@ -1,6 +1,7 @@
 package com.framgia.fdms.screen.devicedetail.infomation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableField;
@@ -11,6 +12,10 @@ import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.screen.devicecreation.CreateDeviceActivity;
 import com.framgia.fdms.screen.devicecreation.DeviceStatusType;
+
+import static android.app.Activity.RESULT_OK;
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICE;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_EDIT;
 
 /**
  * Exposes the data to be used in the Deviceinfomation screen.
@@ -54,8 +59,18 @@ public class DeviceInfomationViewModel extends BaseObservable
 
     @Override
     public void onEditDevice() {
-        mContext.startActivity(
-            CreateDeviceActivity.getInstance(mContext, mDevice, DeviceStatusType.EDIT));
+        mActivity.startActivityForResult(
+            CreateDeviceActivity.getInstance(mContext, mDevice, DeviceStatusType.EDIT),
+            REQUEST_EDIT);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK || data == null) return;
+        Device device = data.getExtras().getParcelable(BUNDLE_DEVICE);
+        if (requestCode == REQUEST_EDIT) {
+            setDevice(device);
+        }
     }
 
     @Override
