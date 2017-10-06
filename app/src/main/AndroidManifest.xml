@@ -92,9 +92,11 @@
         <activity
             android:name=".screen.deviceselection.DeviceSelectionActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".screen.selection.SelectionActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".screen.user.UserActivity"
             android:screenOrientation="portrait"/>
     </application>
 

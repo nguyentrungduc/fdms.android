@@ -8,15 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.DeviceRepository;
-import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
-import com.framgia.fdms.data.source.local.UserLocalDataSource;
-import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.databinding.FragmentMyDeviceDetailBinding;
 
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_TYPE;
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_USER;
 
 /**
  * MyDeviceDetail Screen.
@@ -25,10 +24,11 @@ public class MyDeviceDetailFragment extends Fragment {
 
     private MyDeviceDetailContract.ViewModel mViewModel;
 
-    public static MyDeviceDetailFragment newInstance(@MyDeviceType int type) {
+    public static MyDeviceDetailFragment newInstance(User user, @MyDeviceType int type) {
         MyDeviceDetailFragment fragment = new MyDeviceDetailFragment();
         Bundle args = new Bundle();
         args.putInt(BUNDLE_TYPE, type);
+        args.putParcelable(BUNDLE_USER, user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -37,10 +37,10 @@ public class MyDeviceDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = new MyDeviceDetailViewModel(this);
-
+        User user = getArguments().getParcelable(BUNDLE_USER);
         MyDeviceDetailContract.Presenter presenter =
             new MyDeviceDetailPresenter(mViewModel, getArguments().getInt(BUNDLE_TYPE),
-                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))),
+                user.getEmail(),
                 new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
     }

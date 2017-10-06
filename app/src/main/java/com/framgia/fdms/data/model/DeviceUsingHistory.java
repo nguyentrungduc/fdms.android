@@ -16,6 +16,9 @@ public class DeviceUsingHistory extends BaseObservable {
     @SerializedName(value = "staff_name", alternate = { "name", "staff" })
     private String mStaffName;
     @Expose
+    @SerializedName("staff_email")
+    private String mStaffEmail;
+    @Expose
     @SerializedName("from_date")
     private Date mStartDate;
     @Expose
@@ -63,5 +66,15 @@ public class DeviceUsingHistory extends BaseObservable {
     public void setEndDate(Date endDate) {
         mEndDate = endDate;
         notifyPropertyChanged(BR.endDate);
+    }
+
+    @Bindable
+    public String getStaffEmail() {
+        return mStaffEmail;
+    }
+
+    public void setStaffEmail(String staffEmail) {
+        mStaffEmail = staffEmail;
+        notifyPropertyChanged(BR.staffEmail);
     }
 }
