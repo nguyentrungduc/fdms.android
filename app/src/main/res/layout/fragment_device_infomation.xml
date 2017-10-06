@@ -116,6 +116,21 @@
                     bind:text="@{viewModel.device.warranty}"
                     bind:title="@{@string/title_warranty}"
                     />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@drawable/bg_product_desctiption"
+                    android:gravity="start"
+                    android:minHeight="@dimen/dp_80"
+                    android:padding="@dimen/dp_10"
+                    android:text="@{viewModel.device.deviceDescription}"
+                    android:textSize="@dimen/sp_15"
+                    />
+
             </LinearLayout>
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>

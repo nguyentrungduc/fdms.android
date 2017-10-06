@@ -112,6 +112,9 @@ public interface FDMSApi {
     @POST("api/assignments")
     Observable<Respone<Request>> registerAssignment(@QueryMap Map<String, String> params);
 
+    @POST("api/assignments")
+    Observable<Respone<String>> registerAssignmentForStaff(@QueryMap Map<String, String> params);
+
     @GET("api/requests/{id}")
     Observable<Respone<Request>> getRequest(@Path("id") int requetsId);
 
