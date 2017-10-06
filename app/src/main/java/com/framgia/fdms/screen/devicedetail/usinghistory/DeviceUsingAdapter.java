@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.databinding.ItemDeviceUsingBinding;
 import com.framgia.fdms.utils.Utils;
@@ -19,13 +20,18 @@ public class DeviceUsingAdapter extends RecyclerView.Adapter<DeviceUsingAdapter.
 
     private Context mContext;
     private List<DeviceUsingHistory> mHistories = new ArrayList<>();
+    private BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener mListener;
+
+    public void setListener(BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener listener) {
+        mListener = listener;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (mContext == null) mContext = parent.getContext();
         ItemDeviceUsingBinding binding =
             ItemDeviceUsingBinding.inflate(LayoutInflater.from(mContext), parent, false);
-        return new ViewHolder(binding);
+        return new ViewHolder(binding, mListener);
     }
 
     public void addData(List<DeviceUsingHistory> deviceUsingHistories) {
@@ -46,10 +52,13 @@ public class DeviceUsingAdapter extends RecyclerView.Adapter<DeviceUsingAdapter.
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private ItemDeviceUsingBinding mBinding;
+        private BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener mListener;
 
-        public ViewHolder(ItemDeviceUsingBinding binding) {
+        ViewHolder(ItemDeviceUsingBinding binding,
+            BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener listener) {
             super(binding.getRoot());
             mBinding = binding;
+            mListener = listener;
         }
 
         public void bindData(DeviceUsingHistory item) {
@@ -58,6 +67,7 @@ public class DeviceUsingAdapter extends RecyclerView.Adapter<DeviceUsingAdapter.
             }
             mBinding.setDeviceUsingHistory(item);
             mBinding.setTime(getStrFormatTime(item));
+            mBinding.setListener(mListener);
             mBinding.executePendingBindings();
         }
 

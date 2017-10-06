@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 import android.support.v4.app.Fragment;
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.device.mydevice.mydevicedetail.MyDeviceDetailFragment;
 import com.framgia.fdms.screen.device.mydevice.mydevicedetail.MyDeviceType;
 
@@ -17,16 +18,10 @@ public class MyDeviceViewModel extends BaseObservable implements MyDeviceContrac
     private MyDeviceContract.Presenter mPresenter;
     private MyDevicePagerAdapter mAdapter;
     private int mCurrentTab;
+    private Fragment mFragment;
 
     public MyDeviceViewModel(Fragment fragment) {
-        mAdapter = new MyDevicePagerAdapter(fragment.getChildFragmentManager());
-        mAdapter.addFragment(MyDeviceDetailFragment.newInstance(MyDeviceType.ALL),
-            fragment.getString(R.string.title_device_all));
-        mAdapter.addFragment(MyDeviceDetailFragment.newInstance(MyDeviceType.USING),
-            fragment.getString(R.string.title_device_using));
-        mAdapter.addFragment(MyDeviceDetailFragment.newInstance(MyDeviceType.RETURNED),
-            fragment.getString(R.string.title_device_returned));
-        setCurrentTab(MyDeviceType.USING);
+        mFragment = fragment;
     }
 
     @Override
@@ -62,5 +57,23 @@ public class MyDeviceViewModel extends BaseObservable implements MyDeviceContrac
     public void setCurrentTab(int currentTab) {
         mCurrentTab = currentTab;
         notifyPropertyChanged(BR.currentTab);
+    }
+
+    @Override
+    public void onGetUserSuccess(User user) {
+        mAdapter = new MyDevicePagerAdapter(mFragment.getChildFragmentManager());
+        mAdapter.addFragment(MyDeviceDetailFragment.newInstance(user, MyDeviceType.ALL),
+            mFragment.getString(R.string.title_device_all));
+        mAdapter.addFragment(MyDeviceDetailFragment.newInstance(user, MyDeviceType.USING),
+            mFragment.getString(R.string.title_device_using));
+        mAdapter.addFragment(MyDeviceDetailFragment.newInstance(user, MyDeviceType.RETURNED),
+            mFragment.getString(R.string.title_device_returned));
+        notifyPropertyChanged(BR.adapter);
+        setCurrentTab(MyDeviceType.USING);
+    }
+
+    @Override
+    public void onGetUserFailure(String msg) {
+
     }
 }

@@ -10,6 +10,10 @@
             type="com.framgia.fdms.data.model.DeviceUsingHistory"
             />
         <variable
+            name="listener"
+            type="com.framgia.fdms.BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener"
+            />
+        <variable
             name="time"
             type="String"
             />
@@ -21,6 +25,7 @@
         android:layout_marginLeft="@dimen/dp_5"
         android:layout_marginRight="@dimen/dp_5"
         android:layout_marginTop="@dimen/dp_5"
+        android:onClick="@{()-> listener.onItemRecyclerViewClick(deviceUsingHistory)}"
         car_view:cardCornerRadius="@dimen/dp_1"
         car_view:cardElevation="@dimen/dp_1"
         tools:cardCornerRadius="@dimen/dp_3"

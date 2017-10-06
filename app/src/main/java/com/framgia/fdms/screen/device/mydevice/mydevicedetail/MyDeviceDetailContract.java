@@ -31,8 +31,6 @@ interface MyDeviceDetailContract {
     interface Presenter extends BasePresenter {
         void getData();
 
-        void getUser();
-
         void loadMoreData();
     }
 }

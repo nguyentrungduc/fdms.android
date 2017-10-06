@@ -157,8 +157,8 @@ public class ReturnDeviceViewModel extends BaseObservable
     public void onGetDeviceSuccess(Device device) {
         if (mStaff == null) {
             setStaff(
-                new Status(Integer.parseInt(device.getUser().getId()), device.getUser().getName()));
-            mPresenter.getDevicesOfBorrower(Integer.parseInt(device.getUser().getId()));
+                new Status(device.getUser().getId(), device.getUser().getName()));
+            mPresenter.getDevicesOfBorrower(device.getUser().getId());
             return;
         }
         if (device.getUser() == null) {

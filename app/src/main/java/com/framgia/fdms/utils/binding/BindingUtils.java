@@ -724,11 +724,17 @@ public final class BindingUtils {
     }
 
     @BindingAdapter("bind:hint")
-    public static void setupWithViewPager(TextView view, String text) {
+    public static void setHint(TextView view, String text) {
         if (text == null) {
             return;
         }
         view.setText(null);
         view.setHint(text);
+    }
+
+    @BindingAdapter("activity")
+    public static void setUpToolbar(Toolbar toolbar, AppCompatActivity activity) {
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 }

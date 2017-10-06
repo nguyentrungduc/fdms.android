@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.source.UserRepository;
+import com.framgia.fdms.data.source.local.UserLocalDataSource;
+import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.databinding.FragmentMyDeviceBinding;
 
 /**
@@ -26,7 +29,8 @@ public class MyDeviceFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mViewModel = new MyDeviceViewModel(this);
 
-        MyDeviceContract.Presenter presenter = new MyDevicePresenter(mViewModel);
+        MyDeviceContract.Presenter presenter = new MyDevicePresenter(mViewModel,
+            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
         mViewModel.setPresenter(presenter);
     }
 

@@ -3,7 +3,6 @@ package com.framgia.fdms.screen.device.mydevice.mydevicedetail;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.DeviceRepository;
-import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.utils.Constant;
@@ -28,20 +27,19 @@ final class MyDeviceDetailPresenter implements MyDeviceDetailContract.Presenter 
 
     private final MyDeviceDetailContract.ViewModel mViewModel;
     private CompositeDisposable mCompositeDisposable;
-    private UserRepository mUserRepository;
     private DeviceRepository mDeviceRepository;
     private String mType;
     private int mPage = FIRST_PAGE;
     private String mUserEmail;
 
     public MyDeviceDetailPresenter(MyDeviceDetailContract.ViewModel viewModel,
-        @MyDeviceType int type, UserRepository userRepository, DeviceRepository deviceRepository) {
+        @MyDeviceType int type, String userEmail, DeviceRepository deviceRepository) {
         mViewModel = viewModel;
         mType = getType(type);
-        mUserRepository = userRepository;
+        mUserEmail = userEmail;
         mDeviceRepository = deviceRepository;
         mCompositeDisposable = new CompositeDisposable();
-        getUser();
+        getData();
     }
 
     private String getType(@MyDeviceType int type) {
@@ -101,26 +99,6 @@ final class MyDeviceDetailPresenter implements MyDeviceDetailContract.Presenter 
                 }
             });
 
-        mCompositeDisposable.add(disposable);
-    }
-
-    @Override
-    public void getUser() {
-        Disposable disposable = mUserRepository.getCurrentUser()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<User>() {
-                @Override
-                public void accept(User user) throws Exception {
-                    mUserEmail = user.getEmail();
-                    getData();
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mViewModel.onGetDataFailure(error.getMessage());
-                }
-            });
         mCompositeDisposable.add(disposable);
     }
 
