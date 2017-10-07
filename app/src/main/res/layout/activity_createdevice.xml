@@ -310,6 +310,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_10"
                             android:visibility="@{viewModel.device.deviceMeetingRoom ? View.VISIBLE : View.GONE}"
                             >
                             <include
@@ -319,7 +320,6 @@
                                 bind:onClick="@{() -> viewModel.onChooseMeetingRoom()}"
                                 bind:text="@{viewModel.meetingRoom.name}"
                                 bind:title="@{@string/title_meeting_room}"
-                                bind:type="@{viewModel.deviceType}"
                                 />
                         </LinearLayout>
 
@@ -437,9 +437,9 @@
                     android:background="@drawable/boder_title"
                     android:fontFamily="serif"
                     android:gravity="center"
-                    android:onClick="@{()->viewModel.onCreateDeviceClick()}"
+                    android:onClick="@{()->viewModel.onActionDeviceClick()}"
                     android:padding="@dimen/dp_10"
-                    android:text="@string/action_create_device"
+                    android:text="@{viewModel.onSubmitText()}"
                     android:textAllCaps="true"
                     android:textColor="@color/color_white"
                     android:textStyle="bold"

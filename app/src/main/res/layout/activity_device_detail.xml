@@ -81,14 +81,52 @@
                 />
         </android.support.v4.view.ViewPager>
 
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/float_action_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/dp_16"
-            android:onClick="@{() -> viewModel.onEditDevice()}"
-            android:src="@drawable/ic_edit_white_24dp"
+            android:padding="@dimen/dp_10"
             android:visibility="@{viewModel.floatingVisible}"
-            />
+            app:closedOnTouchOutside="@{true}"
+            app:menu_animationDelayPerItem="55"
+            app:menu_backgroundColor="@color/color_black_transparent"
+            app:menu_icon="@drawable/fab_add"
+            app:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+            app:menu_labels_padding="@dimen/dp_10"
+            app:menu_labels_position="left"
+            app:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+            app:menu_labels_singleLine="false"
+            app:menu_labels_textColor="@android:color/white"
+            app:menu_labels_textSize="@dimen/sp_16"
+            app:menu_openDirection="up"
+            >
+
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onEditDevice(floatActionMenu)}"
+                android:padding="@dimen/dp_10"
+                android:src="@drawable/ic_edit_black_24dp"
+                android:tint="@color/colorPrimary"
+                app:fab_colorNormal="@android:color/white"
+                app:fab_colorPressed="@color/color_seashell"
+                app:fab_colorRipple="@color/color_dark_gray"
+                app:fab_label="@string/title_edit_device"
+                />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{()-> viewModel.onDeleteDeviceClick(floatActionMenu)}"
+                android:padding="@dimen/dp_10"
+                android:src="@drawable/ic_delete_forever_black_24dp"
+                android:tint="@color/colorPrimary"
+                app:fab_colorNormal="@android:color/white"
+                app:fab_colorPressed="@color/color_seashell"
+                app:fab_colorRipple="@color/color_dark_gray"
+                app:fab_label="@string/action_delete_device"
+                />
+        </com.github.clans.fab.FloatingActionMenu>
     </android.support.design.widget.CoordinatorLayout>
 </layout>

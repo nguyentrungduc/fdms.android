@@ -36,6 +36,7 @@ import static com.framgia.fdms.FDMSApplication.sUpdatedDevice;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.CREATE;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.EDIT;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_BRANCH;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
@@ -52,7 +53,7 @@ public class CreateDeviceViewModel extends BaseObservable
     public static final int DEFAULT_STATUS_ID = 2;
     private static final String DEFAULT_STATUS_NAME = "available";
     private static final int DEFAULT_BRANCH_ID = 1;
-    private static final String DEFAULT_BRANCH_NAME = "Hanoi";
+    private static final String DEFAULT_BRANCH_NAME = "Ha Noi";
     private static final int DEFAULT_WIDTH_QRCODE = 300;
     private static final int DEFAULT_HEIGHT_QRCODE = 300;
     private static final int DEFAULT_WIDTH_BARCODE = 200;
@@ -108,7 +109,7 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onCreateDeviceClick() {
+    public void onActionDeviceClick() {
         switch (mDeviceType) {
             case CREATE:
                 mPresenter.registerDevice(mDevice);
@@ -478,6 +479,11 @@ public class CreateDeviceViewModel extends BaseObservable
         sUpdatedDevice.cloneDevice(mDevice);
         setProgressBarVisibility(GONE);
         mNavigator.showToast(message);
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(BUNDLE_DEVICE, mDevice);
+        intent.putExtras(bundle);
+        mNavigator.finishActivityWithResult(intent, RESULT_OK);
     }
 
     @Override
@@ -545,6 +551,7 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     public void setMeetingRoom(Status meetingRoom) {
+        mDevice.setMeetingRoomId(meetingRoom.getId());
         mMeetingRoom = meetingRoom;
         notifyPropertyChanged(BR.meetingRoom);
     }
@@ -589,5 +596,12 @@ public class CreateDeviceViewModel extends BaseObservable
     public void setProgressBarVisibility(int progressBarVisibility) {
         mProgressBarVisibility = progressBarVisibility;
         notifyPropertyChanged(BR.progressBarVisibility);
+    }
+
+    public String onSubmitText() {
+        if (mDeviceType == EDIT) {
+            return mContext.getString(R.string.action_update_device);
+        }
+        return mContext.getString(R.string.action_create_device);
     }
 }

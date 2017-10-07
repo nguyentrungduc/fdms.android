@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.devicedetail.infomation;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -75,5 +76,10 @@ public class DeviceInfomationFragment extends Fragment {
         if (mViewModel != null) {
             mViewModel.onEditDevice();
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mViewModel.onActivityResult(requestCode, resultCode, data);
     }
 }

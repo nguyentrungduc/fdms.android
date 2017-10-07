@@ -35,6 +35,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.USER_BORROW;
 import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
+import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
@@ -55,7 +56,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
     private MarkerRepository mMarkerRepository;
     private BranchRepository mBranchRepository;
     private MeetingRoomRepository mMeetingRoomRepository;
-    private int mPage = 1;
+    private int mPage = FIRST_PAGE;
     private String mKeySearch;
     private int mDeviceGroupId = OUT_OF_INDEX;
     private DeviceGroupRepository mDeviceGroupRepository;
@@ -115,7 +116,10 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
     }
 
     @Override
-    public void getData(String query) {
+    public void getData(String query, boolean isClickSearch) {
+        if (isClickSearch) {
+            mPage = FIRST_PAGE;
+        }
         mKeySearch = query;
         switch (mSelectionType) {
             case STATUS:

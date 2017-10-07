@@ -6,7 +6,6 @@ import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.Respone;
-import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.DeviceDataSource;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.screen.device.listdevice.DeviceFilterModel;
@@ -17,7 +16,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,28 +146,58 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
 
     @Override
     public Observable<String> updateDevice(Device device) {
-        Map<String, RequestBody> parrams = new HashMap<>();
-        RequestBody productionName = null, deviceStatusId = null, deviceCategoryId = null,
-            deviceCode = null;
+        Map<String, RequestBody> params = new HashMap<>();
+        RequestBody productionName, deviceStatusId, deviceVendorId, deviceMakerId,
+            deviceSerialNumber, deviceModelNumber, deviceWarranty, deviceRam, deviceHardDriver,
+            deviceDescription, isMeetingRoom, deviceMeetingRoomId, isBarCode;
         if (!TextUtils.isEmpty(device.getProductionName())) {
             productionName = createPartFromString(device.getProductionName());
-            parrams.put(PRODUCTION_NAME, productionName);
+            params.put(PRODUCTION_NAME, productionName);
         }
-
-        if (device.getDeviceStatusId() != -1) {
+        if (device.getDeviceStatusId() != OUT_OF_INDEX) {
             deviceStatusId = createPartFromString(String.valueOf(device.getDeviceStatusId()));
-            parrams.put(DEVICE_STATUS_ID, deviceStatusId);
+            params.put(DEVICE_STATUS_ID, deviceStatusId);
         }
-
-        if (device.getDeviceCategoryId() != -1) {
-            deviceCategoryId = createPartFromString(String.valueOf(device.getDeviceCategoryId()));
-            parrams.put(DEVICE_CATEGORY_ID, deviceCategoryId);
+        if (device.getVendorId() != OUT_OF_INDEX) {
+            deviceVendorId = createPartFromString(String.valueOf(device.getVendorId()));
+            params.put(VENDOR_ID, deviceVendorId);
         }
-
-        if (!TextUtils.isEmpty(device.getDeviceCode())) {
-            deviceCode = createPartFromString(device.getDeviceCode());
-            parrams.put(DEVICE_CODE, deviceCode);
+        if (device.getMarkerId() != OUT_OF_INDEX) {
+            deviceMakerId = createPartFromString(String.valueOf(device.getMarkerId()));
+            params.put(MAKER_ID, deviceMakerId);
         }
+        if (device.getMeetingRoomId() != OUT_OF_INDEX) {
+            deviceMeetingRoomId = createPartFromString(String.valueOf(device.getMeetingRoomId()));
+            params.put(MEETING_ROOM_ID, deviceMeetingRoomId);
+        }
+        if (device.getSerialNumber() != null) {
+            deviceSerialNumber = createPartFromString(device.getSerialNumber());
+            params.put(SERIAL_NUMBER, deviceSerialNumber);
+        }
+        if (device.getModelNumber() != null) {
+            deviceModelNumber = createPartFromString(device.getModelNumber());
+            params.put(MODEL_NUMBER, deviceModelNumber);
+        }
+        if (device.getWarranty() != null) {
+            deviceWarranty = createPartFromString(device.getWarranty());
+            params.put(WARRANTY, deviceWarranty);
+        }
+        if (device.getRam() != null) {
+            deviceRam = createPartFromString(device.getRam());
+            params.put(RAM, deviceRam);
+        }
+        if (device.getHardDriver() != null) {
+            deviceHardDriver = createPartFromString(device.getHardDriver());
+            params.put(HARD_DRIVE, deviceHardDriver);
+        }
+        if (device.getDeviceDescription() != null) {
+            deviceDescription = createPartFromString(device.getDeviceDescription());
+            params.put(DESCRIPTION, deviceDescription);
+        }
+        isMeetingRoom = createPartFromString(String.valueOf(device.isDeviceMeetingRoom()));
+        params.put(IS_MEETING_ROOM, isMeetingRoom);
+        isBarCode = createPartFromString(String.valueOf(device.isBarcode()));
+        params.put(IS_BAR_CODE, isBarCode);
 
         MultipartBody.Part filePart = null;
 
@@ -183,7 +211,7 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
             }
         }
 
-        return mFDMSApi.updateDevice(device.getId(), parrams, filePart)
+        return mFDMSApi.updateDevice(device.getId(), params, filePart)
             .flatMap(new Function<Respone<String>, ObservableSource<String>>() {
                 @Override
                 public ObservableSource<String> apply(Respone<String> deviceRespone)

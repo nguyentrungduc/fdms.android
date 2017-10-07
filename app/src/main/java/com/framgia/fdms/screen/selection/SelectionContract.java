@@ -14,7 +14,7 @@ public interface SelectionContract {
     interface ViewModel extends BaseViewModel<Presenter> {
         void setPresenter(Presenter presenter);
 
-        void onSearch(String query);
+        void onSearch(String query, boolean isClickSearch);
 
         void onGetDataSuccess(List data);
 
@@ -33,7 +33,7 @@ public interface SelectionContract {
      * Presenter.
      */
     interface Presenter extends BasePresenter {
-        void getData(String query);
+        void getData(String query, boolean isSearch);
 
         void loadMoreData();
 

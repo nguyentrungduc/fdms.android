@@ -185,7 +185,6 @@ public class Device extends BaseObservable implements Parcelable {
         mDeviceCategoryName = deviceCategoryName;
     }
 
-
     @Bindable
     public int getId() {
         return mId;
@@ -534,5 +533,4 @@ public class Device extends BaseObservable implements Parcelable {
         parcel.writeString(mHardDriver);
         parcel.writeString(mDeviceDescription);
     }
-
 }

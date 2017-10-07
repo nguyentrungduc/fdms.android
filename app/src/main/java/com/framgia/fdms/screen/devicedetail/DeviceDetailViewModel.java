@@ -1,18 +1,22 @@
 package com.framgia.fdms.screen.devicedetail;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import com.android.databinding.library.baseAdapters.BR;
+import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.screen.devicedetail.history.DeviceDetailHistoryFragment;
 import com.framgia.fdms.screen.devicedetail.infomation.DeviceInfomationFragment;
 import com.framgia.fdms.screen.devicedetail.usinghistory.DeviceUsingHistoryFragment;
+import com.github.clans.fab.FloatingActionMenu;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +69,8 @@ public class DeviceDetailViewModel extends BaseObservable
     }
 
     @Override
-    public void onEditDevice() {
+    public void onEditDevice(FloatingActionMenu floatingActionsMenu) {
+        floatingActionsMenu.close(true);
         if (mInfomationFragment != null) mInfomationFragment.onStartEditDevice();
     }
 
@@ -98,6 +103,23 @@ public class DeviceDetailViewModel extends BaseObservable
         } else {
             mFloatingVisible.set(View.GONE);
         }
+    }
+
+    public void onDeleteDeviceClick(FloatingActionMenu floatingActionsMenu) {
+        floatingActionsMenu.close(true);
+        new AlertDialog.Builder(mActivity).setTitle(mActivity.getString(R.string.title_delete))
+            .setMessage(mActivity.getString(R.string.msg_delete_producer)
+                + " "
+                + mDevice.getProductionName())
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //TODO: Call API delete Device
+                }
+            })
+            .setNegativeButton(android.R.string.no, null)
+            .create()
+            .show();
     }
 
     public DeviceDetailPagerAdapter getAdapter() {
