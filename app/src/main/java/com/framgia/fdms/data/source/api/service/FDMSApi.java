@@ -51,6 +51,9 @@ public interface FDMSApi {
     Observable<Respone<String>> updateDevice(@Path("id") int id,
         @PartMap Map<String, RequestBody> params, @Part MultipartBody.Part picture);
 
+    @DELETE("api/devices/{id}")
+    Observable<Respone<String>> deleteDevice(@Path("id") int deviceId);
+
     @GET("/api/request_dashboards")
     Observable<Respone<List<Dashboard>>> getDashboardRequest();
 

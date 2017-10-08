@@ -9,9 +9,13 @@ import android.view.MenuItem;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
+import com.framgia.fdms.data.source.local.UserLocalDataSource;
+import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityDeviceDetailBinding;
+import com.framgia.fdms.utils.navigator.Navigator;
 
 import static com.framgia.fdms.FDMSApplication.sUpdatedDevice;
 
@@ -31,12 +35,13 @@ public class DeviceDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Navigator navigator = new Navigator(this);
         Device device = sUpdatedDevice;
-        mViewModel = new DeviceDetailViewModel(this, device);
+        mViewModel = new DeviceDetailViewModel(this, device, navigator);
 
         DeviceDetailContract.Presenter presenter = new DeviceDetailPresenter(mViewModel,
             new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
-            device);
+            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))), device);
         mViewModel.setPresenter(presenter);
 
         ActivityDeviceDetailBinding binding =

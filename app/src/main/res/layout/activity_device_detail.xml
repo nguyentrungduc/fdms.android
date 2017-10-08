@@ -9,6 +9,8 @@
 
         <import type="com.framgia.fdms.utils.Constant"/>
 
+        <import type="android.view.View"/>
+
         <variable
             name="viewModel"
             type="com.framgia.fdms.screen.devicedetail.DeviceDetailViewModel"
@@ -122,6 +124,7 @@
                 android:padding="@dimen/dp_10"
                 android:src="@drawable/ic_delete_forever_black_24dp"
                 android:tint="@color/colorPrimary"
+                android:visibility="@{viewModel.usingDevice ? View.GONE : View.VISIBLE}"
                 app:fab_colorNormal="@android:color/white"
                 app:fab_colorPressed="@color/color_seashell"
                 app:fab_colorRipple="@color/color_dark_gray"

@@ -13,15 +13,18 @@ import android.view.View;
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
+import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.devicedetail.history.DeviceDetailHistoryFragment;
 import com.framgia.fdms.screen.devicedetail.infomation.DeviceInfomationFragment;
 import com.framgia.fdms.screen.devicedetail.usinghistory.DeviceUsingHistoryFragment;
+import com.framgia.fdms.utils.navigator.Navigator;
 import com.github.clans.fab.FloatingActionMenu;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.framgia.fdms.screen.devicedetail.DeviceDetailPagerAdapter.DeviceDetailPage
     .DEVICE_INFOMATION;
+import static com.framgia.fdms.utils.Constant.USING;
 
 /**
  * Exposes the data to be used in the Devicedetail screen.
@@ -38,9 +41,13 @@ public class DeviceDetailViewModel extends BaseObservable
     private ObservableInt mFloatingVisible = new ObservableInt(View.VISIBLE);
     private Device mDevice;
     private ObservableField<Integer> mProgressBarVisibility = new ObservableField<>();
+    private boolean mIsBoManager;
+    private boolean mIsUsingDevice;
+    private Navigator mNavigator;
 
-    public DeviceDetailViewModel(AppCompatActivity activity, Device device) {
+    public DeviceDetailViewModel(AppCompatActivity activity, Device device, Navigator navigator) {
         mActivity = activity;
+        mNavigator = navigator;
         mContext = mActivity.getApplicationContext();
         mDevice = device;
         mInfomationFragment = DeviceInfomationFragment.newInstance(mDevice);
@@ -51,6 +58,11 @@ public class DeviceDetailViewModel extends BaseObservable
         mAdapter =
             new DeviceDetailPagerAdapter(mContext, mActivity.getSupportFragmentManager(), fragments,
                 mDevice.getId());
+        if (mDevice.getDeviceStatusId() == USING) {
+            setUsingDevice(true);
+            return;
+        }
+        setUsingDevice(false);
     }
 
     @Override
@@ -80,7 +92,21 @@ public class DeviceDetailViewModel extends BaseObservable
     }
 
     @Override
-    public void onGetDeviceError() {
+    public void onGetDeviceError(String error) {
+        mNavigator.showToast(error);
+    }
+
+    @Override
+    public void onGetUserSuccess(User user) {
+        if (user.getRole() == null) {
+            return;
+        }
+        setBoManager(user.isBo());
+    }
+
+    @Override
+    public void onGetUserError(String error) {
+        mNavigator.showToast(error);
     }
 
     public ObservableField<Integer> getProgressBarVisibility() {
@@ -97,8 +123,8 @@ public class DeviceDetailViewModel extends BaseObservable
         notifyPropertyChanged(BR.device);
     }
 
-    public void updateFloadtingVisible(int position) {
-        if (position == DEVICE_INFOMATION) {
+    public void updateFloatingVisible(int position) {
+        if (position == DEVICE_INFOMATION && isBoManager()) {
             mFloatingVisible.set(View.VISIBLE);
         } else {
             mFloatingVisible.set(View.GONE);
@@ -114,7 +140,7 @@ public class DeviceDetailViewModel extends BaseObservable
             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    //TODO: Call API delete Device
+                    if (mInfomationFragment != null) mInfomationFragment.onDeleteDevice();
                 }
             })
             .setNegativeButton(android.R.string.no, null)
@@ -132,5 +158,25 @@ public class DeviceDetailViewModel extends BaseObservable
 
     public ObservableInt getFloatingVisible() {
         return mFloatingVisible;
+    }
+
+    @Bindable
+    public boolean isUsingDevice() {
+        return mIsUsingDevice;
+    }
+
+    private void setUsingDevice(boolean usingDevice) {
+        mIsUsingDevice = usingDevice;
+        notifyPropertyChanged(BR.usingDevice);
+    }
+
+    @Bindable
+    private boolean isBoManager() {
+        return mIsBoManager;
+    }
+
+    private void setBoManager(boolean boManager) {
+        mIsBoManager = boManager;
+        notifyPropertyChanged(BR.boManager);
     }
 }

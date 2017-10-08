@@ -7,11 +7,13 @@ import android.databinding.Bindable;
 import android.databinding.ObservableField;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.screen.devicecreation.CreateDeviceActivity;
 import com.framgia.fdms.screen.devicecreation.DeviceStatusType;
+import com.framgia.fdms.utils.navigator.Navigator;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICE;
@@ -29,11 +31,14 @@ public class DeviceInfomationViewModel extends BaseObservable
     private Context mContext;
     private ObservableField<Integer> mProgressBarVisibility = new ObservableField<>();
     private FragmentActivity mActivity;
+    private Navigator mNavigator;
 
-    public DeviceInfomationViewModel(Context context, FragmentActivity activity, Device device) {
+    public DeviceInfomationViewModel(Context context, FragmentActivity activity, Device device,
+        Navigator navigator) {
         mContext = context;
         mActivity = activity;
         mDevice = device;
+        mNavigator = navigator;
         showInformation();
     }
 
@@ -62,6 +67,22 @@ public class DeviceInfomationViewModel extends BaseObservable
         mActivity.startActivityForResult(
             CreateDeviceActivity.getInstance(mContext, mDevice, DeviceStatusType.EDIT),
             REQUEST_EDIT);
+    }
+
+    @Override
+    public void onDeleteDevice() {
+        mPresenter.deleteDevice(mDevice);
+    }
+
+    @Override
+    public void onDeleteDeviceSuccess(Device device, String message) {
+        Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
+        mNavigator.finishActivity();
+    }
+
+    @Override
+    public void onDeleteDeviceError(String message) {
+        mNavigator.showToast(message);
     }
 
     @Override

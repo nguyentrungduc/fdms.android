@@ -4,7 +4,7 @@ import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
-import com.framgia.fdms.data.model.Status;
+import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.screen.device.listdevice.DeviceFilterModel;
 import io.reactivex.Observable;
@@ -34,6 +34,11 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
 
     public Observable<String> updateDevice(Device device) {
         return mDeviceRemoteDataSource.updateDevice(device);
+    }
+
+    @Override
+    public Observable<Respone<String>> deleteDevice(Device device) {
+        return mDeviceRemoteDataSource.deleteDevice(device);
     }
 
     public Observable<Device> getDeviceByQrCode(String qrCode) {
@@ -72,8 +77,8 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
     }
 
     @Override
-    public Observable<List<DeviceUsingHistory>> getUserDevice(String status, String staffEmail, int page,
-        int perPage) {
+    public Observable<List<DeviceUsingHistory>> getUserDevice(String status, String staffEmail,
+        int page, int perPage) {
         return mDeviceRemoteDataSource.getUserDevice(status, staffEmail, page, perPage);
     }
 }

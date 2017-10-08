@@ -61,6 +61,7 @@ public class Constant {
         public static final String BUNDLE_SUCCESS = "BUNDLE_SUCCESS";
         public static final String BUNDLE_SHOW_GROUP_DEVICE = "BUNDLE_SHOW_GROUP_DEVICE";
         public static final String BUNDLE_DEVICE_GROUP_TYPE = "BUNDLE_DEVICE_GROUP_TYPE";
+        public static final String BUNDLE_MANAGE_DEVICE = "BUNDLE_MANAGE_DEVICE";
     }
 
     public static final class RequestConstant {
@@ -86,6 +87,7 @@ public class Constant {
         public static final int REQUEST_USER_BORROW = 20;
         public static final int REQUEST_DEVICE_GROUPS_DIALOG = 21;
         public static final int REQUEST_EDIT = 22;
+        public static final int REQUEST_MANAGE_DEVICE = 23;
     }
 
     public static final class DeviceUsingStatus {

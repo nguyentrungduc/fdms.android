@@ -19,6 +19,12 @@ interface DeviceInfomationContract {
 
         void onEditDevice();
 
+        void onDeleteDevice();
+
+        void onDeleteDeviceSuccess(Device device, String message);
+
+        void onDeleteDeviceError(String message);
+
         void onActivityResult(int requestCode, int resultCode, Intent data);
     }
 
@@ -26,5 +32,6 @@ interface DeviceInfomationContract {
      * Presenter.
      */
     interface Presenter extends BasePresenter {
+        void deleteDevice(Device device);
     }
 }

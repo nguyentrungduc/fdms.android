@@ -14,6 +14,7 @@ import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.databinding.FragmentDeviceInfomationBinding;
+import com.framgia.fdms.utils.navigator.Navigator;
 
 /**
  * Deviceinfomation Screen.
@@ -39,8 +40,9 @@ public class DeviceInfomationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDevice = (Device) getArguments().getParcelable(EXTRA_DEVIVE);
-        mViewModel = new DeviceInfomationViewModel(getContext(), getActivity(), mDevice);
+        Navigator navigator = new Navigator(this);
+        mDevice = getArguments().getParcelable(EXTRA_DEVIVE);
+        mViewModel = new DeviceInfomationViewModel(getContext(), getActivity(), mDevice, navigator);
 
         DeviceInfomationContract.Presenter presenter = new DeviceInfomationPresenter(mViewModel,
             new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
@@ -75,6 +77,12 @@ public class DeviceInfomationFragment extends Fragment {
     public void onStartEditDevice() {
         if (mViewModel != null) {
             mViewModel.onEditDevice();
+        }
+    }
+
+    public void onDeleteDevice() {
+        if (mViewModel != null) {
+            mViewModel.onDeleteDevice();
         }
     }
 
