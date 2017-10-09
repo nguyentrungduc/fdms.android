@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FDMS</string>
+    <string name="app_name">FGAS</string>
     <string name="action_login">Login</string>
     <string name="title_user_name">User Name</string>
     <string name="title_password">Password</string>
@@ -279,7 +279,7 @@
         nguoi su dung hoan toan chiu trach nhiem truoc cong ty.</string>
     <string name="title_device_meeting_room">Is Device Meeting Room</string>
     <string name="title_manage_cap">MANAGE</string>
-    <string name="title_set_up_profile">Set up profile</string>
+    <string name="title_set_up_profile">Profile</string>
     <string name="title_profile_cap">PROFILE</string>
     <string name="title_home_cap">HOME</string>
     <string name="msg_open_drawer">open</string>

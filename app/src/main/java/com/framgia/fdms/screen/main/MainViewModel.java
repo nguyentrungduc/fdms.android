@@ -106,6 +106,9 @@ public class MainViewModel extends BaseObservable
         ShowcaseConfig config = new ShowcaseConfig();
         config.setMaskColor(R.color.color_black_transprarent);
         mSequence.setConfig(config);
+        setCurrentItem(R.id.item_dashboard);
+        setTab(TAB_DASH_BOARD);
+        mActivity.setTitle(R.string.title_dashboard);
     }
 
     @Override
