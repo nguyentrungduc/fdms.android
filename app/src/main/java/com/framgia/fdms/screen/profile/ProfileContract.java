@@ -21,8 +21,6 @@ interface ProfileContract {
 
         void onClickDoneEditProfile();
 
-        void onClickLogout();
-
         void onPickDateTime();
 
         void onActivityResult(int requestCode, int resultCode, Intent data);

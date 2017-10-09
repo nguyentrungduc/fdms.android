@@ -19,14 +19,11 @@ public interface ChooseExportContract {
 
         void onError(String message);
 
-        void onDeviceLoaded(List<Device> devices);
-
         void initToolbar(Toolbar toolbar);
 
         void onDeviceClick(Device device);
     }
 
     interface Presenter extends BasePresenter {
-        void getListDevice();
     }
 }

@@ -27,16 +27,21 @@ public class ChooseExportViewModel extends BaseObservable
     private ChooseExportContract.Presenter mPresenter;
     private AppCompatActivity mActivity;
     private ListDeviceAdapter mAdapter;
-    private User mUser;
+
     private int mProgressBarVisible = VISIBLE;
     private int mEmptyViewVisible = GONE;
     private Navigator mNavigator;
     private List<Device> mDevices;
+    private User mDeliver;
+    private User mReceiver;
 
-    public ChooseExportViewModel(AppCompatActivity activity, User user) {
+    public ChooseExportViewModel(AppCompatActivity activity, User deliver, List<Device> devices) {
         mActivity = activity;
-        mUser = user;
+        mDevices = devices;
+        mDeliver = deliver;
         mNavigator = new Navigator(activity);
+        setAdapter(new ListDeviceAdapter(mActivity, mDevices, this));
+        setEmptyViewVisible(mDevices != null && mDevices.size() != 0 ? GONE : VISIBLE);
     }
 
     @Override
@@ -69,13 +74,6 @@ public class ChooseExportViewModel extends BaseObservable
         mNavigator.showToast(message);
     }
 
-    @Override
-    public void onDeviceLoaded(List<Device> devices) {
-        mDevices = devices;
-        setAdapter(new ListDeviceAdapter(mActivity, mDevices, this));
-        setEmptyViewVisible(mDevices != null && mDevices.size() != 0 ? GONE : VISIBLE);
-    }
-
     @Bindable
     public ListDeviceAdapter getAdapter() {
         return mAdapter;
@@ -99,7 +97,7 @@ public class ChooseExportViewModel extends BaseObservable
 
     public void exportData() {
         FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
-        ExportDialogFragment newFragment = ExportDialogFragment.newInstance(mUser, mDevices);
+        ExportDialogFragment newFragment = ExportDialogFragment.newInstance(mDeliver, mDevices);
         newFragment.show(ft, TYPE_DIALOG);
     }
 
