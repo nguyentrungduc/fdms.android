@@ -37,6 +37,7 @@ import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.CREATE;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.EDIT;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICE;
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_BRANCH;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
@@ -213,8 +214,13 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     @Override
-    public void onRegisterSuccess() {
-        getActivity().finish();
+    public void onRegisterSuccess(Device device) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putInt(BUNDLE_SUCCESS, R.string.msg_create_device_success);
+        bundle.putParcelable(BUNDLE_DEVICE, device);
+        intent.putExtras(bundle);
+        mNavigator.finishActivityWithResult(intent, RESULT_OK);
     }
 
     @Override

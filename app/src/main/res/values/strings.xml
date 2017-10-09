@@ -72,6 +72,7 @@
     <string name="title_scan">scanner</string>
     <string name="title_device">Device</string>
     <string name="title_code">Device Code</string>
+    <string name="msg_create_device_success">Create Device Success</string>
     <string name="msg_create_device_error">Create Device Error</string>
     <string name="title_device_type">Device Categories</string>
     <string name="title_device_status">Device Status</string>

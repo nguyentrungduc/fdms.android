@@ -6,6 +6,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -41,12 +42,15 @@ import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
+import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_DEVICE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MAKER;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MANAGE_DEVICE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MEETING_ROOM;
@@ -76,6 +80,7 @@ public class ListDeviceViewModel extends BaseObservable
     private DeviceFilterModel mFilterModel;
     private boolean mIsChangeFilter;
     private Navigator mNavigator;
+    private int mPositionScroll = OUT_OF_INDEX;
 
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
         @Override
@@ -97,6 +102,15 @@ public class ListDeviceViewModel extends BaseObservable
             }
         }
     };
+
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
+        new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mAdapter.clear();
+                loadData();
+            }
+        };
 
     private SearchView.OnQueryTextListener mQueryTextListener =
         new SearchView.OnQueryTextListener() {
@@ -137,6 +151,7 @@ public class ListDeviceViewModel extends BaseObservable
         mIsChangeFilter = true;
         Bundle bundle = dataIntent.getExtras();
         Status data = bundle.getParcelable(BUNDLE_DATA);
+        Device device = bundle.getParcelable(BUNDLE_DEVICE);
         switch (requestCode) {
             case REQUEST_CATEGORY:
                 mFilterModel.setCategory(data);
@@ -157,6 +172,19 @@ public class ListDeviceViewModel extends BaseObservable
                 mNavigator.showToast(bundle.getInt(BUNDLE_SUCCESS));
                 mAdapter.clear();
                 mPresenter.getData(mFilterModel, FIRST_PAGE);
+                break;
+            case REQUEST_CREATE_DEVICE:
+                if (device != null) {
+                    mNavigator.showToast(bundle.getInt(BUNDLE_SUCCESS));
+                    mAdapter.addData(0, device);
+                    setPositionScroll(0);
+                }
+                break;
+            case REQUEST_MANAGE_DEVICE:
+                if (device != null) {
+                    mNavigator.showToast(bundle.getString(BUNDLE_SUCCESS));
+                    mAdapter.removeData(device);
+                }
                 break;
             default:
                 break;
@@ -264,8 +292,9 @@ public class ListDeviceViewModel extends BaseObservable
     @Override
     public void onRegisterDeviceClick(FloatingActionMenu floatingActionsMenu) {
         floatingActionsMenu.close(true);
-        mFragment.startActivity(
-            CreateDeviceActivity.getInstance(mFragment.getContext(), DeviceStatusType.CREATE));
+        mFragment.startActivityForResult(
+            CreateDeviceActivity.getInstance(mFragment.getContext(), DeviceStatusType.CREATE),
+            REQUEST_CREATE_DEVICE);
     }
 
     @Override
@@ -448,5 +477,20 @@ public class ListDeviceViewModel extends BaseObservable
     @Bindable
     public SearchView.OnQueryTextListener getQueryTextListener() {
         return mQueryTextListener;
+    }
+
+    @Bindable
+    public int getPositionScroll() {
+        return mPositionScroll;
+    }
+
+    public void setPositionScroll(int positionScroll) {
+        mPositionScroll = positionScroll;
+        notifyPropertyChanged(BR.positionScroll);
+    }
+
+    @Bindable
+    public SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
+        return mOnRefreshListener;
     }
 }

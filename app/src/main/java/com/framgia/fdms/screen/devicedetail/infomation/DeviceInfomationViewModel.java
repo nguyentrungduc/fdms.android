@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableField;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
-import android.widget.Toast;
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
@@ -17,6 +17,7 @@ import com.framgia.fdms.utils.navigator.Navigator;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICE;
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_EDIT;
 
 /**
@@ -76,8 +77,12 @@ public class DeviceInfomationViewModel extends BaseObservable
 
     @Override
     public void onDeleteDeviceSuccess(Device device, String message) {
-        Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
-        mNavigator.finishActivity();
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_SUCCESS, message);
+        bundle.putParcelable(BUNDLE_DEVICE, device);
+        intent.putExtras(bundle);
+        mNavigator.finishActivityWithResult(intent, RESULT_OK);
     }
 
     @Override
