@@ -19,7 +19,7 @@ interface CreateDeviceContract {
 
         void onRegisterError();
 
-        void onRegisterSuccess();
+        void onRegisterSuccess(Device device);
 
         void onInputProductionNameError();
 

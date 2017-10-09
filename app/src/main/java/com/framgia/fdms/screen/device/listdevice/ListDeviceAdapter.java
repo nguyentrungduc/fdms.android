@@ -55,6 +55,26 @@ public class ListDeviceAdapter
         notifyDataSetChanged();
     }
 
+    public void addData(int position, Device device) {
+        if (device == null || position < 0 || position > mDevices.size()) {
+            return;
+        }
+        mDevices.add(position, device);
+        notifyItemInserted(position);
+    }
+
+    public void removeData(Device device) {
+        if (mDevices == null || mDevices.size() == 0 || device == null) {
+            return;
+        }
+        int index = mDevices.indexOf(device);
+        if (index < 0) {
+            return;
+        }
+        mDevices.remove(index);
+        notifyItemRemoved(index);
+    }
+
     public void clear() {
         mDevices.clear();
         notifyDataSetChanged();

@@ -28,8 +28,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
     public static Intent getInstance(Context context, Device device) {
         sUpdatedDevice = device;
-        return new Intent(context, DeviceDetailActivity.class).addFlags(
-            Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return new Intent(context, DeviceDetailActivity.class);
     }
 
     @Override

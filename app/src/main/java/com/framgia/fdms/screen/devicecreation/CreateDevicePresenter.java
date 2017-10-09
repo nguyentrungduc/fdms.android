@@ -58,7 +58,7 @@ final class CreateDevicePresenter implements CreateDeviceContract.Presenter {
             .subscribe(new Consumer<Device>() {
                 @Override
                 public void accept(Device device) throws Exception {
-                    mViewModel.onRegisterSuccess();
+                    mViewModel.onRegisterSuccess(device);
                 }
             }, new RequestError() {
                 @Override
@@ -165,6 +165,14 @@ final class CreateDevicePresenter implements CreateDeviceContract.Presenter {
         if (TextUtils.isEmpty(device.getProductionName())) {
             isValid = false;
             mViewModel.onInputProductionNameError();
+        }
+        if (TextUtils.isEmpty(device.getSerialNumber())) {
+            isValid = false;
+            mViewModel.onInputSerialNumberError();
+        }
+        if (TextUtils.isEmpty(device.getModelNumber())) {
+            isValid = false;
+            mViewModel.onInputModellNumberError();
         }
         if (TextUtils.isEmpty(device.getOriginalPrice())) {
             isValid = false;

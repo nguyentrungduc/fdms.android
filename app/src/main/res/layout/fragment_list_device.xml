@@ -13,144 +13,153 @@
             type="com.framgia.fdms.screen.device.listdevice.ListDeviceViewModel"
             />
     </data>
-    <android.support.v4.widget.DrawerLayout
+
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        bind:drawerListener="@{viewModel}"
-        bind:side="@{GravityCompat.END}"
-        bind:statusDrawerLayout="@{viewModel.drawerStatus}"
+        app:refreshAble="@{viewModel.refresh}"
+        app:swipeRefreshListener="@{viewModel.onRefreshListener}"
         >
-        <RelativeLayout
+
+        <android.support.v4.widget.DrawerLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            bind:drawerListener="@{viewModel}"
+            bind:side="@{GravityCompat.END}"
+            bind:statusDrawerLayout="@{viewModel.drawerStatus}"
             >
-
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 >
-                <android.support.design.widget.AppBarLayout
-                    android:id="@+id/appbar"
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
                     >
-                    <android.support.design.widget.CollapsingToolbarLayout
+                    <android.support.design.widget.AppBarLayout
+                        android:id="@+id/appbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorPrimary"
-                        app:contentScrim="?attr/colorPrimary"
-                        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                         >
-                        <com.arlib.floatingsearchview.FloatingSearchView
-                            android:id="@+id/floating_search_view"
+                        <android.support.design.widget.CollapsingToolbarLayout
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_50"
-                            app:backgroundTint="@color/colorPrimaryDark"
-                            app:floatingSearch_leftActionMode="noLeftAction"
-                            app:floatingSearch_menu="@menu/menu_device_manager"
-                            app:floatingSearch_searchHint="@string/title_device_searching"
-                            app:floatingSearch_showSearchKey="true"
-                            bind:clearListenner="@{viewModel}"
-                            bind:menuItemClick="@{viewModel}"
-                            bind:searchListenner="@{viewModel}"
-                            bind:searchText="@{viewModel.filterModel.staffName}"
-                            />
-                    </android.support.design.widget.CollapsingToolbarLayout>
-                </android.support.design.widget.AppBarLayout>
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorPrimary"
+                            app:contentScrim="?attr/colorPrimary"
+                            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                            >
+                            <com.arlib.floatingsearchview.FloatingSearchView
+                                android:id="@+id/floating_search_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dp_50"
+                                app:backgroundTint="@color/colorPrimaryDark"
+                                app:floatingSearch_leftActionMode="noLeftAction"
+                                app:floatingSearch_menu="@menu/menu_device_manager"
+                                app:floatingSearch_searchHint="@string/title_device_searching"
+                                app:floatingSearch_showSearchKey="true"
+                                bind:clearListenner="@{viewModel}"
+                                bind:menuItemClick="@{viewModel}"
+                                bind:searchListenner="@{viewModel}"
+                                bind:searchText="@{viewModel.filterModel.staffName}"
+                                />
+                        </android.support.design.widget.CollapsingToolbarLayout>
+                    </android.support.design.widget.AppBarLayout>
 
-                <include
-                    layout="@layout/empty_state"
-                    bind:image="@{@drawable/ic_not_found_data}"
-                    bind:text="@{@string/msg_no_device_with_request}"
-                    bind:visibleState="@{viewModel.emptyViewVisible}"
-                    />
+                    <include
+                        layout="@layout/empty_state"
+                        bind:image="@{@drawable/ic_not_found_data}"
+                        bind:text="@{@string/msg_no_device_with_request}"
+                        bind:visibleState="@{viewModel.emptyViewVisible}"
+                        />
 
-                <android.support.v7.widget.RecyclerView
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:scrollbars="vertical"
+                        app:layoutManager="LinearLayoutManager"
+                        app:recyclerAdapter="@{viewModel.adapter}"
+                        app:scrollListenner="@{viewModel.scrollListenner}"
+                        app:scrollPosition="@{viewModel.positionScroll}"
+                        />
+
+                    <ProgressBar
+                        android:id="@+id/progress_loading_bottom"
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_30"
+                        android:layout_gravity="center"
+                        android:visibility="@{viewModel.isLoadingMore ? View.VISIBLE : View.GONE}"
+                        />
+                </LinearLayout>
+
+                <com.github.clans.fab.FloatingActionMenu
+                    android:id="@+id/float_action_menu"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:scrollbars="vertical"
-                    app:layoutManager="LinearLayoutManager"
-                    app:recyclerAdapter="@{viewModel.adapter}"
-                    app:scrollListenner="@{viewModel.scrollListenner}"
-                    />
-
-                <ProgressBar
-                    android:id="@+id/progress_loading_bottom"
-                    android:layout_width="@dimen/dp_30"
-                    android:layout_height="@dimen/dp_30"
-                    android:layout_gravity="center"
-                    android:visibility="@{viewModel.isLoadingMore ? View.VISIBLE : View.GONE}"
-                    />
-            </LinearLayout>
-
-            <com.github.clans.fab.FloatingActionMenu
-                android:id="@+id/float_action_menu"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="bottom|end"
-                android:padding="@dimen/dp_10"
-                app:menu_animationDelayPerItem="55"
-                app:menu_backgroundColor="@color/color_black_transparent"
-                app:menu_icon="@drawable/fab_add"
-                app:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
-                app:menu_labels_padding="@dimen/dp_10"
-                app:menu_labels_position="left"
-                app:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
-                app:menu_labels_singleLine="false"
-                app:menu_labels_textColor="@android:color/white"
-                app:menu_labels_textSize="@dimen/sp_16"
-                app:closedOnTouchOutside="@{true}"
-                app:menu_openDirection="up"
-                >
-
-                <com.github.clans.fab.FloatingActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewModel.onStartReturnDevice(floatActionMenu)}"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom|end"
                     android:padding="@dimen/dp_10"
-                    android:src="@drawable/ic_return_teal_24px"
-                    android:tint="@color/colorPrimary"
-                    app:fab_colorNormal="@android:color/white"
-                    app:fab_colorPressed="@color/color_seashell"
-                    app:fab_colorRipple="@color/color_dark_gray"
-                    app:fab_label="@string/action_return_device"
-                    />
+                    app:closedOnTouchOutside="@{true}"
+                    app:menu_animationDelayPerItem="55"
+                    app:menu_backgroundColor="@color/color_black_transparent"
+                    app:menu_icon="@drawable/fab_add"
+                    app:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+                    app:menu_labels_padding="@dimen/dp_10"
+                    app:menu_labels_position="left"
+                    app:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+                    app:menu_labels_singleLine="false"
+                    app:menu_labels_textColor="@android:color/white"
+                    app:menu_labels_textSize="@dimen/sp_16"
+                    app:menu_openDirection="up"
+                    >
 
-                <com.github.clans.fab.FloatingActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewModel.onAssignDeviceForNewMemberClick(floatActionMenu)}"
-                    android:padding="@dimen/dp_10"
-                    android:src="@drawable/ic_assignment_new_member"
-                    android:tint="@color/colorPrimary"
-                    app:fab_colorNormal="@android:color/white"
-                    app:fab_colorPressed="@color/color_seashell"
-                    app:fab_colorRipple="@color/color_dark_gray"
-                    app:fab_label="@string/title_assignment_for_new_member"
-                    />
+                    <com.github.clans.fab.FloatingActionButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{() -> viewModel.onStartReturnDevice(floatActionMenu)}"
+                        android:padding="@dimen/dp_10"
+                        android:src="@drawable/ic_return_teal_24px"
+                        android:tint="@color/colorPrimary"
+                        app:fab_colorNormal="@android:color/white"
+                        app:fab_colorPressed="@color/color_seashell"
+                        app:fab_colorRipple="@color/color_dark_gray"
+                        app:fab_label="@string/action_return_device"
+                        />
 
-                <com.github.clans.fab.FloatingActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewModel.onRegisterDeviceClick(floatActionMenu)}"
-                    android:padding="@dimen/dp_10"
-                    android:src="@drawable/ic_add_device"
-                    android:tint="@color/colorPrimary"
-                    app:fab_colorNormal="@android:color/white"
-                    app:fab_colorPressed="@color/color_seashell"
-                    app:fab_colorRipple="@color/color_dark_gray"
-                    app:fab_label="@string/action_add_new_device"
-                    />
-            </com.github.clans.fab.FloatingActionMenu>
+                    <com.github.clans.fab.FloatingActionButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{() -> viewModel.onAssignDeviceForNewMemberClick(floatActionMenu)}"
+                        android:padding="@dimen/dp_10"
+                        android:src="@drawable/ic_assignment_new_member"
+                        android:tint="@color/colorPrimary"
+                        app:fab_colorNormal="@android:color/white"
+                        app:fab_colorPressed="@color/color_seashell"
+                        app:fab_colorRipple="@color/color_dark_gray"
+                        app:fab_label="@string/title_assignment_for_new_member"
+                        />
 
-        </RelativeLayout>
-        <include
-            layout="@layout/filter_device"
-            bind:viewModel="@{viewModel}"
-            />
-    </android.support.v4.widget.DrawerLayout>
+                    <com.github.clans.fab.FloatingActionButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{() -> viewModel.onRegisterDeviceClick(floatActionMenu)}"
+                        android:padding="@dimen/dp_10"
+                        android:src="@drawable/ic_add_device"
+                        android:tint="@color/colorPrimary"
+                        app:fab_colorNormal="@android:color/white"
+                        app:fab_colorPressed="@color/color_seashell"
+                        app:fab_colorRipple="@color/color_dark_gray"
+                        app:fab_label="@string/action_add_new_device"
+                        />
+                </com.github.clans.fab.FloatingActionMenu>
 
+            </RelativeLayout>
+            <include
+                layout="@layout/filter_device"
+                bind:viewModel="@{viewModel}"
+                />
+        </android.support.v4.widget.DrawerLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </layout>

@@ -90,6 +90,7 @@ public class Constant {
         public static final int REQUEST_DEVICE_GROUPS_DIALOG = 21;
         public static final int REQUEST_EDIT = 22;
         public static final int REQUEST_MANAGE_DEVICE = 23;
+        public static final int REQUEST_CREATE_DEVICE = 24;
     }
 
     public static final class DeviceUsingStatus {

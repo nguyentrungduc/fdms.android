@@ -28,7 +28,6 @@ public class CreateDeviceActivity extends AppCompatActivity {
 
     public static Intent getInstance(Context context, DeviceStatusType type) {
         Intent intent = new Intent(context, CreateDeviceActivity.class);
-        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         Bundle bundle = new Bundle();
         bundle.putSerializable(BUNDLE_TYPE, type);
         intent.putExtras(bundle);
