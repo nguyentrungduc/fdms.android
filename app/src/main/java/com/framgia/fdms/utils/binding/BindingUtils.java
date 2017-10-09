@@ -414,7 +414,7 @@ public final class BindingUtils {
 
             @Override
             public void onPageSelected(int position) {
-                viewModel.updateFloadtingVisible(position);
+                viewModel.updateFloatingVisible(position);
             }
 
             @Override

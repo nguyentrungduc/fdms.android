@@ -78,49 +78,60 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
 
     @Override
     public Observable<Device> registerdevice(final Device device) {
-        Map<String, RequestBody> parrams = new HashMap<>();
-
+        Map<String, RequestBody> params = new HashMap<>();
+        RequestBody productionName, deviceStatusId, deviceCategoryId, vendorId, makerId,
+            meetingRoomId, serialNumber, modelNumber, deviceCode, isBarcode, isMeetingRoom,
+            boughtDate, originalPrice, warranty, ram, hardDrive, description;
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 
-        RequestBody productionName = createPartFromString(device.getProductionName());
-        RequestBody deviceStatusId =
-            createPartFromString(String.valueOf(device.getDeviceStatusId()));
-        RequestBody deviceCategoryId =
-            createPartFromString(String.valueOf(device.getDeviceCategoryId()));
-        RequestBody vendorId = createPartFromString(String.valueOf(device.getVendorId()));
-        RequestBody makerId = createPartFromString(String.valueOf(device.getMarkerId()));
-        RequestBody meetingRoomId = createPartFromString(String.valueOf(device.getMeetingRoomId()));
-        RequestBody serialNumber = createPartFromString(device.getSerialNumber());
-        RequestBody modelNumber = createPartFromString(device.getModelNumber());
-        RequestBody deviceCode = createPartFromString(device.getDeviceCode());
-        RequestBody isBarcode = createPartFromString(String.valueOf(device.isBarcode()));
-        RequestBody isMeetingRoom =
-            createPartFromString(String.valueOf(device.isDeviceMeetingRoom()));
-        RequestBody boughtDate =
-            createPartFromString(String.valueOf(format.format(device.getBoughtDate())));
-        RequestBody originalPrice = createPartFromString(device.getOriginalPrice());
-        RequestBody warranty = createPartFromString(device.getWarranty());
-        RequestBody ranm = createPartFromString(device.getRam());
-        RequestBody hardDrive = createPartFromString(device.getHardDriver());
-        RequestBody description = createPartFromString(device.getDeviceDescription());
-
-        parrams.put(PRODUCTION_NAME, productionName);
-        parrams.put(DEVICE_STATUS_ID, deviceStatusId);
-        parrams.put(DEVICE_CATEGORY_ID, deviceCategoryId);
-        parrams.put(VENDOR_ID, vendorId);
-        parrams.put(MAKER_ID, makerId);
-        parrams.put(MEETING_ROOM_ID, meetingRoomId);
-        parrams.put(IS_BAR_CODE, isBarcode);
-        parrams.put(IS_MEETING_ROOM, isMeetingRoom);
-        parrams.put(SERIAL_NUMBER, serialNumber);
-        parrams.put(MODEL_NUMBER, modelNumber);
-        parrams.put(DEVICE_CODE, deviceCode);
-        parrams.put(BOUGHT_DATE, boughtDate);
-        parrams.put(ORIGINAL_PRICE, originalPrice);
-        parrams.put(WARRANTY, warranty);
-        parrams.put(RAM, ranm);
-        parrams.put(HARD_DRIVE, hardDrive);
-        parrams.put(DESCRIPTION, description);
+        productionName = createPartFromString(device.getProductionName());
+        deviceStatusId = createPartFromString(String.valueOf(device.getDeviceStatusId()));
+        deviceCategoryId = createPartFromString(String.valueOf(device.getDeviceCategoryId()));
+        vendorId = createPartFromString(String.valueOf(device.getVendorId()));
+        makerId = createPartFromString(String.valueOf(device.getMarkerId()));
+        deviceCode = createPartFromString(device.getDeviceCode());
+        isBarcode = createPartFromString(String.valueOf(device.isBarcode()));
+        boughtDate = createPartFromString(String.valueOf(format.format(device.getBoughtDate())));
+        originalPrice = createPartFromString(device.getOriginalPrice());
+        isMeetingRoom = createPartFromString(String.valueOf(device.isDeviceMeetingRoom()));
+        if (device.getMeetingRoomId() > 0) {
+            meetingRoomId = createPartFromString(String.valueOf(device.getMeetingRoomId()));
+            params.put(MEETING_ROOM_ID, meetingRoomId);
+        }
+        if (device.getSerialNumber() != null) {
+            serialNumber = createPartFromString(device.getSerialNumber());
+            params.put(SERIAL_NUMBER, serialNumber);
+        }
+        if (device.getModelNumber() != null) {
+            modelNumber = createPartFromString(device.getModelNumber());
+            params.put(MODEL_NUMBER, modelNumber);
+        }
+        if (device.getWarranty() != null) {
+            warranty = createPartFromString(device.getWarranty());
+            params.put(WARRANTY, warranty);
+        }
+        if (device.getRam() != null) {
+            ram = createPartFromString(device.getRam());
+            params.put(RAM, ram);
+        }
+        if (device.getHardDriver() != null) {
+            hardDrive = createPartFromString(device.getHardDriver());
+            params.put(HARD_DRIVE, hardDrive);
+        }
+        if (device.getDeviceDescription() != null) {
+            description = createPartFromString(device.getDeviceDescription());
+            params.put(DESCRIPTION, description);
+        }
+        params.put(PRODUCTION_NAME, productionName);
+        params.put(DEVICE_STATUS_ID, deviceStatusId);
+        params.put(DEVICE_CATEGORY_ID, deviceCategoryId);
+        params.put(VENDOR_ID, vendorId);
+        params.put(MAKER_ID, makerId);
+        params.put(IS_BAR_CODE, isBarcode);
+        params.put(IS_MEETING_ROOM, isMeetingRoom);
+        params.put(DEVICE_CODE, deviceCode);
+        params.put(BOUGHT_DATE, boughtDate);
+        params.put(ORIGINAL_PRICE, originalPrice);
 
         MultipartBody.Part filePart = null;
 
@@ -134,7 +145,7 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
             }
         }
 
-        return mFDMSApi.uploadDevice(parrams, filePart)
+        return mFDMSApi.uploadDevice(params, filePart)
             .flatMap(new Function<Respone<Device>, ObservableSource<Device>>() {
                 @Override
                 public ObservableSource<Device> apply(Respone<Device> deviceRespone)
@@ -154,19 +165,19 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
             productionName = createPartFromString(device.getProductionName());
             params.put(PRODUCTION_NAME, productionName);
         }
-        if (device.getDeviceStatusId() != OUT_OF_INDEX) {
+        if (device.getDeviceStatusId() > 0) {
             deviceStatusId = createPartFromString(String.valueOf(device.getDeviceStatusId()));
             params.put(DEVICE_STATUS_ID, deviceStatusId);
         }
-        if (device.getVendorId() != OUT_OF_INDEX) {
+        if (device.getVendorId() > 0) {
             deviceVendorId = createPartFromString(String.valueOf(device.getVendorId()));
             params.put(VENDOR_ID, deviceVendorId);
         }
-        if (device.getMarkerId() != OUT_OF_INDEX) {
+        if (device.getMarkerId() > 0) {
             deviceMakerId = createPartFromString(String.valueOf(device.getMarkerId()));
             params.put(MAKER_ID, deviceMakerId);
         }
-        if (device.getMeetingRoomId() != OUT_OF_INDEX) {
+        if (device.getMeetingRoomId() > 0) {
             deviceMeetingRoomId = createPartFromString(String.valueOf(device.getMeetingRoomId()));
             params.put(MEETING_ROOM_ID, deviceMeetingRoomId);
         }
@@ -226,6 +237,11 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
                     return Observable.just(deviceRespone.getMessage());
                 }
             });
+    }
+
+    @Override
+    public Observable<Respone<String>> deleteDevice(Device device) {
+        return mFDMSApi.deleteDevice(device.getId());
     }
 
     @Override

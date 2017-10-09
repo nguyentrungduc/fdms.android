@@ -48,6 +48,7 @@ import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MAKER;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MANAGE_DEVICE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MEETING_ROOM;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_VENDOR;
@@ -347,7 +348,9 @@ public class ListDeviceViewModel extends BaseObservable
 
     @Override
     public void onItemDeviceClick(Device device) {
-        mContext.startActivity(DeviceDetailActivity.getInstance(mContext, device));
+        mFragment.startActivityForResult(
+            DeviceDetailActivity.getInstance(mFragment.getContext(), device),
+            REQUEST_MANAGE_DEVICE);
     }
 
     @Bindable
@@ -385,7 +388,7 @@ public class ListDeviceViewModel extends BaseObservable
         switch (item.getItemId()) {
             case R.id.action_filter:
                 setDrawerStatus(
-                    mDrawerStatus == DRAWER_IS_CLOSE ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
+                    mDrawerStatus.equals(DRAWER_IS_CLOSE) ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
                 break;
             case R.id.action_search:
                 mAdapter.clear();

@@ -1,7 +1,9 @@
 package com.framgia.fdms.screen.devicedetail;
 
 import com.framgia.fdms.data.model.Device;
+import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -20,20 +22,22 @@ final class DeviceDetailPresenter implements DeviceDetailContract.Presenter {
     private final DeviceDetailContract.ViewModel mViewModel;
     private CompositeDisposable mSubscription;
     private DeviceRepository mRepository;
+    private UserRepository mUserRepository;
     private Device mDevice;
 
     public DeviceDetailPresenter(DeviceDetailContract.ViewModel viewModel,
-        DeviceRepository repository, Device device) {
+        DeviceRepository repository, UserRepository userRepository, Device device) {
         mViewModel = viewModel;
         mSubscription = new CompositeDisposable();
         mRepository = repository;
+        mUserRepository = userRepository;
         mDevice = device;
         getDevice(mDevice);
     }
 
     @Override
     public void onStart() {
-
+        getCurrentUser();
     }
 
     @Override
@@ -55,7 +59,26 @@ final class DeviceDetailPresenter implements DeviceDetailContract.Presenter {
             }, new RequestError() {
                 @Override
                 public void onRequestError(BaseException error) {
-                    mViewModel.onGetDeviceError();
+                    mViewModel.onGetDeviceError(error.getMessage());
+                }
+            });
+        mSubscription.add(subscription);
+    }
+
+    @Override
+    public void getCurrentUser() {
+        Disposable subscription = mUserRepository.getCurrentUser()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<User>() {
+                @Override
+                public void accept(User user) throws Exception {
+                    mViewModel.onGetUserSuccess(user);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.onGetUserError(error.getMessage());
                 }
             });
         mSubscription.add(subscription);

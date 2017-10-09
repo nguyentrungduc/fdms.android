@@ -154,17 +154,17 @@ final class CreateDevicePresenter implements CreateDeviceContract.Presenter {
             isValid = false;
             mViewModel.onInputBoughtDateError();
         }
-        if (TextUtils.isEmpty(device.getModelNumber())) {
+        if (device.getVendorId() <= 0) {
             isValid = false;
-            mViewModel.onInputModellNumberError();
+            mViewModel.onInputVendorError();
+        }
+        if (device.getMarkerId() <= 0) {
+            isValid = false;
+            mViewModel.onInputMakerError();
         }
         if (TextUtils.isEmpty(device.getProductionName())) {
             isValid = false;
             mViewModel.onInputProductionNameError();
-        }
-        if (TextUtils.isEmpty(device.getSerialNumber())) {
-            isValid = false;
-            mViewModel.onInputSerialNumberError();
         }
         if (TextUtils.isEmpty(device.getOriginalPrice())) {
             isValid = false;
