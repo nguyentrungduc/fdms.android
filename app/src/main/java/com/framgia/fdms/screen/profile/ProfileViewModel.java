@@ -149,14 +149,6 @@ public class ProfileViewModel extends BaseObservable
     }
 
     @Override
-    public void onClickLogout() {
-        // TODO: 5/30/2017 Call api logout
-        mPreferences.remove(USER_PREFS);
-        mActivity.startActivity(LoginActivity.getInstance(mContext));
-        mActivity.finish();
-    }
-
-    @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         mBirthDay = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
         setBirthDay(mBirthDay);
@@ -230,9 +222,5 @@ public class ProfileViewModel extends BaseObservable
     public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener onRefreshListener) {
         mOnRefreshListener = onRefreshListener;
         notifyPropertyChanged(BR.onRefreshListener);
-    }
-
-    public void showDilogExport() {
-        mActivity.startActivity(ChooseExportActivity.newInstance(mContext, mUser));
     }
 }

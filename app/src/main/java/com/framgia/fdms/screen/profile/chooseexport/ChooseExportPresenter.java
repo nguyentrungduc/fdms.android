@@ -18,15 +18,9 @@ import java.util.List;
 
 public class ChooseExportPresenter implements ChooseExportContract.Presenter {
     private ChooseExportContract.ViewModel mViewModel;
-    private DeviceReturnRepository mDeviceRepository;
-    private CompositeDisposable mCompositeSubscriptions;
 
-    public ChooseExportPresenter(ChooseExportContract.ViewModel viewModel,
-        DeviceReturnRepository deviceRepository) {
+    public ChooseExportPresenter(ChooseExportContract.ViewModel viewModel) {
         mViewModel = viewModel;
-        mDeviceRepository = deviceRepository;
-        mCompositeSubscriptions = new CompositeDisposable();
-        getListDevice();
     }
 
     @Override
@@ -36,37 +30,5 @@ public class ChooseExportPresenter implements ChooseExportContract.Presenter {
 
     @Override
     public void onStop() {
-        mCompositeSubscriptions.clear();
-    }
-
-    @Override
-    public void getListDevice() {
-        Disposable subscription = mDeviceRepository.devicesOfBorrower()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(new Consumer<Disposable>() {
-                @Override
-                public void accept(Disposable disposable) throws Exception {
-                    mViewModel.showProgressbar();
-                }
-            })
-            .subscribe(new Consumer<List<Device>>() {
-                @Override
-                public void accept(List<Device> devices) throws Exception {
-                    mViewModel.onDeviceLoaded(devices);
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mViewModel.hideProgressbar();
-                    mViewModel.onError(error.getMessage());
-                }
-            }, new Action() {
-                @Override
-                public void run() throws Exception {
-                    mViewModel.hideProgressbar();
-                }
-            });
-        mCompositeSubscriptions.add(subscription);
     }
 }

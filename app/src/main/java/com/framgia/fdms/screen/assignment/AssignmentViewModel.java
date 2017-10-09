@@ -209,7 +209,7 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
         if (mAdapter.getItemCount() == 0) {
             return;
         }
-        mActivity.startActivity(ChooseExportActivity.newInstance(mContext, user));
+        // TODO: 10/9/2017   ChooseExportActivity.newInstance
     }
 
     @Override
