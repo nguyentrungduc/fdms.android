@@ -104,6 +104,9 @@ public class Device extends BaseObservable implements Parcelable {
     @Expose
     @SerializedName("description")
     private String mDeviceDescription;
+    @Expose
+    @SerializedName("version")
+    private int mVersion;
 
     public Device() {
     }
@@ -135,6 +138,7 @@ public class Device extends BaseObservable implements Parcelable {
         mRam = in.readString();
         mHardDriver = in.readString();
         mDeviceDescription = in.readString();
+        mVersion = in.readInt();
     }
 
     public static final Creator<Device> CREATOR = new Creator<Device>() {
@@ -177,6 +181,7 @@ public class Device extends BaseObservable implements Parcelable {
         setRam(device.getRam());
         setHardDriver(device.getHardDriver());
         setDeviceDescription(device.getDeviceDescription());
+        setVersion(device.getVersion());
     }
 
     public Device(String deviceCode, String productionName, String deviceCategoryName) {
@@ -485,6 +490,16 @@ public class Device extends BaseObservable implements Parcelable {
     }
 
     @Bindable
+    public int getVersion() {
+        return mVersion;
+    }
+
+    public void setVersion(int version) {
+        mVersion = version;
+        notifyPropertyChanged(BR.version);
+    }
+
+    @Bindable
     public String getDeviceDescription() {
         return mDeviceDescription;
     }
@@ -532,5 +547,6 @@ public class Device extends BaseObservable implements Parcelable {
         parcel.writeString(mRam);
         parcel.writeString(mHardDriver);
         parcel.writeString(mDeviceDescription);
+        parcel.writeInt(mVersion);
     }
 }

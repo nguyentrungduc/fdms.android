@@ -282,6 +282,7 @@
     <string name="title_manage_cap">MANAGE</string>
     <string name="title_set_up_profile">Profile</string>
     <string name="title_profile_cap">PROFILE</string>
+    <string name="title_version">Version</string>
     <string name="title_home_cap">HOME</string>
     <string name="msg_open_drawer">open</string>
     <string name="msg_close_drawer">close</string>
