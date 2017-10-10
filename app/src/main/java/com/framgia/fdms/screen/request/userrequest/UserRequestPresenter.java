@@ -77,7 +77,8 @@ public final class UserRequestPresenter implements UserRequestContract.Presenter
     }
 
     @Override
-    public void getMyRequest(int requestStatusId, int relativeId, final int perPage, int page) {
+    public void getMyRequest(int requestStatusId, int relativeId, final int page,
+        final int perPage) {
         mViewModel.setRefresh(true);
         Disposable subscription =
             mRequestRepository.getRequests(USER_REQUEST, requestStatusId, relativeId, page, perPage)
