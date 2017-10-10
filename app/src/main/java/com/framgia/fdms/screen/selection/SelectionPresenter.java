@@ -31,6 +31,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_USING_HISTO
 import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
+import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_CREATED_BY;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.USER_BORROW;
@@ -159,6 +160,8 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             case USER_BORROW:
                 getListUserBorrow();
                 break;
+            case REQUEST_CREATED_BY:
+                getListRequestCreatedBy();
             default:
                 break;
         }
@@ -172,7 +175,8 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             || mSelectionType == DEVICE_GROUP
             || mSelectionType == STATUS_REQUEST
             || mSelectionType == DEVICE_GROUP_DIALOG
-            || mSelectionType == ASSIGNEE) {
+            || mSelectionType == ASSIGNEE
+            || mSelectionType == REQUEST_CREATED_BY) {
             mViewModel.onGetDataFailed(null);
             mViewModel.hideProgress();
             return;
@@ -581,5 +585,10 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 }
             });
         mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void getListRequestCreatedBy() {
+        //TODO: get list request by me, for me 10/10/2017
     }
 }

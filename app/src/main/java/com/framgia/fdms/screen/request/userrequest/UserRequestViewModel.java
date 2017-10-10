@@ -33,7 +33,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
+import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_CREATED_BY;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
@@ -41,7 +41,7 @@ import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_REQUEST;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
-import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SELECTION;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_REQUEST_CREATED_BY;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
 
 /**
@@ -56,8 +56,7 @@ public class UserRequestViewModel extends BaseFragmentModel
     private final Fragment mFragment;
     private UserRequestAdapter mAdapter;
 
-    private Status mStatus;
-    private Status mRelative;
+    private Status mStatus, mRelative, mRequestBy;
     private boolean mIsRefresh;
     private ObservableField<User> mUser = new ObservableField<>();
     private int mEmptyViewVisible = View.GONE; // show empty state when no date
@@ -80,6 +79,7 @@ public class UserRequestViewModel extends BaseFragmentModel
         mAdapter = new UserRequestAdapter(mContext, new ArrayList<Request>(), this, new User());
         setStatus(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_request_status)));
         setRelative(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_request_relative)));
+        setRequestBy(new Status(OUT_OF_INDEX, mContext.getString(R.string.text_request_for_me)));
         mCalendar = Calendar.getInstance();
     }
 
@@ -108,12 +108,14 @@ public class UserRequestViewModel extends BaseFragmentModel
 
     @Override
     public void onGetRequestSuccess(List<Request> requests) {
+        setLoadMore(false);
         mAdapter.onUpdatePage(requests);
         setEmptyViewVisible(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void onGetRequestError() {
+        setLoadMore(false);
         setEmptyViewVisible(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
@@ -144,21 +146,9 @@ public class UserRequestViewModel extends BaseFragmentModel
             return;
         }
         Bundle bundle = data.getExtras();
+        Status status = bundle.getParcelable(BUNDLE_DATA);
         switch (requestCode) {
-            case REQUEST_SELECTION:
-                Status relative = bundle.getParcelable(BUNDLE_DATA);
-                if (relative == null) {
-                    return;
-                }
-                if (relative.getId() == OUT_OF_INDEX) {
-                    relative.setName(mContext.getString(R.string.title_request_relative));
-                }
-                setRelative(relative);
-                mAdapter.clear();
-                mPresenter.getData(mRelative, mStatus);
-                break;
             case REQUEST_STATUS:
-                Status status = bundle.getParcelable(BUNDLE_DATA);
                 if (status == null) {
                     return;
                 }
@@ -175,6 +165,14 @@ public class UserRequestViewModel extends BaseFragmentModel
                 if (requestRespone != null) {
                     onUpdateActionSuccess(requestRespone);
                 }
+                break;
+            case REQUEST_REQUEST_CREATED_BY:
+                if (status == null) {
+                    return;
+                }
+                setRequestBy(status);
+                mAdapter.clear();
+                mPresenter.getData(mRequestBy, mStatus);
                 break;
             default:
                 break;
@@ -207,9 +205,10 @@ public class UserRequestViewModel extends BaseFragmentModel
             REQUEST_STATUS);
     }
 
-    public void onSelectRelativeClick() {
-        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, RELATIVE_STAFF),
-            REQUEST_SELECTION);
+    public void onSelectTypeRequestClick() {
+        mFragment.startActivityForResult(
+            SelectionActivity.getInstance(mContext, REQUEST_CREATED_BY),
+            REQUEST_REQUEST_CREATED_BY);
     }
 
     @Bindable
@@ -366,5 +365,15 @@ public class UserRequestViewModel extends BaseFragmentModel
     private void setFlagTime(boolean flagTime) {
         mFlagTime = flagTime;
         notifyPropertyChanged(BR.flagTime);
+    }
+
+    @Bindable
+    public Status getRequestBy() {
+        return mRequestBy;
+    }
+
+    private void setRequestBy(Status requestBy) {
+        mRequestBy = requestBy;
+        notifyPropertyChanged(BR.requestBy);
     }
 }

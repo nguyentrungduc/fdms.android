@@ -42,7 +42,7 @@ interface UserRequestContract {
      * Presenter.
      */
     interface Presenter extends BaseFragmentContract.Presenter {
-        void getMyRequest(int requestStatusId, int relativeId, int perPage, int page);
+        void getMyRequest(int requestStatusId, int relativeId, int page, int perPage);
 
         void updateActionRequest(int requestId, int actionId);
 

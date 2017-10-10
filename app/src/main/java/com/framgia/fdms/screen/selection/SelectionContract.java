@@ -60,5 +60,7 @@ public interface SelectionContract {
         void getListAssignee();
 
         void getListUserBorrow();
+
+        void getListRequestCreatedBy();
     }
 }

@@ -113,6 +113,8 @@
     <string name="title_device_return">Return device</string>
     <string name="action_return_device">Return device</string>
     <string name="text_assign_to">Assign to</string>
+    <string name="text_request_by_me">Request by me</string>
+    <string name="text_request_for_me">Request for me</string>
     <string name="text_request_for">Request for</string>
     <string name="title_two_dot">:</string>
     <string name="title_original_price">Original Price</string>

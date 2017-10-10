@@ -84,7 +84,7 @@ public class Constant {
         public static final int REQUEST_DEVICE = 15;
         public static final int REQUEST_MEETING_ROOM = 16;
         public static final int REQUEST_DEVICE_USING_STATUS = 17;
-        public static final int REQUEST_REQUEST_FOR = 18;
+        public static final int REQUEST_REQUEST_CREATED_BY = 18;
         public static final int REQUEST_ASSIGNEE = 19;
         public static final int REQUEST_USER_BORROW = 20;
         public static final int REQUEST_DEVICE_GROUPS_DIALOG = 21;
