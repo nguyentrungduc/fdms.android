@@ -36,6 +36,8 @@ interface RequestManagerContract {
         void onRegisterRequestClick();
 
         void setAllowLoadMore(boolean allowLoadMore);
+
+        void onActionRequestClick(int acionId, int requestId);
     }
 
     /**

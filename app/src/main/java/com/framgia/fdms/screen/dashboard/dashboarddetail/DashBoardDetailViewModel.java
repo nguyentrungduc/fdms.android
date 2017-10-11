@@ -27,6 +27,7 @@ import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailF
 import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
     .REQUEST_DASHBOARD;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
+import static com.framgia.fdms.utils.Constant.RequestAction.CANCEL;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
 
 /**
@@ -269,13 +271,35 @@ public class DashBoardDetailViewModel extends BaseObservable
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        mPresenter.updateActionRequest(request.getRequest().getId(),
-                            action.getId());
+                        onActionRequestClick(request.getRequest().getId(), action.getId());
                         return false;
                     }
                 });
         }
         popupMenu.show();
+    }
+
+    @Override
+    public void onActionRequestClick(int requestId, int actionId) {
+        switch (actionId) {
+            case CANCEL:
+                new LovelyTextInputDialog(mContext).setTopColorRes(R.color.colorPrimary)
+                    .setTitle(R.string.msg_cancel_request)
+                    .setIcon(R.drawable.ic_error_white)
+                    .setConfirmButton(android.R.string.ok,
+                        new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                            @Override
+                            public void onTextInputConfirmed(String text) {
+                                // TODO: 10/11/2017 cancel request with text
+                            }
+                        })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
+                break;
+            default:
+                mPresenter.updateActionRequest(requestId, actionId);
+                break;
+        }
     }
 
     @Override
