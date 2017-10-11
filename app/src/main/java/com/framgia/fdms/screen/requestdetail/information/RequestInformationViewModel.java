@@ -20,6 +20,7 @@ import com.framgia.fdms.screen.assignment.AssignmentType;
 import com.framgia.fdms.utils.Constant;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -189,15 +190,37 @@ public class RequestInformationViewModel extends BaseObservable
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (requestAction.getId() == EDIT) {
-                        initEditRequest();
-                        return;
-                    }
-                    mPresenter.updateActionRequest(mRequest.getId(), requestAction.getId());
-                    mFloatingActionsMenu.hideMenu(true);
+                    onActionRequestClick(mRequest.getId(), requestAction.getId());
                 }
             });
             button.setButtonSize(SIZE_MINI);
+        }
+    }
+
+    @Override
+    public void onActionRequestClick(int requestId, int actionId) {
+        switch (actionId) {
+            case EDIT:
+                initEditRequest();
+                break;
+            case CANCEL:
+                new LovelyTextInputDialog(mContext).setTopColorRes(R.color.colorPrimary)
+                    .setTitle(R.string.msg_cancel_request)
+                    .setIcon(R.drawable.ic_error_white)
+                    .setConfirmButton(android.R.string.ok,
+                        new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                            @Override
+                            public void onTextInputConfirmed(String text) {
+                                // TODO: 10/11/2017 cancel request with text
+
+                            }
+                        })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
+                break;
+            default:
+                mPresenter.updateActionRequest(requestId, actionId);
+                break;
         }
     }
 

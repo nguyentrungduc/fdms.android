@@ -42,6 +42,8 @@ interface DashBoardDetailContract {
         void setCurrentUser(User user);
 
         void setRefresh(boolean isRefresh);
+
+        void onActionRequestClick(int requestId, int actionId);
     }
 
     /**

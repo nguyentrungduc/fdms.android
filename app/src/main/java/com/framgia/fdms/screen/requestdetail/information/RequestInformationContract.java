@@ -35,6 +35,8 @@ public interface RequestInformationContract {
         void onUploadRequestError(String message);
 
         void initActionEdit(Request request);
+
+        void onActionRequestClick(int requestId, int actionId);
     }
 
     interface Presenter extends BasePresenter {

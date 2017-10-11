@@ -28,6 +28,7 @@ import com.framgia.fdms.screen.requestcreation.RequestCreationActivity;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -38,6 +39,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
+import static com.framgia.fdms.utils.Constant.RequestAction.CANCEL;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_REQUEST;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
@@ -247,14 +249,36 @@ public class UserRequestViewModel extends BaseFragmentModel
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        // TODO: 22/05/2017 update request status
-                        ((UserRequestContract.Presenter) mPresenter).updateActionRequest(
-                            request.getRequest().getId(), action.getId());
+                        onActionRequestClick(request.getRequest().getId(), action.getId());
                         return false;
                     }
                 });
         }
         popupMenu.show();
+    }
+
+    @Override
+    public void onActionRequestClick(int reqeuestId, int actionId) {
+        switch (actionId) {
+            case CANCEL:
+                new LovelyTextInputDialog(mContext).setTopColorRes(R.color.colorPrimary)
+                    .setTitle(R.string.msg_cancel_request)
+                    .setIcon(R.drawable.ic_error_white)
+                    .setConfirmButton(android.R.string.ok,
+                        new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                            @Override
+                            public void onTextInputConfirmed(String text) {
+                                // TODO: 10/11/2017 cancel request with text
+                            }
+                        })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
+                break;
+            default:
+                ((UserRequestContract.Presenter) mPresenter).updateActionRequest(reqeuestId,
+                    actionId);
+                break;
+        }
     }
 
     @Override
