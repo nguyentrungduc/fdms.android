@@ -10,7 +10,6 @@ import com.framgia.fdms.data.source.RequestDataSource;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.utils.Utils;
-import com.google.gson.Gson;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
@@ -80,9 +79,12 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
 
         parrams.put(REQUEST_TITLE, request.getTitle());
         parrams.put(REQUEST_DESCRIPTION, request.getDescription());
-        parrams.put(REQUEST_FOR_USER_ID, String.valueOf(request.getRequestFor()));
-        parrams.put(REQUEST_ASSIGNEE_ID, String.valueOf(request.getAssignee()));
-
+        if (request.getRequestFor() > 0) {
+            parrams.put(REQUEST_FOR_USER_ID, String.valueOf(request.getRequestFor()));
+        }
+        if (request.getAssignee() > 0) {
+            parrams.put(REQUEST_ASSIGNEE_ID, String.valueOf(request.getAssignee()));
+        }
         return mFDMSApi.registerRequest(parrams)
             .flatMap(new Function<Respone<Request>, ObservableSource<Request>>() {
                 @Override

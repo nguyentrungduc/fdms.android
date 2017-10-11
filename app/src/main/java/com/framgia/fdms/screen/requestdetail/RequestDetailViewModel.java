@@ -27,14 +27,14 @@ public class RequestDetailViewModel extends BaseObservable
     private Navigator mNavigator;
     private ObservableField<Integer> mProgressBarVisibility = new ObservableField<>();
 
-    public RequestDetailViewModel(AppCompatActivity activity, Request request,
-        Navigator navigator) {
+    public RequestDetailViewModel(AppCompatActivity activity, Request request, Navigator navigator,
+        int groupRequestType) {
         mActivity = activity;
         mContext = mActivity.getApplicationContext();
         mRequest = request;
         mNavigator = navigator;
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(RequestInformationFragment.newInstance(mRequest));
+        fragments.add(RequestInformationFragment.newInstance(mRequest, groupRequestType));
         fragments.add(ListDeviceAssignmentFragment.newInstance(mRequest));
         mAdapter = new RequestDetailPagerAdapter(mContext, mActivity.getSupportFragmentManager(),
             fragments);

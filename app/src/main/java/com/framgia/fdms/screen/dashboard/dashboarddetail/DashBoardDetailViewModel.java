@@ -37,6 +37,7 @@ import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailF
 import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
     .REQUEST_DASHBOARD;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
+import static com.framgia.fdms.utils.Constant.MANAGE_REQUEST_GROUP;
 import static com.framgia.fdms.utils.Constant.RequestAction.CANCEL;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
 
@@ -304,7 +305,8 @@ public class DashBoardDetailViewModel extends BaseObservable
 
     @Override
     public void onDetailRequestClick(Request request) {
-        mFragment.startActivityForResult(RequestDetailActivity.getInstance(mContext, request),
+        mFragment.startActivityForResult(
+            RequestDetailActivity.getInstance(mContext, request, MANAGE_REQUEST_GROUP),
             REQUEST_DETAIL);
     }
 

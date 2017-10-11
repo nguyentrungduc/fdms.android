@@ -16,7 +16,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_APPROVE;
+import static com.framgia.fdms.utils.Constant.DeviceStatus.DONE;
 
 /**
  * Created by tuanbg on 5/30/17.
@@ -136,7 +136,7 @@ public class RequestInformationPresenter implements RequestInformationContract.P
             return;
         }
         String status = request.getRequestStatus();
-        mViewModel.initFloatActionButton(status != null && status.equals(WAITING_APPROVE));
+        mViewModel.initFloatActionButton(request, status != null && !DONE.equals(status));
     }
 
     @Override
