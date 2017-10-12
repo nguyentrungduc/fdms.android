@@ -1,20 +1,19 @@
 package com.framgia.fdms.screen.profile;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.Picture;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
-import com.framgia.fdms.screen.authenication.login.LoginActivity;
-import com.framgia.fdms.screen.profile.chooseexport.ChooseExportActivity;
 import com.framgia.fdms.utils.Utils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import java.text.DateFormat;
@@ -23,8 +22,15 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.USER_PREFS;
+import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.LANGUAGE_PRES;
+import static com.framgia.fdms.utils.Constant.LocaleLanguage.ENGLISH;
+import static com.framgia.fdms.utils.Constant.LocaleLanguage.ENGLISH_POSITION;
+import static com.framgia.fdms.utils.Constant.LocaleLanguage.JAPANESE;
+import static com.framgia.fdms.utils.Constant.LocaleLanguage.JAPANESE_POSITION;
+import static com.framgia.fdms.utils.Constant.LocaleLanguage.VIETNAMESE;
+import static com.framgia.fdms.utils.Constant.LocaleLanguage.VIETNAMESE_POSITION;
 import static com.framgia.fdms.utils.Constant.PICK_IMAGE_REQUEST;
+import static com.framgia.fdms.utils.Utils.changeLanguage;
 
 /**
  * Exposes the data to be used in the Profile screen.
@@ -44,6 +50,8 @@ public class ProfileViewModel extends BaseObservable
     private String mBirthDay;
     private String mContractDate;
     private String mStartProbationDate;
+    private String mLanguage;
+    private int mItemLanguageSelectedPosition;
     private boolean mIsRefresh;
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
@@ -59,6 +67,29 @@ public class ProfileViewModel extends BaseObservable
         mContext = activity.getApplicationContext();
         mFragment = fragment;
         mPreferences = new SharePreferenceImp(mContext);
+        initLanguage(mPreferences.get(LANGUAGE_PRES, Integer.class));
+    }
+
+    private void initLanguage(int language) {
+        switch (language) {
+            case ENGLISH_POSITION:
+                setLanguage(mContext.getString(R.string.text_english));
+                changeLanguage(ENGLISH, mActivity);
+                setItemLanguageSelectedPosition(ENGLISH_POSITION);
+                break;
+            case VIETNAMESE_POSITION:
+                setLanguage(mContext.getString(R.string.text_vietnamese));
+                changeLanguage(VIETNAMESE, mActivity);
+                setItemLanguageSelectedPosition(VIETNAMESE_POSITION);
+                break;
+            case JAPANESE_POSITION:
+                setLanguage(mContext.getString(R.string.text_japanese));
+                changeLanguage(JAPANESE, mActivity);
+                setItemLanguageSelectedPosition(JAPANESE_POSITION);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -154,6 +185,26 @@ public class ProfileViewModel extends BaseObservable
         setBirthDay(mBirthDay);
     }
 
+    public void onClickChangeLanguage() {
+        new AlertDialog.Builder(mActivity).setSingleChoiceItems(R.array.language,
+            getItemLanguageSelectedPosition(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int itemPosition) {
+                    mPresenter.saveLanguage(itemPosition);
+                    initLanguage(itemPosition);
+                    setItemLanguageSelectedPosition(itemPosition);
+                    dialog.dismiss();
+                    restartActivity();
+                }
+            }).show();
+    }
+
+    private void restartActivity() {
+        Intent intent = mActivity.getIntent();
+        mActivity.finish();
+        mActivity.startActivity(intent);
+    }
+
     @Bindable
     public User getUser() {
         return mUser;
@@ -222,5 +273,25 @@ public class ProfileViewModel extends BaseObservable
     public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener onRefreshListener) {
         mOnRefreshListener = onRefreshListener;
         notifyPropertyChanged(BR.onRefreshListener);
+    }
+
+    @Bindable
+    public String getLanguage() {
+        return mLanguage != null ? mLanguage : "";
+    }
+
+    public void setLanguage(String language) {
+        mLanguage = language;
+        notifyPropertyChanged(BR.language);
+    }
+
+    @Bindable
+    public int getItemLanguageSelectedPosition() {
+        return mItemLanguageSelectedPosition;
+    }
+
+    public void setItemLanguageSelectedPosition(int itemLanguageSelectedPosition) {
+        mItemLanguageSelectedPosition = itemLanguageSelectedPosition;
+        notifyPropertyChanged(BR.itemLanguageSelectedPosition);
     }
 }
