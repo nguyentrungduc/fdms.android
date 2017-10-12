@@ -185,5 +185,7 @@ public class Constant {
         public static final int DONE = 5;
         public static final int EDIT = 6;
         public static final int RESEND = 7;
+        public static final int ASSIGNMENT = 8;
+
     }
 }

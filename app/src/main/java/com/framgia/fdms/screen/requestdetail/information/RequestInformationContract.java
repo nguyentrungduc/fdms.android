@@ -26,15 +26,11 @@ public interface RequestInformationContract {
 
         boolean onBackPressed();
 
-        void initFloatActionButton(Request request, boolean isEdit);
-
         void onGetReponeSuccess(Respone<Request> requestRespone);
 
         void setCurrentUser(User user);
 
         void onUploadRequestError(String message);
-
-        void initActionEdit(Request request);
 
         void onActionRequestClick(int requestId, int actionId);
     }
@@ -45,7 +41,5 @@ public interface RequestInformationContract {
         void updateRequest(Request request);
 
         void getCurrentUser();
-
-        void initFloatActionButton(Request request);
     }
 }

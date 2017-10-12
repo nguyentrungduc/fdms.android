@@ -16,7 +16,6 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
-import com.framgia.fdms.screen.assignment.AssignmentType;
 import com.framgia.fdms.utils.Constant;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -25,11 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static com.framgia.fdms.screen.assignment.AssignmentType.ASSIGN_BY_REQUEST;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_CATEGORY;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
+import static com.framgia.fdms.utils.Constant.DeviceStatus.CANCELLED;
 import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_DONE;
-import static com.framgia.fdms.utils.Constant.MY_REQUEST_GROUP;
 import static com.framgia.fdms.utils.Constant.RequestAction.APPROVED;
+import static com.framgia.fdms.utils.Constant.RequestAction.ASSIGNMENT;
 import static com.framgia.fdms.utils.Constant.RequestAction.CANCEL;
 import static com.framgia.fdms.utils.Constant.RequestAction.DONE;
 import static com.framgia.fdms.utils.Constant.RequestAction.EDIT;
@@ -37,8 +38,6 @@ import static com.framgia.fdms.utils.Constant.RequestAction.RECEIVE;
 import static com.framgia.fdms.utils.Constant.RequestAction.WAITING_APPROVE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
-import static com.framgia.fdms.utils.Constant.Role.BO_MANAGER;
-import static com.framgia.fdms.utils.Constant.Role.DIVISION_MANAGER;
 import static com.framgia.fdms.utils.Utils.hideSoftKeyboard;
 import static com.github.clans.fab.FloatingActionButton.SIZE_MINI;
 
@@ -164,23 +163,23 @@ public class RequestInformationViewModel extends BaseObservable
         return true;
     }
 
-    @Override
-    public void initFloatActionButton(Request request, final boolean isEdit) {
-        if (isEdit) {
+    public void initActionRequestMenu() {
+        String requestStatus = mRequest.getRequestStatus();
+
+        if (!Constant.DeviceStatus.DONE.equals(requestStatus) && !CANCELLED.equals(requestStatus)) {
             Request.RequestAction editAction = new Request().new RequestAction();
             editAction.setId(EDIT);
             editAction.setName(mContext.getString(R.string.action_edit));
-            if (!Constant.DeviceStatus.CANCELLED.equals(request.getRequestStatus())) {
-                if (mGroupRequestType == MY_REQUEST_GROUP && ((getUser().getRole()
-                    .equals(BO_MANAGER) && request.getRequestStatus()
-                    .equals(Constant.DeviceStatus.WAITING_DONE)) || (getUser().getRole()
-                    .equals(DIVISION_MANAGER) && request.getRequestStatus()
-                    .equals(Constant.DeviceStatus.APPROVED)))) {
-                    return;
-                }
-                mListAction.add(editAction);
-            }
+            mListAction.add(editAction);
         }
+
+        if (mUser.isBoStaff() && requestStatus.equals(WAITING_DONE) && mRequest.getId() > 0) {
+            Request.RequestAction assignAction = new Request().new RequestAction();
+            assignAction.setId(ASSIGNMENT);
+            assignAction.setName(mContext.getString(R.string.title_assignment));
+            mListAction.add(assignAction);
+        }
+
         for (final Request.RequestAction requestAction : mListAction) {
             FloatingActionButton button = new FloatingActionButton(mContext);
             switch (requestAction.getId()) {
@@ -202,11 +201,14 @@ public class RequestInformationViewModel extends BaseObservable
                 case EDIT:
                     button.setImageResource(R.drawable.ic_edit_white_24dp);
                     break;
+                case ASSIGNMENT:
+                    button.setImageResource(R.drawable.ic_assignment_white);
+                    break;
                 default:
                     break;
             }
+
             button.setLabelText(requestAction.getName());
-            mFloatingActionsMenu.addMenuButton(button);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -214,12 +216,19 @@ public class RequestInformationViewModel extends BaseObservable
                 }
             });
             button.setButtonSize(SIZE_MINI);
+            mFloatingActionsMenu.addMenuButton(button);
         }
     }
 
     @Override
     public void onActionRequestClick(int requestId, int actionId) {
         switch (actionId) {
+            case ASSIGNMENT:
+                mFragment.getActivity()
+                    .startActivityForResult(
+                        AssignmentActivity.getInstance(mContext, ASSIGN_BY_REQUEST,
+                            mRequest.getId()), REQUEST_CREATE_ASSIGNMENT);
+                break;
             case EDIT:
                 initEditRequest();
                 break;
@@ -260,26 +269,7 @@ public class RequestInformationViewModel extends BaseObservable
             return;
         }
         setUser(user);
-        initActionEdit(mRequest);
-        if (mUser.isBoStaff()
-            && mRequest.getRequestStatus().equals(WAITING_DONE)
-            && mRequest.getId() > 0) {
-            FloatingActionButton button = new FloatingActionButton(mContext);
-            button.setImageResource(R.drawable.ic_timer);
-            button.setLabelText(mContext.getString(R.string.title_assignment));
-            button.setButtonSize(SIZE_MINI);
-            mFloatingActionsMenu.addMenuButton(button);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mFragment.getActivity()
-                        .startActivityForResult(AssignmentActivity.getInstance(mContext,
-                            AssignmentType.ASSIGN_BY_REQUEST, mRequest.getId()),
-                            REQUEST_CREATE_ASSIGNMENT);
-                }
-            });
-            return;
-        }
+        initActionRequestMenu();
         setActionMenuVisibility(
             mListAction != null && mListAction.size() > 0 ? View.VISIBLE : View.GONE);
     }
@@ -289,11 +279,6 @@ public class RequestInformationViewModel extends BaseObservable
         Snackbar.make(mFragment.getActivity().findViewById(android.R.id.content), message,
             Snackbar.LENGTH_LONG).show();
         onCancelEditClick();
-    }
-
-    @Override
-    public void initActionEdit(Request request) {
-        mPresenter.initFloatActionButton(request);
     }
 
     public ObservableField<Status> getCategory() {

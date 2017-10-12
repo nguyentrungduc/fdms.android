@@ -16,8 +16,6 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.framgia.fdms.utils.Constant.DeviceStatus.DONE;
-
 /**
  * Created by tuanbg on 5/30/17.
  */
@@ -128,15 +126,6 @@ public class RequestInformationPresenter implements RequestInformationContract.P
                 }
             });
         mSubscription.add(subscription);
-    }
-
-    @Override
-    public void initFloatActionButton(Request request) {
-        if (request == null || request.getRequestActionList() == null) {
-            return;
-        }
-        String status = request.getRequestStatus();
-        mViewModel.initFloatActionButton(request, status != null && !DONE.equals(status));
     }
 
     @Override
