@@ -12,6 +12,8 @@ public class Constant {
     public static final int PICK_IMAGE_REQUEST = 4;
     public static final int ALL_REQUEST_STATUS_ID = -1;
     public static final int ALL_RELATIVE_ID = -1;
+    public static final int MANAGE_REQUEST_GROUP = 1;
+    public static final int MY_REQUEST_GROUP = 2;
     public static final String PERCENT = " %";
     public static final String NOT_SEARCH = "NOT_SEARCH";
     public static final String BLANK = "";
@@ -64,6 +66,7 @@ public class Constant {
         public static final String BUNDLE_SHOW_GROUP_DEVICE = "BUNDLE_SHOW_GROUP_DEVICE";
         public static final String BUNDLE_DEVICE_GROUP_TYPE = "BUNDLE_DEVICE_GROUP_TYPE";
         public static final String BUNDLE_MANAGE_DEVICE = "BUNDLE_MANAGE_DEVICE";
+        public static final String BUNDLE_GROUP_REQUEST = "BUNDLE_GROUP_REQUEST";
     }
 
     public static final class RequestConstant {
@@ -181,5 +184,6 @@ public class Constant {
         public static final int RECEIVE = 4;
         public static final int DONE = 5;
         public static final int EDIT = 6;
+        public static final int RESEND = 7;
     }
 }

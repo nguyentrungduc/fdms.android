@@ -26,7 +26,7 @@ public interface RequestInformationContract {
 
         boolean onBackPressed();
 
-        void initFloatActionButton(boolean isEdit);
+        void initFloatActionButton(Request request, boolean isEdit);
 
         void onGetReponeSuccess(Respone<Request> requestRespone);
 

@@ -27,6 +27,8 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_CATEGORY;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
+import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_DONE;
+import static com.framgia.fdms.utils.Constant.MY_REQUEST_GROUP;
 import static com.framgia.fdms.utils.Constant.RequestAction.APPROVED;
 import static com.framgia.fdms.utils.Constant.RequestAction.CANCEL;
 import static com.framgia.fdms.utils.Constant.RequestAction.DONE;
@@ -35,6 +37,8 @@ import static com.framgia.fdms.utils.Constant.RequestAction.RECEIVE;
 import static com.framgia.fdms.utils.Constant.RequestAction.WAITING_APPROVE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
+import static com.framgia.fdms.utils.Constant.Role.BO_MANAGER;
+import static com.framgia.fdms.utils.Constant.Role.DIVISION_MANAGER;
 import static com.framgia.fdms.utils.Utils.hideSoftKeyboard;
 import static com.github.clans.fab.FloatingActionButton.SIZE_MINI;
 
@@ -56,14 +60,17 @@ public class RequestInformationViewModel extends BaseObservable
     private FloatingActionMenu mFloatingActionsMenu;
     private Request mRequestTemp;
     private int mActionMenuVisibility;
+    private int mGroupRequestType;
 
     public RequestInformationViewModel(Fragment fragment, List<Request.RequestAction> actions,
-        String statusRequest, Request actionRequest, FloatingActionMenu floatingActionMenu) {
+        String statusRequest, Request actionRequest, FloatingActionMenu floatingActionMenu,
+        int groupRequestType) {
         mContext = fragment.getContext();
         mFragment = fragment;
         setRequest(actionRequest);
         mStatusRequest = statusRequest;
         setEdit(false);
+        mGroupRequestType = groupRequestType;
         mListAction.addAll(actions);
         mFloatingActionsMenu = floatingActionMenu;
     }
@@ -134,6 +141,10 @@ public class RequestInformationViewModel extends BaseObservable
         hideSoftKeyboard(mFragment.getActivity());
     }
 
+    public void onChangeStatusClick() {
+        //TODO: Open select status activity
+    }
+
     @Override
     public void onCancelEditClick() {
         setEdit(false);
@@ -154,12 +165,21 @@ public class RequestInformationViewModel extends BaseObservable
     }
 
     @Override
-    public void initFloatActionButton(final boolean isEdit) {
+    public void initFloatActionButton(Request request, final boolean isEdit) {
         if (isEdit) {
             Request.RequestAction editAction = new Request().new RequestAction();
             editAction.setId(EDIT);
             editAction.setName(mContext.getString(R.string.action_edit));
-            mListAction.add(editAction);
+            if (!Constant.DeviceStatus.CANCELLED.equals(request.getRequestStatus())) {
+                if (mGroupRequestType == MY_REQUEST_GROUP && ((getUser().getRole()
+                    .equals(BO_MANAGER) && request.getRequestStatus()
+                    .equals(Constant.DeviceStatus.WAITING_DONE)) || (getUser().getRole()
+                    .equals(DIVISION_MANAGER) && request.getRequestStatus()
+                    .equals(Constant.DeviceStatus.APPROVED)))) {
+                    return;
+                }
+                mListAction.add(editAction);
+            }
         }
         for (final Request.RequestAction requestAction : mListAction) {
             FloatingActionButton button = new FloatingActionButton(mContext);
@@ -239,9 +259,11 @@ public class RequestInformationViewModel extends BaseObservable
         if (user == null) {
             return;
         }
-        mUser = user;
-        if (mUser.isBoStaff() && mRequest.getRequestStatus()
-            .equals(Constant.DeviceStatus.WAITING_DONE) && mRequest.getId() > 0) {
+        setUser(user);
+        initActionEdit(mRequest);
+        if (mUser.isBoStaff()
+            && mRequest.getRequestStatus().equals(WAITING_DONE)
+            && mRequest.getId() > 0) {
             FloatingActionButton button = new FloatingActionButton(mContext);
             button.setImageResource(R.drawable.ic_timer);
             button.setLabelText(mContext.getString(R.string.title_assignment));
@@ -330,5 +352,15 @@ public class RequestInformationViewModel extends BaseObservable
     public void setActionMenuVisibility(int actionMenuVisibility) {
         this.mActionMenuVisibility = actionMenuVisibility;
         notifyPropertyChanged(BR.actionMenuVisibility);
+    }
+
+    @Bindable
+    public User getUser() {
+        return mUser;
+    }
+
+    public void setUser(User user) {
+        mUser = user;
+        notifyPropertyChanged(BR.user);
     }
 }

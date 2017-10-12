@@ -96,8 +96,9 @@
                                 android:layout_height="wrap_content"
                                 android:drawablePadding="@dimen/dp_10"
                                 android:drawableStart="@drawable/ic_list_24dp"
-                                android:enabled="false"
+                                android:focusable="false"
                                 android:inputType="number"
+                                android:onClick="@{() -> viewModel.onChangeStatusClick()}"
                                 android:text="@{viewModel.request.requestStatus}"
                                 android:textSize="@dimen/sp_16"
                                 bind:deviceStatus="@{viewModel.request.requestStatus}"
@@ -119,11 +120,11 @@
             android:layout_marginStart="@dimen/dp_5"
             android:clickable="true"
             android:onClick="@{() -> viewModel.onSubmitEditClick()}"
+            android:visibility="@{viewModel.isEdit ? View.VISIBLE : View.GONE}"
             app:backgroundTint="@color/color_green_600"
             app:fabSize="mini"
             app:rippleColor="@color/color_green_600"
             app:srcCompat="@drawable/ic_accept"
-            app:visibleAnim="@{viewModel.isEdit}"
             bind:ignore="RelativeOverlap"
             />
 
@@ -135,11 +136,11 @@
             android:layout_toStartOf="@+id/fab_accept"
             android:clickable="true"
             android:onClick="@{() -> viewModel.onCancelEditClick()}"
+            android:visibility="@{viewModel.isEdit ? View.VISIBLE : View.GONE}"
             app:backgroundTint="@color/color_red_aceent_700"
             app:fabSize="mini"
             app:rippleColor="@color/color_red_500"
             app:srcCompat="@drawable/ic_cancel"
-            app:visibleAnim="@{viewModel.isEdit}"
             />
 
         <com.github.clans.fab.FloatingActionMenu

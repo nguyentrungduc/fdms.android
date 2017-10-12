@@ -11,6 +11,7 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.databinding.ActivityRequestDetailBinding;
 import com.framgia.fdms.utils.navigator.Navigator;
 
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_GROUP_REQUEST;
 import static com.framgia.fdms.utils.Constant.BundleRequest.BUND_REQUEST;
 
 /**
@@ -20,10 +21,12 @@ public class RequestDetailActivity extends AppCompatActivity {
 
     private RequestDetailContract.ViewModel mViewModel;
     private Request mRequest;
+    private int mGroupRequestType;
 
-    public static Intent getInstance(Context context, Request request) {
+    public static Intent getInstance(Context context, Request request, int groupRequestType) {
         Intent intent = new Intent(context, RequestDetailActivity.class);
         intent.putExtra(BUND_REQUEST, request);
+        intent.putExtra(BUNDLE_GROUP_REQUEST, groupRequestType);
         return intent;
     }
 
@@ -32,7 +35,7 @@ public class RequestDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getDataFromIntent();
         Navigator navigator = new Navigator(this);
-        mViewModel = new RequestDetailViewModel(this, mRequest, navigator);
+        mViewModel = new RequestDetailViewModel(this, mRequest, navigator, mGroupRequestType);
 
         RequestDetailContract.Presenter presenter = new RequestDetailPresenter(mViewModel);
         mViewModel.setPresenter(presenter);
@@ -56,6 +59,7 @@ public class RequestDetailActivity extends AppCompatActivity {
             return;
         }
         mRequest = (Request) bundle.getSerializable(BUND_REQUEST);
+        mGroupRequestType = bundle.getInt(BUNDLE_GROUP_REQUEST);
     }
 
     @Override
