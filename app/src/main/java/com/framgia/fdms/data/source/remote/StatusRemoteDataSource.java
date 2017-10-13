@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.framgia.fdms.utils.Constant.ApiParram.NAME;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.USER_NAME;
@@ -128,7 +129,7 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
 
     @Override
     public Observable<List<Status>> getListUserBorrow(final String query, int page, int perPage) {
-        return mFDMSApi.getListUserBorrow(getParams(query, page, perPage))
+        return mFDMSApi.getListUserBorrow(getParamsUserBorrow(query, page, perPage))
             .flatMap(new Function<Respone<List<Status>>, ObservableSource<List<Status>>>() {
                 @Override
                 public ObservableSource<List<Status>> apply(
@@ -139,6 +140,20 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
     }
 
     private Map<String, String> getParams(final String query, int page, int perPage) {
+        Map<String, String> params = new HashMap<>();
+        if (!TextUtils.isEmpty(query)) {
+            params.put(NAME, query);
+        }
+        if (page != OUT_OF_INDEX) {
+            params.put(PAGE, String.valueOf(page));
+        }
+        if (perPage != OUT_OF_INDEX) {
+            params.put(PER_PAGE, String.valueOf(perPage));
+        }
+        return params;
+    }
+
+    private Map<String, String> getParamsUserBorrow(final String query, int page, int perPage) {
         Map<String, String> params = new HashMap<>();
         if (!TextUtils.isEmpty(query)) {
             params.put(USER_NAME, query);

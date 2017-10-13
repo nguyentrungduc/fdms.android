@@ -189,6 +189,7 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
                 mSearchView.onActionViewCollapsed();
                 mSearchMenu.collapseActionView();
                 mViewModel.onSearch("", false);
+                mViewModel.setSearch(false);
             }
         });
         return true;
