@@ -99,7 +99,7 @@
     <string name="title_device_dashboard">Device Overview</string>
     <string name="title_top_requests">Top Requests</string>
     <string name="title_top_devices">Top Devices</string>
-    <string name="title_request_dashboard">Request Overview</string>
+    <string name="title_request_dashboard">Requests Overview</string>
     <string name="title_manager_request">Manager Request</string>
     <string name="title_my_request">My request</string>
     <string name="title_minus">—</string>
@@ -341,4 +341,5 @@
     <string name="action_update_device">Update device</string>
     <string name="action_delete_device">Delete device</string>
     <string name="msg_cancel_request">Add description to cancel this request</string>
+    <string name="format_date">MM/dd/yyyy</string>
 </resources>

@@ -51,6 +51,7 @@ import com.framgia.fdms.screen.dashboard.DashboardViewModel;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailViewModel;
 import com.framgia.fdms.screen.main.MainViewModel;
 import com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel;
+import com.framgia.fdms.utils.Utils;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -736,5 +737,17 @@ public final class BindingUtils {
     public static void setUpToolbar(Toolbar toolbar, AppCompatActivity activity) {
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @BindingAdapter("dateText")
+    public static void setDateText(TextView view, Date date) {
+        view.setText(Utils.getStringDate(date, view.getContext()));
+    }
+
+    @BindingAdapter({ "borrowDateText", "returnDateText" })
+    public static void setDatesText(TextView view, Date borrowDate, Date returnDate) {
+        view.setText(
+            (Utils.getStringDate(borrowDate, view.getContext())) + "->" + (Utils.getStringDate(
+                returnDate, view.getContext())));
     }
 }

@@ -85,8 +85,8 @@
                     android:paddingBottom="@dimen/dp_4"
                     android:paddingLeft="@dimen/dp_16"
                     android:paddingTop="@dimen/dp_4"
-                    android:text="@{Utils.getStringDate(deviceHistoryDetail.historyInfo.updatedAt)}"
                     android:textSize="@dimen/sp_14"
+                    app:dateText="@{deviceHistoryDetail.historyInfo.updatedAt}"
                     />
 
                 <LinearLayout
