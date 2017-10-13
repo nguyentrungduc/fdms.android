@@ -27,6 +27,8 @@ public interface SelectionContract {
         void setSelectedType(int selectedType);
 
         void setAllowLoadMore(boolean allowLoadMore);
+
+        void setSearch(boolean search);
     }
 
     /**

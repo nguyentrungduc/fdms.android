@@ -119,6 +119,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
     @Override
     public void getData(String query, boolean isClickSearch) {
         if (isClickSearch) {
+            mViewModel.setSearch(true);
             mPage = FIRST_PAGE;
         }
         mKeySearch = query;
@@ -152,7 +153,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 getListStatusRequest();
                 break;
             case RELATIVE_STAFF:
-                getListRelative();
+                getListUserBorrow();
                 break;
             case ASSIGNEE:
                 getListAssignee();
@@ -196,7 +197,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 getListMeetingRoom();
                 break;
             case RELATIVE_STAFF:
-                getListRelative();
+                getListUserBorrow();
                 break;
             case USER_BORROW:
                 getListUserBorrow();
@@ -538,7 +539,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 public void accept(@NonNull List<Status> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.hideProgress();
-                    mViewModel.setAllowLoadMore(false);
+                    mViewModel.setAllowLoadMore(statuses != null && statuses.size() == PER_PAGE);
                 }
             }, new RequestError() {
                 @Override

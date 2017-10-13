@@ -154,6 +154,7 @@ public class Constant {
         public static final String ASSIGNMENT_ASSIGNMENT_DEVICE_ID = "device_ids[]";
         public static final String DEVICE_GROUP_ID = "device_group_id";
         public static final String USER_NAME = "username";
+        public static final String NAME = "name";
         public static final String DEVICE_CATEGORY_NAME = "device_category_name";
         public static final String DEVICE_CATEGORY_NAME_MANAGER = "device_category[name]";
         public static final String DEVICE_CATEGORY_DESCRIPTION_MANAGER =
@@ -195,6 +196,5 @@ public class Constant {
         public static final int EDIT = 6;
         public static final int RESEND = 7;
         public static final int ASSIGNMENT = 8;
-
     }
 }
