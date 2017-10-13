@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="title"
+            type="String"
+            />
+        <variable
+            name="text"
+            type="String"
+            />
+        <variable
+            name="image"
+            type="android.graphics.drawable.Drawable"
+            />
+    </data>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:layout_marginStart="@dimen/dp_5"
+        android:hint="@{title}"
+        android:textColorHint="@color/colorPrimary"
+        >
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?editTextBackground"
+            android:drawablePadding="@dimen/dp_10"
+            android:drawableStart="@{image}"
+            android:enabled="false"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:text="@={text}"
+            android:textColor="@color/color_grey_757575"
+            android:textSize="@dimen/sp_16"
+            />
+    </android.support.design.widget.TextInputLayout>
+</layout>

@@ -177,6 +177,15 @@ public class Constant {
         public static final String BUND_REQUEST = "BUND_REQUEST";
     }
 
+    public class LocaleLanguage {
+        public static final String ENGLISH = "en";
+        public static final String VIETNAMESE = "vi";
+        public static final String JAPANESE = "ja";
+        public static final int ENGLISH_POSITION = 0;
+        public static final int VIETNAMESE_POSITION = 1;
+        public static final int JAPANESE_POSITION = 2;
+    }
+
     public class RequestAction {
         public static final int CANCEL = 1;
         public static final int WAITING_APPROVE = 2;

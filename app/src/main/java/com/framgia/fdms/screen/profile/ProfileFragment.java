@@ -29,9 +29,12 @@ public class ProfileFragment extends Fragment {
         return new ProfileFragment();
     }
 
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
+        FragmentProfileBinding binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);
         mViewModel = new ProfileViewModel((AppCompatActivity) getActivity(), this);
 
         ProfileContract.Presenter presenter = new ProfilePresenter(mViewModel,
@@ -39,15 +42,7 @@ public class ProfileFragment extends Fragment {
                 new UserLocalDataSource(new SharePreferenceImp(getContext()))),
             new SharePreferenceImp(getActivity().getApplicationContext()));
         mViewModel.setPresenter(presenter);
-    }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
-
-        FragmentProfileBinding binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);
         binding.setViewModel((ProfileViewModel) mViewModel);
         mView = binding.coordinatorLayout;
         return binding.getRoot();

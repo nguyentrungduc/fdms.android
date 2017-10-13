@@ -18,12 +18,14 @@
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
         >
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_250"
             >
+
             <android.support.design.widget.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -67,7 +69,6 @@
                         bind:ignore="UnusedAttribute"
                         />
                 </FrameLayout>
-
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
@@ -77,381 +78,128 @@
             android:background="@color/color_gray_mos"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
+
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/cardview_shadow_start_color"
                     >
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:padding="@dimen/dp_7"
                         >
-                        <LinearLayout
+
+                        <include
+                            layout="@layout/text_profile"
+                            bind:image="@{@drawable/ic_persion_teal_24dp}"
+                            bind:text="@{viewModel.user.name != null ? viewModel.user.name : ``}"
+                            bind:title="@{@string/title_full_name}"
+                            />
+
+                        <include
+                            layout="@layout/text_profile"
+                            bind:image="@{@drawable/ic_credit_card_black_24px}"
+                            bind:text="@{viewModel.user.employeeCode}"
+                            bind:title="@{@string/title_employcode}"
+                            />
+
+                        <include
+                            layout="@layout/text_profile"
+                            bind:image="@{@drawable/ic_email_cyan_24dp}"
+                            bind:text="@{viewModel.user.email}"
+                            bind:title="@{@string/title_email}"
+                            />
+
+                        <include
+                            layout="@layout/text_profile"
+                            bind:image="@{@drawable/ic_credit_card_black_24px}"
+                            bind:text="@{viewModel.user.cardNumber}"
+                            bind:title="@{@string/title__card_number}"
+                            />
+
+                        <include
+                            layout="@layout/text_profile"
+                            bind:image="@{@drawable/ic_place_cyan_24dp}"
+                            bind:text="@{viewModel.user.branch}"
+                            bind:title="@{@string/title_branch}"
+                            />
+
+                        <include
+                            layout="@layout/text_profile"
+                            bind:image="@{@drawable/ic_place_cyan_24dp}"
+                            bind:text="@{viewModel.user.status}"
+                            bind:title="@{@string/title_request_status}"
+                            />
+
+                        <include
+                            layout="@layout/text_profile"
+                            bind:image="@{@drawable/ic_date_range_cyan_24dp}"
+                            bind:text="@{viewModel.contractDate}"
+                            bind:title="@{@string/title_contract_date}"
+                            />
+
+                        <include
+                            layout="@layout/text_profile"
+                            bind:image="@{@drawable/ic_date_range_cyan_24dp}"
+                            bind:text="@{viewModel.startProbationDate}"
+                            bind:title="@{@string/title_start_working_date}"
+                            />
+
+                        <include
+                            layout="@layout/text_profile"
+                            bind:image="@{@drawable/ic_gender_cyan}"
+                            bind:text="@{viewModel.user.gender}"
+                            bind:title="@{@string/title_gender}"
+                            />
+
+                        <include
+                            layout="@layout/text_profile"
+                            bind:image="@{@drawable/ic_place_cyan_24dp}"
+                            bind:text="@{viewModel.user.address}"
+                            bind:title="@{@string/title_address}"
+                            />
+
+                        <include
+                            layout="@layout/text_profile"
+                            bind:image="@{@drawable/ic_date_range_cyan_24dp}"
+                            bind:text="@{viewModel.birthDay}"
+                            bind:title="@{@string/title_birthday}"
+                            />
+
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/dp_8"
-                            android:paddingTop="@dimen/dp_8"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:hint="@string/title_language"
+                            android:textColorHint="@color/colorPrimary"
                             >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:srcCompat="@drawable/ic_persion_teal_24dp"
-                                bind:ignore="ContentDescription"
-                                />
 
-                            <android.support.v7.widget.AppCompatEditText
+                            <android.support.design.widget.TextInputEditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
                                 android:background="?editTextBackground"
-                                android:enabled="false"
-                                android:imeOptions="actionDone"
-                                android:inputType="text"
-                                android:text="@{viewModel.user.name != null ? viewModel.user.name : ``}"
+                                android:drawablePadding="@dimen/dp_10"
+                                android:drawableStart="@drawable/ic_language"
+                                android:focusable="false"
+                                android:onClick="@{() -> viewModel.onClickChangeLanguage()}"
+                                android:text="@={viewModel.language}"
                                 android:textColor="@color/color_grey_757575"
                                 android:textSize="@dimen/sp_16"
                                 />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/dp_8"
-                            android:paddingTop="@dimen/dp_8"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:srcCompat="@drawable/ic_credit_card_black_24px"
-                                bind:ignore="ContentDescription"
-                                />
-
-                            <android.support.v7.widget.AppCompatEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
-                                android:background="?editTextBackground"
-                                android:enabled="false"
-                                android:imeOptions="actionDone"
-                                android:inputType="text"
-                                android:text="@{viewModel.user.employeeCode}"
-                                android:textColor="@color/color_grey_757575"
-                                android:textSize="@dimen/sp_16"
-                                />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/dp_8"
-                            android:paddingTop="@dimen/dp_8"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:srcCompat="@drawable/ic_email_cyan_24dp"
-                                bind:ignore="ContentDescription"
-                                />
-
-                            <android.support.v7.widget.AppCompatEditText
-                                android:id="@+id/appCompatEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
-                                android:background="?editTextBackground"
-                                android:enabled="false"
-                                android:imeOptions="actionDone"
-                                android:inputType="text"
-                                android:text="@{viewModel.user.email}"
-                                android:textColor="@color/color_grey_757575"
-                                android:textSize="@dimen/sp_16"
-                                />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:paddingBottom="@dimen/dp_8"
-                            android:paddingTop="@dimen/dp_8"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:srcCompat="@drawable/ic_perm_device_information_black_24px"
-                                bind:ignore="ContentDescription"
-                                />
-
-                            <android.support.v7.widget.AppCompatEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
-                                android:background="?editTextBackground"
-                                android:enabled="false"
-                                android:text="@{String.format(@string/title_device_code_staff,viewModel.user.id)}"
-                                android:textColor="@color/color_grey_757575"
-                                android:textSize="@dimen/sp_15"
-                                />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/dp_8"
-                            android:paddingTop="@dimen/dp_8"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:srcCompat="@drawable/ic_credit_card_black_24px"
-                                bind:ignore="ContentDescription"
-                                />
-
-                            <android.support.v7.widget.AppCompatEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
-                                android:background="?editTextBackground"
-                                android:enabled="false"
-                                android:text="@{String.format(@string/title_id_card_staff,viewModel.user.cardNumber)}"
-                                android:textColor="@color/color_grey_757575"
-                                android:textSize="@dimen/sp_15"
-                                />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/dp_8"
-                            android:paddingTop="@dimen/dp_8"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:srcCompat="@drawable/ic_place_cyan_24dp"
-                                bind:ignore="ContentDescription"
-                                />
-
-                            <android.support.v7.widget.AppCompatEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
-                                android:background="?editTextBackground"
-                                android:enabled="false"
-                                android:text="@{viewModel.user.branch}"
-                                android:textColor="@color/color_grey_757575"
-                                android:textSize="@dimen/sp_16"
-                                />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/dp_8"
-                            android:paddingTop="@dimen/dp_8"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:srcCompat="@drawable/ic_place_cyan_24dp"
-                                bind:ignore="ContentDescription"
-                                />
-
-                            <android.support.v7.widget.AppCompatEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
-                                android:background="?editTextBackground"
-                                android:enabled="false"
-                                android:text="@{viewModel.user.status}"
-                                android:textColor="@color/color_grey_757575"
-                                android:textSize="@dimen/sp_16"
-                                />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/dp_8"
-                            android:paddingTop="@dimen/dp_8"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:srcCompat="@drawable/ic_date_range_cyan_24dp"
-                                bind:ignore="ContentDescription"
-                                />
-
-                            <android.support.v7.widget.AppCompatEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
-                                android:background="?editTextBackground"
-                                android:enabled="false"
-                                android:text="@{viewModel.contractDate}"
-                                android:textColor="@color/color_grey_757575"
-                                android:textSize="@dimen/sp_16"
-                                />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/dp_8"
-                            android:paddingTop="@dimen/dp_8"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:srcCompat="@drawable/ic_date_range_cyan_24dp"
-                                bind:ignore="ContentDescription"
-                                />
-
-                            <android.support.v7.widget.AppCompatEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
-                                android:background="?editTextBackground"
-                                android:enabled="false"
-                                android:text="@{viewModel.startProbationDate}"
-                                android:textColor="@color/color_grey_757575"
-                                android:textSize="@dimen/sp_16"
-                                />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/dp_8"
-                            android:paddingTop="@dimen/dp_8"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:srcCompat="@drawable/ic_place_cyan_24dp"
-                                bind:ignore="ContentDescription"
-                                />
-
-                            <android.support.v7.widget.AppCompatEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
-                                android:background="?editTextBackground"
-                                android:enabled="@{viewModel.edit}"
-                                android:text="@={viewModel.user.address}"
-                                android:textColor="@color/color_grey_757575"
-                                android:textSize="@dimen/sp_16"
-                                />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/dp_8"
-                            android:paddingTop="@dimen/dp_8"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:srcCompat="@drawable/ic_gender_cyan"
-                                bind:ignore="ContentDescription"
-                                />
-
-                            <android.support.v7.widget.AppCompatTextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
-                                android:background="?editTextBackground"
-                                android:enabled="false"
-                                android:inputType="textCapCharacters"
-                                android:text="@{viewModel.user.gender}"
-                                android:textColor="@color/color_grey_757575"
-                                android:textSize="@dimen/sp_16"
-                                android:visibility="@{!viewModel.edit ? View.VISIBLE : View.GONE}"
-                                />
-                            <android.support.v7.widget.AppCompatSpinner
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
-                                android:entries="@array/array_gender"
-                                android:paddingBottom="@dimen/dp_8"
-                                android:paddingTop="@dimen/dp_8"
-                                android:visibility="@{viewModel.edit ? View.VISIBLE : View.GONE}"
-                                style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                                />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/dp_8"
-                            android:paddingTop="@dimen/dp_8"
-                            >
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:srcCompat="@drawable/ic_date_range_cyan_24dp"
-                                bind:ignore="ContentDescription"
-                                />
-
-                            <android.support.v7.widget.AppCompatTextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp_16"
-                                android:layout_marginRight="@dimen/dp_16"
-                                android:background="?editTextBackground"
-                                android:clickable="@{viewModel.edit}"
-                                android:onClick="@{() -> viewModel.onPickDateTime()}"
-                                android:text="@={viewModel.birthDay}"
-                                android:textColor="@color/color_grey_757575"
-                                android:textSize="@dimen/sp_16"
-                                />
-                        </LinearLayout>
-
+                        </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
-
         </android.support.v4.widget.NestedScrollView>
 
         <!-- android:visibility="gone" Edit later when function edit profile is available-->

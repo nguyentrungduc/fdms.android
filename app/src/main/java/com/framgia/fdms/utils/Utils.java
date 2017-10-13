@@ -2,6 +2,8 @@ package com.framgia.fdms.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -136,5 +138,14 @@ public class Utils {
         } catch (ParseException e) {
             return null;
         }
+    }
+
+    public static void changeLanguage(String language, Context context) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Resources resources = context.getResources();
+        Configuration config = new Configuration(resources.getConfiguration());
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 }

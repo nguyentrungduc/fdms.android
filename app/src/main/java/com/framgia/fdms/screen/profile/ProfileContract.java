@@ -37,5 +37,7 @@ interface ProfileContract {
         void getCurrentUser();
 
         void updateUserProfile(int userId, String gender, String address, String birthday);
+
+        void saveLanguage(int language);
     }
 }

@@ -17,6 +17,15 @@ import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityNewmainBinding;
 import com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailViewModel;
 
+import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.LANGUAGE_PRES;
+import static com.framgia.fdms.utils.Constant.LocaleLanguage.ENGLISH;
+import static com.framgia.fdms.utils.Constant.LocaleLanguage.ENGLISH_POSITION;
+import static com.framgia.fdms.utils.Constant.LocaleLanguage.JAPANESE;
+import static com.framgia.fdms.utils.Constant.LocaleLanguage.JAPANESE_POSITION;
+import static com.framgia.fdms.utils.Constant.LocaleLanguage.VIETNAMESE;
+import static com.framgia.fdms.utils.Constant.LocaleLanguage.VIETNAMESE_POSITION;
+import static com.framgia.fdms.utils.Utils.changeLanguage;
+
 /**
  * Newmain Screen.
  */
@@ -33,6 +42,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharePreferenceImp preferences = new SharePreferenceImp(this);
+        initLanguage(preferences.get(LANGUAGE_PRES, Integer.class));
         ActivityNewmainBinding binding =
             DataBindingUtil.setContentView(this, R.layout.activity_newmain);
         DeviceRepository deviceRepository =
@@ -83,5 +94,21 @@ public class MainActivity extends AppCompatActivity
             return;
         }
         mViewModel.setTabDeviceManage(device);
+    }
+
+    private void initLanguage(int language) {
+        switch (language) {
+            case ENGLISH_POSITION:
+                changeLanguage(ENGLISH, this);
+                break;
+            case VIETNAMESE_POSITION:
+                changeLanguage(VIETNAMESE, this);
+                break;
+            case JAPANESE_POSITION:
+                changeLanguage(JAPANESE, this);
+                break;
+            default:
+                break;
+        }
     }
 }

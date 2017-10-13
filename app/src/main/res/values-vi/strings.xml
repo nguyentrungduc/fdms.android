@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FGAS</string>
     <string name="action_login">Login</string>
@@ -66,7 +67,7 @@
     <string name="action_qr_code">QR Code</string>
     <string name="title_asset_font">speedline.ttf</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_dashboard">Bảng điều khiển</string>
     <string name="title_notifications">notification</string>
     <string name="title_manage_request">Manage Request</string>
     <string name="title_scan">scanner</string>
@@ -181,7 +182,7 @@
     <string name="title_assignment_for_new_member">Assign devices for new member</string>
     <string name="title_device_code">Device Code</string>
     <string name="title_add_device">Add Device</string>
-    <string name="title_branch">Branch </string>
+    <string name="title_branch">Chi nhánh </string>
     <string name="title_type_code">Type of code</string>
     <string name="title_qrcode">QRCode</string>
     <string name="title_barcode">BarCode</string>

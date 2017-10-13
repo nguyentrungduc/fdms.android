@@ -11,4 +11,5 @@ public class SharePreferenceKey {
     public static final String IS_SHOW_TUTORIAL = "IS_SHOW_TUTORIAL";
     public static final String IS_SHOW_CASE_MAIN = "IS_SHOW_CASE_MAIN";
     public static final String IS_SHOW_CASE_REQUEST = "IS_SHOW_CASE_REQUEST";
+    public static final String LANGUAGE_PRES = "LANGUAGE_PRES";
 }

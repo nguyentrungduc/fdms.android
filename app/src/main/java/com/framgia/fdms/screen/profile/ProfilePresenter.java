@@ -14,6 +14,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.LANGUAGE_PRES;
 import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.USER_PREFS;
 
 /**
@@ -83,6 +84,11 @@ final class ProfilePresenter implements ProfileContract.Presenter {
                 }
             });
         mCompositeSubscription.add(subscription);
+    }
+
+    @Override
+    public void saveLanguage(int language) {
+        mSharedPreferences.put(LANGUAGE_PRES, language);
     }
 
     private void saveUser(User user) {
