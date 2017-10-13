@@ -50,7 +50,7 @@ public class DeviceUsingAdapter extends RecyclerView.Adapter<DeviceUsingAdapter.
         return mHistories != null ? mHistories.size() : 0;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private ItemDeviceUsingBinding mBinding;
         private BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener mListener;
 
@@ -78,8 +78,10 @@ public class DeviceUsingAdapter extends RecyclerView.Adapter<DeviceUsingAdapter.
                 return "";
             }
             return String.format(FORMAT_DATE,
-                Utils.getStringDate(deviceUsingHistory.getUsingDevices().get(0).getBorrowDate()),
-                Utils.getStringDate(deviceUsingHistory.getUsingDevices().get(0).getReturnDate()));
+                Utils.getStringDate(deviceUsingHistory.getUsingDevices().get(0).getBorrowDate(),
+                    mContext),
+                Utils.getStringDate(deviceUsingHistory.getUsingDevices().get(0).getReturnDate(),
+                    mContext));
         }
     }
 }

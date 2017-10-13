@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     >
     <data>
         <import type="com.framgia.fdms.utils.Utils"/>
+        <import type="android.view.View"/>
         <variable
             name="device"
             type="com.framgia.fdms.data.model.Device"
@@ -48,12 +50,63 @@
                     bind:title="@{@string/title_original_price}"
                     />
 
-                <include
-                    layout="@layout/text_display"
-                    bind:image="@{@drawable/ic_calendar_24dp}"
-                    bind:text="@{Utils.getStringDate(device.boughtDate)}"
-                    bind:title="@{@string/title_bought_date}"
-                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp_8"
+                    android:visibility="@{device.boughtDate!=null? View.VISIBLE : View.GONE}"
+                    >
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/appCompatImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_calendar_24dp"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/dp_16"
+                        tools:ignore="RtlSymmetry"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dp_5"
+                                android:text="@string/title_bought_date"
+                                android:textSize="@dimen/sp_18"
+                                />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:textSize="@dimen/sp_16"
+                                android:textStyle="bold"
+                                bind:dateText="@{device.boughtDate}"
+                                />
+                        </LinearLayout>
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_1"
+                            android:layout_marginTop="@dimen/dp_5"
+                            android:background="@color/color_gray_mos"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <include
                     layout="@layout/text_display"

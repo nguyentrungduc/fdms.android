@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.profile.export;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -83,11 +84,13 @@ public class ExportPresenter implements ExportContract.Presenter {
     private PdfPTable mTableSignature;
     private Paragraph mPledge;
     private Paragraph mHeader;
+    private Context mContext;
 
-    public ExportPresenter(User user, ExportContract.ViewModel viewModel) {
+    public ExportPresenter(User user, ExportContract.ViewModel viewModel, Context context) {
         mUser = user;
         mCompositeSubscription = new CompositeDisposable();
         mViewModel = viewModel;
+        mContext = context;
     }
 
     @Override
@@ -314,7 +317,7 @@ public class ExportPresenter implements ExportContract.Presenter {
             table.addCell(cellModel);
             PdfPCell cellSeri = new PdfPCell(new Phrase(device.getSerialNumber()));
             table.addCell(cellSeri);
-            String boughtDate = Utils.getStringDate(device.getBoughtDate());
+            String boughtDate = Utils.getStringDate(device.getBoughtDate(), mContext);
             PdfPCell cellAssign = new PdfPCell(new Phrase(boughtDate));
             table.addCell(cellAssign);
         }

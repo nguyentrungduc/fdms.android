@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.inputmethod.InputMethodManager;
+import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Respone;
 import io.reactivex.Observable;
 import java.text.DateFormat;
@@ -30,6 +31,7 @@ public class Utils {
     private static final String TIME_ZONE_GMT = "GMT";
     public static final String INPUT_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
     public static final String FORMAT_DATE_DD_MM_YYYY = "dd/MM/yyyy";
+    private Context mContext;
 
     public static <T> Observable<T> getResponse(Respone<T> listRespone) {
         if (listRespone == null) {
@@ -61,9 +63,9 @@ public class Utils {
         return String.format("%.1f", percent) + PERCENT;
     }
 
-    public static String getStringDate(Date date) {
+    public static String getStringDate(Date date, Context context) {
         if (date == null) return TITLE_NOW;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat(context.getString(R.string.format_date));
         return formatter.format(date);
     }
 
