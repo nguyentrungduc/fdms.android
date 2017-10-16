@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
+import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_FOR;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
@@ -58,7 +58,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
     private UserRequestAdapter mAdapter;
 
     private Status mStatus;
-    private Status mRelative;
+    private Status mRequestFor;
     private boolean mIsRefresh;
     private int mEmptyViewVisible = View.GONE; // show empty state when no date
     private SwipeRefreshLayout.OnRefreshListener mRefreshLayout =
@@ -76,8 +76,8 @@ public class RequestManagerViewModel extends BaseFragmentModel
         mFragment = fragment;
         mContext = fragment.getContext();
         mAdapter = new UserRequestAdapter(mContext, new ArrayList<Request>(), this, new User());
-        setStatus(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_request_status)));
-        setRelative(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_request_relative)));
+        setStatus(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_all_request_status)));
+        setRequestFor(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_all_request_for)));
     }
 
     @Override
@@ -150,22 +150,22 @@ public class RequestManagerViewModel extends BaseFragmentModel
                     return;
                 }
                 if (dataResponse.getId() == OUT_OF_INDEX) {
-                    dataResponse.setName(mContext.getString(R.string.title_request_relative));
+                    dataResponse.setName(mContext.getString(R.string.title_all_request_for));
                 }
-                setRelative(dataResponse);
+                setRequestFor(dataResponse);
                 mAdapter.clear();
-                mPresenter.getData(mRelative, mStatus);
+                mPresenter.getData(mRequestFor, mStatus);
                 break;
             case REQUEST_STATUS:
                 if (dataResponse == null) {
                     return;
                 }
                 if (dataResponse.getId() == OUT_OF_INDEX) {
-                    dataResponse.setName(mContext.getString(R.string.title_request_status));
+                    dataResponse.setName(mContext.getString(R.string.title_all_request_status));
                 }
                 setStatus(dataResponse);
                 mAdapter.clear();
-                mPresenter.getData(mRelative, mStatus);
+                mPresenter.getData(mRequestFor, mStatus);
                 break;
             case REQUEST_DETAIL:
                 Respone<Request> requestRespone =
@@ -195,7 +195,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void refreshData() {
         mAdapter.clear();
-        mPresenter.getData(mRelative, mStatus);
+        mPresenter.getData(mRequestFor, mStatus);
     }
 
     @Override
@@ -209,8 +209,8 @@ public class RequestManagerViewModel extends BaseFragmentModel
             REQUEST_STATUS);
     }
 
-    public void onSelectRelativeClick() {
-        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, RELATIVE_STAFF),
+    public void onSelectRequestForClick() {
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, REQUEST_FOR),
             REQUEST_SELECTION);
     }
 
@@ -225,13 +225,13 @@ public class RequestManagerViewModel extends BaseFragmentModel
     }
 
     @Bindable
-    public Status getRelative() {
-        return mRelative;
+    public Status getRequestFor() {
+        return mRequestFor;
     }
 
-    public void setRelative(Status relative) {
-        mRelative = relative;
-        notifyPropertyChanged(BR.relative);
+    public void setRequestFor(Status requestFor) {
+        mRequestFor = requestFor;
+        notifyPropertyChanged(BR.requestFor);
     }
 
     @Override

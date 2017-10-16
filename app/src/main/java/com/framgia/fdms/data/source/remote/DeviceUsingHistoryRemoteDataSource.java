@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.framgia.fdms.utils.Constant.ApiParram.BRANCH_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.STATUS;
@@ -89,6 +90,9 @@ public class DeviceUsingHistoryRemoteDataSource extends BaseRemoteDataSource
         if (filter != null) {
             if (filter.getStatus() != null) {
                 param.put(STATUS, filter.getStatus().getName());
+            }
+            if (filter.getBranch() != null) {
+                param.put(BRANCH_ID, String.valueOf(filter.getBranch().getId()));
             }
             if (!TextUtils.isEmpty(filter.getStaffName())) {
                 param.put(TEXT_USER_SEARCH, filter.getStaffName());

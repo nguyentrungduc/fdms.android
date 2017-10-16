@@ -86,6 +86,9 @@
     <string name="title_total">Total\n</string>
     <string name="action_clear">Clear</string>
     <string name="title_btn_category">Category</string>
+    <string name="title_all_request_status">All Request Status</string>
+    <string name="title_all_request_for">All Request For</string>
+    <string name="title_all_request">All Requests</string>
     <string name="title_request_status">Status</string>
     <string name="title_request_relative">Relative to</string>
     <string name="title_request_off_your">Request Manager</string>

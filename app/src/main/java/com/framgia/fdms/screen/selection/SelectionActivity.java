@@ -34,6 +34,7 @@ import com.framgia.fdms.databinding.ActivityNewStatusSelectionBinding;
 
 import static com.framgia.fdms.screen.selection.SelectionType.ASSIGNEE;
 import static com.framgia.fdms.screen.selection.SelectionType.BRANCH;
+import static com.framgia.fdms.screen.selection.SelectionType.BRANCH_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_DIALOG;
@@ -42,6 +43,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
 import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_CREATED_BY;
+import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_FOR;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.USER_BORROW;
@@ -102,6 +104,7 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
             case RELATIVE_STAFF:
             case ASSIGNEE:
             case REQUEST_CREATED_BY:
+            case REQUEST_FOR:
             case USER_BORROW:
                 StatusRepository statusRepository = new StatusRepository(
                     new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
@@ -127,6 +130,7 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
                 presenter.setMarkerRepository(markerRepository);
                 break;
 
+            case BRANCH_ALL:
             case BRANCH:
                 BranchRepository branchRepository = new BranchRepository(
                     new BranchRemoteDataSource(FDMSServiceClient.getInstance()));

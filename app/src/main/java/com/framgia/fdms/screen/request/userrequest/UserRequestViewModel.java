@@ -80,7 +80,7 @@ public class UserRequestViewModel extends BaseFragmentModel
         mContext = activity.getApplicationContext();
         mFragment = fragment;
         mAdapter = new UserRequestAdapter(mContext, new ArrayList<Request>(), this, new User());
-        setStatus(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_request_status)));
+        setStatus(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_all_request)));
         setRelative(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_request_relative)));
         setRequestBy(new Status(OUT_OF_INDEX, mContext.getString(R.string.text_request_for_me)));
         mCalendar = Calendar.getInstance();
@@ -156,7 +156,7 @@ public class UserRequestViewModel extends BaseFragmentModel
                     return;
                 }
                 if (status.getId() == OUT_OF_INDEX) {
-                    status.setName(mContext.getString(R.string.title_request_status));
+                    status.setName(mContext.getString(R.string.title_all_request));
                 }
                 setStatus(status);
                 mAdapter.clear();

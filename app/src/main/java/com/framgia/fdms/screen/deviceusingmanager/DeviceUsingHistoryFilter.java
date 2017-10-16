@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.data.model.Status;
 
+import static com.framgia.fdms.utils.Constant.DeviceUsingStatus.ALL;
 import static com.framgia.fdms.utils.Constant.DeviceUsingStatus.USING;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
@@ -16,6 +17,7 @@ public class DeviceUsingHistoryFilter extends BaseObservable {
     private Status mStatus;
     private String mStaffName;
     private String mDeviceCode;
+    private Status mBranch;
 
     public DeviceUsingHistoryFilter() {
         initDefaultData();
@@ -25,6 +27,7 @@ public class DeviceUsingHistoryFilter extends BaseObservable {
         setDeviceCode("");
         setStaffName("");
         setStatus(new Status(OUT_OF_INDEX, USING));
+        setBranch(new Status(OUT_OF_INDEX, ALL));
     }
 
     @Bindable
@@ -55,5 +58,15 @@ public class DeviceUsingHistoryFilter extends BaseObservable {
     public void setDeviceCode(String deviceCode) {
         mDeviceCode = deviceCode;
         notifyPropertyChanged(BR.deviceCode);
+    }
+
+    @Bindable
+    public Status getBranch() {
+        return mBranch;
+    }
+
+    public void setBranch(Status branch) {
+        mBranch = branch;
+        notifyPropertyChanged(BR.branch);
     }
 }

@@ -24,6 +24,8 @@ public interface DeviceUsingManagerContract {
 
         void onChooseStatusClick();
 
+        void onChooseBranchClick();
+
         void onItemDeviceClick(Device device);
 
         void showProgress();
