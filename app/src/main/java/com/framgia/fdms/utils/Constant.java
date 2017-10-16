@@ -123,6 +123,7 @@ public class Constant {
         public static final String IS_BAR_CODE = "device[is_barcode]";
         public static final String IS_MEETING_ROOM = "device[is_meeting_room]";
         public static final String MEETING_ROOM_ID = "device[meeting_room_id]";
+        public static final String DEVICE_BRANCH_ID = "device[branch_id]";
         public static final String PAGE = "page";
         public static final String REQUEST_TYPE = "manager_request";
         public static final String PER_PAGE = "per_page";

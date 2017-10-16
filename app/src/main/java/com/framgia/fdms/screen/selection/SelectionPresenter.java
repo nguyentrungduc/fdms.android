@@ -27,6 +27,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.BRANCH;
 import static com.framgia.fdms.screen.selection.SelectionType.BRANCH_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
+import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_DIALOG;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_USING_HISTORY;
 import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
@@ -145,6 +146,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             case MEETING_ROOM:
                 getListMeetingRoom();
                 break;
+            case DEVICE_GROUP_ALL:
             case DEVICE_GROUP:
             case DEVICE_GROUP_DIALOG:
                 getDeviceGroups();
@@ -178,7 +180,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             || mSelectionType == DEVICE_USING_HISTORY
             || mSelectionType == BRANCH
             || mSelectionType == BRANCH_ALL
-            || mSelectionType == DEVICE_GROUP
+            || mSelectionType == DEVICE_GROUP || mSelectionType == DEVICE_GROUP_ALL
             || mSelectionType == STATUS_REQUEST
             || mSelectionType == DEVICE_GROUP_DIALOG
             || mSelectionType == ASSIGNEE

@@ -178,6 +178,10 @@ final class CreateDevicePresenter implements CreateDeviceContract.Presenter {
             isValid = false;
             mViewModel.onInputOriginalPriceError();
         }
+        if (device.isDeviceMeetingRoom() && device.getMeetingRoomId() < 1) {
+            isValid = false;
+            mViewModel.onInputMeetingRoomError();
+        }
         return isValid;
     }
 

@@ -36,6 +36,7 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.VISIBLE;
+import static com.framgia.fdms.screen.selection.SelectionType.BRANCH_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
@@ -48,6 +49,7 @@ import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_BRANCH;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_DEVICE;
@@ -168,6 +170,9 @@ public class ListDeviceViewModel extends BaseObservable
             case REQUEST_MEETING_ROOM:
                 mFilterModel.setMeetingRoom((Producer) data);
                 break;
+            case REQUEST_BRANCH:
+                mFilterModel.setBranch(data);
+                break;
             case REQUEST_CREATE_ASSIGNMENT:
                 mNavigator.showToast(bundle.getInt(BUNDLE_SUCCESS));
                 mAdapter.clear();
@@ -229,6 +234,12 @@ public class ListDeviceViewModel extends BaseObservable
     public void onChooseMeetingRoomClick() {
         mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, MEETING_ROOM),
             REQUEST_MEETING_ROOM);
+    }
+
+    @Override
+    public void onChooseBranchClick() {
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, BRANCH_ALL),
+            REQUEST_BRANCH);
     }
 
     @Override
