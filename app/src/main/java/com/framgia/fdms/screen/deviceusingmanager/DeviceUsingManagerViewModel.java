@@ -27,10 +27,13 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.framgia.fdms.screen.selection.SelectionType.BRANCH;
+import static com.framgia.fdms.screen.selection.SelectionType.BRANCH_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_USING_HISTORY;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_BRANCH;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_USING_STATUS;
 
 /**
@@ -125,6 +128,12 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     }
 
     @Override
+    public void onChooseBranchClick() {
+        mNavigator.startActivityForResult(
+            SelectionActivity.getInstance(mNavigator.getContext(), BRANCH_ALL), REQUEST_BRANCH);
+    }
+
+    @Override
     public void onItemDeviceClick(Device device) {
         mNavigator.startActivity(DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
     }
@@ -141,13 +150,22 @@ public class DeviceUsingManagerViewModel extends BaseObservable
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != REQUEST_DEVICE_USING_STATUS || resultCode != RESULT_OK || data == null) {
+        if (resultCode != RESULT_OK || data == null) {
             return;
         }
         mIsFilterChanged = true;
         Bundle bundle = data.getExtras();
         Status status = bundle.getParcelable(BUNDLE_DATA);
-        mFilterModel.setStatus(status);
+        switch (requestCode) {
+            case REQUEST_DEVICE_USING_STATUS:
+                mFilterModel.setStatus(status);
+                break;
+            case REQUEST_BRANCH:
+                mFilterModel.setBranch(status);
+                break;
+            default:
+                break;
+        }
         setDrawerStatus(DRAWER_IS_CLOSE);
     }
 

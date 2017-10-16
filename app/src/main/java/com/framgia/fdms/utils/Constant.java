@@ -164,6 +164,7 @@ public class Constant {
         public static final String STATUS = "status";
         public static final String TEXT_USER_SEARCH = "text_user_search";
         public static final String USING_HISTORY_DEVICE_CODE = "device_code";
+        public static final String BRANCH_ID = "branch_id";
     }
 
     public class DeviceStatus {

@@ -56,7 +56,7 @@ public class SelectionViewModel extends BaseObservable implements SelectionContr
     };
 
     public SelectionViewModel(AppCompatActivity activity) {
-        mAdapter = new SelectionAdapter(new ArrayList<Status>(), getSelectedType());
+        mAdapter = new SelectionAdapter(new ArrayList<Status>());
         mAdapter.setViewModel(this);
         mActivity = activity;
         mNavigator = new Navigator(activity);
@@ -115,7 +115,7 @@ public class SelectionViewModel extends BaseObservable implements SelectionContr
     @Override
     public void onGetDataSuccess(List data) {
         setLoadMore(false);
-        mAdapter.updateData(data, isSearch());
+        mAdapter.updateData(data, isSearch(), getSelectedType());
     }
 
     @Override

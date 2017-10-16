@@ -24,6 +24,7 @@ import java.util.List;
 
 import static com.framgia.fdms.screen.selection.SelectionType.ASSIGNEE;
 import static com.framgia.fdms.screen.selection.SelectionType.BRANCH;
+import static com.framgia.fdms.screen.selection.SelectionType.BRANCH_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_DIALOG;
@@ -32,6 +33,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
 import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_CREATED_BY;
+import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_FOR;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.USER_BORROW;
@@ -136,6 +138,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             case MARKER:
                 getListMarker();
                 break;
+            case BRANCH_ALL:
             case BRANCH:
                 getListBranch();
                 break;
@@ -158,6 +161,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             case ASSIGNEE:
                 getListAssignee();
                 break;
+            case REQUEST_FOR:
             case USER_BORROW:
                 getListUserBorrow();
                 break;
@@ -173,6 +177,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
         if (mSelectionType == STATUS
             || mSelectionType == DEVICE_USING_HISTORY
             || mSelectionType == BRANCH
+            || mSelectionType == BRANCH_ALL
             || mSelectionType == DEVICE_GROUP
             || mSelectionType == STATUS_REQUEST
             || mSelectionType == DEVICE_GROUP_DIALOG
@@ -197,8 +202,9 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 getListMeetingRoom();
                 break;
             case RELATIVE_STAFF:
-                getListUserBorrow();
+                getListRelative();
                 break;
+            case REQUEST_FOR:
             case USER_BORROW:
                 getListUserBorrow();
                 break;

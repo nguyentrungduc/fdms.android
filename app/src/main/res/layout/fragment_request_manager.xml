@@ -62,6 +62,7 @@
                                 android:layout_marginStart="@dimen/dp_5"
                                 android:layout_weight="1"
                                 android:background="@drawable/border_button"
+                                android:onClick="@{() -> viewModel.onSelectStatusClick()}"
                                 android:padding="@dimen/dp_7"
                                 >
                                 <ImageView
@@ -77,7 +78,6 @@
                                     android:ellipsize="end"
                                     android:gravity="center_vertical"
                                     android:maxLines="1"
-                                    android:onClick="@{() -> viewModel.onSelectStatusClick()}"
                                     android:text="@={viewModel.status.name}"
                                     android:textColor="@color/cardview_dark_background"
                                     android:textColorHint="@color/cardview_shadow_start_color"
@@ -92,6 +92,7 @@
                                 android:layout_marginStart="@dimen/dp_5"
                                 android:layout_weight="1"
                                 android:background="@drawable/border_button"
+                                android:onClick="@{() -> viewModel.onSelectRequestForClick()}"
                                 android:padding="@dimen/dp_7"
                                 >
                                 <ImageView
@@ -107,8 +108,7 @@
                                     android:ellipsize="end"
                                     android:gravity="center_vertical"
                                     android:maxLines="1"
-                                    android:onClick="@{() -> viewModel.onSelectRelativeClick()}"
-                                    android:text="@={viewModel.relative.name}"
+                                    android:text="@={viewModel.requestFor.name}"
                                     android:textColor="@color/cardview_dark_background"
                                     android:textColorHint="@color/cardview_shadow_start_color"
                                     android:textSize="@dimen/sp_13"

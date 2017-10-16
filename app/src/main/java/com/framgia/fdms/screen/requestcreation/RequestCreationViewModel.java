@@ -220,7 +220,7 @@ public class RequestCreationViewModel extends BaseObservable
         notifyPropertyChanged(BR.manager);
     }
 
-    public void onClickChooseRequestFor() {
+    public void onClickChooseRequestForRelativeStaff() {
         mActivity.startActivityForResult(
             SelectionActivity.getInstance(mContext, SelectionType.RELATIVE_STAFF),
             REQUEST_RELATIVE);

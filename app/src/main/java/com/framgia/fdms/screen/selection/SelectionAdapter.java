@@ -10,6 +10,7 @@ import java.util.List;
 
 import static com.framgia.fdms.screen.selection.SelectionType.ASSIGNEE;
 import static com.framgia.fdms.screen.selection.SelectionType.BRANCH;
+import static com.framgia.fdms.screen.selection.SelectionType.BRANCH_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_DIALOG;
@@ -36,22 +37,20 @@ public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.Sele
     private LayoutInflater mInflater;
     private List<Status> mDatas;
     private SelectionViewModel mViewModel;
-    private int mSelectedType;
 
-    public SelectionAdapter(List<Status> datas, int selectedType) {
+    public SelectionAdapter(List<Status> datas) {
         mDatas = datas;
-        mSelectedType = selectedType;
     }
 
     public void setViewModel(SelectionViewModel viewModel) {
         mViewModel = viewModel;
     }
 
-    public void updateData(List<Status> datas, boolean isSearch) {
+    public void updateData(List<Status> datas, boolean isSearch, int selectedType) {
         if (mDatas == null || datas == null) {
             return;
         }
-        initData(datas, mSelectedType, isSearch);
+        initData(datas, selectedType, isSearch);
         notifyDataSetChanged();
     }
 
@@ -63,6 +62,12 @@ public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.Sele
                 case MARKER:
                 case MEETING_ROOM:
                 case DEVICE_GROUP:
+                case BRANCH:
+                case DEVICE_GROUP_DIALOG:
+                case DEVICE_USING_HISTORY:
+                case CATEGORY:
+                    break;
+                case BRANCH_ALL:
                 case STATUS_REQUEST:
                     mDatas.add(0, new Producer(OUT_OF_INDEX, TITLE_ALL));
                     break;
@@ -73,12 +78,8 @@ public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.Sele
                 case USER_BORROW:
                     mDatas.add(0, new Producer(OUT_OF_INDEX, NONE));
                     break;
-                case BRANCH:
-                case DEVICE_GROUP_DIALOG:
-                case DEVICE_USING_HISTORY:
-                case CATEGORY:
-                    break;
                 default:
+                    break;
             }
         }
         mDatas.addAll(statuses);

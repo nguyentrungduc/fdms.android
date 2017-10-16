@@ -96,7 +96,7 @@
                         android:hint="@string/title_request_for"
                         android:imeOptions="actionDone"
                         android:inputType="text"
-                        android:onClick="@{() -> viewModel.onClickChooseRequestFor()}"
+                        android:onClick="@{() -> viewModel.onClickChooseRequestForRelativeStaff()}"
                         android:text="@={viewModel.requestFor.name}"
                         />
                 </android.support.design.widget.TextInputLayout>

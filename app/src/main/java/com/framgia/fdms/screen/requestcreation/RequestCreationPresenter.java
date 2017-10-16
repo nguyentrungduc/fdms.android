@@ -92,11 +92,6 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
             isValid = false;
             mViewModel.onInputTitleError();
         }
-        if (TextUtils.isEmpty(request.getDescription())) {
-            isValid = false;
-            mViewModel.onInputDescriptionError();
-        }
-
         return isValid;
     }
 
