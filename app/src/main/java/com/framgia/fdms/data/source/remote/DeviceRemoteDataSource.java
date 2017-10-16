@@ -26,6 +26,7 @@ import okhttp3.RequestBody;
 import static com.framgia.fdms.utils.Constant.ApiParram.BOUGHT_DATE;
 import static com.framgia.fdms.utils.Constant.ApiParram.CATEGORY_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.DESCRIPTION;
+import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_BRANCH_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CATEGORY_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CODE;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_NAME;
@@ -375,11 +376,11 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
             parrams.put(STATUS_ID, String.valueOf(filterModel.getStatus().getId()));
         }
 
-        if (filterModel.getDeviceName() != null) {
+        if (!TextUtils.isEmpty(filterModel.getDeviceName())) {
             parrams.put(DEVICE_NAME, String.valueOf(filterModel.getDeviceName()));
         }
 
-        if (filterModel.getStaffName() != null) {
+        if (!TextUtils.isEmpty(filterModel.getStaffName())) {
             parrams.put(STAFF_USING_NAME, String.valueOf(filterModel.getStaffName()));
         }
 
@@ -394,6 +395,10 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         if (filterModel.getMeetingRoom() != null
             && filterModel.getMeetingRoom().getId() != OUT_OF_INDEX) {
             parrams.put(MEETING_ROOM_ID, String.valueOf(filterModel.getMeetingRoom().getId()));
+        }
+
+        if (filterModel.getBranch() != null && filterModel.getBranch().getId() != OUT_OF_INDEX) {
+            parrams.put(DEVICE_BRANCH_ID, String.valueOf(filterModel.getBranch().getId()));
         }
 
         if (page != OUT_OF_INDEX) {

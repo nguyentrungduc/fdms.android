@@ -7,7 +7,7 @@ import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
 
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
-import static com.framgia.fdms.utils.Constant.TITLE_NA;
+import static com.framgia.fdms.utils.Constant.TITLE_ALL;
 
 /**
  * Created by toand on 9/15/2017.
@@ -28,12 +28,12 @@ public class DeviceFilterModel extends BaseObservable {
     }
 
     public void initDefaultFilter() {
-        setCategory(new Status(OUT_OF_INDEX, TITLE_NA));
-        setStatus(new Status(OUT_OF_INDEX, TITLE_NA));
-        setMeetingRoom(new Producer(OUT_OF_INDEX, TITLE_NA));
-        setVendor(new Producer(OUT_OF_INDEX, TITLE_NA));
-        setMarker(new Producer(OUT_OF_INDEX, TITLE_NA));
-        setBranch(new Status(OUT_OF_INDEX, ""));
+        setCategory(new Status(OUT_OF_INDEX, TITLE_ALL));
+        setStatus(new Status(OUT_OF_INDEX, TITLE_ALL));
+        setMeetingRoom(new Producer(OUT_OF_INDEX, TITLE_ALL));
+        setVendor(new Producer(OUT_OF_INDEX, TITLE_ALL));
+        setMarker(new Producer(OUT_OF_INDEX, TITLE_ALL));
+        setBranch(new Status(OUT_OF_INDEX, TITLE_ALL));
         setDeviceName("");
         setStaffName("");
     }

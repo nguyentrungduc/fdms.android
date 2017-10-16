@@ -64,6 +64,7 @@ public class CreateDeviceViewModel extends BaseObservable
     private Context mContext;
     private CreateDeviceActivity mActivity;
     private CreateDeviceContract.Presenter mPresenter;
+
     private String mDeviceCodeError;
     private String mNameDeviceError;
     private String mSerialNumberError;
@@ -74,8 +75,8 @@ public class CreateDeviceViewModel extends BaseObservable
     private String mMakerError;
     private String mOriginalPriceError;
     private String mWarrantyError;
-    private String mBoughtDate;
     private String mMeetingRoomError;
+    private String mBoughtDate;
     private Device mDevice;
     private String mStatusError;
     private Status mCategory;

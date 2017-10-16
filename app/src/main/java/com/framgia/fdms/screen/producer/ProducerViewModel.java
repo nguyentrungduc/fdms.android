@@ -34,7 +34,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
+import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_ALL;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
@@ -429,7 +429,7 @@ public class ProducerViewModel extends BaseObservable
     }
 
     public void onChooseGroupTypeClick() {
-        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, DEVICE_GROUP),
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, DEVICE_GROUP_ALL),
             REQUEST_DEVICE_GROUPS);
     }
 

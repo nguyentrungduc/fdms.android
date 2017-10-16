@@ -127,8 +127,28 @@ public final class BindingUtils {
     }
 
     @BindingAdapter("errorText")
-    public static void setErrorText(TextInputLayout layout, String text) {
+    public static void setErrorText(final TextInputLayout layout, String text) {
         layout.setError(text);
+        EditText editText = layout.getEditText();
+        if (editText == null) {
+            return;
+        }
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //No-Op
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //No-Op
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                layout.setError("");
+            }
+        });
     }
 
     @BindingAdapter({ "spinnerAdapter" })

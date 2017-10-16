@@ -34,6 +34,8 @@ interface ListDeviceContract {
 
         void onChooseMeetingRoomClick();
 
+        void onChooseBranchClick();
+
         void onClearFilterClick();
 
         void onActivityResult(int requestCode, int resultCode, Intent data);
