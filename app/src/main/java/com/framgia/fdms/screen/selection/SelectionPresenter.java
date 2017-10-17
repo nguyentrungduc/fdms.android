@@ -180,7 +180,8 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             || mSelectionType == DEVICE_USING_HISTORY
             || mSelectionType == BRANCH
             || mSelectionType == BRANCH_ALL
-            || mSelectionType == DEVICE_GROUP || mSelectionType == DEVICE_GROUP_ALL
+            || mSelectionType == DEVICE_GROUP
+            || mSelectionType == DEVICE_GROUP_ALL
             || mSelectionType == STATUS_REQUEST
             || mSelectionType == DEVICE_GROUP_DIALOG
             || mSelectionType == ASSIGNEE
@@ -340,7 +341,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
     @Override
     public void getListMeetingRoom() {
         Disposable disposable =
-            mMeetingRoomRepository.getListMeetingRoom(mKeySearch, mPage, PER_PAGE)
+            mMeetingRoomRepository.getListMeetingRoom(mKeySearch, OUT_OF_INDEX, mPage, PER_PAGE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.framgia.fdms.screen.meetingroom.detailmeetingroom.ItemListDeviceViewModel"
+            type="com.framgia.fdms.screen.meetingroomdetail.ItemListDeviceViewModel"
             />
     </data>
 

@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.meetingroom.detailmeetingroom;
+package com.framgia.fdms.screen.meetingroomdetail;
 
 import android.content.Context;
 import android.databinding.BaseObservable;

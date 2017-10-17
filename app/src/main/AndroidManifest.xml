@@ -81,7 +81,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".screen.meetingroom.detailmeetingroom.DetailMeetingRoomActivity"
+            android:name=".screen.meetingroomdetail.DetailMeetingRoomActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
 

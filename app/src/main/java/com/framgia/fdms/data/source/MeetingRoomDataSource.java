@@ -11,7 +11,8 @@ import java.util.List;
 
 public interface MeetingRoomDataSource {
     interface RemoteDataSource {
-        Observable<List<Producer>> getListMeetingRoom(String roomName, int page, int perPage);
+        Observable<List<Producer>> getListMeetingRoom(String roomName, int branchId, int page,
+            int perPage);
 
         Observable<Producer> addMeetingRoom(Producer meetingRoom);
 

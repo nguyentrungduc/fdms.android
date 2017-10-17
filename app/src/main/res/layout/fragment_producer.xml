@@ -56,7 +56,7 @@
                                 android:id="@+id/floating_search_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/dp_50"
-                                android:visibility="@{viewModel.showCategoryFilter ? View.GONE : View.VISIBLE}"
+                                android:visibility="@{viewModel.showFilter ? View.GONE : View.VISIBLE}"
                                 app:backgroundTint="@color/colorPrimaryDark"
                                 app:floatingSearch_leftActionMode="noLeftAction"
                                 app:floatingSearch_menu="@menu/menu_search"
@@ -70,7 +70,7 @@
                                 android:id="@+id/floating_search_view_category"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/dp_50"
-                                android:visibility="@{viewModel.showCategoryFilter ? View.VISIBLE : View.GONE}"
+                                android:visibility="@{viewModel.showFilter ? View.VISIBLE : View.GONE}"
                                 app:backgroundTint="@color/colorPrimaryDark"
                                 app:floatingSearch_leftActionMode="noLeftAction"
                                 app:floatingSearch_menu="@menu/menu_device_manager"
@@ -118,7 +118,7 @@
                 </LinearLayout>
             </RelativeLayout>
             <include
-                layout="@layout/filter_category"
+                layout="@layout/filter_producer"
                 bind:viewModel="@{viewModel}"
                 />
         </android.support.v4.widget.DrawerLayout>

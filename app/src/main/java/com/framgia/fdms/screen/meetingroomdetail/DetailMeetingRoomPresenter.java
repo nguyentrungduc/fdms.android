@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.meetingroom.detailmeetingroom;
+package com.framgia.fdms.screen.meetingroomdetail;
 
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.source.DeviceRepository;

@@ -18,9 +18,9 @@ import java.util.List;
 
 public class ProducerAdapter extends BaseRecyclerViewAdapter<Producer, ProducerAdapter.ViewHolder> {
     private List<Producer> mProducers;
-    private ProducerContract.ViewModel mViewModel;
+    private ProducerViewModel mViewModel;
 
-    public ProducerAdapter(@NonNull Context context, @NonNull ProducerContract.ViewModel viewModel,
+    public ProducerAdapter(@NonNull Context context, @NonNull ProducerViewModel viewModel,
         @NonNull List<Producer> producers) {
         super(context);
         mViewModel = viewModel;
@@ -79,7 +79,7 @@ public class ProducerAdapter extends BaseRecyclerViewAdapter<Producer, ProducerA
         ItemProducerBinding binding =
             DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                 R.layout.item_producer, parent, false);
-        binding.setViewModel((ProducerViewModel) mViewModel);
+        binding.setViewModel(mViewModel);
         return new ViewHolder(binding);
     }
 
@@ -93,7 +93,7 @@ public class ProducerAdapter extends BaseRecyclerViewAdapter<Producer, ProducerA
         return mProducers == null ? 0 : mProducers.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private ItemProducerBinding mBinding;
 
         public ViewHolder(ItemProducerBinding binding) {
@@ -105,6 +105,7 @@ public class ProducerAdapter extends BaseRecyclerViewAdapter<Producer, ProducerA
             if (producer == null) {
                 return;
             }
+            mBinding.setViewModel(mViewModel);
             mBinding.setProducer(producer);
             mBinding.executePendingBindings();
         }

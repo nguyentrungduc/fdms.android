@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.meetingroom.detailmeetingroom;
+package com.framgia.fdms.screen.meetingroomdetail;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;

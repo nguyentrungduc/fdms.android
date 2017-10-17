@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.framgia.fdms.screen.meetingroom.detailmeetingroom.DetailMeetingRoomViewModel"
+            type="com.framgia.fdms.screen.meetingroomdetail.DetailMeetingRoomViewModel"
             />
 
         <import type="android.view.View"/>

@@ -13,10 +13,12 @@ import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.DeviceGroupRepository;
 import com.framgia.fdms.data.source.MarkerRepository;
+import com.framgia.fdms.data.source.MeetingRoomRepository;
 import com.framgia.fdms.data.source.VendorRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.remote.CategoryRemoteDataSource;
 import com.framgia.fdms.data.source.remote.MarkerRemoteDataSource;
+import com.framgia.fdms.data.source.remote.MeetingRoomRemoteDataSource;
 import com.framgia.fdms.data.source.remote.VendorRemoteDataSource;
 import com.framgia.fdms.databinding.FragmentProducerBinding;
 
@@ -50,7 +52,9 @@ public class ProducerFragment extends Fragment {
             MarkerRepository.getInstance(
                 MarkerRemoteDataSource.getInstance(FDMSServiceClient.getInstance())),
             DeviceGroupRepository.getInstance(), CategoryRepository.getInstance(
-            new CategoryRemoteDataSource(FDMSServiceClient.getInstance())));
+            new CategoryRemoteDataSource(FDMSServiceClient.getInstance())),
+            new MeetingRoomRepository(
+                new MeetingRoomRemoteDataSource(FDMSServiceClient.getInstance())));
 
         mViewModel.setPresenter(presenter);
     }
