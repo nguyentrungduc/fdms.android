@@ -219,7 +219,7 @@ public final class BindingUtils {
         if (pieData.getDataSetCount() > 0) {
             pieChart.setUsePercentValues(true);
             pieChart.setDrawEntryLabels(false);
-            pieChart.getDescription().setEnabled(true);
+            pieChart.getDescription().setEnabled(false);
             pieChart.setDragDecelerationFrictionCoef(DECELERATION_FRICTION_COEF);
             pieChart.setDrawHoleEnabled(true);
             pieChart.setHoleColor(Color.WHITE);
