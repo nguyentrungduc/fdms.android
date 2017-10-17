@@ -16,8 +16,9 @@ public class MeetingRoomRepository {
         mRemoteDataSource = remoteDataSource;
     }
 
-    public Observable<List<Producer>> getListMeetingRoom(String roomName, int page, int perPage) {
-        return mRemoteDataSource.getListMeetingRoom(roomName, page, perPage);
+    public Observable<List<Producer>> getListMeetingRoom(String roomName, int branchId, int page,
+        int perPage) {
+        return mRemoteDataSource.getListMeetingRoom(roomName, branchId, page, perPage);
     }
 
     public Observable<Producer> addMeetingRoom(Producer marker) {

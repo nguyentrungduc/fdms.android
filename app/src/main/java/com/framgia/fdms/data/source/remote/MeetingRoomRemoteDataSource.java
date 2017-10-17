@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.framgia.fdms.utils.Constant.ApiParram.BRANCH_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.ROOM_NAME;
@@ -32,8 +33,9 @@ public class MeetingRoomRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<List<Producer>> getListMeetingRoom(String roomName, int page, int perPage) {
-        return mFDMSApi.getListMeetingRoom(getRoomParams(roomName, page, perPage))
+    public Observable<List<Producer>> getListMeetingRoom(String roomName, int branchId, int page,
+        int perPage) {
+        return mFDMSApi.getListMeetingRoom(getRoomParams(roomName, branchId, page, perPage))
             .flatMap(new Function<Respone<List<Producer>>, ObservableSource<List<Producer>>>() {
                 @Override
                 public ObservableSource<List<Producer>> apply(Respone<List<Producer>> listRespone) {
@@ -80,10 +82,14 @@ public class MeetingRoomRemoteDataSource extends BaseRemoteDataSource
             });
     }
 
-    private Map<String, String> getRoomParams(String roomName, int page, int perPage) {
+    private Map<String, String> getRoomParams(String roomName, int branchId, int page,
+        int perPage) {
         Map<String, String> params = new HashMap<>();
         if (!TextUtils.isEmpty(roomName)) {
             params.put(ROOM_NAME, roomName);
+        }
+        if (branchId > 0) {
+            params.put(BRANCH_ID, String.valueOf(branchId));
         }
         if (page != OUT_OF_INDEX) {
             params.put(PAGE, String.valueOf(page));

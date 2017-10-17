@@ -19,10 +19,12 @@ import android.view.View;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
+import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
+import com.framgia.fdms.screen.meetingroomdetail.DetailMeetingRoomActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.Constant;
@@ -34,11 +36,13 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.framgia.fdms.screen.selection.SelectionType.BRANCH_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_ALL;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_BRANCH;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_GROUPS;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_GROUPS_DIALOG;
 import static com.framgia.fdms.utils.Constant.TAG_PRODUCER_DIALOG;
@@ -49,7 +53,8 @@ import static com.framgia.fdms.utils.Constant.TAG_PRODUCER_DIALOG;
 public class ProducerViewModel extends BaseObservable
     implements ProducerContract.ViewModel, ProducerDialogContract.ActionCallback,
     FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
-    OnSearchMenuItemClickListener, DrawerLayout.DrawerListener {
+    OnSearchMenuItemClickListener,
+    BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<Producer>, DrawerLayout.DrawerListener {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<ProducerViewModel> CREATOR =
         new Parcelable.Creator<ProducerViewModel>() {
@@ -73,9 +78,12 @@ public class ProducerViewModel extends BaseObservable
     private boolean mIsAllowLoadMore;
     private int mLoadingMoreVisibility;
     private Navigator mNavigator;
-    private boolean mIsShowCategoryFilter;
+    private boolean mIsShowFilter;
+    private boolean mIsShowBranchFilter;
+    private boolean mIsShowGroupDevice;
     private String mDrawerStatus = DRAWER_IS_CLOSE;
     private Producer mGroupType, mCategory, mTempGroupType;
+    private Status mBranch;
     private Context mContext;
     private String mKeySearch;
     private boolean mIsRefresh;
@@ -108,7 +116,7 @@ public class ProducerViewModel extends BaseObservable
             @Override
             public void onRefresh() {
                 mAdapter.clearData();
-                mPresenter.getProducer(mKeySearch, mGroupType.getId());
+                mPresenter.getProducer(mKeySearch, mGroupType.getId(), mBranch.getId());
             }
         };
 
@@ -120,6 +128,7 @@ public class ProducerViewModel extends BaseObservable
             new ProducerAdapter(FDMSApplication.getInstant(), this, new ArrayList<Producer>());
         setLoadingMoreVisibility(GONE);
         mGroupType = new Producer(OUT_OF_INDEX, Constant.DeviceUsingStatus.ALL);
+        mBranch = new Producer(OUT_OF_INDEX, Constant.DeviceUsingStatus.ALL);
     }
 
     protected ProducerViewModel(Parcel in) {
@@ -238,7 +247,7 @@ public class ProducerViewModel extends BaseObservable
         }
         mProducerDialog = ProducerDialog.newInstant(producer,
             mFragment.getResources().getString(R.string.action_edit), this, mTempGroupType,
-            isShowCategoryFilter());
+            isShowGroupDevice());
         mProducerDialog.show(mFragment.getFragmentManager(), TAG_PRODUCER_DIALOG);
     }
 
@@ -265,7 +274,7 @@ public class ProducerViewModel extends BaseObservable
             new Producer(1, mFragment.getResources().getString(R.string.title_computer_device));
         mProducerDialog = ProducerDialog.newInstant(new Producer(OUT_OF_INDEX, ""),
             mFragment.getResources().getString(R.string.title_add_producer), this,
-            getTempGroupType(), isShowCategoryFilter());
+            getTempGroupType(), isShowGroupDevice());
         mProducerDialog.show(mFragment.getFragmentManager(), TAG_PRODUCER_DIALOG);
     }
 
@@ -316,7 +325,7 @@ public class ProducerViewModel extends BaseObservable
     public void onSearchAction(String currentQuery) {
         setKeySearch(currentQuery);
         mAdapter.clearData();
-        mPresenter.getProducer(currentQuery, mGroupType.getId());
+        mPresenter.getProducer(currentQuery, mGroupType.getId(), mBranch.getId());
     }
 
     @Override
@@ -337,7 +346,7 @@ public class ProducerViewModel extends BaseObservable
     @Override
     public void onClearSearchClicked() {
         mAdapter.clearData();
-        mPresenter.getProducer("", OUT_OF_INDEX);
+        mPresenter.getProducer("", OUT_OF_INDEX, OUT_OF_INDEX);
     }
 
     @Override
@@ -354,13 +363,33 @@ public class ProducerViewModel extends BaseObservable
     }
 
     @Bindable
-    public boolean isShowCategoryFilter() {
-        return mIsShowCategoryFilter;
+    public boolean isShowFilter() {
+        return mIsShowFilter;
     }
 
-    public void setShowCategoryFilter(boolean showCategoryFilter) {
-        mIsShowCategoryFilter = showCategoryFilter;
-        notifyPropertyChanged(BR.showCategoryFilter);
+    public void setShowFilter(boolean showFilter) {
+        mIsShowFilter = showFilter;
+        notifyPropertyChanged(BR.showFilter);
+    }
+
+    @Bindable
+    public boolean isShowBranchFilter() {
+        return mIsShowBranchFilter;
+    }
+
+    public void setShowBranchFilter(boolean showBranchFilter) {
+        mIsShowBranchFilter = showBranchFilter;
+        notifyPropertyChanged(BR.showBranchFilter);
+    }
+
+    @Bindable
+    public boolean isShowGroupDevice() {
+        return mIsShowGroupDevice;
+    }
+
+    public void setShowGroupDevice(boolean showGroupDevice) {
+        mIsShowGroupDevice = showGroupDevice;
+        notifyPropertyChanged(BR.showGroupDevice);
     }
 
     @Override
@@ -374,10 +403,13 @@ public class ProducerViewModel extends BaseObservable
             case REQUEST_DEVICE_GROUPS:
                 setGroupType((Producer) status);
                 break;
+            case REQUEST_BRANCH:
+                setBranch(status);
+                break;
             case REQUEST_DEVICE_GROUPS_DIALOG:
                 setTempGroupType((Producer) status);
                 mProducerDialog = ProducerDialog.newInstant(mCategory, mTitle, this, mTempGroupType,
-                    isShowCategoryFilter());
+                    isShowFilter());
                 mProducerDialog.show(mFragment.getFragmentManager(), TAG_PRODUCER_DIALOG);
                 break;
             default:
@@ -410,7 +442,7 @@ public class ProducerViewModel extends BaseObservable
     public void onDrawerClosed(View drawerView) {
         setDrawerStatus(DRAWER_IS_CLOSE);
         mAdapter.clearData();
-        mPresenter.getProducer(getKeySearch(), mGroupType.getId());
+        mPresenter.getProducer(getKeySearch(), mGroupType.getId(), mBranch.getId());
     }
 
     @Override
@@ -428,14 +460,30 @@ public class ProducerViewModel extends BaseObservable
         notifyPropertyChanged(BR.groupType);
     }
 
+    @Bindable
+    public Status getBranch() {
+        return mBranch;
+    }
+
+    public void setBranch(Status branch) {
+        mBranch = branch;
+        notifyPropertyChanged(BR.branch);
+    }
+
     public void onChooseGroupTypeClick() {
         mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, DEVICE_GROUP_ALL),
             REQUEST_DEVICE_GROUPS);
     }
 
+    public void onChooseBranchClick() {
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, BRANCH_ALL),
+            REQUEST_BRANCH);
+    }
+
     public void onClearFilterClick() {
         mAdapter.clearData();
         setGroupType(new Producer(OUT_OF_INDEX, Constant.DeviceUsingStatus.ALL));
+        setBranch(new Producer(OUT_OF_INDEX, Constant.DeviceUsingStatus.ALL));
         setDrawerStatus(DRAWER_IS_CLOSE);
     }
 
@@ -472,5 +520,14 @@ public class ProducerViewModel extends BaseObservable
     public void setTempGroupType(Producer tempGroupType) {
         mTempGroupType = tempGroupType;
         notifyPropertyChanged(BR.tempGroupType);
+    }
+
+    @Override
+    public void onItemRecyclerViewClick(Producer item) {
+        if (isShowBranchFilter()) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(Constant.BundleConstant.BUNDLE_MEETING_ROOM, item);
+            mNavigator.startActivity(DetailMeetingRoomActivity.class, bundle);
+        }
     }
 }

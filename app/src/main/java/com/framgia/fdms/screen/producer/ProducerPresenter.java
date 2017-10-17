@@ -5,6 +5,7 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.source.CategoryDataSource;
 import com.framgia.fdms.data.source.DeviceGroupDataSource;
 import com.framgia.fdms.data.source.MarkerDataSource;
+import com.framgia.fdms.data.source.MeetingRoomRepository;
 import com.framgia.fdms.data.source.VendorDataSource;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
@@ -31,23 +32,27 @@ final class ProducerPresenter implements ProducerContract.Presenter {
     private MarkerDataSource mMarkerRepository;
     private DeviceGroupDataSource mDeviceGroupRepository;
     private CategoryDataSource.RemoteDataSource mCategoryRepository;
+    private MeetingRoomRepository mMeetingRoomRepository;
     private CompositeDisposable mSubscription;
     private int mPage;
     @ProducerType
     private int mType;
     private String mName;
     private int mGroupTypeId = OUT_OF_INDEX;
+    private int mBranchId = OUT_OF_INDEX;
 
     ProducerPresenter(ProducerContract.ViewModel viewModel, @ProducerType int type,
         VendorDataSource.RemoteDataSource vendorRepository, MarkerDataSource markerRepository,
         DeviceGroupDataSource deviceGroupRepository,
-        CategoryDataSource.RemoteDataSource categoryRepository) {
+        CategoryDataSource.RemoteDataSource categoryRepository,
+        MeetingRoomRepository meetingRoomRepository) {
         mViewModel = viewModel;
         mType = type;
         mVendorRepository = vendorRepository;
         mMarkerRepository = markerRepository;
         mDeviceGroupRepository = deviceGroupRepository;
         mCategoryRepository = categoryRepository;
+        mMeetingRoomRepository = meetingRoomRepository;
         mSubscription = new CompositeDisposable();
         mPage++;
         getProducer();
@@ -75,7 +80,14 @@ final class ProducerPresenter implements ProducerContract.Presenter {
             case ProducerType.CATEGORIES_GROUPS:
                 observable =
                     mCategoryRepository.getListCategory(mName, mGroupTypeId, mPage, PER_PAGE);
-                mViewModel.setShowCategoryFilter(true);
+                mViewModel.setShowFilter(true);
+                mViewModel.setShowGroupDevice(true);
+                break;
+            case ProducerType.MEETING_ROOM:
+                observable =
+                    mMeetingRoomRepository.getListMeetingRoom(mName, mBranchId, mPage, PER_PAGE);
+                mViewModel.setShowFilter(true);
+                mViewModel.setShowBranchFilter(true);
                 break;
             default:
             case ProducerType.MARKER:
@@ -139,6 +151,9 @@ final class ProducerPresenter implements ProducerContract.Presenter {
                 observable =
                     mCategoryRepository.addDeviceCategory(producer, tempProductGroup.getId());
                 break;
+            case ProducerType.MEETING_ROOM:
+                observable = mMeetingRoomRepository.addMeetingRoom(producer);
+                break;
             default:
             case ProducerType.MARKER:
                 observable = mMarkerRepository.addMarker(producer);
@@ -173,6 +188,9 @@ final class ProducerPresenter implements ProducerContract.Presenter {
                 break;
             case ProducerType.CATEGORIES_GROUPS:
                 observable = mCategoryRepository.deleteDeviceCategory(producer);
+                break;
+            case ProducerType.MEETING_ROOM:
+                observable = mMeetingRoomRepository.deleteMeetingRoom(producer);
                 break;
             default:
             case ProducerType.MARKER:
@@ -213,13 +231,15 @@ final class ProducerPresenter implements ProducerContract.Presenter {
                 observable =
                     mCategoryRepository.editDeviceCategory(producer, temProductGroup.getId());
                 break;
+            case ProducerType.MEETING_ROOM:
+                observable = mMeetingRoomRepository.editMeetingRoom(producer);
+                break;
             default:
             case ProducerType.MARKER:
                 observable = mMarkerRepository.editMarker(producer);
                 break;
         }
-        Disposable subscription = observable
-            .subscribeOn(Schedulers.io())
+        Disposable subscription = observable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Consumer<String>() {
                 @Override
@@ -236,9 +256,10 @@ final class ProducerPresenter implements ProducerContract.Presenter {
     }
 
     @Override
-    public void getProducer(String name, int groupTypeId) {
+    public void getProducer(String name, int groupTypeId, int branchId) {
         mName = name;
         mGroupTypeId = groupTypeId;
+        mBranchId = branchId;
         mPage = FIRST_PAGE;
         getProducer();
     }

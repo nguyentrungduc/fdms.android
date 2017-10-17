@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.meetingroom.detailmeetingroom;
+package com.framgia.fdms.screen.meetingroomdetail;
 
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;

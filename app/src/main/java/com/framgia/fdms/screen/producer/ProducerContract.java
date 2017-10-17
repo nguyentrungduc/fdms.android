@@ -42,9 +42,13 @@ interface ProducerContract {
 
         void setAllowLoadMore(boolean isAllowLoadMore);
 
-        void setShowCategoryFilter(boolean isShowCategoryFilter);
+        void setShowFilter(boolean isShowCategoryFilter);
+
+        void setShowBranchFilter(boolean showBranchFilter);
 
         void onActivityResult(int requestCode, int resultCode, Intent data);
+
+        void setShowGroupDevice(boolean showGroupDevice);
     }
 
     /**
@@ -61,6 +65,6 @@ interface ProducerContract {
 
         void editProducer(Producer producer, Producer temProductGroup);
 
-        void getProducer(String name, int groupTypeId);
+        void getProducer(String name, int groupTypeId, int branchId);
     }
 }
