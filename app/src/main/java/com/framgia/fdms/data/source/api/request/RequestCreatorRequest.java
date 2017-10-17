@@ -1,5 +1,6 @@
 package com.framgia.fdms.data.source.api.request;
 
+import com.framgia.fdms.data.model.Request;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -15,6 +16,9 @@ public class RequestCreatorRequest extends BaseRequest {
     private int mRequestFor;
     @SerializedName("request[assignee_id]")
     private int mAssignee;
+    @SerializedName("request[request_status_id]")
+    private int mStatusId;
+    private Request mRequest;
 
     public String getTitle() {
         return mTitle;
@@ -46,5 +50,21 @@ public class RequestCreatorRequest extends BaseRequest {
 
     public void setAssignee(int assignee) {
         mAssignee = assignee;
+    }
+
+    public int getStatusId() {
+        return mStatusId;
+    }
+
+    public void setStatusId(int statusId) {
+        mStatusId = statusId;
+    }
+
+    public Request getRequest() {
+        return mRequest;
+    }
+
+    public void setRequest(Request request) {
+        mRequest = request;
     }
 }

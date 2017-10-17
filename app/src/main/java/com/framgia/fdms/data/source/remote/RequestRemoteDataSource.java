@@ -1,5 +1,6 @@
 package com.framgia.fdms.data.source.remote;
 
+import android.text.TextUtils;
 import com.framgia.fdms.data.model.AssignmentItemRequest;
 import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Dashboard;
@@ -19,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.framgia.fdms.screen.request.RequestPagerAdapter.RequestPage.USER_REQUEST;
 import static com.framgia.fdms.utils.Constant.ALL_RELATIVE_ID;
 import static com.framgia.fdms.utils.Constant.ALL_REQUEST_STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_ASSIGNEE_ID;
@@ -38,6 +38,7 @@ import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_REQUEST_DETAILS;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_TITLE;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_TYPE;
+import static com.framgia.fdms.utils.Constant.BundleRequestType.MY_REQUEST;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 /**
@@ -77,8 +78,12 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     public Observable<Request> registerRequest(RequestCreatorRequest request) {
         Map<String, String> parrams = new HashMap<>();
 
-        parrams.put(REQUEST_TITLE, request.getTitle());
-        parrams.put(REQUEST_DESCRIPTION, request.getDescription());
+        if (!TextUtils.isEmpty(request.getTitle())) {
+            parrams.put(REQUEST_TITLE, request.getTitle());
+        }
+        if (!TextUtils.isEmpty(request.getDescription())) {
+            parrams.put(REQUEST_DESCRIPTION, request.getDescription());
+        }
         if (request.getRequestFor() > 0) {
             parrams.put(REQUEST_FOR_USER_ID, String.valueOf(request.getRequestFor()));
         }
@@ -212,7 +217,7 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
         if (page != OUT_OF_INDEX) {
             parrams.put(PAGE, page);
         }
-        if (requestType != USER_REQUEST) {
+        if (requestType != MY_REQUEST) {
             parrams.put(REQUEST_TYPE, requestType);
         }
         return parrams;

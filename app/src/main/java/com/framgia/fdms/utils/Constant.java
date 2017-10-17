@@ -178,6 +178,12 @@ public class Constant {
 
     public class BundleRequest {
         public static final String BUND_REQUEST = "BUND_REQUEST";
+        public static final String BUNDLE_REQUEST_TYPE = "BUNDLE_REQUEST_TYPE";
+    }
+
+    public class BundleRequestType {
+        public static final int MEMBER_REQUEST = 0;
+        public static final int MY_REQUEST = 1;
     }
 
     public class LocaleLanguage {

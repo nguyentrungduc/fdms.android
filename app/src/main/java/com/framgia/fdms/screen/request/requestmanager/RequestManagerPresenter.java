@@ -16,9 +16,9 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
-import static com.framgia.fdms.screen.request.RequestPagerAdapter.RequestPage.MANAGER_REQUEST;
 import static com.framgia.fdms.utils.Constant.ALL_RELATIVE_ID;
 import static com.framgia.fdms.utils.Constant.ALL_REQUEST_STATUS_ID;
+import static com.framgia.fdms.utils.Constant.BundleRequestType.MEMBER_REQUEST;
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
@@ -108,7 +108,7 @@ public final class RequestManagerPresenter implements RequestManagerContract.Pre
     @Override
     public void getRequest(int requestStatusId, final int relativeId, int page, final int perPage) {
         Disposable subscription =
-            mRequestRepository.getRequests(MANAGER_REQUEST, requestStatusId, relativeId, page,
+            mRequestRepository.getRequests(MEMBER_REQUEST, requestStatusId, relativeId, page,
                 perPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

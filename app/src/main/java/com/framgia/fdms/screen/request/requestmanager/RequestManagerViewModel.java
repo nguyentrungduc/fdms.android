@@ -37,6 +37,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
+import static com.framgia.fdms.utils.Constant.BundleRequestType.MEMBER_REQUEST;
 import static com.framgia.fdms.utils.Constant.MANAGE_REQUEST_GROUP;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestAction.CANCEL;
@@ -119,7 +120,8 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void onRegisterRequestClick() {
         mFragment.startActivityForResult(
-            RequestCreationActivity.getInstance(mFragment.getActivity()), REQUEST_CREATE_REQUEST);
+            RequestCreationActivity.getInstance(mFragment.getActivity(), MEMBER_REQUEST),
+            REQUEST_CREATE_REQUEST);
     }
 
     @Override
