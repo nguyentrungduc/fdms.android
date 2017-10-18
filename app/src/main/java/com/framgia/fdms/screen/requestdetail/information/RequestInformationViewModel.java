@@ -18,6 +18,7 @@ import com.framgia.fdms.screen.assignment.AssignmentActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.Constant;
+import com.framgia.fdms.utils.Utils;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
@@ -63,6 +64,7 @@ public class RequestInformationViewModel extends BaseObservable
     private Request mRequestTemp;
     private int mActionMenuVisibility;
     private int mGroupRequestType;
+    private String mRequestTitleEmpty;
 
     public RequestInformationViewModel(Fragment fragment, List<Request.RequestAction> actions,
         String statusRequest, Request actionRequest, FloatingActionMenu floatingActionMenu,
@@ -146,8 +148,6 @@ public class RequestInformationViewModel extends BaseObservable
     @Override
     public void onSubmitEditClick() {
         mPresenter.updateRequest(mRequest);
-        mFloatingActionsMenu.showMenu(true);
-        setEdit(false);
         hideSoftKeyboard(mFragment.getActivity());
     }
 
@@ -283,6 +283,17 @@ public class RequestInformationViewModel extends BaseObservable
     }
 
     @Override
+    public void onRequestTitleEmpty() {
+        setRequestTitleEmpty(mContext.getString(R.string.msg_error_user_name));
+    }
+
+    @Override
+    public void hideActionRequestButton() {
+        mFloatingActionsMenu.showMenu(true);
+        setEdit(false);
+    }
+
+    @Override
     public void onGetReponeSuccess(Respone<Request> requestRespone) {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -355,7 +366,7 @@ public class RequestInformationViewModel extends BaseObservable
     }
 
     public void setActionMenuVisibility(int actionMenuVisibility) {
-        this.mActionMenuVisibility = actionMenuVisibility;
+        mActionMenuVisibility = actionMenuVisibility;
         notifyPropertyChanged(BR.actionMenuVisibility);
     }
 
@@ -367,5 +378,15 @@ public class RequestInformationViewModel extends BaseObservable
     public void setUser(User user) {
         mUser = user;
         notifyPropertyChanged(BR.user);
+    }
+
+    @Bindable
+    public String getRequestTitleEmpty() {
+        return mRequestTitleEmpty;
+    }
+
+    public void setRequestTitleEmpty(String requestTitleEmpty) {
+        mRequestTitleEmpty = requestTitleEmpty;
+        notifyPropertyChanged(BR.requestTitleEmpty);
     }
 }

@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.requestdetail.information;
 
+import android.text.TextUtils;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.User;
@@ -67,6 +68,10 @@ public class RequestInformationPresenter implements RequestInformationContract.P
 
     @Override
     public void updateRequest(Request request) {
+        if (TextUtils.isEmpty(request.getTitle())){
+            mViewModel.onRequestTitleEmpty();
+            return;
+        }
         Disposable subscription = mRequestRepository.updateRequest(request)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -86,11 +91,13 @@ public class RequestInformationPresenter implements RequestInformationContract.P
                 public void onRequestError(BaseException error) {
                     mViewModel.hideProgressbar();
                     mViewModel.onUploadRequestError(error.getMessage());
+                    mViewModel.hideActionRequestButton();
                 }
             }, new Action() {
                 @Override
                 public void run() throws Exception {
                     mViewModel.hideProgressbar();
+                    mViewModel.hideActionRequestButton();
                 }
             });
 
