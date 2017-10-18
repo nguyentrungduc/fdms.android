@@ -49,6 +49,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_10"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="50"
                     android:paddingTop="@dimen/dp_10"
                     android:textColorHint="@color/color_brown"
                     app:errorText="@{viewModel.titleError}"
@@ -77,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/title_descriptions"
                         android:imeOptions="actionDone"
-                        android:inputType="text|textMultiLine"
+                        android:inputType="textMultiLine"
                         android:text="@={viewModel.requestDescription}"
                         />
                 </android.support.design.widget.TextInputLayout>
