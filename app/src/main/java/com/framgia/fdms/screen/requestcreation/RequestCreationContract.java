@@ -31,6 +31,8 @@ public interface RequestCreationContract {
 
         void onInputDescriptionError();
 
+        void onInputRequestForError();
+
         void onGetUserSuccess(User user);
     }
 

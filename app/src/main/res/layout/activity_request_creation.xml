@@ -7,7 +7,7 @@
     <data>
 
         <import type="android.view.View"/>
-
+        <import type="com.framgia.fdms.utils.Constant"/>
         <variable
             name="viewModel"
             type="com.framgia.fdms.screen.requestcreation.RequestCreationViewModel"
@@ -58,7 +58,8 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/title_title"
                         android:imeOptions="actionDone"
-                        android:inputType="text"
+                        android:inputType="text|textMultiLine"
+                        android:maxLength="50"
                         android:text="@={viewModel.requestTitle}"
                         />
                 </android.support.design.widget.TextInputLayout>
@@ -76,49 +77,60 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/title_descriptions"
                         android:imeOptions="actionDone"
-                        android:inputType="text"
+                        android:inputType="text|textMultiLine"
                         android:text="@={viewModel.requestDescription}"
                         />
                 </android.support.design.widget.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:paddingTop="@dimen/dp_10"
-                    android:textColorHint="@color/color_brown"
+                    android:orientation="vertical"
                     android:visibility="@{viewModel.manager ? View.VISIBLE : View.GONE}"
                     >
-                    <android.support.design.widget.TextInputEditText
+
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:hint="@string/title_request_for"
-                        android:imeOptions="actionDone"
-                        android:inputType="text"
-                        android:onClick="@{() -> viewModel.onClickChooseRequestForRelativeStaff()}"
-                        android:text="@={viewModel.requestFor.name}"
-                        />
-                </android.support.design.widget.TextInputLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:paddingTop="@dimen/dp_10"
-                    android:textColorHint="@color/color_brown"
-                    android:visibility="@{viewModel.manager ? View.VISIBLE : View.GONE}"
-                    >
-                    <android.support.design.widget.TextInputEditText
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:paddingTop="@dimen/dp_10"
+                        android:textColorHint="@color/color_brown"
+                        android:visibility="@{viewModel.manageRequestType == Constant.BundleRequestType.MEMBER_REQUEST ? View.VISIBLE : View.GONE}"
+                        app:errorText="@{viewModel.requestForError}"
+                        >
+
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:hint="@string/title_request_for"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:onClick="@{() -> viewModel.onClickChooseRequestForRelativeStaff()}"
+                            android:text="@={viewModel.requestFor.name}"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:hint="@string/title_assignee"
-                        android:imeOptions="actionDone"
-                        android:inputType="text"
-                        android:onClick="@{() -> viewModel.onClickAssignee()}"
-                        android:text="@={viewModel.assignee.name}"
-                        />
-                </android.support.design.widget.TextInputLayout>
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:paddingTop="@dimen/dp_10"
+                        android:textColorHint="@color/color_brown"
+                        >
+
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:hint="@string/title_assignee"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:onClick="@{() -> viewModel.onClickAssignee()}"
+                            android:text="@={viewModel.assignee.name}"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
             </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>

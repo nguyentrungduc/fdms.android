@@ -45,15 +45,18 @@ public class RequestCreationViewModel extends BaseObservable
     private Context mContext;
     private String mTitleError;
     private String mDescriptionError;
+    private String mRequestForError;
     private int mProgressBarVisibility = View.GONE;
     private boolean mIsManager;
+    private int mManageRequestType;
 
-    public RequestCreationViewModel(AppCompatActivity activity) {
+    public RequestCreationViewModel(AppCompatActivity activity, int manageRequestType) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
         mRequest = new RequestCreatorRequest();
         mAdapterCategory =
             new ArrayAdapter<>(mActivity, R.layout.support_simple_spinner_dropdown_item);
+        setManageRequestType(manageRequestType);
     }
 
     @Override
@@ -138,10 +141,16 @@ public class RequestCreationViewModel extends BaseObservable
     }
 
     @Override
+    public void onInputRequestForError() {
+        mRequestForError = mContext.getString(R.string.msg_error_user_name);
+        notifyPropertyChanged(BR.requestForError);
+    }
+
+    @Override
     public void onGetUserSuccess(User user) {
         if (user.getRole().equals(Constant.Role.BO_MANAGER)) {
             setManager(true);
-            setRequestFor(new Status(user.getId(), user.getName()));
+            setRequestFor(new Status(OUT_OF_INDEX, NONE));
             setAssignee(new Status(OUT_OF_INDEX, NONE));
         } else {
             setManager(false);
@@ -218,6 +227,26 @@ public class RequestCreationViewModel extends BaseObservable
     private void setManager(boolean manager) {
         mIsManager = manager;
         notifyPropertyChanged(BR.manager);
+    }
+
+    @Bindable
+    public int getManageRequestType() {
+        return mManageRequestType;
+    }
+
+    private void setManageRequestType(int manageRequestType) {
+        mManageRequestType = manageRequestType;
+        notifyPropertyChanged(BR.manageRequestType);
+    }
+
+    @Bindable
+    public String getRequestForError() {
+        return mRequestForError;
+    }
+
+    public void setRequestForError(String requestForError) {
+        mRequestForError = requestForError;
+        notifyPropertyChanged(BR.requestForError);
     }
 
     public void onClickChooseRequestForRelativeStaff() {

@@ -16,9 +16,9 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
-import static com.framgia.fdms.screen.request.RequestPagerAdapter.RequestPage.USER_REQUEST;
 import static com.framgia.fdms.utils.Constant.ALL_RELATIVE_ID;
 import static com.framgia.fdms.utils.Constant.ALL_REQUEST_STATUS_ID;
+import static com.framgia.fdms.utils.Constant.BundleRequestType.MY_REQUEST;
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
@@ -81,7 +81,7 @@ public final class UserRequestPresenter implements UserRequestContract.Presenter
         final int perPage) {
         mViewModel.setRefresh(true);
         Disposable subscription =
-            mRequestRepository.getRequests(USER_REQUEST, requestStatusId, relativeId, page, perPage)
+            mRequestRepository.getRequests(MY_REQUEST, requestStatusId, relativeId, page, perPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {

@@ -15,6 +15,8 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.framgia.fdms.utils.Constant.Role.BO_MANAGER;
+
 /**
  * Listens to user actions from the UI ({@link RequestCreationActivity}), retrieves the data and
  * updates
@@ -25,6 +27,7 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
     private CompositeDisposable mSubscription;
     private RequestRepository mRequestRepository;
     private UserRepository mUserRepository;
+    private User mUser;
 
     public RequestCreationPresenter(RequestCreationContract.ViewModel viewModel,
         RequestRepository requestRepository, UserRepository userRepository) {
@@ -43,6 +46,7 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
                 @Override
                 public void accept(User user) throws Exception {
                     mViewModel.onGetUserSuccess(user);
+                    mUser = user;
                 }
             }, new RequestError() {
                 @Override
@@ -91,6 +95,10 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
         if (TextUtils.isEmpty(request.getTitle())) {
             isValid = false;
             mViewModel.onInputTitleError();
+        }
+        if (mUser.getRole().equals(BO_MANAGER) && request.getRequestFor() < 1) {
+            isValid = false;
+            mViewModel.onInputRequestForError();
         }
         return isValid;
     }

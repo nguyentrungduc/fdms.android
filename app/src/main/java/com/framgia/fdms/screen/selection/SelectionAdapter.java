@@ -27,7 +27,6 @@ import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 import static com.framgia.fdms.utils.Constant.NONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.TITLE_ALL;
-import static com.framgia.fdms.utils.Constant.TITLE_NA;
 
 /**
  * Created by ToanDoan
@@ -76,8 +75,8 @@ public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.Sele
                     mDatas.add(0, new Producer(OUT_OF_INDEX, TITLE_ALL));
                     break;
                 case RELATIVE_STAFF:
-                    mDatas.add(0, new Producer(OUT_OF_INDEX, TITLE_NA));
-                    break;
+                    // TODO: Edit later 17/10/2017
+                    statuses.remove(0);
                 case ASSIGNEE:
                 case USER_BORROW:
                     mDatas.add(0, new Producer(OUT_OF_INDEX, NONE));

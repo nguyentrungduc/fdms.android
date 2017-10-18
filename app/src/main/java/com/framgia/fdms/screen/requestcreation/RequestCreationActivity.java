@@ -15,22 +15,29 @@ import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.data.source.remote.RequestRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityRequestCreationBinding;
 
+import static com.framgia.fdms.utils.Constant.BundleRequest.BUNDLE_REQUEST_TYPE;
+
 /**
  * Requestcreation Screen.
  */
 public class RequestCreationActivity extends AppCompatActivity {
 
     private RequestCreationContract.ViewModel mViewModel;
+    private int mManageRequestType;
 
-    public static Intent getInstance(Context context) {
-        return new Intent(context, RequestCreationActivity.class);
+    public static Intent getInstance(Context context, int manageRequestType) {
+        Intent intent = new Intent(context, RequestCreationActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(BUNDLE_REQUEST_TYPE, manageRequestType);
+        intent.putExtras(bundle);
+        return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mViewModel = new RequestCreationViewModel(this);
+        getDataFromIntent();
+        mViewModel = new RequestCreationViewModel(this, mManageRequestType);
 
         RequestCreationContract.Presenter presenter = new RequestCreationPresenter(mViewModel,
             new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
@@ -64,5 +71,11 @@ public class RequestCreationActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mViewModel.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void getDataFromIntent() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle == null) return;
+        mManageRequestType = bundle.getInt(BUNDLE_REQUEST_TYPE);
     }
 }

@@ -158,7 +158,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 getListStatusRequest();
                 break;
             case RELATIVE_STAFF:
-                getListUserBorrow();
+                getListRelative();
                 break;
             case ASSIGNEE:
                 getListAssignee();

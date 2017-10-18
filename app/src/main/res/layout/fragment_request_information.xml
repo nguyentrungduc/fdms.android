@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
+        android:focusableInTouchMode="true"
         >
 
         <android.support.v4.widget.NestedScrollView
@@ -45,17 +46,31 @@
                         layout="@layout/edittext_input"
                         bind:enabled="@{viewModel.isEdit}"
                         bind:image="@{@drawable/ic_title}"
+                        bind:maxLength="50"
                         bind:text="@={viewModel.request.title}"
                         bind:title="@{@string/title_title}"
                         />
 
-                    <include
-                        layout="@layout/edittext_input"
-                        bind:enabled="@{viewModel.isEdit}"
-                        bind:image="@{@drawable/ic_description_24dp}"
-                        bind:text="@={viewModel.request.description}"
-                        bind:title="@{@string/title_description}"
-                        />
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:hint="@string/title_description"
+                        >
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/dp_10"
+                            android:drawableStart="@drawable/ic_description_24dp"
+                            android:enabled="@{viewModel.isEdit}"
+                            android:imeOptions="actionDone"
+                            android:inputType="text|textMultiLine"
+                            android:maxLength="50"
+                            android:text="@={viewModel.request.description}"
+                            android:textColor="@color/color_dark_gray"
+                            android:textSize="@dimen/sp_16"
+                            />
+                    </android.support.design.widget.TextInputLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
