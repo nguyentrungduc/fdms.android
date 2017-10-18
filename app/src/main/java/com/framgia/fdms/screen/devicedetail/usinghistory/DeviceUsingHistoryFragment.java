@@ -42,6 +42,7 @@ public class DeviceUsingHistoryFragment extends Fragment {
                 getArguments().getString(EXTRA_DEVICE_CODE));
 
         mViewModel.setPresenter(presenter);
+        mViewModel.setDeviceUsingHistoryPresenter(presenter);
     }
 
     @Nullable
@@ -66,5 +67,14 @@ public class DeviceUsingHistoryFragment extends Fragment {
     public void onStop() {
         mViewModel.onStop();
         super.onStop();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (!isVisibleToUser) {
+            return;
+        }
+        mViewModel.onLoadData();
     }
 }

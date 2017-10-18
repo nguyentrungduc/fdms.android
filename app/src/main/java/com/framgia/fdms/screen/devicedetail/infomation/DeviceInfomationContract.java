@@ -26,6 +26,8 @@ interface DeviceInfomationContract {
         void onDeleteDeviceError(String message);
 
         void onActivityResult(int requestCode, int resultCode, Intent data);
+
+        void onLoadData();
     }
 
     /**

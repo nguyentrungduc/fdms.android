@@ -23,6 +23,9 @@ public class Device extends BaseObservable implements Parcelable {
     @SerializedName("id")
     private int mId;
     @Expose
+    @SerializedName("device_id")
+    private int mDeviceId;
+    @Expose
     @SerializedName("device_code")
     private String mDeviceCode;
     @Expose
@@ -113,6 +116,7 @@ public class Device extends BaseObservable implements Parcelable {
 
     protected Device(Parcel in) {
         mId = in.readInt();
+        mDeviceId = in.readInt();
         mDeviceCode = in.readString();
         mProductionName = in.readString();
         mDeviceStatusId = in.readInt();
@@ -155,6 +159,7 @@ public class Device extends BaseObservable implements Parcelable {
 
     public void cloneDevice(Device device) {
         setId(device.getId());
+        setDeviceId(device.getDeviceId());
         setDeviceCode(device.getDeviceCode());
         setProductionName(device.getProductionName());
         setDeviceStatusId(device.getDeviceStatusId());
@@ -198,6 +203,16 @@ public class Device extends BaseObservable implements Parcelable {
     public void setId(int id) {
         mId = id;
         notifyPropertyChanged(BR.id);
+    }
+
+    @Bindable
+    public int getDeviceId() {
+        return mDeviceId;
+    }
+
+    public void setDeviceId(int deviceId) {
+        mDeviceId = deviceId;
+        notifyPropertyChanged(BR.deviceId);
     }
 
     @Bindable
@@ -522,6 +537,7 @@ public class Device extends BaseObservable implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(mId);
+        parcel.writeInt(mDeviceId);
         parcel.writeString(mDeviceCode);
         parcel.writeString(mProductionName);
         parcel.writeInt(mDeviceStatusId);

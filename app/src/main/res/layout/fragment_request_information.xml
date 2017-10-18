@@ -42,14 +42,27 @@
                     android:paddingTop="@dimen/dp_10"
                     >
 
-                    <include
-                        layout="@layout/edittext_input"
-                        bind:enabled="@{viewModel.isEdit}"
-                        bind:image="@{@drawable/ic_title}"
-                        bind:maxLength="50"
-                        bind:text="@={viewModel.request.title}"
-                        bind:title="@{@string/title_title}"
-                        />
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:hint="@string/title_title"
+                        >
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/dp_10"
+                            android:drawableStart="@drawable/ic_title"
+                            android:enabled="@{viewModel.isEdit}"
+                            android:imeOptions="actionDone"
+                            android:inputType="text|textMultiLine"
+                            android:maxLength="50"
+                            android:text="@={viewModel.request.title}"
+                            android:textColor="@color/color_dark_gray"
+                            android:textSize="@dimen/sp_16"
+                            app:counterEnabled="true"
+                            />
+                    </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -65,7 +78,6 @@
                             android:enabled="@{viewModel.isEdit}"
                             android:imeOptions="actionDone"
                             android:inputType="text|textMultiLine"
-                            android:maxLength="50"
                             android:text="@={viewModel.request.description}"
                             android:textColor="@color/color_dark_gray"
                             android:textSize="@dimen/sp_16"

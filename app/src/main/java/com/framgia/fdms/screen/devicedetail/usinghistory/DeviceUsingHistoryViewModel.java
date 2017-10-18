@@ -21,6 +21,7 @@ public class DeviceUsingHistoryViewModel extends BaseFragmentModel
     BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<DeviceUsingHistory> {
 
     private BaseFragmentContract.Presenter mPresenter;
+    private DeviceUsingHistoryContract.Presenter mDeviceUsingHistoryPresenter;
     private DeviceUsingAdapter mAdapter;
     private Fragment mFragment;
     private Navigator mNavigator;
@@ -46,6 +47,10 @@ public class DeviceUsingHistoryViewModel extends BaseFragmentModel
         mPresenter = presenter;
     }
 
+    public void setDeviceUsingHistoryPresenter(DeviceUsingHistoryContract.Presenter presenter) {
+        mDeviceUsingHistoryPresenter = presenter;
+    }
+
     @Bindable
     public DeviceUsingAdapter getAdapter() {
         return mAdapter;
@@ -64,6 +69,11 @@ public class DeviceUsingHistoryViewModel extends BaseFragmentModel
     @Override
     public void onGetUsingHistoryDeviceFailed(String msg) {
         mNavigator.showToast(msg);
+    }
+
+    @Override
+    public void onLoadData() {
+        mDeviceUsingHistoryPresenter.getUsingHistoryDevice();
     }
 
     @Override

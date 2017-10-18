@@ -15,6 +15,10 @@ interface DeviceUsingHistoryContract {
         void onGetUsingHistoryDeviceSuccess(List<DeviceUsingHistory> histories);
 
         void onGetUsingHistoryDeviceFailed(String msg);
+
+        void setDeviceUsingHistoryPresenter(DeviceUsingHistoryContract.Presenter presenter);
+
+        void onLoadData();
     }
 
     /**
