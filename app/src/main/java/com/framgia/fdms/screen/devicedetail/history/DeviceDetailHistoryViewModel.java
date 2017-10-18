@@ -110,6 +110,11 @@ public class DeviceDetailHistoryViewModel extends BaseObservable
         mIsAllowLoadMore = allowLoadMore;
     }
 
+    @Override
+    public void onLoadData() {
+        mPresenter.getDetailHistory();
+    }
+
     @Bindable
     public DeviceDetailHistoryAdapter getAdapter() {
         return mAdapter;

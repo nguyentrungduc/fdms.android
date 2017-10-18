@@ -40,7 +40,6 @@ public class DeviceInfomationViewModel extends BaseObservable
         mActivity = activity;
         mDevice = device;
         mNavigator = navigator;
-        showInformation();
     }
 
     @Override
@@ -97,6 +96,11 @@ public class DeviceInfomationViewModel extends BaseObservable
         if (requestCode == REQUEST_EDIT) {
             setDevice(device);
         }
+    }
+
+    @Override
+    public void onLoadData() {
+        showInformation();
     }
 
     @Override

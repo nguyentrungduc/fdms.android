@@ -37,9 +37,10 @@ public class DeviceInfomationFragment extends Fragment {
         return fragment;
     }
 
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
         Navigator navigator = new Navigator(this);
         mDevice = getArguments().getParcelable(EXTRA_DEVIVE);
         mViewModel = new DeviceInfomationViewModel(getContext(), getActivity(), mDevice, navigator);
@@ -48,13 +49,6 @@ public class DeviceInfomationFragment extends Fragment {
             new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance())),
             mDevice);
         mViewModel.setPresenter(presenter);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
-
         FragmentDeviceInfomationBinding binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_device_infomation, container,
                 false);
@@ -89,5 +83,14 @@ public class DeviceInfomationFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mViewModel.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (!isVisibleToUser || mViewModel == null) {
+            return;
+        }
+        mViewModel.onLoadData();
     }
 }

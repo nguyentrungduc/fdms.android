@@ -33,7 +33,6 @@ public final class DeviceDetailHistoryPresenter implements DeviceDetailHistoryCo
         mRepository = repository;
         mDeviceId = deviceId;
         mCompositeDisposable = new CompositeDisposable();
-        getDetailHistory();
     }
 
     @Override
