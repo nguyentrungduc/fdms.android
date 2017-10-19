@@ -36,6 +36,7 @@ import static com.framgia.fdms.FDMSApplication.sUpdatedDevice;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.CREATE;
 import static com.framgia.fdms.screen.devicecreation.DeviceStatusType.EDIT;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
+import static com.framgia.fdms.utils.Constant.AVAIABLE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
@@ -45,14 +46,16 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MAKER;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MEETING_ROOM;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_VENDOR;
+import static com.framgia.fdms.utils.Constant.USING;
 
 /**
  * Exposes the data to be used in the Createdevice screen.
  */
 public class CreateDeviceViewModel extends BaseObservable
     implements CreateDeviceContract.ViewModel, DatePickerDialog.OnDateSetListener {
-    public static final int DEFAULT_STATUS_ID = 2;
+
     private static final String DEFAULT_STATUS_NAME = "available";
+    private static final String DEVICE_USING_CONTENT = "using";
     private static final int DEFAULT_BRANCH_ID = 1;
     private static final String DEFAULT_BRANCH_NAME = "Ha Noi";
     private static final int DEFAULT_WIDTH_QRCODE = 300;
@@ -60,6 +63,7 @@ public class CreateDeviceViewModel extends BaseObservable
     private static final int DEFAULT_WIDTH_BARCODE = 200;
     private static final int DEFAULT_HEIGHT_BARCODE = 100;
     private static final int SCALE_BITMAP = 7;
+
     private DeviceStatusType mDeviceType = CREATE;
     private Context mContext;
     private CreateDeviceActivity mActivity;
@@ -90,6 +94,7 @@ public class CreateDeviceViewModel extends BaseObservable
     private Bitmap mDeviceCode;
     private int mProgressBarVisibility = GONE;
     private Navigator mNavigator;
+    private boolean mIsAllowEditMeetingRoom = true;
 
     public CreateDeviceViewModel(CreateDeviceActivity activity, Device device,
         DeviceStatusType type) {
@@ -97,14 +102,15 @@ public class CreateDeviceViewModel extends BaseObservable
         mActivity = activity;
         if (device == null) {
             mDevice = new Device();
-            mStatus = new Status(DEFAULT_STATUS_ID, DEFAULT_STATUS_NAME);
+            mStatus = new Status(AVAIABLE, DEFAULT_STATUS_NAME);
             mBranch = new Status(DEFAULT_BRANCH_ID, DEFAULT_BRANCH_NAME);
-            mDevice.setDeviceStatusId(DEFAULT_STATUS_ID);
+            mDevice.setDeviceStatusId(AVAIABLE);
         } else {
             mDevice = device;
             mCategory = new Status(device.getDeviceCategoryId(), device.getDeviceCategoryName());
             setBoughtDate(Utils.stringBoughtDateDevice(device.getBoughtDate()));
             mStatus = new Status(device.getDeviceStatusId(), device.getDeviceStatusName());
+            mIsAllowEditMeetingRoom = device.getDeviceStatusId() == AVAIABLE;
         }
         mDeviceType = type;
         mNavigator = new Navigator(activity);
@@ -513,11 +519,15 @@ public class CreateDeviceViewModel extends BaseObservable
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        mBoughtDate = dayOfMonth + " - " + (monthOfYear + 1) + " - " + year;
-        setBoughtDate(mBoughtDate);
         mCalendar.set(Calendar.YEAR, year);
         mCalendar.set(Calendar.MONTH, monthOfYear);
         mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        if (mCalendar.getTime().after(Calendar.getInstance().getTime())) {
+            mNavigator.showToast(R.string.error_bought_date_in_the_future);
+            return;
+        }
+        setBoughtDate( Utils.getStringDate(mCalendar.getTime(), mContext));
         mDevice.setBoughtDate(mCalendar.getTime());
     }
 
@@ -585,6 +595,11 @@ public class CreateDeviceViewModel extends BaseObservable
         notifyPropertyChanged(BR.marker);
     }
 
+    public void onCheckedChange(boolean isChecked) {
+        setStatus(!isChecked ? new Status(AVAIABLE, DEFAULT_STATUS_NAME)
+            : new Status(USING, DEVICE_USING_CONTENT));
+    }
+
     @Bindable
     public Bitmap getDeviceCode() {
         return mDeviceCode;
@@ -610,5 +625,15 @@ public class CreateDeviceViewModel extends BaseObservable
             return mContext.getString(R.string.action_update_device);
         }
         return mContext.getString(R.string.action_create_device);
+    }
+
+    @Bindable
+    public boolean isAllowEditMeetingRoom() {
+        return mIsAllowEditMeetingRoom;
+    }
+
+    public void setAllowEditMeetingRoom(boolean allowEditMeetingRoom) {
+        mIsAllowEditMeetingRoom = allowEditMeetingRoom;
+        notifyPropertyChanged(com.framgia.fdms.BR.allowEditMeetingRoom);
     }
 }
