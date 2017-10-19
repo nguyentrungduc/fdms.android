@@ -345,4 +345,5 @@
     <string name="action_delete_device">Delete device</string>
     <string name="msg_cancel_request">Add description to cancel this request</string>
     <string name="format_date">MM/dd/yyyy</string>
+    <string name="error_bought_date_in_the_future">The bought date cannot greater than the current date</string>
 </resources>

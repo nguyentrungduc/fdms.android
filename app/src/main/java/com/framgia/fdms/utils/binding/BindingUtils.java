@@ -64,6 +64,8 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Calendar;
 import java.util.Date;
 import uk.co.deanwild.materialshowcaseview.IShowcaseListener;
@@ -280,13 +282,60 @@ public final class BindingUtils {
         }
     }
 
+    /**
+     * format money currency
+     */
+    @InverseBindingAdapter(attribute = "currency", event = "textAttrChangedAM")
+    public static String captureTextValue(EditText view) {
+        String value = view.getText().toString();
+        if (value.isEmpty()) {
+            return value;
+        }
+        String numberValue = value.replaceAll("\\,", "");
+        double number = Double.parseDouble(numberValue);
+        DecimalFormat decimalFormat = new DecimalFormat();
+        DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
+        formatSymbols.setGroupingSeparator(',');
+        decimalFormat.setDecimalFormatSymbols(formatSymbols);
+        return decimalFormat.format(number);
+    }
+
+    @BindingAdapter(value = { "currency", "textAttrChangedAM" }, requireAll = false)
+    public static void setChange(final EditText view, final String currency,
+        final InverseBindingListener textAttrChanged) {
+        view.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                textAttrChanged.onChange();
+                try {
+                    String value = view.getText().toString();
+                    view.setSelection(value.length());
+                } catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
     /*
     * set Toolbar Activity device return
     * */
 
     @BindingAdapter({ "view", "titleToolbar" })
     public static void bindToolbar(Toolbar view, AppCompatActivity activity, String resTitle) {
-        if (activity == null) return;
+        if (activity == null) {
+            return;
+        }
         activity.setSupportActionBar(view);
         if (activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);

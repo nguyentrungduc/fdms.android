@@ -67,7 +67,8 @@ public class CreateDeviceActivity extends AppCompatActivity {
         ActivityCreatedeviceBinding binding =
             DataBindingUtil.setContentView(this, R.layout.activity_createdevice);
         binding.setViewModel((CreateDeviceViewModel) mViewModel);
-        setTitle(R.string.title_create_device);
+        setTitle(mDeviceStatusType == DeviceStatusType.CREATE ? R.string.title_create_device
+            : R.string.title_edit_device);
     }
 
     @Override
