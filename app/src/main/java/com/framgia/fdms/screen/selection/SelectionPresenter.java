@@ -37,6 +37,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_CREATED_BY
 import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_FOR;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.USER_BORROW;
 import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
@@ -155,6 +156,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 getDeviceUsingHistoryStatus();
                 break;
             case STATUS_REQUEST:
+            case STATUS_REQUEST_ALL:
                 getListStatusRequest();
                 break;
             case RELATIVE_STAFF:
@@ -182,6 +184,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             || mSelectionType == BRANCH_ALL
             || mSelectionType == DEVICE_GROUP
             || mSelectionType == DEVICE_GROUP_ALL
+            || mSelectionType == STATUS_REQUEST_ALL
             || mSelectionType == STATUS_REQUEST
             || mSelectionType == DEVICE_GROUP_DIALOG
             || mSelectionType == ASSIGNEE

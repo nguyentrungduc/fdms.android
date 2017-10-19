@@ -53,7 +53,7 @@
                             android:layout_height="wrap_content"
                             android:drawablePadding="@dimen/dp_10"
                             android:drawableStart="@drawable/ic_title"
-                            android:enabled="@{viewModel.isEdit}"
+                            android:enabled="@{viewModel.edit}"
                             android:imeOptions="actionDone"
                             android:inputType="text|textMultiLine"
                             android:maxLength="50"
@@ -75,7 +75,7 @@
                             android:layout_height="wrap_content"
                             android:drawablePadding="@dimen/dp_10"
                             android:drawableStart="@drawable/ic_description_24dp"
-                            android:enabled="@{viewModel.isEdit}"
+                            android:enabled="@{viewModel.edit}"
                             android:imeOptions="actionDone"
                             android:inputType="text|textMultiLine"
                             android:text="@={viewModel.request.description}"
@@ -87,16 +87,87 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@{viewModel.isEdit ? @color/color_blue_grey_50 : @android:color/transparent }"
                         android:orientation="vertical"
                         >
 
-                        <include
-                            layout="@layout/text_input"
-                            bind:image="@{@drawable/ic_profile_24dp}"
-                            bind:text="@{viewModel.request.requestFor}"
-                            bind:title="@{@string/title_request_for}"
-                            />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="@{viewModel.user.bo ? View.VISIBLE : View.GONE}"
+                            >
+
+                            <include
+                                layout="@layout/text_input"
+                                bind:image="@{@drawable/ic_profile_24dp}"
+                                bind:onClick="@{() -> viewModel.onClickChooseRequestForRelativeStaff()}"
+                                bind:text="@{viewModel.request.requestFor}"
+                                bind:title="@{@string/title_request_for}"
+                                />
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="@{viewModel.edit ? View.VISIBLE : View.GONE}"
+                                >
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/dp_10"
+                                    android:hint="@string/title_assignee"
+                                    >
+
+                                    <android.support.design.widget.TextInputEditText
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:drawablePadding="@dimen/dp_10"
+                                        android:drawableStart="@drawable/ic_profile_24dp"
+                                        android:focusable="false"
+                                        android:onClick="@{() -> viewModel.onClickAssignee()}"
+                                        android:text="@{viewModel.request.assignee}"
+                                        android:textSize="@dimen/sp_16"
+                                        bind:ignore="TooDeepLayout"
+                                        />
+                                </android.support.design.widget.TextInputLayout>
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center|end"
+                                    app:srcCompat="@drawable/ic_arrow_drop_down"
+                                    bind:ignore="ContentDescription"
+                                    />
+                            </FrameLayout>
+                        </LinearLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_10"
+                            android:hint="@string/title_all_request_status"
+                            >
+
+                            <android.support.design.widget.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="@dimen/dp_10"
+                                android:drawableStart="@drawable/ic_list_24dp"
+                                android:focusable="false"
+                                android:onClick="@{() -> viewModel.onChangeStatusClick()}"
+                                android:text="@{viewModel.request.requestStatus}"
+                                android:textSize="@dimen/sp_16"
+                                bind:deviceStatus="@{viewModel.request.requestStatus}"
+                                />
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@{viewModel.isEdit ? @color/color_blue_grey_50 : @android:color/transparent }"
+                        android:orientation="vertical"
+                        >
 
                         <include
                             layout="@layout/text_input"
@@ -111,26 +182,6 @@
                             bind:text="@{viewModel.request.updater}"
                             bind:title="@{@string/title_update_by}"
                             />
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dp_10"
-                            android:hint="@string/title_all_request_status"
-                            >
-                            <android.support.design.widget.TextInputEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:drawablePadding="@dimen/dp_10"
-                                android:drawableStart="@drawable/ic_list_24dp"
-                                android:focusable="false"
-                                android:inputType="number"
-                                android:onClick="@{() -> viewModel.onChangeStatusClick()}"
-                                android:text="@{viewModel.request.requestStatus}"
-                                android:textSize="@dimen/sp_16"
-                                bind:deviceStatus="@{viewModel.request.requestStatus}"
-                                />
-                        </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

@@ -22,6 +22,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
 import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_FOR;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.USER_BORROW;
 import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 import static com.framgia.fdms.utils.Constant.NONE;
@@ -66,12 +67,13 @@ public class SelectionAdapter extends RecyclerView.Adapter<SelectionAdapter.Sele
                 case BRANCH:
                 case DEVICE_GROUP_DIALOG:
                 case DEVICE_USING_HISTORY:
+                case STATUS_REQUEST:
                 case CATEGORY:
                     break;
                 case BRANCH_ALL:
                 case DEVICE_GROUP_ALL:
                 case REQUEST_FOR:
-                case STATUS_REQUEST:
+                case STATUS_REQUEST_ALL:
                     mDatas.add(0, new Producer(OUT_OF_INDEX, TITLE_ALL));
                     break;
                 case RELATIVE_STAFF:
