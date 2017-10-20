@@ -5,7 +5,6 @@ import android.databinding.Bindable;
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.R;
-import com.framgia.fdms.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -13,9 +12,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static com.framgia.fdms.utils.Utils.FORMAT_DATE_DD_MM_YYYY;
-import static com.framgia.fdms.utils.Utils.INPUT_TIME_FORMAT;
 
 /**
  * Created by beepi on 09/05/2017.
@@ -43,6 +39,9 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     @Expose
     @SerializedName("request_for")
     private String mRequestFor;
+    @Expose
+    @SerializedName("request_for_id")
+    private int mRequestForId;
     @Expose
     @SerializedName("creater")
     private String mCreater;
@@ -126,12 +125,14 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
         notifyPropertyChanged(BR.requestStatus);
     }
 
+    @Bindable
     public String getAssignee() {
         return mAssignee;
     }
 
     public void setAssignee(String assignee) {
         mAssignee = assignee;
+        notifyPropertyChanged(BR.assignee);
     }
 
     @Bindable
@@ -142,6 +143,16 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     public void setRequestFor(String requestFor) {
         mRequestFor = requestFor;
         notifyPropertyChanged(BR.requestFor);
+    }
+
+    @Bindable
+    public int getRequestForId() {
+        return mRequestForId;
+    }
+
+    public void setRequestForId(int requestForId) {
+        mRequestForId = requestForId;
+        notifyPropertyChanged(BR.requestForId);
     }
 
     @Bindable

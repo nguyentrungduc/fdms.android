@@ -47,6 +47,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_CREATED_BY
 import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_FOR;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.USER_BORROW;
 import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
@@ -101,6 +102,7 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
     private void initPresenter(SelectionPresenter presenter) {
         switch (mSelectionType) {
             case STATUS:
+            case STATUS_REQUEST_ALL:
             case STATUS_REQUEST:
             case RELATIVE_STAFF:
             case ASSIGNEE:

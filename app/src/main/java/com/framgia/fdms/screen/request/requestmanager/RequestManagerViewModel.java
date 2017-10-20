@@ -33,7 +33,7 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_FOR;
-import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST_ALL;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
@@ -207,7 +207,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
     }
 
     public void onSelectStatusClick() {
-        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, STATUS_REQUEST),
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, STATUS_REQUEST_ALL),
             REQUEST_STATUS);
     }
 

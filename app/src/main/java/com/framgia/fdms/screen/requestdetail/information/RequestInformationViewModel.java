@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -16,6 +15,8 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
+import com.framgia.fdms.screen.selection.SelectionActivity;
+import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.Constant;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -25,7 +26,8 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.screen.assignment.AssignmentType.ASSIGN_BY_REQUEST;
-import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_CATEGORY;
+import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.DeviceStatus.CANCELLED;
 import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_DONE;
@@ -36,8 +38,10 @@ import static com.framgia.fdms.utils.Constant.RequestAction.DONE;
 import static com.framgia.fdms.utils.Constant.RequestAction.EDIT;
 import static com.framgia.fdms.utils.Constant.RequestAction.RECEIVE;
 import static com.framgia.fdms.utils.Constant.RequestAction.WAITING_APPROVE;
-import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_ASSIGNEE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_RELATIVE;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
 import static com.framgia.fdms.utils.Utils.hideSoftKeyboard;
 import static com.github.clans.fab.FloatingActionButton.SIZE_MINI;
 
@@ -50,7 +54,6 @@ public class RequestInformationViewModel extends BaseObservable
     private Fragment mFragment;
     private boolean mIsEdit;
     private RequestInformationContract.Presenter mPresenter;
-    private ObservableField<Status> mCategory = new ObservableField<>();
     private List<Request.RequestAction> mListAction = new ArrayList<>();
     private String mStatusRequest;
     private Request mRequest;
@@ -118,14 +121,22 @@ public class RequestInformationViewModel extends BaseObservable
         if (resultCode != RESULT_OK || data == null) {
             return;
         }
+        Bundle bundle = data.getExtras();
+        Status status = bundle.getParcelable(BUNDLE_DATA);
+        if (status == null || status.getId() < 1) {
+            return;
+        }
         switch (requestCode) {
-            case REQUEST_CATEGORY:
-                Bundle bundle = data.getExtras();
-                Status category = bundle.getParcelable(BUNDLE_CATEGORY);
-                if (category.getName().equals(mContext.getString(R.string.action_clear))) {
-                    category.setName(mContext.getString(R.string.title_empty));
-                }
-                setCategory(category);
+            case REQUEST_STATUS:
+                mRequest.setRequestStatus(status.getName());
+                break;
+            case REQUEST_RELATIVE:
+                mRequest.setRequestForId(status.getId());
+                mRequest.setRequestFor(status.getName());
+                break;
+            case REQUEST_ASSIGNEE:
+                mRequest.setAssigneeId(status.getId());
+                mRequest.setAssignee(status.getName());
                 break;
             default:
                 break;
@@ -141,7 +152,25 @@ public class RequestInformationViewModel extends BaseObservable
     }
 
     public void onChangeStatusClick() {
-        //TODO: Open select status activity
+        if (!isEdit()) {
+            return;
+        }
+        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, STATUS_REQUEST),
+            REQUEST_STATUS);
+    }
+
+    public void onClickChooseRequestForRelativeStaff() {
+        if (!isEdit()) {
+            return;
+        }
+        mFragment.startActivityForResult(
+            SelectionActivity.getInstance(mContext, SelectionType.RELATIVE_STAFF),
+            REQUEST_RELATIVE);
+    }
+
+    public void onClickAssignee() {
+        mFragment.startActivityForResult(
+            SelectionActivity.getInstance(mContext, SelectionType.ASSIGNEE), REQUEST_ASSIGNEE);
     }
 
     @Override
@@ -279,15 +308,6 @@ public class RequestInformationViewModel extends BaseObservable
         Snackbar.make(mFragment.getActivity().findViewById(android.R.id.content), message,
             Snackbar.LENGTH_LONG).show();
         onCancelEditClick();
-    }
-
-    public ObservableField<Status> getCategory() {
-        return mCategory;
-    }
-
-    public void setCategory(Status category) {
-        mCategory.set(category);
-        notifyPropertyChanged(BR.category);
     }
 
     public void initEditRequest() {
