@@ -89,6 +89,12 @@ public interface FDMSApi {
     Observable<Respone<Request>> updateActionRequest(@Path("id") int requestId,
         @Field("request[request_status_id]") int actionId);
 
+    @PATCH("/api/requests/{id}")
+    @FormUrlEncoded
+    Observable<Respone<Request>> cancelRequest(@Path("id") int requestId,
+        @Field("request[request_status_id]") int actionId,
+        @Field("request[description]") String description);
+
     @GET("api/device_histories/{id}")
     Observable<Respone<List<DeviceHistoryDetail>>> getDeviceDetailHistory(@Path("id") int deviceId,
         @Query("page") int page, @Query("per_page") int perPage);

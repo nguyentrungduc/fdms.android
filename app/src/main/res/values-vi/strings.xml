@@ -347,4 +347,5 @@
     <string name="msg_cancel_request">Add description to cancel this request</string>
     <string name="format_date">dd/MM/yyyy</string>
     <string name="error_bought_date_in_the_future">The bought date cannot greater than the current date</string>
+    <string name="error_empty_description">Missing description!</string>
 </resources>

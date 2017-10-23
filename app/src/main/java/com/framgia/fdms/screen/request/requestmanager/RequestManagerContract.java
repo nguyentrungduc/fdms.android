@@ -49,5 +49,7 @@ interface RequestManagerContract {
         void updateActionRequest(int requestId, int actionId);
 
         void getCurrentUser();
+
+        void cancelRequest(int reqeuestId, int actionId, String description);
     }
 }

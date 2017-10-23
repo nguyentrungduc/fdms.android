@@ -45,5 +45,7 @@ public interface RequestInformationContract {
         void updateRequest(Request request);
 
         void getCurrentUser();
+
+        void cancelRequest(int requestId, int actionId, String description);
     }
 }

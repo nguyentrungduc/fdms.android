@@ -31,6 +31,8 @@ public interface RequestRepositoryContract {
 
     Observable<Respone<Request>> updateActionRequest(int requestId, int statusId);
 
+    Observable<Respone<Request>> cancelRequest(int requestId, int statusId, String description);
+
     Observable<Respone<Request>> updateRequest(Request request);
 
     Observable<Request> getRequest(int requetsId);
