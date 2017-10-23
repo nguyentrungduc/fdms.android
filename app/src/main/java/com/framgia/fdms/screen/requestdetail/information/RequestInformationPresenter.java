@@ -136,6 +136,37 @@ public class RequestInformationPresenter implements RequestInformationContract.P
     }
 
     @Override
+    public void cancelRequest(int requestId, int actionId, String description) {
+        Disposable subscription = mRequestRepository.cancelRequest(requestId, actionId, description)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(new Consumer<Disposable>() {
+                @Override
+                public void accept(Disposable disposable) throws Exception {
+                    mViewModel.showProgressbar();
+                }
+            })
+            .subscribe(new Consumer<Respone<Request>>() {
+                @Override
+                public void accept(Respone<Request> requestRespone) throws Exception {
+                    mViewModel.onGetReponeSuccess(requestRespone);
+                }
+            }, new RequestError() {
+                @Override
+                public void onRequestError(BaseException error) {
+                    mViewModel.hideProgressbar();
+                    mViewModel.onLoadError(error.getMessage());
+                }
+            }, new Action() {
+                @Override
+                public void run() throws Exception {
+                    mViewModel.hideProgressbar();
+                }
+            });
+        mSubscription.add(subscription);
+    }
+
+    @Override
     public void onStart() {
     }
 

@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.PopupMenu;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -206,8 +207,8 @@ public class UserRequestViewModel extends BaseFragmentModel
     }
 
     public void onSelectStatusClick() {
-        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, STATUS_REQUEST_ALL),
-            REQUEST_STATUS);
+        mFragment.startActivityForResult(
+            SelectionActivity.getInstance(mContext, STATUS_REQUEST_ALL), REQUEST_STATUS);
     }
 
     public void onSelectTypeRequestClick() {
@@ -261,7 +262,7 @@ public class UserRequestViewModel extends BaseFragmentModel
     }
 
     @Override
-    public void onActionRequestClick(int reqeuestId, int actionId) {
+    public void onActionRequestClick(final int reqeuestId, final int actionId) {
         switch (actionId) {
             case CANCEL:
                 new LovelyTextInputDialog(mContext).setTopColorRes(R.color.colorPrimary)
@@ -271,10 +272,23 @@ public class UserRequestViewModel extends BaseFragmentModel
                         new LovelyTextInputDialog.OnTextInputConfirmListener() {
                             @Override
                             public void onTextInputConfirmed(String text) {
-                                // TODO: 10/11/2017 cancel request with text
+                                if (TextUtils.isEmpty(text)) {
+                                    return;
+                                }
+                                ((UserRequestContract.Presenter) mPresenter).cancelRequest(
+                                    reqeuestId, actionId, text);
                             }
                         })
                     .setNegativeButton(android.R.string.cancel, null)
+                    .setInputFilter(R.string.error_empty_description,
+                        new LovelyTextInputDialog.TextFilter() {
+                            @Override
+                            public boolean check(String s) {
+                                // TODO: 10/23/2017 test later
+                                return !TextUtils.isEmpty(s);
+                            }
+                        })
+                    .setCancelable(false)
                     .show();
                 break;
             default:

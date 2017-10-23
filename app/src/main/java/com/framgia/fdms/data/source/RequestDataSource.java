@@ -32,6 +32,8 @@ public interface RequestDataSource {
 
         Observable<Respone<Request>> updateActionRequest(int requestId, int actionId);
 
+        Observable<Respone<Request>> cancelRequest(int requestId, int actionId, String description);
+
         Observable<Respone<Request>> updateRequest(Request request);
 
         Observable<Request> getRequest(int requetsId);

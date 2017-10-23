@@ -7,6 +7,7 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.View;
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
@@ -250,7 +251,7 @@ public class RequestInformationViewModel extends BaseObservable
     }
 
     @Override
-    public void onActionRequestClick(int requestId, int actionId) {
+    public void onActionRequestClick(final int requestId, final int actionId) {
         switch (actionId) {
             case ASSIGNMENT:
                 mFragment.getActivity()
@@ -269,11 +270,21 @@ public class RequestInformationViewModel extends BaseObservable
                         new LovelyTextInputDialog.OnTextInputConfirmListener() {
                             @Override
                             public void onTextInputConfirmed(String text) {
-                                // TODO: 10/11/2017 cancel request with text
-
+                                if (TextUtils.isEmpty(text)){
+                                    return;
+                                }
+                                mPresenter.cancelRequest(requestId, actionId, text);
                             }
                         })
                     .setNegativeButton(android.R.string.cancel, null)
+                    .setInputFilter(R.string.error_empty_description,
+                        new LovelyTextInputDialog.TextFilter() {
+                            @Override
+                            public boolean check(String s) {
+                                // TODO: 10/23/2017 test later
+                                return !TextUtils.isEmpty(s);
+                            }
+                        })
                     .show();
                 break;
             default:

@@ -63,6 +63,12 @@ public class RequestRepository implements RequestRepositoryContract {
     }
 
     @Override
+    public Observable<Respone<Request>> cancelRequest(int requestId, int statusId,
+        String description) {
+        return mRemoteDataSource.cancelRequest(requestId, statusId, description);
+    }
+
+    @Override
     public Observable<Respone<Request>> updateRequest(Request request) {
         return mRemoteDataSource.updateRequest(request);
     }

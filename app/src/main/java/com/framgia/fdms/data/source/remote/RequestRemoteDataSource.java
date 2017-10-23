@@ -118,6 +118,12 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
+    public Observable<Respone<Request>> cancelRequest(int requestId, int actionId,
+        String description) {
+        return mFDMSApi.cancelRequest(requestId, actionId, description);
+    }
+
+    @Override
     public Observable<Respone<Request>> updateRequest(Request request) {
         Map<String, String> parrams = new HashMap<>();
 

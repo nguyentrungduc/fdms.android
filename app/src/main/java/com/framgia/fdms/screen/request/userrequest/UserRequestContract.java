@@ -48,6 +48,8 @@ interface UserRequestContract {
 
         void updateActionRequest(int requestId, int actionId);
 
+        void cancelRequest(int requestId, int actionId, String description);
+
         void getCurrentUser();
     }
 }
