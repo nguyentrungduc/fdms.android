@@ -20,7 +20,6 @@ public interface ProducerDialogContract {
 
         void onEditCallback(Producer oldProducer, Producer newProducer, Producer tempGroupType);
 
-        void onChooseGroupTypeClickDialog(Producer tempDeviceCategory, Producer tempGroupType,
-            String title);
+        void onChooseGroupTypeClickDialog(Producer tempDeviceCategory, Producer tempGroupType);
     }
 }

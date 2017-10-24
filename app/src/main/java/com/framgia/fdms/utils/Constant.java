@@ -67,6 +67,8 @@ public class Constant {
         public static final String BUNDLE_DEVICE_GROUP_TYPE = "BUNDLE_DEVICE_GROUP_TYPE";
         public static final String BUNDLE_MANAGE_DEVICE = "BUNDLE_MANAGE_DEVICE";
         public static final String BUNDLE_GROUP_REQUEST = "BUNDLE_GROUP_REQUEST";
+        public static final String BUNDLE_PRODUCER_TYPE = "BUNDLE_PRODUCER_TYPE";
+        public static final String BUNDLE_PRODUCER_DIALOG_TYPE = "BUNDLE_PRODUCER_DIALOG_TYPE";
     }
 
     public static final class RequestConstant {
