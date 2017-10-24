@@ -26,6 +26,8 @@ public interface SelectionContract {
 
         void setSelectedType(int selectedType);
 
+        void setRequestStatus(int requestStatusId);
+
         void setAllowLoadMore(boolean allowLoadMore);
 
         void setSearch(boolean search);
@@ -52,6 +54,8 @@ public interface SelectionContract {
         void getListStatus();
 
         void getListStatusRequest();
+
+        void getListStatusEditRequest(int requestStatusId);
 
         void getDeviceGroups();
 

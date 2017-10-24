@@ -31,6 +31,9 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     @SerializedName("request_status")
     private String mRequestStatus;
     @Expose
+    @SerializedName("request_status_id")
+    private int mRequestStatusId;
+    @Expose
     @SerializedName("assignee")
     private String mAssignee;
     @Expose
@@ -123,6 +126,16 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     public void setRequestStatus(String requestStatus) {
         mRequestStatus = requestStatus;
         notifyPropertyChanged(BR.requestStatus);
+    }
+
+    @Bindable
+    public int getRequestStatusId() {
+        return mRequestStatusId;
+    }
+
+    public void setRequestStatusId(int requestStatusId) {
+        mRequestStatusId = requestStatusId;
+        notifyPropertyChanged(BR.requestStatusId);
     }
 
     @Bindable

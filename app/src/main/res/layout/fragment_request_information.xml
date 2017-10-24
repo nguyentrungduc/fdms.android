@@ -63,7 +63,7 @@
                             app:counterEnabled="true"
                             />
                     </android.support.design.widget.TextInputLayout>
-                    
+
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -97,13 +97,51 @@
                             android:visibility="@{viewModel.user.bo ? View.VISIBLE : View.GONE}"
                             >
 
-                            <include
-                                layout="@layout/text_input"
-                                bind:image="@{@drawable/ic_profile_24dp}"
-                                bind:onClick="@{() -> viewModel.onClickChooseRequestForRelativeStaff()}"
-                                bind:text="@{viewModel.request.requestFor}"
-                                bind:title="@{@string/title_request_for}"
-                                />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@{viewModel.acceptStatus ? @color/color_blue_grey_50 : @android:color/transparent }"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                >
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    >
+
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:hint="@string/title_request_for"
+                                        bind:ignore="TooDeepLayout"
+                                        >
+
+                                        <EditText
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginStart="@dimen/dp_10"
+                                            android:drawablePadding="@dimen/dp_10"
+                                            android:drawableStart="@drawable/ic_profile_24dp"
+                                            android:ellipsize="end"
+                                            android:focusable="false"
+                                            android:maxLines="1"
+                                            android:onClick="@{() -> viewModel.onClickChooseRequestForRelativeStaff()}"
+                                            android:text="@{viewModel.request.requestFor}"
+                                            bind:ignore="LabelFor,TextFields"
+                                            />
+                                    </android.support.design.widget.TextInputLayout>
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center|end"
+                                        app:srcCompat="@drawable/ic_arrow_drop_down"
+                                        bind:ignore="ContentDescription"
+                                        />
+                                </FrameLayout>
+                            </LinearLayout>
 
                             <FrameLayout
                                 android:layout_width="match_parent"

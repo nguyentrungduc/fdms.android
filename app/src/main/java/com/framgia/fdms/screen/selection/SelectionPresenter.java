@@ -30,6 +30,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_DIALOG;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_USING_HISTORY;
+import static com.framgia.fdms.screen.selection.SelectionType.EDIT_STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
@@ -66,6 +67,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
     private int mDeviceGroupId = OUT_OF_INDEX;
     private DeviceGroupRepository mDeviceGroupRepository;
     private DeviceUsingHistoryRepository mDeviceUsingHistoryRepository;
+    private int mRequestStatusId;
 
     public SelectionPresenter(SelectionContract.ViewModel viewModel,
         @SelectionType int selectionType) {
@@ -109,6 +111,10 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
     public void setDeviceUsingHistoryRepository(
         DeviceUsingHistoryRepository deviceUsingHistoryRepository) {
         mDeviceUsingHistoryRepository = deviceUsingHistoryRepository;
+    }
+
+    public void setRequestStatus(int requestStatusId) {
+        mRequestStatusId = requestStatusId;
     }
 
     @Override
@@ -171,6 +177,10 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                 break;
             case REQUEST_CREATED_BY:
                 getListRequestCreatedBy();
+                break;
+            case EDIT_STATUS_REQUEST:
+                getListStatusEditRequest(mRequestStatusId);
+                break;
             default:
                 break;
         }
@@ -188,6 +198,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
             || mSelectionType == STATUS_REQUEST
             || mSelectionType == DEVICE_GROUP_DIALOG
             || mSelectionType == ASSIGNEE
+            || mSelectionType == EDIT_STATUS_REQUEST
             || mSelectionType == REQUEST_CREATED_BY) {
             mViewModel.onGetDataFailed(null);
             mViewModel.hideProgress();
@@ -274,6 +285,39 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
                     mViewModel.hideProgress();
                 }
             });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void getListStatusEditRequest(int requestStatusId) {
+        Disposable disposable =
+            mStatusRepository.getListStatusEditRequest(requestStatusId, mKeySearch)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mViewModel.showProgress();
+                    }
+                })
+                .subscribe(new Consumer<List<Status>>() {
+                    @Override
+                    public void accept(List<Status> statuses) throws Exception {
+                        mViewModel.onGetDataSuccess(statuses);
+                        mViewModel.setAllowLoadMore(false);
+                    }
+                }, new RequestError() {
+                    @Override
+                    public void onRequestError(BaseException error) {
+                        mViewModel.onGetDataFailed(error.getMessage());
+                        mViewModel.hideProgress();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mViewModel.hideProgress();
+                    }
+                });
         mCompositeDisposable.add(disposable);
     }
 

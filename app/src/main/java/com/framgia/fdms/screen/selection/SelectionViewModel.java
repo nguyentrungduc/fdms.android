@@ -170,6 +170,11 @@ public class SelectionViewModel extends BaseObservable implements SelectionContr
     }
 
     @Override
+    public void setRequestStatus(int requestStatusId) {
+        mPresenter.getListStatusEditRequest(requestStatusId);
+    }
+
+    @Override
     public void setAllowLoadMore(boolean allowLoadMore) {
         mAllowLoadMore = allowLoadMore;
     }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -19,7 +20,6 @@ import com.framgia.fdms.screen.assignment.AssignmentActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.Constant;
-import com.framgia.fdms.utils.Utils;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
@@ -28,7 +28,17 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.screen.assignment.AssignmentType.ASSIGN_BY_REQUEST;
-import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
+    .RequestStatusType.APPROVED_ID;
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
+    .RequestStatusType.CANCELLED_ID;
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
+    .RequestStatusType.DONE_ID;
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
+    .RequestStatusType.WAITING_APPROVE_ID;
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
+    .RequestStatusType.WAITING_DONE_ID;
+import static com.framgia.fdms.screen.selection.SelectionType.EDIT_STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.DeviceStatus.CANCELLED;
@@ -66,6 +76,7 @@ public class RequestInformationViewModel extends BaseObservable
     private int mActionMenuVisibility;
     private int mGroupRequestType;
     private String mRequestTitleEmpty;
+    private boolean isAcceptStatus;
 
     public RequestInformationViewModel(Fragment fragment, List<Request.RequestAction> actions,
         String statusRequest, Request actionRequest, FloatingActionMenu floatingActionMenu,
@@ -132,6 +143,7 @@ public class RequestInformationViewModel extends BaseObservable
         switch (requestCode) {
             case REQUEST_STATUS:
                 mRequest.setRequestStatus(status.getName());
+                mRequest.setRequestStatusId(status.getId());
                 break;
             case REQUEST_RELATIVE:
                 mRequest.setRequestForId(status.getId());
@@ -156,12 +168,13 @@ public class RequestInformationViewModel extends BaseObservable
         if (!isEdit()) {
             return;
         }
-        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, STATUS_REQUEST),
-            REQUEST_STATUS);
+        mFragment.startActivityForResult(
+            SelectionActivity.newInstance(mContext, EDIT_STATUS_REQUEST,
+                mRequest.getRequestStatusId()), REQUEST_STATUS);
     }
 
     public void onClickChooseRequestForRelativeStaff() {
-        if (!isEdit()) {
+        if (!isEdit() || Constant.DeviceStatus.APPROVED.equals(mRequest.getRequestStatus())) {
             return;
         }
         mFragment.startActivityForResult(
@@ -196,12 +209,15 @@ public class RequestInformationViewModel extends BaseObservable
     public void initActionRequestMenu() {
         String requestStatus = mRequest.getRequestStatus();
 
-        if (!Constant.DeviceStatus.DONE.equals(requestStatus) && !CANCELLED.equals(requestStatus)) {
-            Request.RequestAction editAction = new Request().new RequestAction();
-            editAction.setId(EDIT);
-            editAction.setName(mContext.getString(R.string.action_edit));
-            mListAction.add(editAction);
+        if (Constant.DeviceStatus.DONE.equals(requestStatus) || (!mUser.getName()
+            .equals(mRequest.getCreater()) && (CANCELLED.equals(requestStatus)
+            || WAITING_DONE.equals(requestStatus)))) {
+            return;
         }
+        Request.RequestAction editAction = new Request().new RequestAction();
+        editAction.setId(EDIT);
+        editAction.setName(mContext.getString(R.string.action_edit));
+        mListAction.add(editAction);
 
         if (mUser.isBoStaff() && requestStatus.equals(WAITING_DONE) && mRequest.getId() > 0) {
             Request.RequestAction assignAction = new Request().new RequestAction();
@@ -270,7 +286,7 @@ public class RequestInformationViewModel extends BaseObservable
                         new LovelyTextInputDialog.OnTextInputConfirmListener() {
                             @Override
                             public void onTextInputConfirmed(String text) {
-                                if (TextUtils.isEmpty(text)){
+                                if (TextUtils.isEmpty(text)) {
                                     return;
                                 }
                                 mPresenter.cancelRequest(requestId, actionId, text);
@@ -334,6 +350,9 @@ public class RequestInformationViewModel extends BaseObservable
 
     public void initEditRequest() {
         setEdit(true);
+        if (Constant.DeviceStatus.APPROVED.equals(mRequest.getRequestStatus())) {
+            setAcceptStatus(true);
+        }
         mFloatingActionsMenu.hideMenu(true);
         try {
             mRequestTemp = (Request) mRequest.clone();
@@ -399,5 +418,26 @@ public class RequestInformationViewModel extends BaseObservable
     public void setRequestTitleEmpty(String requestTitleEmpty) {
         mRequestTitleEmpty = requestTitleEmpty;
         notifyPropertyChanged(BR.requestTitleEmpty);
+    }
+
+    @Bindable
+    public boolean isAcceptStatus() {
+        return isAcceptStatus;
+    }
+
+    public void setAcceptStatus(boolean acceptStatus) {
+        isAcceptStatus = acceptStatus;
+        notifyPropertyChanged(BR.acceptStatus);
+    }
+
+    @IntDef({
+        CANCELLED_ID, WAITING_APPROVE_ID, APPROVED_ID, WAITING_DONE_ID, DONE_ID
+    })
+    public @interface RequestStatusType {
+        int CANCELLED_ID = 1;
+        int WAITING_APPROVE_ID = 2;
+        int APPROVED_ID = 3;
+        int WAITING_DONE_ID = 4;
+        int DONE_ID = 5;
     }
 }

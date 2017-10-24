@@ -21,6 +21,8 @@ public class StatusDataSource {
 
         Observable<List<Status>> getListStatusRequest(String query);
 
+        Observable<List<Status>> getListStatusEditRequest(int requestStatusId,String query);
+
         Observable<List<Status>> getListRelative(String query, int page, int perPage);
 
         Observable<List<Status>> getListAssignee();
