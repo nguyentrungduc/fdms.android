@@ -216,12 +216,13 @@ public final class BindingUtils {
     }
 
     @BindingAdapter(value = {
-        "bind:searchListenner", "bind:clearListenner", "bind:menuItemClick", "bind:searchText"
+        "bind:searchListenner", "bind:clearListenner", "bind:menuItemClick", "bind:searchText", "bind:searchHint"
     }, requireAll = false)
     public static void setOnQueryChangeListenner(final FloatingSearchView searchView,
         FloatingSearchView.OnSearchListener onSearchListener,
         FloatingSearchView.OnClearSearchActionListener clearSearchActionListener,
-        final OnSearchMenuItemClickListener onSearchMenuItemClickListener, String searchText) {
+        final OnSearchMenuItemClickListener onSearchMenuItemClickListener, String searchText,
+        String searchHint) {
         searchView.setOnSearchListener(onSearchListener);
         searchView.setOnClearSearchActionListener(clearSearchActionListener);
         searchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
@@ -233,6 +234,7 @@ public final class BindingUtils {
         if (searchText != null) {
             searchView.setSearchText(searchText);
         }
+        searchView.setSearchHint(searchHint);
     }
 
     @BindingAdapter({ "pieData", "totalValue", "description" })
