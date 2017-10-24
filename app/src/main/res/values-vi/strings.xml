@@ -348,4 +348,15 @@
     <string name="format_date">dd/MM/yyyy</string>
     <string name="error_bought_date_in_the_future">The bought date cannot greater than the current date</string>
     <string name="error_empty_description">Missing description!</string>
+    <string name="title_add_new_vendor">Add new vendor</string>
+    <string name="title_edit_vendor">Edit vendor</string>
+    <string name="title_vendor_name">Vendor\'s name</string>
+    <string name="title_add_new_maker">Add new maker</string>
+    <string name="title_edit_maker">Edit maker</string>
+    <string name="title_add_new_meeting_room">Add new meeting room</string>
+    <string name="title_edit_device_group">Edit device group</string>
+    <string name="title_device_group_name">Device group name</string>
+    <string name="hint_search_vendor">Vendor\'s name</string>
+    <string name="hint_search_maker">Maker\'s name</string>
+    <string name="error_filter_empty">There is not data with your filter</string>
 </resources>

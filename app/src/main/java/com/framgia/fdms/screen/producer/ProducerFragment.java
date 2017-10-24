@@ -43,8 +43,8 @@ public class ProducerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new ProducerViewModel(this);
         getDataIntent();
+        mViewModel = new ProducerViewModel(this, mFragmentType);
 
         ProducerContract.Presenter presenter = new ProducerPresenter(mViewModel, mFragmentType,
             VendorRepository.getInstances(
