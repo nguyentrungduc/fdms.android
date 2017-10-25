@@ -32,6 +32,10 @@ public class StatusRepository {
         return mStatusRemoteDataSource.getListStatusRequest(query);
     }
 
+    public Observable<List<Status>> getListStatusEditRequest(int requestStatusId, String query) {
+        return mStatusRemoteDataSource.getListStatusEditRequest(requestStatusId, query);
+    }
+
     public Observable<List<Status>> getListRelative(String query, int page, int perPage) {
         return mStatusRemoteDataSource.getListRelative(query, page, perPage);
     }

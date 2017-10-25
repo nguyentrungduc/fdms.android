@@ -104,6 +104,9 @@ public class CreateDeviceViewModel extends BaseObservable
             mDevice = new Device();
             mStatus = new Status(AVAIABLE, DEFAULT_STATUS_NAME);
             mBranch = new Status(DEFAULT_BRANCH_ID, DEFAULT_BRANCH_NAME);
+            mDevice.setVendor(new Producer(OUT_OF_INDEX, ""));
+            mDevice.setMarker(new Producer(OUT_OF_INDEX, ""));
+            mDevice.setBranch(mBranch.getName());
             mDevice.setDeviceStatusId(AVAIABLE);
         } else {
             mDevice = device;
@@ -363,6 +366,7 @@ public class CreateDeviceViewModel extends BaseObservable
                     status.setName(DEFAULT_BRANCH_NAME);
                 }
                 mDevice.setBranch(status.getName());
+                setBranch(status);
                 if (mCategory != null && mCategory.getId() > 0) {
                     mPresenter.getDeviceCode(mCategory.getId(), mBranch.getId());
                 }

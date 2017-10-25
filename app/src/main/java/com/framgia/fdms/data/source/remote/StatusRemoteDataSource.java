@@ -1,6 +1,7 @@
 package com.framgia.fdms.data.source.remote;
 
 import android.text.TextUtils;
+import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.StatusDataSource;
@@ -16,10 +17,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
+    .RequestStatusType.APPROVED_ID;
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
+    .RequestStatusType.CANCELLED_ID;
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
+    .RequestStatusType.WAITING_DONE_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.NAME;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.USER_NAME;
+import static com.framgia.fdms.utils.Constant.DeviceStatus.APPROVED;
+import static com.framgia.fdms.utils.Constant.DeviceStatus.CANCELLED;
+import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_DONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 /**
@@ -101,6 +111,34 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
                     return Observable.just(data);
                 }
             });
+    }
+
+    @Override
+    public Observable<List<Status>> getListStatusEditRequest(int requestStatusId, String query) {
+        List<Status> statuses = new ArrayList<>();
+        switch (requestStatusId) {
+            case CANCELLED_ID:
+            case WAITING_DONE_ID:
+                statuses.add(new Producer(CANCELLED_ID, CANCELLED));
+                statuses.add(new Producer(WAITING_DONE_ID, WAITING_DONE));
+                break;
+            case APPROVED_ID:
+                statuses.add(new Producer(CANCELLED_ID, CANCELLED));
+                statuses.add(new Producer(APPROVED_ID, APPROVED));
+                statuses.add(new Producer(WAITING_DONE_ID, WAITING_DONE));
+                break;
+            default:
+                break;
+        }
+        List<Status> statusesSearch = new ArrayList<>();
+        for (Status status : statuses) {
+            if (status.getName()
+                .toLowerCase(Locale.getDefault())
+                .contains(query.toLowerCase(Locale.getDefault()))) {
+                statusesSearch.add(status);
+            }
+        }
+        return Observable.just(statusesSearch);
     }
 
     @Override

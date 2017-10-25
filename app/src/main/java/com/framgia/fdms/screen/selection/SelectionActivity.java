@@ -40,6 +40,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP_DIALOG;
 import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_USING_HISTORY;
+import static com.framgia.fdms.screen.selection.SelectionType.EDIT_STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
 import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
 import static com.framgia.fdms.screen.selection.SelectionType.RELATIVE_STAFF;
@@ -50,6 +51,7 @@ import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST_ALL;
 import static com.framgia.fdms.screen.selection.SelectionType.USER_BORROW;
 import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
+import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 /**
@@ -64,6 +66,7 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
     private int mDeviceGroupId;
     private SearchView mSearchView;
     private MenuItem mSearchMenu;
+    private int mRequestStatusId;
 
     public static Intent getInstance(Context context, @SelectionType int type) {
         Intent intent = new Intent(context, SelectionActivity.class);
@@ -78,6 +81,16 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
         Bundle bundle = new Bundle();
         bundle.putInt(BUNDLE_SELECTION_TYPE, type);
         bundle.putInt(BUNDLE_ID, id);
+        intent.putExtras(bundle);
+        return intent;
+    }
+
+    public static Intent newInstance(Context context, @SelectionType int type,
+        int requestStatusId) {
+        Intent intent = new Intent(context, SelectionActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(BUNDLE_SELECTION_TYPE, type);
+        bundle.putInt(BUNDLE_DATA, requestStatusId);
         intent.putExtras(bundle);
         return intent;
     }
@@ -108,6 +121,8 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
             case ASSIGNEE:
             case REQUEST_CREATED_BY:
             case REQUEST_FOR:
+            case EDIT_STATUS_REQUEST:
+                presenter.setRequestStatus(mRequestStatusId);
             case USER_BORROW:
                 StatusRepository statusRepository = new StatusRepository(
                     new StatusRemoteDataSource(FDMSServiceClient.getInstance()));
@@ -170,6 +185,9 @@ public class SelectionActivity extends AppCompatActivity implements SearchView.O
             return;
         }
         mSelectionType = bundle.getInt(BUNDLE_SELECTION_TYPE);
+        if (bundle.getInt(BUNDLE_DATA) > 0) {
+            mRequestStatusId = bundle.getInt(BUNDLE_DATA);
+        }
         if (bundle.getInt(BUNDLE_ID) == 0) {
             mDeviceGroupId = OUT_OF_INDEX;
             return;

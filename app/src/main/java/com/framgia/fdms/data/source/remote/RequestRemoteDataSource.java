@@ -36,6 +36,7 @@ import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_DESCRIPTION;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_FOR_USER_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_REQUEST_DETAILS;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_STATUS_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_STATUS_ID_EDIT;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_TITLE;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_TYPE;
 import static com.framgia.fdms.utils.Constant.BundleRequestType.MY_REQUEST;
@@ -130,7 +131,15 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
         parrams.put(REQUEST_TITLE, request.getTitle());
         parrams.put(REQUEST_DESCRIPTION, request.getDescription());
         parrams.put(REQUEST_REQUEST_DETAILS, request.getDevices().toString());
-
+        if (request.getRequestForId() > 0) {
+            parrams.put(REQUEST_FOR_USER_ID, String.valueOf(request.getRequestForId()));
+        }
+        if (request.getAssigneeId() > 0) {
+            parrams.put(REQUEST_ASSIGNEE_ID, String.valueOf(request.getAssigneeId()));
+        }
+        if (request.getRequestStatusId() > 0) {
+            parrams.put(REQUEST_STATUS_ID_EDIT, String.valueOf(request.getRequestStatusId()));
+        }
         return mFDMSApi.updateRequest(request.getId(), parrams);
     }
 
