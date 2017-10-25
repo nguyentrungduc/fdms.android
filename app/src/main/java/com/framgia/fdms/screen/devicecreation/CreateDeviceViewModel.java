@@ -94,7 +94,7 @@ public class CreateDeviceViewModel extends BaseObservable
     private Bitmap mDeviceCode;
     private int mProgressBarVisibility = GONE;
     private Navigator mNavigator;
-    private boolean mIsAllowEditMeetingRoom = true;
+    private boolean mIsAllowEditMeetingRoom;
 
     public CreateDeviceViewModel(CreateDeviceActivity activity, Device device,
         DeviceStatusType type) {
@@ -238,9 +238,10 @@ public class CreateDeviceViewModel extends BaseObservable
         setCategory(new Status(device.getDeviceCategoryId(), device.getDeviceCategoryName()));
         setBoughtDate(Utils.stringBoughtDateDevice(device.getBoughtDate()));
         setStatus(new Status(device.getDeviceStatusId(), device.getDeviceStatusName()));
-        setAllowEditMeetingRoom(device.getDeviceStatusId() == AVAIABLE);
         setBarCode(device.isBarcode());
         setQrCode(!device.isBarcode());
+        setAllowEditMeetingRoom(
+            device.isDeviceMeetingRoom() && device.getDeviceStatusId() == USING);
     }
 
     @Override
