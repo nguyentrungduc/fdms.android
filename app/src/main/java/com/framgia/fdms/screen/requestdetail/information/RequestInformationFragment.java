@@ -15,7 +15,6 @@ import com.framgia.fdms.data.source.local.UserLocalDataSource;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.databinding.FragmentRequestInformationBinding;
 
-import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_GROUP_REQUEST;
 import static com.framgia.fdms.utils.Constant.BundleRequest.BUND_REQUEST;
 
 /**
@@ -24,17 +23,15 @@ import static com.framgia.fdms.utils.Constant.BundleRequest.BUND_REQUEST;
 public class RequestInformationFragment extends Fragment {
     private RequestInformationContract.ViewModel mViewModel;
     private Request mRequest;
-    private int mGroupRequestType;
 
     public static RequestInformationFragment newInstance() {
         return new RequestInformationFragment();
     }
 
-    public static RequestInformationFragment newInstance(Request request, int groupRequestType) {
+    public static RequestInformationFragment newInstance(Request request) {
         RequestInformationFragment fragment = new RequestInformationFragment();
         Bundle args = new Bundle();
         args.putSerializable(BUND_REQUEST, request);
-        args.putInt(BUNDLE_GROUP_REQUEST, groupRequestType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,7 +45,7 @@ public class RequestInformationFragment extends Fragment {
             DataBindingUtil.inflate(inflater, R.layout.fragment_request_information, container,
                 false);
         mViewModel = new RequestInformationViewModel(this, mRequest.getRequestActionList(),
-            mRequest.getRequestStatus(), mRequest, binding.floatActionMenu, mGroupRequestType);
+            mRequest.getRequestStatus(), mRequest, binding.floatActionMenu);
 
         RequestInformationContract.Presenter presenter = new RequestInformationPresenter(mViewModel,
             new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
@@ -59,7 +56,6 @@ public class RequestInformationFragment extends Fragment {
 
     public void getRequestFromIntent() {
         mRequest = (Request) getActivity().getIntent().getSerializableExtra(BUND_REQUEST);
-        mGroupRequestType = getActivity().getIntent().getExtras().getInt(BUNDLE_GROUP_REQUEST);
     }
 
     @Override

@@ -6,10 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.databinding.ItemListDeviceAssignmentBinding;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,16 +20,21 @@ import java.util.List;
  */
 
 public class ListDeviceAssignmentAdapter
-    extends BaseRecyclerViewAdapter<Request.DeviceRequest, ListDeviceAssignmentAdapter.ViewHolder> {
+        extends BaseRecyclerViewAdapter<Request.DeviceRequest, ListDeviceAssignmentAdapter.ViewHolder> {
 
     private List<Request.DeviceRequest> mDeviceRequests;
     private ListDeviceAssignmentViewModel mViewModel;
+    private BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener mListenner;
 
     protected ListDeviceAssignmentAdapter(@NonNull Context context,
-        ListDeviceAssignmentViewModel viewModel) {
+                                          ListDeviceAssignmentViewModel viewModel) {
         super(context);
         mViewModel = viewModel;
         mDeviceRequests = new ArrayList<>();
+    }
+
+    public void setListenner(OnRecyclerViewItemClickListener listenner) {
+        mListenner = listenner;
     }
 
     @Override
@@ -42,8 +49,8 @@ public class ListDeviceAssignmentAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemListDeviceAssignmentBinding binding =
-            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                R.layout.item_list_device_assignment, parent, false);
+                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                        R.layout.item_list_device_assignment, parent, false);
         return new ListDeviceAssignmentAdapter.ViewHolder(binding);
     }
 
@@ -76,6 +83,7 @@ public class ListDeviceAssignmentAdapter
             }
             mBinding.setViewModel(mViewModel);
             mBinding.setItem(deviceRequest);
+            mBinding.setListenner(mListenner);
             mBinding.executePendingBindings();
         }
     }

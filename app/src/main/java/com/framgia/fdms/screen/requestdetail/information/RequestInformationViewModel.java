@@ -64,18 +64,15 @@ public class RequestInformationViewModel extends BaseObservable
     private FloatingActionMenu mFloatingActionsMenu;
     private Request mRequestTemp;
     private int mActionMenuVisibility;
-    private int mGroupRequestType;
     private String mRequestTitleEmpty;
 
     public RequestInformationViewModel(Fragment fragment, List<Request.RequestAction> actions,
-        String statusRequest, Request actionRequest, FloatingActionMenu floatingActionMenu,
-        int groupRequestType) {
+        String statusRequest, Request actionRequest, FloatingActionMenu floatingActionMenu) {
         mContext = fragment.getContext();
         mFragment = fragment;
         setRequest(actionRequest);
         mStatusRequest = statusRequest;
         setEdit(false);
-        mGroupRequestType = groupRequestType;
         mListAction.addAll(actions);
         mFloatingActionsMenu = floatingActionMenu;
     }
