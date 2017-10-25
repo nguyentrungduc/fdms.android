@@ -63,8 +63,6 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     @Expose
     @SerializedName("create_at")
     private Date mCreatAt;
-    @SerializedName("device")
-    private List<Device> mDevice;
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -208,16 +206,6 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     }
 
     @Bindable
-    public List<Device> getDevice() {
-        return mDevice;
-    }
-
-    public void setDevice(List<Device> device) {
-        mDevice = device;
-        notifyPropertyChanged(BR.device);
-    }
-
-    @Bindable
     public int getAssigneeId() {
         return mAssigneeId;
     }
@@ -225,18 +213,6 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     public void setAssigneeId(int assigneeId) {
         mAssigneeId = assigneeId;
         notifyPropertyChanged(BR.assigneeId);
-    }
-
-    @Bindable
-    public String getRequestDescription() {
-        String nameDevice;
-        if (getDevices() == null || getDevices().size() == 0) {
-            nameDevice = FDMSApplication.getInstant().getString(R.string.title_device);
-        } else {
-            nameDevice = getDevices().get(0).getCategoryName();
-        }
-        return String.format(FDMSApplication.getInstant().getString(R.string.title_request),
-            getCreater(), nameDevice, getRequestFor());
     }
 
     public static class DeviceRequest extends BaseObservable implements Serializable, Cloneable {

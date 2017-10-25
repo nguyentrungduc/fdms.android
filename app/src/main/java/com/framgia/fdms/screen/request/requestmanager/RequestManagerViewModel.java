@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
 import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseFragmentContract;
 import com.framgia.fdms.BaseFragmentModel;
@@ -29,6 +30,7 @@ import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +55,7 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
  */
 
 public class RequestManagerViewModel extends BaseFragmentModel
-    implements RequestManagerContract.ViewModel, OnRequestClickListenner {
+        implements RequestManagerContract.ViewModel, OnRequestClickListenner {
 
     private final Fragment mFragment;
     private Context mContext;
@@ -64,13 +66,13 @@ public class RequestManagerViewModel extends BaseFragmentModel
     private boolean mIsRefresh;
     private int mEmptyViewVisible = View.GONE; // show empty state when no date
     private SwipeRefreshLayout.OnRefreshListener mRefreshLayout =
-        new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mAdapter.clear();
-                getData();
-            }
-        };
+            new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    mAdapter.clear();
+                    getData();
+                }
+            };
     private Navigator mNavigator;
 
     public RequestManagerViewModel(Fragment fragment) {
@@ -121,8 +123,8 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void onRegisterRequestClick() {
         mFragment.startActivityForResult(
-            RequestCreationActivity.getInstance(mFragment.getActivity(), MEMBER_REQUEST),
-            REQUEST_CREATE_REQUEST);
+                RequestCreationActivity.getInstance(mFragment.getActivity(), MEMBER_REQUEST),
+                REQUEST_CREATE_REQUEST);
     }
 
     @Override
@@ -172,7 +174,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 break;
             case REQUEST_DETAIL:
                 Respone<Request> requestRespone =
-                    (Respone<Request>) bundle.getSerializable(BUNDLE_RESPONE);
+                        (Respone<Request>) bundle.getSerializable(BUNDLE_RESPONE);
                 if (requestRespone != null) {
                     onUpdateActionSuccess(requestRespone);
                 }
@@ -192,7 +194,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
         if (requestRespone == null || requestRespone.getData() == null) return;
         mAdapter.updateItem(requestRespone.getData());
         Snackbar.make(mFragment.getView(), requestRespone.getMessage(), Snackbar.LENGTH_LONG)
-            .show();
+                .show();
     }
 
     @Override
@@ -209,12 +211,12 @@ public class RequestManagerViewModel extends BaseFragmentModel
 
     public void onSelectStatusClick() {
         mFragment.startActivityForResult(
-            SelectionActivity.getInstance(mContext, STATUS_REQUEST_ALL), REQUEST_STATUS);
+                SelectionActivity.getInstance(mContext, STATUS_REQUEST_ALL), REQUEST_STATUS);
     }
 
     public void onSelectRequestForClick() {
         mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, REQUEST_FOR),
-            REQUEST_SELECTION);
+                REQUEST_SELECTION);
     }
 
     @Bindable
@@ -240,8 +242,8 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void onMenuClick(View v, final UserRequestAdapter.RequestModel request) {
         if (request == null
-            || request.getRequest() == null
-            || request.getRequest().getRequestActionList() == null) {
+                || request.getRequest() == null
+                || request.getRequest().getRequestActionList() == null) {
             return;
         }
 
@@ -250,14 +252,14 @@ public class RequestManagerViewModel extends BaseFragmentModel
         for (int i = 0; i < requestModel.getRequestActionList().size(); i++) {
             final Request.RequestAction action = requestModel.getRequestActionList().get(i);
             popupMenu.getMenu()
-                .add(action.getName())
-                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        onActionRequestClick(request.getRequest().getId(), action.getId());
-                        return false;
-                    }
-                });
+                    .add(action.getName())
+                    .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            onActionRequestClick(request.getRequest().getId(), action.getId());
+                            return false;
+                        }
+                    });
         }
         popupMenu.show();
     }
@@ -267,34 +269,34 @@ public class RequestManagerViewModel extends BaseFragmentModel
         switch (actionId) {
             case CANCEL:
                 new LovelyTextInputDialog(mNavigator.getContext()).setTopColorRes(
-                    R.color.colorPrimary)
-                    .setTitle(R.string.msg_cancel_request)
-                    .setIcon(R.drawable.ic_error_white)
-                    .setConfirmButton(android.R.string.ok,
-                        new LovelyTextInputDialog.OnTextInputConfirmListener() {
-                            @Override
-                            public void onTextInputConfirmed(String text) {
-                                if (TextUtils.isEmpty(text)) {
-                                    return;
-                                }
-                                ((RequestManagerContract.Presenter) mPresenter).cancelRequest(
-                                    reqeuestId, actionId, text);
-                            }
-                        })
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setInputFilter(R.string.error_empty_description,
-                        new LovelyTextInputDialog.TextFilter() {
-                            @Override
-                            public boolean check(String s) {
-                                // TODO: 10/23/2017 check later
-                                return !TextUtils.isEmpty(s);
-                            }
-                        })
-                    .show();
+                        R.color.colorPrimary)
+                        .setTitle(R.string.msg_cancel_request)
+                        .setIcon(R.drawable.ic_error_white)
+                        .setConfirmButton(android.R.string.ok,
+                                new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                                    @Override
+                                    public void onTextInputConfirmed(String text) {
+                                        if (TextUtils.isEmpty(text)) {
+                                            return;
+                                        }
+                                        ((RequestManagerContract.Presenter) mPresenter).cancelRequest(
+                                                reqeuestId, actionId, text);
+                                    }
+                                })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setInputFilter(R.string.error_empty_description,
+                                new LovelyTextInputDialog.TextFilter() {
+                                    @Override
+                                    public boolean check(String s) {
+                                        // TODO: 10/23/2017 check later
+                                        return !TextUtils.isEmpty(s);
+                                    }
+                                })
+                        .show();
                 break;
             default:
                 ((RequestManagerContract.Presenter) mPresenter).updateActionRequest(reqeuestId,
-                    actionId);
+                        actionId);
                 break;
         }
     }
@@ -302,15 +304,15 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void onDetailRequestClick(Request request) {
         mFragment.startActivityForResult(
-            RequestDetailActivity.getInstance(mContext, request, MANAGE_REQUEST_GROUP),
-            REQUEST_DETAIL);
+                RequestDetailActivity.getInstance(mContext, request),
+                REQUEST_DETAIL);
     }
 
     @Override
     public void onAddDeviceClick(int requestId) {
         mFragment.startActivityForResult(
-            AssignmentActivity.getInstance(mContext, AssignmentType.ASSIGN_BY_REQUEST, requestId),
-            REQUEST_CREATE_ASSIGNMENT);
+                AssignmentActivity.getInstance(mContext, AssignmentType.ASSIGN_BY_REQUEST, requestId),
+                REQUEST_CREATE_ASSIGNMENT);
     }
 
     @Bindable
