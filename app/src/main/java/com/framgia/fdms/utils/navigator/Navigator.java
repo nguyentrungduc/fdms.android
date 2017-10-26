@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Patterns;
+
 import com.framgia.fdms.R;
 
 public class Navigator {
@@ -81,7 +82,7 @@ public class Navigator {
     }
 
     public void startActivityForResult(@NonNull Class<? extends Activity> clazz, Bundle args,
-        int requestCode) {
+                                       int requestCode) {
         Intent intent = new Intent(mActivity, clazz);
         intent.putExtras(args);
         startActivityForResult(intent, requestCode);
@@ -106,7 +107,7 @@ public class Navigator {
      * @param fragment new child fragment
      */
     public void goNextChildFragment(@IdRes int containerViewId, Fragment fragment,
-        boolean addToBackStack, int animation, String tag) {
+                                    boolean addToBackStack, int animation, String tag) {
         if (mFragment == null) return;
         FragmentTransaction transaction = mFragment.getChildFragmentManager().beginTransaction();
         setFragmentTransactionAnimation(transaction, animation);
@@ -117,19 +118,19 @@ public class Navigator {
     }
 
     private void setFragmentTransactionAnimation(FragmentTransaction transaction,
-        @NavigateAnim int animation) {
+                                                 @NavigateAnim int animation) {
         switch (animation) {
             case FADED:
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
-                    android.R.anim.fade_in, android.R.anim.fade_out);
+                        android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case RIGHT_LEFT:
                 transaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_left_out,
-                    R.anim.slide_left_in, R.anim.slide_right_out);
+                        R.anim.slide_left_in, R.anim.slide_right_out);
                 break;
             case BOTTOM_UP:
                 transaction.setCustomAnimations(R.anim.slide_bottom_in, R.anim.slide_top_out,
-                    R.anim.slide_top_in, R.anim.slide_bottom_out);
+                        R.anim.slide_top_in, R.anim.slide_bottom_out);
                 break;
             case NONE:
                 break;
@@ -138,29 +139,37 @@ public class Navigator {
         }
     }
 
-    public void showToast(@StringRes int stringId) {
+    public void showToast(@StringRes int stringId, Snackbar.Callback callback) {
         Activity activity =
-            mActivity != null ? mActivity : mFragment != null ? mFragment.getActivity() : null;
+                mActivity != null ? mActivity : mFragment != null ? mFragment.getActivity() : null;
         if (activity == null) return;
         Snackbar.make(activity.findViewById(android.R.id.content), stringId, Snackbar.LENGTH_LONG)
-            .show();
+                .setCallback(callback)
+                .show();
+    }
+
+    public void showToast(String msg, Snackbar.Callback callback) {
+        Activity activity =
+                mActivity != null ? mActivity : mFragment != null ? mFragment.getActivity() : null;
+        if (activity == null) return;
+        Snackbar.make(activity.findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG)
+                .setCallback(callback)
+                .show();
+    }
+
+    public void showToast(@StringRes int stringId) {
+        showToast(stringId, null);
     }
 
     public void showToast(String message) {
-        Activity activity =
-            mActivity != null ? mActivity : mFragment != null ? mFragment.getActivity() : null;
-        if (activity == null || message == null) {
-            return;
-        }
-        Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
-            .show();
+       showToast(message, null);
     }
 
-    @IntDef({ RIGHT_LEFT, BOTTOM_UP, FADED, NONE, LEFT_RIGHT })
+    @IntDef({RIGHT_LEFT, BOTTOM_UP, FADED, NONE, LEFT_RIGHT})
     public @interface NavigateAnim {
     }
 
-    @IntDef({ ActivityTransition.START, ActivityTransition.FINISH })
+    @IntDef({ActivityTransition.START, ActivityTransition.FINISH})
     @interface ActivityTransition {
         int START = 0x00;
         int FINISH = 0x01;

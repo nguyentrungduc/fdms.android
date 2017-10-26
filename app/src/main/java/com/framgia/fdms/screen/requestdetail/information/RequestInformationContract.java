@@ -26,7 +26,7 @@ public interface RequestInformationContract {
 
         boolean onBackPressed();
 
-        void onGetReponeSuccess(Respone<Request> requestRespone);
+        void onUpdateActionSuccess(Respone<Request> requestRespone);
 
         void setCurrentUser(User user);
 
