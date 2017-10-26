@@ -303,7 +303,7 @@ public class UserRequestViewModel extends BaseFragmentModel
     @Override
     public void onDetailRequestClick(Request request) {
         mFragment.startActivityForResult(
-                RequestDetailActivity.getInstance(mContext, request), REQUEST_DETAIL);
+                RequestDetailActivity.getInstance(mContext, request.getId()), REQUEST_DETAIL);
     }
 
     @Override

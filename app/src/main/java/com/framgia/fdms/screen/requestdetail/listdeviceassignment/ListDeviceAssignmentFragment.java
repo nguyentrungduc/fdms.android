@@ -55,7 +55,7 @@ public class ListDeviceAssignmentFragment extends Fragment {
     }
 
     private void getDataFromIntent() {
-        mRequest = (Request) getActivity().getIntent().getSerializableExtra(BUND_REQUEST);
+        mRequest = (Request) getArguments().get(BUND_REQUEST);
     }
 
     @Override

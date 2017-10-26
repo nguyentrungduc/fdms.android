@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.source.UserRepository;
@@ -24,10 +25,6 @@ public class RequestInformationFragment extends Fragment {
     private RequestInformationContract.ViewModel mViewModel;
     private Request mRequest;
 
-    public static RequestInformationFragment newInstance() {
-        return new RequestInformationFragment();
-    }
-
     public static RequestInformationFragment newInstance(Request request) {
         RequestInformationFragment fragment = new RequestInformationFragment();
         Bundle args = new Bundle();
@@ -39,23 +36,23 @@ public class RequestInformationFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         getRequestFromIntent();
         FragmentRequestInformationBinding binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_request_information, container,
-                false);
+                DataBindingUtil.inflate(inflater, R.layout.fragment_request_information, container,
+                        false);
         mViewModel = new RequestInformationViewModel(this, mRequest.getRequestActionList(),
-            mRequest.getRequestStatus(), mRequest, binding.floatActionMenu);
+                mRequest.getRequestStatus(), mRequest, binding.floatActionMenu);
 
         RequestInformationContract.Presenter presenter = new RequestInformationPresenter(mViewModel,
-            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
+                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
         mViewModel.setPresenter(presenter);
         binding.setViewModel((RequestInformationViewModel) mViewModel);
         return binding.getRoot();
     }
 
     public void getRequestFromIntent() {
-        mRequest = (Request) getActivity().getIntent().getSerializableExtra(BUND_REQUEST);
+        mRequest = (Request) getArguments().get(BUND_REQUEST);
     }
 
     @Override

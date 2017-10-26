@@ -9,22 +9,25 @@ import android.view.MenuItem;
 
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Request;
+import com.framgia.fdms.data.source.RequestRepository;
+import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
+import com.framgia.fdms.data.source.remote.RequestRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityRequestDetailBinding;
 import com.framgia.fdms.utils.navigator.Navigator;
-
-import static com.framgia.fdms.utils.Constant.BundleRequest.BUND_REQUEST;
 
 /**
  * RequestDetail Screen.
  */
 public class RequestDetailActivity extends AppCompatActivity {
 
-    private RequestDetailContract.ViewModel mViewModel;
-    private Request mRequest;
+    private static final String BUND_REQUEST_ID = "BUND_REQUEST_ID";
 
-    public static Intent getInstance(Context context, Request request) {
+    private RequestDetailContract.ViewModel mViewModel;
+    private int mRequestId;
+
+    public static Intent getInstance(Context context, int requestId) {
         Intent intent = new Intent(context, RequestDetailActivity.class);
-        intent.putExtra(BUND_REQUEST, request);
+        intent.putExtra(BUND_REQUEST_ID, requestId);
         return intent;
     }
 
@@ -33,14 +36,18 @@ public class RequestDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getDataFromIntent();
         Navigator navigator = new Navigator(this);
-        mViewModel = new RequestDetailViewModel(this, mRequest, navigator);
-
-        RequestDetailContract.Presenter presenter = new RequestDetailPresenter(mViewModel);
-        mViewModel.setPresenter(presenter);
-
+        mViewModel = new RequestDetailViewModel(this, navigator);
+        
         ActivityRequestDetailBinding binding =
-            DataBindingUtil.setContentView(this, R.layout.activity_request_detail);
+                DataBindingUtil.setContentView(this, R.layout.activity_request_detail);
         binding.setViewModel((RequestDetailViewModel) mViewModel);
+
+        RequestDetailContract.Presenter presenter = new RequestDetailPresenter(mViewModel,
+                RequestRepository.getInstant(
+                        new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
+                mRequestId);
+
+        mViewModel.setPresenter(presenter);
     }
 
     @Override
@@ -56,7 +63,7 @@ public class RequestDetailActivity extends AppCompatActivity {
         if (bundle == null) {
             return;
         }
-        mRequest = (Request) bundle.getSerializable(BUND_REQUEST);
+        mRequestId = bundle.getInt(BUND_REQUEST_ID);
     }
 
     @Override
