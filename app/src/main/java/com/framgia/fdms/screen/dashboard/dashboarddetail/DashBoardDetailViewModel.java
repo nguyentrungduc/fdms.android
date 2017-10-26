@@ -306,7 +306,7 @@ public class DashBoardDetailViewModel extends BaseObservable
     @Override
     public void onDetailRequestClick(Request request) {
         mFragment.startActivityForResult(
-            RequestDetailActivity.getInstance(mContext, request),
+            RequestDetailActivity.getInstance(mContext, request.getId()),
             REQUEST_DETAIL);
     }
 
