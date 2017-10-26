@@ -37,7 +37,7 @@ public class RequestDetailActivity extends AppCompatActivity {
         getDataFromIntent();
         Navigator navigator = new Navigator(this);
         mViewModel = new RequestDetailViewModel(this, navigator);
-        
+
         ActivityRequestDetailBinding binding =
                 DataBindingUtil.setContentView(this, R.layout.activity_request_detail);
         binding.setViewModel((RequestDetailViewModel) mViewModel);

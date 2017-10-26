@@ -49,7 +49,7 @@ public class RequestInformationPresenter implements RequestInformationContract.P
             .subscribe(new Consumer<Respone<Request>>() {
                 @Override
                 public void accept(Respone<Request> requestRespone) throws Exception {
-                    mViewModel.onGetReponeSuccess(requestRespone);
+                    mViewModel.onUpdateActionSuccess(requestRespone);
                 }
             }, new RequestError() {
                 @Override
@@ -84,7 +84,7 @@ public class RequestInformationPresenter implements RequestInformationContract.P
             .subscribe(new Consumer<Respone<Request>>() {
                 @Override
                 public void accept(Respone<Request> requestRespone) throws Exception {
-                    mViewModel.onGetReponeSuccess(requestRespone);
+                    mViewModel.onUpdateActionSuccess(requestRespone);
                 }
             }, new RequestError() {
                 @Override
@@ -149,7 +149,7 @@ public class RequestInformationPresenter implements RequestInformationContract.P
             .subscribe(new Consumer<Respone<Request>>() {
                 @Override
                 public void accept(Respone<Request> requestRespone) throws Exception {
-                    mViewModel.onGetReponeSuccess(requestRespone);
+                    mViewModel.onUpdateActionSuccess(requestRespone);
                 }
             }, new RequestError() {
                 @Override
