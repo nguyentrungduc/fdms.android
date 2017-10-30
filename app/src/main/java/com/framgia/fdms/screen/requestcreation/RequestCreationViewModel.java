@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.requestcreation;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
+
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Request;
@@ -31,7 +33,7 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_RELATIVE;
  */
 
 public class RequestCreationViewModel extends BaseObservable
-    implements RequestCreationContract.ViewModel {
+        implements RequestCreationContract.ViewModel {
 
     private ArrayAdapter<Status> mAdapterCategory;
     private RequestCreationContract.Presenter mPresenter;
@@ -48,15 +50,18 @@ public class RequestCreationViewModel extends BaseObservable
     private String mRequestForError;
     private int mProgressBarVisibility = View.GONE;
     private boolean mIsManager;
-    private int mManageRequestType;
+    @RequestCreatorType
+    private int mRequestCreatorType;
 
-    public RequestCreationViewModel(AppCompatActivity activity, int manageRequestType) {
+    public RequestCreationViewModel(AppCompatActivity activity,
+                                    @RequestCreatorType int requestCreatorType) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
+        mRequestCreatorType = requestCreatorType;
         mRequest = new RequestCreatorRequest();
         mAdapterCategory =
-            new ArrayAdapter<>(mActivity, R.layout.support_simple_spinner_dropdown_item);
-        setManageRequestType(manageRequestType);
+                new ArrayAdapter<>(mActivity, R.layout.support_simple_spinner_dropdown_item);
+
     }
 
     @Override
@@ -148,12 +153,14 @@ public class RequestCreationViewModel extends BaseObservable
 
     @Override
     public void onGetUserSuccess(User user) {
+        setManager(user.getRole().equals(Constant.Role.BO_MANAGER));
         if (user.getRole().equals(Constant.Role.BO_MANAGER)) {
-            setManager(true);
-            setRequestFor(new Status(OUT_OF_INDEX, NONE));
+            if (mRequestCreatorType == RequestCreatorType.MY_REQUEST) {
+                setRequestFor(new Status(user.getId(), user.getName()));
+            } else {
+                setRequestFor(new Status(OUT_OF_INDEX, NONE));
+            }
             setAssignee(new Status(OUT_OF_INDEX, NONE));
-        } else {
-            setManager(false);
         }
     }
 
@@ -230,13 +237,13 @@ public class RequestCreationViewModel extends BaseObservable
     }
 
     @Bindable
-    public int getManageRequestType() {
-        return mManageRequestType;
+    public int getRequestCreatorType() {
+        return mRequestCreatorType;
     }
 
-    private void setManageRequestType(int manageRequestType) {
-        mManageRequestType = manageRequestType;
-        notifyPropertyChanged(BR.manageRequestType);
+    public void setRequestCreatorType(int requestCreatorType) {
+        this.mRequestCreatorType = requestCreatorType;
+        notifyPropertyChanged(BR.requestCreatorType);
     }
 
     @Bindable
@@ -251,12 +258,12 @@ public class RequestCreationViewModel extends BaseObservable
 
     public void onClickChooseRequestForRelativeStaff() {
         mActivity.startActivityForResult(
-            SelectionActivity.getInstance(mContext, SelectionType.RELATIVE_STAFF),
-            REQUEST_RELATIVE);
+                SelectionActivity.getInstance(mContext, SelectionType.RELATIVE_STAFF),
+                REQUEST_RELATIVE);
     }
 
     public void onClickAssignee() {
         mActivity.startActivityForResult(
-            SelectionActivity.getInstance(mContext, SelectionType.ASSIGNEE), REQUEST_ASSIGNEE);
+                SelectionActivity.getInstance(mContext, SelectionType.ASSIGNEE), REQUEST_ASSIGNEE);
     }
 }

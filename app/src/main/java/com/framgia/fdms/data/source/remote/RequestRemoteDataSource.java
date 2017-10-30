@@ -1,25 +1,30 @@
 package com.framgia.fdms.data.source.remote;
 
 import android.text.TextUtils;
+
 import com.framgia.fdms.data.model.AssignmentItemRequest;
 import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
+import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.RequestDataSource;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.utils.Utils;
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+
+import static com.framgia.fdms.screen.requestcreation.RequestCreatorType.MY_REQUEST;
 import static com.framgia.fdms.utils.Constant.ALL_RELATIVE_ID;
 import static com.framgia.fdms.utils.Constant.ALL_REQUEST_STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_ASSIGNEE_ID;
@@ -39,7 +44,6 @@ import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_STATUS_ID_EDIT;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_TITLE;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_TYPE;
-import static com.framgia.fdms.utils.Constant.BundleRequestType.MY_REQUEST;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 /**
