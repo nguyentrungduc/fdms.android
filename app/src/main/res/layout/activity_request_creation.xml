@@ -7,7 +7,7 @@
     <data>
 
         <import type="android.view.View"/>
-        <import type="com.framgia.fdms.utils.Constant"/>
+        <import type="com.framgia.fdms.screen.requestcreation.RequestCreatorType"/>
         <variable
             name="viewModel"
             type="com.framgia.fdms.screen.requestcreation.RequestCreationViewModel"
@@ -99,7 +99,7 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
                         android:textColorHint="@color/color_brown"
-                        android:visibility="@{viewModel.manageRequestType == Constant.BundleRequestType.MEMBER_REQUEST ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{viewModel.requestCreatorType == RequestCreatorType.MEMBER_REQUEST ? View.VISIBLE : View.GONE}"
                         app:errorText="@{viewModel.requestForError}"
                         >
 

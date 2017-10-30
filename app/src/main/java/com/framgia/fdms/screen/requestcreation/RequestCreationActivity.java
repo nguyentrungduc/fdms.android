@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.RequestRepository;
 import com.framgia.fdms.data.source.UserRepository;
@@ -25,7 +26,7 @@ public class RequestCreationActivity extends AppCompatActivity {
     private RequestCreationContract.ViewModel mViewModel;
     private int mManageRequestType;
 
-    public static Intent getInstance(Context context, int manageRequestType) {
+    public static Intent getInstance(Context context, @RequestCreatorType int manageRequestType) {
         Intent intent = new Intent(context, RequestCreationActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(BUNDLE_REQUEST_TYPE, manageRequestType);
@@ -40,12 +41,13 @@ public class RequestCreationActivity extends AppCompatActivity {
         mViewModel = new RequestCreationViewModel(this, mManageRequestType);
 
         RequestCreationContract.Presenter presenter = new RequestCreationPresenter(mViewModel,
-            new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
-            new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))));
+                mManageRequestType,
+                new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
+                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))));
         mViewModel.setPresenter(presenter);
 
         ActivityRequestCreationBinding binding =
-            DataBindingUtil.setContentView(this, R.layout.activity_request_creation);
+                DataBindingUtil.setContentView(this, R.layout.activity_request_creation);
         binding.setViewModel((RequestCreationViewModel) mViewModel);
         setTitle(getString(R.string.title_create_request));
     }

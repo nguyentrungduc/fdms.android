@@ -184,11 +184,6 @@ public class Constant {
         public static final String BUNDLE_REQUEST_TYPE = "BUNDLE_REQUEST_TYPE";
     }
 
-    public class BundleRequestType {
-        public static final int MEMBER_REQUEST = 0;
-        public static final int MY_REQUEST = 1;
-    }
-
     public class LocaleLanguage {
         public static final String ENGLISH = "en";
         public static final String VIETNAMESE = "vi";
