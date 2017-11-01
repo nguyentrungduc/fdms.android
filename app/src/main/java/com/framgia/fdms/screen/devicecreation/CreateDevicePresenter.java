@@ -28,7 +28,7 @@ final class CreateDevicePresenter implements CreateDeviceContract.Presenter {
     private DeviceRepository mDeviceRepository;
 
     public CreateDevicePresenter(CreateDeviceContract.ViewModel viewModel,
-        DeviceRepository deviceRepository, Device device) {
+        DeviceRepository deviceRepository) {
         mViewModel = viewModel;
         mDeviceRepository = deviceRepository;
         mCompositeSubscription = new CompositeDisposable();
@@ -48,6 +48,7 @@ final class CreateDevicePresenter implements CreateDeviceContract.Presenter {
         if (!validateDataInput(device)) {
             return;
         }
+        // TODO: 11/1/2017 Update invoice when api available
         Disposable subscription = mDeviceRepository.registerdevice(device)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -83,6 +84,7 @@ final class CreateDevicePresenter implements CreateDeviceContract.Presenter {
         if (!validateDataEditDevice(localDevice)) {
             return;
         }
+        // TODO: 11/1/2017 Update invoice when api available
         Disposable disposable = mDeviceRepository.updateDevice(localDevice)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

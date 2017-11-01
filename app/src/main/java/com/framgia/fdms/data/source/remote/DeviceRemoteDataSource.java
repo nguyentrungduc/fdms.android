@@ -1,6 +1,7 @@
 package com.framgia.fdms.data.source.remote;
 
 import android.text.TextUtils;
+
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
@@ -10,15 +11,18 @@ import com.framgia.fdms.data.source.DeviceDataSource;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.screen.device.listdevice.DeviceFilterModel;
 import com.framgia.fdms.utils.Utils;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -32,6 +36,7 @@ import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CODE;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_NAME;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.HARD_DRIVE;
+import static com.framgia.fdms.utils.Constant.ApiParram.INVOICE_NUMBER;
 import static com.framgia.fdms.utils.Constant.ApiParram.IS_BAR_CODE;
 import static com.framgia.fdms.utils.Constant.ApiParram.IS_MEETING_ROOM;
 import static com.framgia.fdms.utils.Constant.ApiParram.MAKER_ID;
@@ -60,20 +65,20 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
 
     @Override
     public Observable<List<Device>> getListDevices(DeviceFilterModel filterModel, int page,
-        int perPage) {
+                                                   int perPage) {
         return mFDMSApi.getListDevices(getDeviceParams(filterModel, page, perPage))
-            .flatMap(new Function<Respone<List<Device>>, ObservableSource<List<Device>>>() {
-                @Override
-                public ObservableSource<List<Device>> apply(Respone<List<Device>> listRespone)
-                    throws Exception {
-                    return Utils.getResponse(listRespone);
-                }
-            });
+                .flatMap(new Function<Respone<List<Device>>, ObservableSource<List<Device>>>() {
+                    @Override
+                    public ObservableSource<List<Device>> apply(Respone<List<Device>> listRespone)
+                            throws Exception {
+                        return Utils.getResponse(listRespone);
+                    }
+                });
     }
 
     @Override
     public Observable<List<Device>> getListDevices(String deviceName, int categoryId, int statusId,
-        int page, int perPage) {
+                                                   int page, int perPage) {
         return null;
     }
 
@@ -81,8 +86,8 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
     public Observable<Device> registerdevice(final Device device) {
         Map<String, RequestBody> params = new HashMap<>();
         RequestBody productionName, deviceStatusId, deviceCategoryId, vendorId, makerId,
-            meetingRoomId, serialNumber, modelNumber, deviceCode, isBarcode, isMeetingRoom,
-            boughtDate, originalPrice, warranty, ram, hardDrive, description;
+                meetingRoomId, serialNumber, modelNumber, deviceCode, isBarcode, isMeetingRoom,
+                boughtDate, originalPrice, warranty, ram, hardDrive, description, invoiceNumber;
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 
         productionName = createPartFromString(device.getProductionName());
@@ -123,6 +128,10 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
             description = createPartFromString(device.getDeviceDescription());
             params.put(DESCRIPTION, description);
         }
+        if (device.getInvoiceNumber() != null) {
+            invoiceNumber = createPartFromString(device.getInvoiceNumber());
+            params.put(INVOICE_NUMBER, invoiceNumber);
+        }
         params.put(PRODUCTION_NAME, productionName);
         params.put(DEVICE_STATUS_ID, deviceStatusId);
         params.put(DEVICE_CATEGORY_ID, deviceCategoryId);
@@ -147,21 +156,21 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         }
 
         return mFDMSApi.uploadDevice(params, filePart)
-            .flatMap(new Function<Respone<Device>, ObservableSource<Device>>() {
-                @Override
-                public ObservableSource<Device> apply(Respone<Device> deviceRespone)
-                    throws Exception {
-                    return Utils.getResponse(deviceRespone);
-                }
-            });
+                .flatMap(new Function<Respone<Device>, ObservableSource<Device>>() {
+                    @Override
+                    public ObservableSource<Device> apply(Respone<Device> deviceRespone)
+                            throws Exception {
+                        return Utils.getResponse(deviceRespone);
+                    }
+                });
     }
 
     @Override
     public Observable<String> updateDevice(Device device) {
         Map<String, RequestBody> params = new HashMap<>();
         RequestBody productionName, deviceStatusId, deviceVendorId, deviceMakerId,
-            deviceSerialNumber, deviceModelNumber, deviceWarranty, deviceRam, deviceHardDriver,
-            deviceDescription, isMeetingRoom, deviceMeetingRoomId, isBarCode;
+                deviceSerialNumber, deviceModelNumber, deviceWarranty, deviceRam, deviceHardDriver,
+                deviceDescription, isMeetingRoom, deviceMeetingRoomId, isBarCode, invoiceNumber;
         if (!TextUtils.isEmpty(device.getProductionName())) {
             productionName = createPartFromString(device.getProductionName());
             params.put(PRODUCTION_NAME, productionName);
@@ -180,7 +189,7 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         }
         if (device.getMeetingRoom().getId() > 0) {
             deviceMeetingRoomId =
-                createPartFromString(String.valueOf(device.getMeetingRoom().getId()));
+                    createPartFromString(String.valueOf(device.getMeetingRoom().getId()));
             params.put(MEETING_ROOM_ID, deviceMeetingRoomId);
         }
         if (device.getSerialNumber() != null) {
@@ -207,6 +216,11 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
             deviceDescription = createPartFromString(device.getDeviceDescription());
             params.put(DESCRIPTION, deviceDescription);
         }
+        if (device.getInvoiceNumber() != null) {
+            invoiceNumber = createPartFromString(device.getInvoiceNumber());
+            params.put(INVOICE_NUMBER, invoiceNumber);
+        }
+
         isMeetingRoom = createPartFromString(String.valueOf(device.isDeviceMeetingRoom()));
         params.put(IS_MEETING_ROOM, isMeetingRoom);
         isBarCode = createPartFromString(String.valueOf(device.isBarcode()));
@@ -225,20 +239,20 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         }
 
         return mFDMSApi.updateDevice(device.getId(), params, filePart)
-            .flatMap(new Function<Respone<String>, ObservableSource<String>>() {
-                @Override
-                public ObservableSource<String> apply(Respone<String> deviceRespone)
-                    throws Exception {
-                    if (deviceRespone == null) {
-                        return Observable.error(new NullPointerException());
+                .flatMap(new Function<Respone<String>, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(Respone<String> deviceRespone)
+                            throws Exception {
+                        if (deviceRespone == null) {
+                            return Observable.error(new NullPointerException());
+                        }
+                        if (deviceRespone.isError()) {
+                            return Observable.error(
+                                    new NullPointerException("ERROR" + deviceRespone.getStatus()));
+                        }
+                        return Observable.just(deviceRespone.getMessage());
                     }
-                    if (deviceRespone.isError()) {
-                        return Observable.error(
-                            new NullPointerException("ERROR" + deviceRespone.getStatus()));
-                    }
-                    return Observable.just(deviceRespone.getMessage());
-                }
-            });
+                });
     }
 
     @Override
@@ -249,127 +263,127 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
     @Override
     public Observable<Device> getDeviceByQrCode(String qrCode) {
         return mFDMSApi.getDeviceByQrCode(qrCode)
-            .flatMap(new Function<Respone<Device>, ObservableSource<Device>>() {
-                @Override
-                public ObservableSource<Device> apply(Respone<Device> deviceRespone)
-                    throws Exception {
-                    return Utils.getResponse(deviceRespone);
-                }
-            });
+                .flatMap(new Function<Respone<Device>, ObservableSource<Device>>() {
+                    @Override
+                    public ObservableSource<Device> apply(Respone<Device> deviceRespone)
+                            throws Exception {
+                        return Utils.getResponse(deviceRespone);
+                    }
+                });
     }
 
     @Override
     public Observable<List<Dashboard>> getDashboardDevice() {
         return mFDMSApi.getDashboardDevice()
-            .flatMap(new Function<Respone<List<Dashboard>>, ObservableSource<List<Dashboard>>>() {
-                @Override
-                public ObservableSource<List<Dashboard>> apply(Respone<List<Dashboard>> listRespone)
-                    throws Exception {
-                    return Utils.getResponse(listRespone);
-                }
-            });
+                .flatMap(new Function<Respone<List<Dashboard>>, ObservableSource<List<Dashboard>>>() {
+                    @Override
+                    public ObservableSource<List<Dashboard>> apply(Respone<List<Dashboard>> listRespone)
+                            throws Exception {
+                        return Utils.getResponse(listRespone);
+                    }
+                });
     }
 
     @Override
     public Observable<List<DeviceUsingHistory>> getDeviceUsingHistory(String deviceId, int page,
-        int perPage) {
+                                                                      int perPage) {
         return mFDMSApi.getDeviceUsingHistory(deviceId, page, perPage)
-            .flatMap(
-                new Function<Respone<List<DeviceUsingHistory>>,
-                    ObservableSource<List<DeviceUsingHistory>>>() {
-                    @Override
-                    public ObservableSource<List<DeviceUsingHistory>> apply(
-                        Respone<List<DeviceUsingHistory>> listRespone) throws Exception {
-                        return Utils.getResponse(listRespone);
-                    }
-                });
+                .flatMap(
+                        new Function<Respone<List<DeviceUsingHistory>>,
+                                ObservableSource<List<DeviceUsingHistory>>>() {
+                            @Override
+                            public ObservableSource<List<DeviceUsingHistory>> apply(
+                                    Respone<List<DeviceUsingHistory>> listRespone) throws Exception {
+                                return Utils.getResponse(listRespone);
+                            }
+                        });
     }
 
     @Override
     public Observable<List<DeviceHistoryDetail>> getDeviceDetailHistory(int deviceId, int page,
-        int perPage) {
+                                                                        int perPage) {
         return mFDMSApi.getDeviceDetailHistory(deviceId, page, perPage)
-            .flatMap(
-                new Function<Respone<List<DeviceHistoryDetail>>,
-                    ObservableSource<List<DeviceHistoryDetail>>>() {
-                    @Override
-                    public ObservableSource<List<DeviceHistoryDetail>> apply(
-                        Respone<List<DeviceHistoryDetail>> listRespone) throws Exception {
-                        return Utils.getResponse(listRespone);
-                    }
-                });
+                .flatMap(
+                        new Function<Respone<List<DeviceHistoryDetail>>,
+                                ObservableSource<List<DeviceHistoryDetail>>>() {
+                            @Override
+                            public ObservableSource<List<DeviceHistoryDetail>> apply(
+                                    Respone<List<DeviceHistoryDetail>> listRespone) throws Exception {
+                                return Utils.getResponse(listRespone);
+                            }
+                        });
     }
 
     @Override
     public Observable<Device> getDevice(int deviceId) {
         return mFDMSApi.getDevice(deviceId)
-            .flatMap(new Function<Respone<Device>, ObservableSource<Device>>() {
-                @Override
-                public ObservableSource<Device> apply(Respone<Device> deviceRespone)
-                    throws Exception {
-                    return Utils.getResponse(deviceRespone);
-                }
-            });
+                .flatMap(new Function<Respone<Device>, ObservableSource<Device>>() {
+                    @Override
+                    public ObservableSource<Device> apply(Respone<Device> deviceRespone)
+                            throws Exception {
+                        return Utils.getResponse(deviceRespone);
+                    }
+                });
     }
 
     @Override
     public Observable<List<Device>> getTopDevice(int topDevice) {
         return mFDMSApi.getTopDevice(topDevice)
-            .flatMap(new Function<Respone<List<Device>>, ObservableSource<List<Device>>>() {
-                @Override
-                public ObservableSource<List<Device>> apply(Respone<List<Device>> listRespone)
-                    throws Exception {
-                    return Utils.getResponse(listRespone);
-                }
-            });
-    }
-
-    @Override
-    public Observable<Device> getDeviceCode(int deviceCategoryId, int branchId) {
-        return mFDMSApi.getDeviceCode(deviceCategoryId, branchId)
-            .flatMap(new Function<Respone<Device>, ObservableSource<Device>>() {
-                @Override
-                public ObservableSource<Device> apply(Respone<Device> deviceRespone)
-                    throws Exception {
-                    return Utils.getResponse(deviceRespone);
-                }
-            });
-    }
-
-    @Override
-    public Observable<List<Device>> getListDeviceByMeetingRoomId(int meetingRoomId, int page,
-        int perPage) {
-        return mFDMSApi.getListDeviceByMeetingRoomId(meetingRoomId, page, perPage)
-            .flatMap(new Function<Respone<List<Device>>, ObservableSource<List<Device>>>() {
-                @Override
-                public ObservableSource<List<Device>> apply(
-                    @NonNull Respone<List<Device>> listRespone) throws Exception {
-                    return Utils.getResponse(listRespone);
-                }
-            });
-    }
-
-    @Override
-    public Observable<List<DeviceUsingHistory>> getUserDevice(String status, String staffEmail,
-        int page, int perPage) {
-        return mFDMSApi.getUserDevice(status, staffEmail, page, perPage)
-            .flatMap(
-                new Function<Respone<List<DeviceUsingHistory>>,
-                    ObservableSource<List<DeviceUsingHistory>>>() {
+                .flatMap(new Function<Respone<List<Device>>, ObservableSource<List<Device>>>() {
                     @Override
-                    public ObservableSource<List<DeviceUsingHistory>> apply(
-                        Respone<List<DeviceUsingHistory>> listRespone) throws Exception {
+                    public ObservableSource<List<Device>> apply(Respone<List<Device>> listRespone)
+                            throws Exception {
                         return Utils.getResponse(listRespone);
                     }
                 });
     }
 
+    @Override
+    public Observable<Device> getDeviceCode(int deviceCategoryId, int branchId) {
+        return mFDMSApi.getDeviceCode(deviceCategoryId, branchId)
+                .flatMap(new Function<Respone<Device>, ObservableSource<Device>>() {
+                    @Override
+                    public ObservableSource<Device> apply(Respone<Device> deviceRespone)
+                            throws Exception {
+                        return Utils.getResponse(deviceRespone);
+                    }
+                });
+    }
+
+    @Override
+    public Observable<List<Device>> getListDeviceByMeetingRoomId(int meetingRoomId, int page,
+                                                                 int perPage) {
+        return mFDMSApi.getListDeviceByMeetingRoomId(meetingRoomId, page, perPage)
+                .flatMap(new Function<Respone<List<Device>>, ObservableSource<List<Device>>>() {
+                    @Override
+                    public ObservableSource<List<Device>> apply(
+                            @NonNull Respone<List<Device>> listRespone) throws Exception {
+                        return Utils.getResponse(listRespone);
+                    }
+                });
+    }
+
+    @Override
+    public Observable<List<DeviceUsingHistory>> getUserDevice(String status, String staffEmail,
+                                                              int page, int perPage) {
+        return mFDMSApi.getUserDevice(status, staffEmail, page, perPage)
+                .flatMap(
+                        new Function<Respone<List<DeviceUsingHistory>>,
+                                ObservableSource<List<DeviceUsingHistory>>>() {
+                            @Override
+                            public ObservableSource<List<DeviceUsingHistory>> apply(
+                                    Respone<List<DeviceUsingHistory>> listRespone) throws Exception {
+                                return Utils.getResponse(listRespone);
+                            }
+                        });
+    }
+
     public Map<String, String> getDeviceParams(DeviceFilterModel filterModel, int page,
-        int perPage) {
+                                               int perPage) {
         Map<String, String> parrams = new HashMap<>();
 
         if (filterModel.getCategory() != null
-            && filterModel.getCategory().getId() != OUT_OF_INDEX) {
+                && filterModel.getCategory().getId() != OUT_OF_INDEX) {
             parrams.put(CATEGORY_ID, String.valueOf(filterModel.getCategory().getId()));
         }
 
@@ -394,7 +408,7 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         }
 
         if (filterModel.getMeetingRoom() != null
-            && filterModel.getMeetingRoom().getId() != OUT_OF_INDEX) {
+                && filterModel.getMeetingRoom().getId() != OUT_OF_INDEX) {
             parrams.put(MEETING_ROOM_ID, String.valueOf(filterModel.getMeetingRoom().getId()));
         }
 

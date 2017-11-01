@@ -61,7 +61,7 @@ public class CreateDeviceActivity extends AppCompatActivity {
         DeviceRepository deviceRepository =
             new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
         CreateDeviceContract.Presenter presenter =
-            new CreateDevicePresenter(mViewModel, deviceRepository, mDevice);
+            new CreateDevicePresenter(mViewModel, deviceRepository);
         mViewModel.setPresenter(presenter);
 
         ActivityCreatedeviceBinding binding =
