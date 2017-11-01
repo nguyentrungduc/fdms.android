@@ -77,6 +77,9 @@ public class Device extends BaseObservable implements Parcelable {
     @SerializedName("model_number")
     private String mModelNumber;
     @Expose
+    @SerializedName("invoice_number")
+    private String mInvoiceNumber;
+    @Expose
     @SerializedName("status")
     private int mStatus;
     @Expose
@@ -155,6 +158,7 @@ public class Device extends BaseObservable implements Parcelable {
         mHardDriver = in.readString();
         mDeviceDescription = in.readString();
         mVersion = in.readInt();
+        mInvoiceNumber = in.readString();
     }
 
     public static final Creator<Device> CREATOR = new Creator<Device>() {
@@ -201,6 +205,7 @@ public class Device extends BaseObservable implements Parcelable {
         setHardDriver(device.getHardDriver());
         setDeviceDescription(device.getDeviceDescription());
         setVersion(device.getVersion());
+        setInvoiceNumber(device.getInvoiceNumber());
     }
 
     public Device(String deviceCode, String productionName, String deviceCategoryName) {
@@ -558,6 +563,16 @@ public class Device extends BaseObservable implements Parcelable {
         notifyPropertyChanged(BR.meetingRoom);
     }
 
+    @Bindable
+    public String getInvoiceNumber() {
+        return mInvoiceNumber;
+    }
+
+    public void setInvoiceNumber(String invoiceNumber) {
+        mInvoiceNumber = invoiceNumber;
+        notifyPropertyChanged(BR.invoiceNumber);
+    }
+
     @Override
     public String toString() {
         return new Gson().toJson(this);
@@ -600,5 +615,6 @@ public class Device extends BaseObservable implements Parcelable {
         parcel.writeString(mHardDriver);
         parcel.writeString(mDeviceDescription);
         parcel.writeInt(mVersion);
+        parcel.writeString(mInvoiceNumber);
     }
 }

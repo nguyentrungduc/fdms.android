@@ -45,9 +45,30 @@
 
                 <include
                     layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_seri_number_24dp}"
+                    bind:text="@{device.serialNumber}"
+                    bind:title="@{@string/title_serial_number}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_model_number_24dp}"
+                    bind:text="@{device.modelNumber}"
+                    bind:title="@{@string/title_number_of_devices}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
                     bind:image="@{@drawable/ic_price_tag_24dp}"
                     bind:text="@{device.originalPrice == null ? @string/title_unknown : Utils.formatPrice(device.originalPrice)}"
                     bind:title="@{@string/title_original_price}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_invoice_24dp}"
+                    bind:text="@{device.invoiceNumber}"
+                    bind:title="@{@string/title_invoice_number}"
                     />
 
                 <LinearLayout

@@ -1,66 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="com.framgia.fdms.utils.Constant"/>
+        <import type="com.framgia.fdms.utils.Constant" />
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
-            type="com.framgia.fdms.screen.devicedetail.DeviceDetailViewModel"
-            />
+            type="com.framgia.fdms.screen.devicedetail.DeviceDetailViewModel" />
 
     </data>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        >
+        android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_300"
-            android:fitsSystemWindows="true"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            >
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/main_collapsing"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/color_white"
-                android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                android:layout_height="?attr/actionBarSize"
                 app:title="@{viewModel.device.productionName}"
-                >
-
-                <ImageView
-                    android:id="@+id/image_device"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_no_image"
-                    app:imageUrl="@{Constant.END_POINT_URL + viewModel.device.picture.url}"
-                    />
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:activity="@{viewModel.activity}"
-                    app:layout_collapseMode="pin"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    />
-            </android.support.design.widget.CollapsingToolbarLayout>
+                app:activity="@{viewModel.activity}"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.view.ViewPager
@@ -70,8 +42,7 @@
             app:adapter="@{viewModel.adapter}"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:bindViewModel="@{viewModel}"
-            tools:context="com.framgia.fdms.screen.devicedetail.DeviceDetailActivity"
-            >
+            tools:context="com.framgia.fdms.screen.devicedetail.DeviceDetailActivity">
 
             <android.support.design.widget.TabLayout
                 android:layout_width="wrap_content"
@@ -79,8 +50,7 @@
                 android:background="@color/colorPrimary"
                 app:tabIndicatorColor="@android:color/white"
                 app:tabSelectedTextColor="@android:color/white"
-                app:tabTextColor="@android:color/darker_gray"
-                />
+                app:tabTextColor="@android:color/darker_gray" />
         </android.support.v4.view.ViewPager>
 
         <com.github.clans.fab.FloatingActionMenu
@@ -101,8 +71,7 @@
             app:menu_labels_singleLine="false"
             app:menu_labels_textColor="@android:color/white"
             app:menu_labels_textSize="@dimen/sp_16"
-            app:menu_openDirection="up"
-            >
+            app:menu_openDirection="up">
 
             <com.github.clans.fab.FloatingActionButton
                 android:layout_width="wrap_content"
@@ -114,8 +83,7 @@
                 app:fab_colorNormal="@android:color/white"
                 app:fab_colorPressed="@color/color_seashell"
                 app:fab_colorRipple="@color/color_dark_gray"
-                app:fab_label="@string/title_edit_device"
-                />
+                app:fab_label="@string/title_edit_device" />
 
             <com.github.clans.fab.FloatingActionButton
                 android:layout_width="wrap_content"
@@ -128,8 +96,7 @@
                 app:fab_colorNormal="@android:color/white"
                 app:fab_colorPressed="@color/color_seashell"
                 app:fab_colorRipple="@color/color_dark_gray"
-                app:fab_label="@string/action_delete_device"
-                />
+                app:fab_label="@string/action_delete_device" />
         </com.github.clans.fab.FloatingActionMenu>
     </android.support.design.widget.CoordinatorLayout>
 </layout>
