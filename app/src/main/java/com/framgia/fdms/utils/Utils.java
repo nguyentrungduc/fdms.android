@@ -8,10 +8,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Respone;
+
 import io.reactivex.Observable;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -108,10 +112,16 @@ public class Utils {
     }
 
     public static void hideSoftKeyboard(Activity activity) {
-        if (activity == null) return;
+        if (activity == null) {
+            return;
+        }
         InputMethodManager inputMethodManager =
-            (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+                (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            return;
+        }
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public static String getStringFromList(List<String> strings) {
@@ -126,7 +136,7 @@ public class Utils {
     }
 
     public static String convertUiFormatToDataFormat(String time, String inputFormat,
-        String outputFormat) {
+                                                     String outputFormat) {
         if (TextUtils.isEmpty(time)) {
             return "";
         }

@@ -115,6 +115,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:hint="@string/title_request_for"
+                                        android:background="@{viewModel.isEdit ? @color/color_blue_grey_50 : @android:color/transparent }"
                                         bind:ignore="TooDeepLayout"
                                         >
 
@@ -127,7 +128,6 @@
                                             android:ellipsize="end"
                                             android:focusable="false"
                                             android:maxLines="1"
-                                            android:onClick="@{() -> viewModel.onClickChooseRequestForRelativeStaff()}"
                                             android:text="@{viewModel.request.requestFor}"
                                             bind:ignore="LabelFor,TextFields"
                                             />
@@ -182,8 +182,9 @@
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@{viewModel.isEdit ? @color/color_blue_grey_50 : @android:color/transparent }"
                             android:layout_marginStart="@dimen/dp_10"
-                            android:hint="@string/title_all_request_status"
+                            android:hint="@string/title_request_status_detail"
                             >
 
                             <android.support.design.widget.TextInputEditText
@@ -192,7 +193,6 @@
                                 android:drawablePadding="@dimen/dp_10"
                                 android:drawableStart="@drawable/ic_list_24dp"
                                 android:focusable="false"
-                                android:onClick="@{() -> viewModel.onChangeStatusClick()}"
                                 android:text="@{viewModel.request.requestStatus}"
                                 android:textSize="@dimen/sp_16"
                                 bind:deviceStatus="@{viewModel.request.requestStatus}"
