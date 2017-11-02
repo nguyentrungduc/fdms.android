@@ -87,6 +87,7 @@
     <string name="action_clear">Clear</string>
     <string name="title_btn_category">Category</string>
     <string name="title_all_request_status">All Request Status</string>
+    <string name="title_request_status_detail">Request status</string>
     <string name="title_all_request_for">All Request For</string>
     <string name="title_all_request">All Requests</string>
     <string name="title_request_status">Status</string>
