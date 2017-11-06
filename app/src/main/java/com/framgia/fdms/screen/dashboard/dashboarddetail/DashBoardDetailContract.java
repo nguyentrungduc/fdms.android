@@ -1,6 +1,7 @@
 package com.framgia.fdms.screen.dashboard.dashboarddetail;
 
 import android.content.Intent;
+
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Dashboard;
@@ -9,6 +10,7 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.User;
 import com.github.mikephil.charting.data.PieDataSet;
+
 import java.util.List;
 
 /**
@@ -31,7 +33,7 @@ interface DashBoardDetailContract {
 
         void onGetTopDeviceSuccess(List<Device> topDevices);
 
-        void onUpdateActionSuccess(Respone<Request> requestRespone);
+        void onUpdateActionSuccess(Request request);
 
         void showProgressbar();
 
@@ -44,6 +46,8 @@ interface DashBoardDetailContract {
         void setRefresh(boolean isRefresh);
 
         void onActionRequestClick(int requestId, int actionId);
+
+        void showMessage(String message);
     }
 
     /**
@@ -61,6 +65,8 @@ interface DashBoardDetailContract {
         void getTopDevice();
 
         void updateActionRequest(int requestId, int actionId);
+
+        void cancelRequest(int reqeuestId, int actionId, String message);
 
         void getCurrentUser();
     }

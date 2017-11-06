@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
@@ -23,7 +24,6 @@ import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.Constant;
-import com.framgia.fdms.utils.navigator.Navigator;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
@@ -33,20 +33,13 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.screen.assignment.AssignmentType.ASSIGN_BY_REQUEST;
-import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
-        .RequestStatusType.APPROVED_ID;
-import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
-        .RequestStatusType.CANCELLED_ID;
-import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
-        .RequestStatusType.DONE_ID;
-import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
-        .RequestStatusType.WAITING_APPROVE_ID;
-import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel
-        .RequestStatusType.WAITING_DONE_ID;
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel.RequestStatusType.APPROVED_ID;
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel.RequestStatusType.CANCELLED_ID;
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel.RequestStatusType.DONE_ID;
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel.RequestStatusType.WAITING_APPROVE_ID;
+import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel.RequestStatusType.WAITING_DONE_ID;
 import static com.framgia.fdms.screen.selection.SelectionType.EDIT_STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
-import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
-import static com.framgia.fdms.utils.Constant.DeviceStatus.CANCELLED;
 import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_DONE;
 import static com.framgia.fdms.utils.Constant.RequestAction.APPROVED;
 import static com.framgia.fdms.utils.Constant.RequestAction.ASSIGNMENT;
@@ -81,9 +74,12 @@ public class RequestInformationViewModel extends BaseObservable
     private int mActionMenuVisibility;
     private String mRequestTitleEmpty;
     private boolean isAcceptStatus;
+    private OnRequestUpdateSuccessListenner mListenner;
 
     public RequestInformationViewModel(Fragment fragment, List<Request.RequestAction> actions,
-                                       String statusRequest, Request actionRequest, FloatingActionMenu floatingActionMenu) {
+                                       String statusRequest, Request actionRequest,
+                                       FloatingActionMenu floatingActionMenu,
+                                       OnRequestUpdateSuccessListenner listenner) {
         mContext = fragment.getContext();
         mFragment = fragment;
         setRequest(actionRequest);
@@ -91,6 +87,7 @@ public class RequestInformationViewModel extends BaseObservable
         setEdit(false);
         mListAction.addAll(actions);
         mFloatingActionsMenu = floatingActionMenu;
+        mListenner = listenner;
     }
 
     @Override
@@ -163,6 +160,8 @@ public class RequestInformationViewModel extends BaseObservable
                 mRequest.setAssignee(status.getName());
                 break;
             case REQUEST_CREATE_ASSIGNMENT:
+                onUpdateActionSuccess(null);
+
                 Activity activity = mFragment.getActivity();
                 Intent intent = new Intent();
                 activity.setResult(RESULT_OK, intent);
@@ -243,7 +242,7 @@ public class RequestInformationViewModel extends BaseObservable
         }
 
         for (final Request.RequestAction requestAction : mListAction) {
-            FloatingActionButton button = new FloatingActionButton(mContext);
+            final FloatingActionButton button = new FloatingActionButton(mContext);
             switch (requestAction.getId()) {
                 case CANCEL:
                     button.setImageResource(R.drawable.ic_cancel_white_24px);
@@ -301,9 +300,6 @@ public class RequestInformationViewModel extends BaseObservable
                                 new LovelyTextInputDialog.OnTextInputConfirmListener() {
                                     @Override
                                     public void onTextInputConfirmed(String text) {
-                                        if (TextUtils.isEmpty(text)) {
-                                            return;
-                                        }
                                         mPresenter.cancelRequest(requestId, actionId, text);
                                     }
                                 })
@@ -312,7 +308,6 @@ public class RequestInformationViewModel extends BaseObservable
                                 new LovelyTextInputDialog.TextFilter() {
                                     @Override
                                     public boolean check(String s) {
-                                        // TODO: 10/23/2017 test later
                                         return !TextUtils.isEmpty(s);
                                     }
                                 })
@@ -322,6 +317,8 @@ public class RequestInformationViewModel extends BaseObservable
                 mPresenter.updateActionRequest(requestId, actionId);
                 break;
         }
+
+        mFloatingActionsMenu.close(true);
     }
 
     @Override
@@ -337,15 +334,8 @@ public class RequestInformationViewModel extends BaseObservable
 
     @Override
     public void onUpdateActionSuccess(Respone<Request> requestRespone) {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        Activity activity = mFragment.getActivity();
-        bundle.putSerializable(BUNDLE_RESPONE, requestRespone);
-        intent.putExtras(bundle);
-        activity.setResult(RESULT_OK, intent);
-        activity.startActivity(RequestDetailActivity.getInstance(
-                mFragment.getContext(), requestRespone.getData().getId()));
-        activity.finish();
+        Toast.makeText(mFragment.getContext(), R.string.msg_update_request_success, Toast.LENGTH_SHORT).show();
+        mListenner.onUpdateSuccessFull(requestRespone.getData().getId());
     }
 
     @Override

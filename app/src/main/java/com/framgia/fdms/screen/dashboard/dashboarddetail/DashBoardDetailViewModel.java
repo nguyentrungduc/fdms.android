@@ -10,9 +10,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.PopupMenu;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Dashboard;
@@ -24,18 +27,20 @@ import com.framgia.fdms.screen.device.OnDeviceClickListenner;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
 import com.framgia.fdms.screen.request.userrequest.UserRequestAdapter;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
+import com.framgia.fdms.utils.navigator.Navigator;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
-    .DEVICE_DASHBOARD;
+        .DEVICE_DASHBOARD;
 import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
-    .REQUEST_DASHBOARD;
+        .REQUEST_DASHBOARD;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.MANAGE_REQUEST_GROUP;
 import static com.framgia.fdms.utils.Constant.RequestAction.CANCEL;
@@ -45,7 +50,7 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
  * Exposes the data to be used in the Scanner screen.
  */
 public class DashBoardDetailViewModel extends BaseObservable
-    implements DashBoardDetailContract.ViewModel, OnRequestClickListenner, OnDeviceClickListenner {
+        implements DashBoardDetailContract.ViewModel, OnRequestClickListenner, OnDeviceClickListenner {
     /**
      * Listener Event DashBoardDetail
      */
@@ -66,22 +71,24 @@ public class DashBoardDetailViewModel extends BaseObservable
     private int mDashboardType;
     private Fragment mFragment;
     private boolean mIsRefresh;
+    private Navigator mNavigator;
     private SwipeRefreshLayout.OnRefreshListener mRefreshLayout =
-        new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mAdapterTopDevice.clear();
-                mAdapterTopRequest.clear();
-                getData();
-            }
-        };
+            new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    mAdapterTopDevice.clear();
+                    mAdapterTopRequest.clear();
+                    getData();
+                }
+            };
 
     public DashBoardDetailViewModel(Fragment fragment, int dashboardType) {
         mFragment = fragment;
         mContext = fragment.getContext();
+        mNavigator = new Navigator(fragment);
         mPieData = new PieData();
         mAdapterTopRequest =
-            new UserRequestAdapter(mContext, new ArrayList<Request>(), this, new User());
+                new UserRequestAdapter(mContext, new ArrayList<Request>(), this, new User());
         mAdapterTopDevice = new TopDeviceAdapter(mContext, this, new ArrayList<Device>());
         initDashboardTitle(dashboardType);
         mDashboardType = dashboardType;
@@ -117,10 +124,10 @@ public class DashBoardDetailViewModel extends BaseObservable
         }
         Bundle bundle = data.getExtras();
         if (requestCode == REQUEST_DETAIL) {
-            Respone<Request> requestRespone =
-                (Respone<Request>) bundle.getSerializable(BUNDLE_RESPONE);
-            if (requestRespone != null) {
-                onUpdateActionSuccess(requestRespone);
+            Request request =
+                    (Request) bundle.getSerializable(BUNDLE_RESPONE);
+            if (request != null) {
+                onUpdateActionSuccess(request);
             }
         }
     }
@@ -197,11 +204,11 @@ public class DashBoardDetailViewModel extends BaseObservable
     }
 
     @Override
-    public void onUpdateActionSuccess(Respone<Request> requestRespone) {
-        if (requestRespone == null || requestRespone.getData() == null) return;
-        mAdapterTopRequest.updateItem(requestRespone.getData());
-        Snackbar.make(mFragment.getView(), requestRespone.getMessage(), Snackbar.LENGTH_LONG)
-            .show();
+    public void onUpdateActionSuccess(Request request) {
+        if (request == null) {
+            return;
+        }
+        mAdapterTopRequest.updateItem(request);
     }
 
     @Override
@@ -259,8 +266,8 @@ public class DashBoardDetailViewModel extends BaseObservable
     @Override
     public void onMenuClick(View v, final UserRequestAdapter.RequestModel request) {
         if (request == null
-            || request.getRequest() == null
-            || request.getRequest().getRequestActionList() == null) {
+                || request.getRequest() == null
+                || request.getRequest().getRequestActionList() == null) {
             return;
         }
         Request requestModel = request.getRequest();
@@ -268,34 +275,44 @@ public class DashBoardDetailViewModel extends BaseObservable
         for (int i = 0; i < requestModel.getRequestActionList().size(); i++) {
             final Request.RequestAction action = requestModel.getRequestActionList().get(i);
             popupMenu.getMenu()
-                .add(action.getName())
-                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        onActionRequestClick(request.getRequest().getId(), action.getId());
-                        return false;
-                    }
-                });
+                    .add(action.getName())
+                    .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            onActionRequestClick(request.getRequest().getId(), action.getId());
+                            return false;
+                        }
+                    });
         }
         popupMenu.show();
     }
 
     @Override
-    public void onActionRequestClick(int requestId, int actionId) {
+    public void onActionRequestClick(final int requestId, final int actionId) {
         switch (actionId) {
             case CANCEL:
                 new LovelyTextInputDialog(mContext).setTopColorRes(R.color.colorPrimary)
-                    .setTitle(R.string.msg_cancel_request)
-                    .setIcon(R.drawable.ic_error_white)
-                    .setConfirmButton(android.R.string.ok,
-                        new LovelyTextInputDialog.OnTextInputConfirmListener() {
-                            @Override
-                            public void onTextInputConfirmed(String text) {
-                                // TODO: 10/11/2017 cancel request with text
-                            }
-                        })
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .show();
+                        .setTitle(R.string.msg_cancel_request)
+                        .setIcon(R.drawable.ic_error_white)
+                        .setConfirmButton(android.R.string.ok,
+                                new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                                    @Override
+                                    public void onTextInputConfirmed(String text) {
+                                        if (TextUtils.isEmpty(text)) {
+                                            return;
+                                        }
+                                        mPresenter.cancelRequest(requestId, actionId, text);
+                                    }
+                                })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setInputFilter(R.string.error_empty_description,
+                                new LovelyTextInputDialog.TextFilter() {
+                                    @Override
+                                    public boolean check(String s) {
+                                        return !TextUtils.isEmpty(s);
+                                    }
+                                })
+                        .show();
                 break;
             default:
                 mPresenter.updateActionRequest(requestId, actionId);
@@ -304,10 +321,15 @@ public class DashBoardDetailViewModel extends BaseObservable
     }
 
     @Override
+    public void showMessage(String message) {
+        mNavigator.showToast(message);
+    }
+
+    @Override
     public void onDetailRequestClick(Request request) {
         mFragment.startActivityForResult(
-            RequestDetailActivity.getInstance(mContext, request.getId()),
-            REQUEST_DETAIL);
+                RequestDetailActivity.getInstance(mContext, request.getId()),
+                REQUEST_DETAIL);
     }
 
     @Override

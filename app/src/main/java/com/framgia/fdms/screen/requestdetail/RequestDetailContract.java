@@ -15,6 +15,8 @@ interface RequestDetailContract {
         void onGetRequestSuccess(Request request);
 
         void onGetRequestFailure(String message);
+
+        void onUpdateSuccessFull(int requestId);
     }
 
     /**

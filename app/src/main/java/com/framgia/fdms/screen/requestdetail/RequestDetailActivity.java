@@ -8,17 +8,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.source.RequestRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.remote.RequestRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityRequestDetailBinding;
+import com.framgia.fdms.screen.requestdetail.information.OnRequestUpdateSuccessListenner;
 import com.framgia.fdms.utils.navigator.Navigator;
 
 /**
  * RequestDetail Screen.
  */
-public class RequestDetailActivity extends AppCompatActivity {
+public class RequestDetailActivity extends AppCompatActivity
+        implements OnRequestUpdateSuccessListenner {
 
     private static final String BUND_REQUEST_ID = "BUND_REQUEST_ID";
 
@@ -76,5 +77,10 @@ public class RequestDetailActivity extends AppCompatActivity {
     protected void onStop() {
         mViewModel.onStop();
         super.onStop();
+    }
+
+    @Override
+    public void onUpdateSuccessFull(int requestId) {
+        mViewModel.onUpdateSuccessFull(requestId);
     }
 }

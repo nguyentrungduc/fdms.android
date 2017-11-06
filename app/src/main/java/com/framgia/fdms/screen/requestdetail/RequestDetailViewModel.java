@@ -1,24 +1,30 @@
 package com.framgia.fdms.screen.requestdetail;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableField;
-import android.support.v4.app.Fragment;
+import android.os.Bundle;
+import android.os.Parcel;
 import android.support.v7.app.AppCompatActivity;
 
 import com.framgia.fdms.BR;
+import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Request;
+import com.framgia.fdms.screen.requestdetail.information.OnRequestUpdateSuccessListenner;
 import com.framgia.fdms.screen.requestdetail.information.RequestInformationFragment;
 import com.framgia.fdms.screen.requestdetail.listdeviceassignment.ListDeviceAssignmentFragment;
 import com.framgia.fdms.utils.navigator.Navigator;
 
-import java.util.ArrayList;
-import java.util.List;
+import static android.app.Activity.RESULT_OK;
+import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 
 /**
  * Exposes the data to be used in the Devicedetail screen.
  */
+
 
 public class RequestDetailViewModel extends BaseObservable
         implements RequestDetailContract.ViewModel {
@@ -69,6 +75,15 @@ public class RequestDetailViewModel extends BaseObservable
         adapter.addFragment(RequestInformationFragment.newInstance(request));
         adapter.addFragment(ListDeviceAssignmentFragment.newInstance(request));
         mAdapter.set(adapter);
+        setResultUpdateActivity(request);
+    }
+
+    private void setResultUpdateActivity(Request request) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(BUNDLE_RESPONE, request);
+        intent.putExtras(bundle);
+        mActivity.setResult(RESULT_OK, intent);
     }
 
     @Bindable
@@ -84,5 +99,10 @@ public class RequestDetailViewModel extends BaseObservable
     @Override
     public void onGetRequestFailure(String message) {
         mNavigator.showToast(message);
+    }
+
+    @Override
+    public void onUpdateSuccessFull(int requestId) {
+        mPresenter.getRequest(requestId);
     }
 }

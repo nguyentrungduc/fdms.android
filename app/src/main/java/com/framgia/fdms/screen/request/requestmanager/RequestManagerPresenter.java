@@ -79,7 +79,7 @@ public final class RequestManagerPresenter implements RequestManagerContract.Pre
             .subscribe(new Consumer<Respone<Request>>() {
                 @Override
                 public void accept(Respone<Request> requestRespone) throws Exception {
-                    mViewModel.onUpdateActionSuccess(requestRespone);
+                    mViewModel.onUpdateActionSuccess(requestRespone.getData());
                 }
             }, new RequestError() {
                 @Override
@@ -175,7 +175,7 @@ public final class RequestManagerPresenter implements RequestManagerContract.Pre
                 .subscribe(new Consumer<Respone<Request>>() {
                     @Override
                     public void accept(Respone<Request> requestRespone) throws Exception {
-                        mViewModel.onUpdateActionSuccess(requestRespone);
+                        mViewModel.onUpdateActionSuccess(requestRespone.getData());
                     }
                 }, new RequestError() {
                     @Override
