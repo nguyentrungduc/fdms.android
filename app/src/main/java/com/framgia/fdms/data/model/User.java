@@ -6,13 +6,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.StringDef;
 import com.android.databinding.library.baseAdapters.BR;
+import com.framgia.fdms.data.anotation.Permission;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
-import static com.framgia.fdms.data.model.User.Role.STAFF;
-import static com.framgia.fdms.utils.Constant.Role.BO_MANAGER;
-import static com.framgia.fdms.utils.Constant.Role.BO_STAFF;
 
 /**
  * Created by levutantuan on 3/31/17.
@@ -79,6 +77,7 @@ public class User extends BaseObservable implements Parcelable {
     private String mGender;
     @Expose
     @SerializedName("role")
+    @Permission
     private String mRole;
     @Expose
     @SerializedName("birthday")
@@ -309,7 +308,7 @@ public class User extends BaseObservable implements Parcelable {
         return mRole;
     }
 
-    public void setRole(String role) {
+    public void setRole(@Permission String role) {
         mRole = role;
         notifyPropertyChanged(BR.role);
     }
@@ -421,20 +420,5 @@ public class User extends BaseObservable implements Parcelable {
         dest.writeString(mToken);
         dest.writeString(mCardNumber);
         dest.writeString(mBranch);
-    }
-
-    public boolean isBo() {
-        //TODO: EDIT LATER 11/10/2017
-        return mRole != null && (mRole.equals(BO_MANAGER) || mRole.equals(BO_STAFF));
-    }
-
-    public boolean isBoStaff() {
-        //TODO: EDIT LATER 11/10/2017
-        return mRole != null && (mRole.equals(BO_STAFF) || mRole.equals(BO_MANAGER));
-    }
-
-    @StringDef({ STAFF })
-    public @interface Role {
-        String STAFF = "staff";
     }
 }
