@@ -24,6 +24,7 @@ import static com.framgia.fdms.utils.Constant.BundleRequest.BUND_REQUEST;
 public class RequestInformationFragment extends Fragment {
     private RequestInformationContract.ViewModel mViewModel;
     private Request mRequest;
+    private OnRequestUpdateSuccessListenner mListenner;
 
     public static RequestInformationFragment newInstance(Request request) {
         RequestInformationFragment fragment = new RequestInformationFragment();
@@ -42,7 +43,7 @@ public class RequestInformationFragment extends Fragment {
                 DataBindingUtil.inflate(inflater, R.layout.fragment_request_information, container,
                         false);
         mViewModel = new RequestInformationViewModel(this, mRequest.getRequestActionList(),
-                mRequest.getRequestStatus(), mRequest, binding.floatActionMenu);
+                mRequest.getRequestStatus(), mRequest, binding.floatActionMenu, mListenner);
 
         RequestInformationContract.Presenter presenter = new RequestInformationPresenter(mViewModel,
                 new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));
@@ -53,6 +54,7 @@ public class RequestInformationFragment extends Fragment {
 
     public void getRequestFromIntent() {
         mRequest = (Request) getArguments().get(BUND_REQUEST);
+        mListenner = (OnRequestUpdateSuccessListenner) getActivity();
     }
 
     @Override

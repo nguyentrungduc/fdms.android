@@ -21,7 +21,7 @@ import static com.framgia.fdms.screen.requestdetail.RequestDetailPagerAdapter.Re
  * Created by MyPC on 23/05/2017.
  */
 
-public class RequestDetailPagerAdapter extends FragmentPagerAdapter {
+public class RequestDetailPagerAdapter extends FragmentStatePagerAdapter {
     private Context mContext;
     private List<Fragment> mFragments;
 
@@ -38,6 +38,11 @@ public class RequestDetailPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         return mFragments.get(position);
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
     @Override

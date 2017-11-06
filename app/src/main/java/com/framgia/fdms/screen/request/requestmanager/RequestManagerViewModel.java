@@ -172,10 +172,10 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 mPresenter.getData(mRequestFor, mStatus);
                 break;
             case REQUEST_DETAIL:
-                Respone<Request> requestRespone =
-                        (Respone<Request>) bundle.getSerializable(BUNDLE_RESPONE);
-                if (requestRespone != null) {
-                    onUpdateActionSuccess(requestRespone);
+                Request request =
+                        (Request) bundle.getSerializable(BUNDLE_RESPONE);
+                if (request != null) {
+                    onUpdateActionSuccess(request);
                 }
                 break;
             case REQUEST_CREATE_ASSIGNMENT:
@@ -189,11 +189,11 @@ public class RequestManagerViewModel extends BaseFragmentModel
     }
 
     @Override
-    public void onUpdateActionSuccess(Respone<Request> requestRespone) {
-        if (requestRespone == null || requestRespone.getData() == null) return;
-        mAdapter.updateItem(requestRespone.getData());
-        Snackbar.make(mFragment.getView(), requestRespone.getMessage(), Snackbar.LENGTH_LONG)
-                .show();
+    public void onUpdateActionSuccess(Request request) {
+        if (request == null) {
+            return;
+        }
+        mAdapter.updateItem(request);
     }
 
     @Override

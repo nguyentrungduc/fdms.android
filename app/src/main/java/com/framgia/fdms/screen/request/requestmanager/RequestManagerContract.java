@@ -23,7 +23,7 @@ interface RequestManagerContract {
 
         void onActivityResult(int requestCode, int resultCode, Intent data);
 
-        void onUpdateActionSuccess(Respone<Request> requestRespone);
+        void onUpdateActionSuccess(Request request);
 
         void refreshData();
 
