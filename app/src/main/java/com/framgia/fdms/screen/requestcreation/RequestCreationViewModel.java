@@ -43,6 +43,8 @@ public class RequestCreationViewModel extends BaseObservable
     private Status mAssignee;
     private RequestCreatorRequest mRequest;
 
+    private Status mDefaultAssignee;
+
     private Context mContext;
     private String mTitleError;
     private String mDescriptionError;
@@ -51,6 +53,7 @@ public class RequestCreationViewModel extends BaseObservable
     private boolean mIsManager;
     @RequestCreatorType
     private int mRequestCreatorType;
+
 
     public RequestCreationViewModel(AppCompatActivity activity,
                                     @RequestCreatorType int requestCreatorType) {
@@ -110,10 +113,8 @@ public class RequestCreationViewModel extends BaseObservable
         assert status != null;
         switch (requestCode) {
             case REQUEST_RELATIVE:
-                if (status.getId() == OUT_OF_INDEX) {
-                    return;
-                }
                 setRequestFor(status);
+                updateDefaultAssignee();
                 break;
             case REQUEST_ASSIGNEE:
                 setAssignee(status);
@@ -165,6 +166,11 @@ public class RequestCreationViewModel extends BaseObservable
             }
             setAssignee(new Status(OUT_OF_INDEX, NONE));
         }
+    }
+
+    @Override
+    public void onGetDefaultAssignSuccess(Status assignee) {
+        mDefaultAssignee = assignee;
     }
 
     @Bindable
@@ -263,6 +269,12 @@ public class RequestCreationViewModel extends BaseObservable
         mActivity.startActivityForResult(
                 SelectionActivity.getInstance(mContext, SelectionType.RELATIVE_STAFF),
                 REQUEST_RELATIVE);
+    }
+
+    public void updateDefaultAssignee(){
+        if (mAssignee.getId() < 0 && mDefaultAssignee != null) {
+            setAssignee(mDefaultAssignee);
+        }
     }
 
     public void onClickAssignee() {

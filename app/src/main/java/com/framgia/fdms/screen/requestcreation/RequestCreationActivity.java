@@ -9,11 +9,13 @@ import android.view.MenuItem;
 
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.RequestRepository;
+import com.framgia.fdms.data.source.StatusRepository;
 import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.local.UserLocalDataSource;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.data.source.remote.RequestRemoteDataSource;
+import com.framgia.fdms.data.source.remote.StatusRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityRequestCreationBinding;
 
 import static com.framgia.fdms.utils.Constant.BundleRequest.BUNDLE_REQUEST_TYPE;
@@ -43,7 +45,8 @@ public class RequestCreationActivity extends AppCompatActivity {
         RequestCreationContract.Presenter presenter = new RequestCreationPresenter(mViewModel,
                 mManageRequestType,
                 new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
-                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))));
+                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))),
+                new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance())));
         mViewModel.setPresenter(presenter);
 
         ActivityRequestCreationBinding binding =

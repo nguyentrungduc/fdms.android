@@ -1,9 +1,11 @@
 package com.framgia.fdms.screen.requestcreation;
 
 import android.content.Intent;
+
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Request;
+import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 
@@ -34,6 +36,8 @@ public interface RequestCreationContract {
         void onInputRequestForError();
 
         void onGetUserSuccess(User user);
+
+        void onGetDefaultAssignSuccess(Status assignee);
     }
 
     /**
@@ -45,5 +49,7 @@ public interface RequestCreationContract {
         void registerRequest(RequestCreatorRequest request);
 
         boolean validateDataInput(RequestCreatorRequest request);
+
+        void getDefaultAssignee();
     }
 }
