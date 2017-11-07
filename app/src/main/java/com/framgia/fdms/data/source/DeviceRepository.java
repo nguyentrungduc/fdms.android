@@ -5,6 +5,7 @@ import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.Respone;
+import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.screen.device.listdevice.DeviceFilterModel;
 
@@ -90,5 +91,25 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
     public Observable<List<DeviceUsingHistory>> getUserDevice(String status, String staffEmail,
                                                               int page, int perPage) {
         return mDeviceRemoteDataSource.getUserDevice(status, staffEmail, page, perPage);
+    }
+
+    @Override
+    public Observable<List<Status>> getDeviceStatus() {
+        return mDeviceRemoteDataSource.getDeviceStatus();
+    }
+
+    @Override
+    public Observable<List<Status>> getDeviceStatus(String statusName) {
+        return mDeviceRemoteDataSource.getDeviceStatus(statusName);
+    }
+
+    @Override
+    public Observable<List<Status>> getChangeDeviceStatus(int inputStatus, String statusName) {
+        return mDeviceRemoteDataSource.getChangeDeviceStatus(inputStatus, statusName);
+    }
+
+    @Override
+    public Observable<List<Status>> getChangeDeviceStatus(int inputStatus) {
+        return mDeviceRemoteDataSource.getChangeDeviceStatus(inputStatus);
     }
 }

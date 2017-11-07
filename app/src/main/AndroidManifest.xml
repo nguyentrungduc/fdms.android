@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.framgia.fdms">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.READ_PROFILE"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".FDMSApplication"
@@ -18,86 +18,87 @@
         android:theme="@style/NoActionBarTheme">
         <meta-data
             android:name="android.app.searchable"
-            android:resource="@xml/searchable">
-        </meta-data>
+            android:resource="@xml/searchable"></meta-data>
 
         <activity
             android:name=".screen.authenication.login.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Design.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.Design.NoActionBar"></activity>
         <activity
             android:name=".screen.authenication.register.RegisterActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".screen.authenication.login.LoginActivity"/>
+                android:value=".screen.authenication.login.LoginActivity" />
         </activity>
         <activity
             android:name=".screen.authenication.forgotpassword.ForgotpasswordActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".screen.authenication.login.LoginActivity"/>
+                android:value=".screen.authenication.login.LoginActivity" />
         </activity>
         <activity
             android:name=".screen.main.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".screen.devicecreation.CreateDeviceActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".screen.requestcreation.RequestCreationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".screen.scanner.ScannerActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".screen.devicedetail.DeviceDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".screen.returndevice.ReturnDeviceActivity"/>
+            android:screenOrientation="portrait" />
+        <activity android:name=".screen.returndevice.ReturnDeviceActivity" />
         <activity
             android:name=".screen.requestdetail.RequestDetailActivity"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".screen.notification.NotificationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".screen.assignment.AssignmentActivity"/>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".screen.assignment.AssignmentActivity" />
         <activity
             android:name=".screen.profile.chooseexport.ChooseExportActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".screen.tutorial.TutorialActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".screen.meetingroomdetail.DetailMeetingRoomActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="731ae80443a5d1005298e4d8934ce1bc9b4de457"/>
+            android:value="731ae80443a5d1005298e4d8934ce1bc9b4de457" />
 
         <activity
             android:name=".screen.deviceselection.DeviceSelectionActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".screen.selection.SelectionActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screen.devicecreation.selectdevicestatus.SelectDeviceStatusActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".screen.user.UserActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

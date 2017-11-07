@@ -2,11 +2,14 @@ package com.framgia.fdms.data.source.remote;
 
 import android.text.TextUtils;
 
+import com.framgia.fdms.FDMSApplication;
+import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.Respone;
+import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.DeviceDataSource;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.screen.device.listdevice.DeviceFilterModel;
@@ -19,6 +22,7 @@ import io.reactivex.functions.Function;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +31,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
+import static com.framgia.fdms.utils.Constant.AVAIABLE;
 import static com.framgia.fdms.utils.Constant.ApiParram.BOUGHT_DATE;
 import static com.framgia.fdms.utils.Constant.ApiParram.CATEGORY_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.DESCRIPTION;
@@ -53,7 +58,9 @@ import static com.framgia.fdms.utils.Constant.ApiParram.STAFF_USING_NAME;
 import static com.framgia.fdms.utils.Constant.ApiParram.STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.VENDOR_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.WARRANTY;
+import static com.framgia.fdms.utils.Constant.BROKEN;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
+import static com.framgia.fdms.utils.Constant.USING;
 
 public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource {
 
@@ -376,6 +383,86 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
                                 return Utils.getResponse(listRespone);
                             }
                         });
+    }
+
+    public List<Status> getAllDeviceStatus() {
+        List<Status> statuses = new ArrayList<>();
+        statuses.add(new Status(USING,
+                FDMSApplication.getInstant().getString(R.string.title_using)));
+        statuses.add(new Status(AVAIABLE,
+                FDMSApplication.getInstant().getString(R.string.title_available)));
+        statuses.add(new Status(BROKEN,
+                FDMSApplication.getInstant().getString(R.string.title_broken)));
+        return statuses;
+    }
+
+    @Override
+    public Observable<List<Status>> getDeviceStatus() {
+        return Observable.just(getAllDeviceStatus());
+    }
+
+    @Override
+    public Observable<List<Status>> getDeviceStatus(final String statusName) {
+        if (TextUtils.isEmpty(statusName)) {
+            return getDeviceStatus();
+        }
+        return getDeviceStatus()
+                .flatMap(new Function<List<Status>, ObservableSource<List<Status>>>() {
+                    @Override
+                    public ObservableSource<List<Status>> apply(List<Status> statuses)
+                            throws Exception {
+                        List<Status> result = new ArrayList<>();
+                        for (Status status : statuses) {
+                            if (status.getName().toLowerCase().equals(statusName.toLowerCase())) {
+                                result.add(status);
+                            }
+                        }
+                        return Observable.just(result);
+                    }
+                });
+    }
+
+    @Override
+    public Observable<List<Status>> getChangeDeviceStatus(int inputStatus, final String statusName) {
+        if (TextUtils.isEmpty(statusName)) {
+            return getChangeDeviceStatus(inputStatus);
+        }
+        return getChangeDeviceStatus(inputStatus)
+                .flatMap(new Function<List<Status>, ObservableSource<List<Status>>>() {
+                    @Override
+                    public ObservableSource<List<Status>> apply(List<Status> statuses)
+                            throws Exception {
+                        List<Status> result = new ArrayList<>();
+                        for (Status status : statuses) {
+                            if (status.getName().toLowerCase().equals(statusName.toLowerCase())) {
+                                result.add(status);
+                            }
+                        }
+                        return Observable.just(result);
+                    }
+                });
+    }
+
+    @Override
+    public Observable<List<Status>> getChangeDeviceStatus(int inputStatus) {
+        List<Status> statuses = new ArrayList<>();
+        switch (inputStatus) {
+            case AVAIABLE:
+                statuses.add(new Status(AVAIABLE,
+                        FDMSApplication.getInstant().getString(R.string.title_available)));
+                statuses.add(new Status(BROKEN,
+                        FDMSApplication.getInstant().getString(R.string.title_broken)));
+                break;
+            case BROKEN:
+                statuses.add(new Status(BROKEN,
+                        FDMSApplication.getInstant().getString(R.string.title_broken)));
+                statuses.add(new Status(AVAIABLE,
+                        FDMSApplication.getInstant().getString(R.string.title_available)));
+                break;
+            default:
+                break;
+        }
+        return Observable.just(statuses);
     }
 
     public Map<String, String> getDeviceParams(DeviceFilterModel filterModel, int page,
