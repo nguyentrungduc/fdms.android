@@ -1,6 +1,5 @@
 package com.framgia.fdms.screen.requestcreation;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -22,6 +21,7 @@ import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.Constant;
 
 import static android.app.Activity.RESULT_OK;
+import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.NONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
@@ -153,8 +153,8 @@ public class RequestCreationViewModel extends BaseObservable
 
     @Override
     public void onGetUserSuccess(User user) {
-        setManager(user.getRole().equals(Constant.Role.BO_MANAGER));
-        if (user.getRole().equals(Constant.Role.BO_MANAGER)) {
+        setManager(user.getRole().equals(BO_MANAGER));
+        if (isManager()) {
             if (mRequestCreatorType == RequestCreatorType.MY_REQUEST) {
                 setRequestFor(new Status(user.getId(), user.getName()));
             } else {

@@ -7,23 +7,32 @@ import android.support.annotation.IntDef;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
+
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
+import static com.framgia.fdms.data.anotation.Permission.ACCOUNTANT;
+import static com.framgia.fdms.data.anotation.Permission.ADMIN;
+import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
+import static com.framgia.fdms.data.anotation.Permission.BO_STAFF;
+import static com.framgia.fdms.data.anotation.Permission.DIVISION_MANAGER;
+import static com.framgia.fdms.data.anotation.Permission.SECTION_MANAGER;
 import static com.framgia.fdms.screen.dashboard.DashboardViewModel.Tab.TAB_DEVIVE_DASH_BOARD;
 import static com.framgia.fdms.screen.dashboard.DashboardViewModel.Tab.TAB_REQUEST_DASH_BOARD;
 import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
-    .DEVICE_DASHBOARD;
+        .DEVICE_DASHBOARD;
 import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
-    .REQUEST_DASHBOARD;
+        .REQUEST_DASHBOARD;
 
 /**
  * Exposes the data to be used in the Dashboard screen.
@@ -32,7 +41,7 @@ public class DashboardViewModel extends BaseObservable implements DashboardContr
     private DashboardContract.Presenter mPresenter;
     private ViewPagerAdapter mPagerAdapter;
     private int mTab = TAB_REQUEST_DASH_BOARD;
-    private boolean mIsBoRole;
+    private boolean mIsShowDeviceDashboard;
     private Fragment mFragment;
     private Context mContext;
     private FDMSShowcaseSequence mSequence;
@@ -86,25 +95,41 @@ public class DashboardViewModel extends BaseObservable implements DashboardContr
     }
 
     @Bindable
-    public boolean isBoRole() {
-        return mIsBoRole;
+    public boolean isShowDeviceDashboard() {
+        return mIsShowDeviceDashboard;
     }
 
-    public void setBoRole(boolean boRole) {
-        mIsBoRole = boRole;
-        notifyPropertyChanged(BR.boRole);
+    public void setShowDeviceDashboard(boolean showDeviceDashboard) {
+        mIsShowDeviceDashboard = showDeviceDashboard;
+        notifyPropertyChanged(BR.showDeviceDashboard);
     }
 
     @Override
     public void setupViewPager(User user) {
         String role = user.getRole();
         if (role == null) return;
-        setBoRole(user.isBo());
+        setShowDeviceDashboard(isShowDeviceDashboard(user.getRole()));
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(DashBoardDetailFragment.newInstance(REQUEST_DASHBOARD));
-        if (mIsBoRole) fragments.add(DashBoardDetailFragment.newInstance(DEVICE_DASHBOARD));
+        if (isShowDeviceDashboard()) {
+            fragments.add(DashBoardDetailFragment.newInstance(DEVICE_DASHBOARD));
+        }
         mPagerAdapter = new ViewPagerAdapter(mFragment.getChildFragmentManager(), fragments);
         setPagerAdapter(mPagerAdapter);
+    }
+
+    public boolean isShowDeviceDashboard(String permission) {
+        switch (permission) {
+            case ADMIN:
+            case BO_MANAGER:
+            case BO_STAFF:
+            case ACCOUNTANT:
+            case DIVISION_MANAGER:
+            case SECTION_MANAGER:
+                return true;
+            default:
+                return false;
+        }
     }
 
     @Override
@@ -116,15 +141,15 @@ public class DashboardViewModel extends BaseObservable implements DashboardContr
     public void onShowCase() {
         mSequence.start();
         mSequence.setOnItemDismissedListener(
-            new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
-                @Override
-                public void onDismiss(MaterialShowcaseView materialShowcaseView, int i) {
-                    mSequence.setCount(mSequence.getCount() - 1);
-                    if (mSequence.getCount() == 0) {
-                        mPresenter.saveShowCase();
+                new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
+                    @Override
+                    public void onDismiss(MaterialShowcaseView materialShowcaseView, int i) {
+                        mSequence.setCount(mSequence.getCount() - 1);
+                        if (mSequence.getCount() == 0) {
+                            mPresenter.saveShowCase();
+                        }
                     }
-                }
-            });
+                });
     }
 
     @Bindable
@@ -138,7 +163,7 @@ public class DashboardViewModel extends BaseObservable implements DashboardContr
     }
 
     @IntDef({
-        TAB_DEVIVE_DASH_BOARD, TAB_REQUEST_DASH_BOARD
+            TAB_DEVIVE_DASH_BOARD, TAB_REQUEST_DASH_BOARD
     })
     public @interface Tab {
         int TAB_REQUEST_DASH_BOARD = 0;

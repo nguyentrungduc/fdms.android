@@ -17,7 +17,8 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.framgia.fdms.utils.Constant.Role.BO_MANAGER;
+import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
+
 
 /**
  * Listens to user actions from the UI ({@link RequestCreationActivity}), retrieves the data and
@@ -103,8 +104,9 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
             isValid = false;
             mViewModel.onInputTitleError();
         }
-        if (mUser.getRole().equals(BO_MANAGER) && mRequestType == RequestCreatorType.MEMBER_REQUEST
-                && request.getRequestFor() <= 0) {
+        if (mUser.getRole().equals(BO_MANAGER) &&
+                mRequestType == RequestCreatorType.MEMBER_REQUEST &&
+                request.getRequestFor() <= 0) {
             isValid = false;
             mViewModel.onInputRequestForError();
         }

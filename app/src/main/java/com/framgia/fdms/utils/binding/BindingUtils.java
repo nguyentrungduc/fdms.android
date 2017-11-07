@@ -75,6 +75,11 @@ import uk.co.deanwild.materialshowcaseview.IShowcaseListener;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
+import static com.framgia.fdms.data.anotation.Permission.ACCOUNTANT;
+import static com.framgia.fdms.data.anotation.Permission.ADMIN;
+import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
+import static com.framgia.fdms.data.anotation.Permission.BO_STAFF;
+import static com.framgia.fdms.data.anotation.Permission.DIVISION_MANAGER;
 import static com.framgia.fdms.screen.dashboard.DashboardViewModel.Tab.TAB_DEVIVE_DASH_BOARD;
 import static com.framgia.fdms.screen.dashboard.DashboardViewModel.Tab.TAB_REQUEST_DASH_BOARD;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
@@ -85,11 +90,6 @@ import static com.framgia.fdms.utils.Constant.DeviceStatus.DONE;
 import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_APPROVE;
 import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_DONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
-import static com.framgia.fdms.utils.Constant.Role.ACCOUNTANT;
-import static com.framgia.fdms.utils.Constant.Role.ADMIN;
-import static com.framgia.fdms.utils.Constant.Role.BO_MANAGER;
-import static com.framgia.fdms.utils.Constant.Role.BO_STAFF;
-import static com.framgia.fdms.utils.Constant.Role.DIVISION_MANAGER;
 
 /**
  * Created by Age on 4/3/2017.

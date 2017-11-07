@@ -5,12 +5,11 @@ import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import com.android.databinding.library.baseAdapters.BR;
+
+import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.User;
@@ -19,11 +18,14 @@ import com.framgia.fdms.screen.devicedetail.infomation.DeviceInfomationFragment;
 import com.framgia.fdms.screen.devicedetail.usinghistory.DeviceUsingHistoryFragment;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.github.clans.fab.FloatingActionMenu;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
+import static com.framgia.fdms.data.anotation.Permission.BO_STAFF;
 import static com.framgia.fdms.screen.devicedetail.DeviceDetailPagerAdapter.DeviceDetailPage
-    .DEVICE_INFOMATION;
+        .DEVICE_INFOMATION;
 import static com.framgia.fdms.utils.Constant.USING;
 
 /**
@@ -31,33 +33,36 @@ import static com.framgia.fdms.utils.Constant.USING;
  */
 
 public class DeviceDetailViewModel extends BaseObservable
-    implements DeviceDetailContract.ViewModel {
+        implements DeviceDetailContract.ViewModel {
 
     private DeviceDetailContract.Presenter mPresenter;
     private DeviceDetailPagerAdapter mAdapter;
     private Context mContext;
     private AppCompatActivity mActivity;
     private DeviceInfomationFragment mInfomationFragment;
-    private ObservableInt mFloatingVisible = new ObservableInt(View.VISIBLE);
+    private boolean mIsAllowEditDeleteDevice = true;
     private Device mDevice;
     private ObservableField<Integer> mProgressBarVisibility = new ObservableField<>();
-    private boolean mIsBoManager;
+
     private boolean mIsUsingDevice;
     private Navigator mNavigator;
+    private User mUser;
 
     public DeviceDetailViewModel(AppCompatActivity activity, Device device, Navigator navigator) {
         mActivity = activity;
         mNavigator = navigator;
         mContext = mActivity.getApplicationContext();
         mDevice = device;
-        mInfomationFragment = DeviceInfomationFragment.newInstance(mDevice);
         List<Fragment> fragments = new ArrayList<>();
+        mInfomationFragment = DeviceInfomationFragment.newInstance(mDevice);
         fragments.add(mInfomationFragment);
         fragments.add(DeviceDetailHistoryFragment.newInstance(mDevice.getDeviceId()));
         fragments.add(DeviceUsingHistoryFragment.newInstance(mDevice.getDeviceCode()));
         mAdapter =
-            new DeviceDetailPagerAdapter(mContext, mActivity.getSupportFragmentManager(), fragments,
-                mDevice.getId());
+                new DeviceDetailPagerAdapter(mContext,
+                        mActivity.getSupportFragmentManager(),
+                        fragments,
+                        mDevice.getId());
         if (mDevice.getDeviceStatusId() == USING) {
             setUsingDevice(true);
             return;
@@ -98,10 +103,10 @@ public class DeviceDetailViewModel extends BaseObservable
 
     @Override
     public void onGetUserSuccess(User user) {
-        if (user.getRole() == null) {
+        if (user == null) {
             return;
         }
-        setBoManager(user.isBo());
+        mUser = user;
     }
 
     @Override
@@ -124,28 +129,29 @@ public class DeviceDetailViewModel extends BaseObservable
     }
 
     public void updateFloatingVisible(int position) {
-        if (position == DEVICE_INFOMATION && isBoManager()) {
-            mFloatingVisible.set(View.VISIBLE);
-        } else {
-            mFloatingVisible.set(View.GONE);
-        }
+        setIsAllowEditDeleteDevice(isAllowEditDeleteDevice(position, mUser.getRole()));
+    }
+
+    public boolean isAllowEditDeleteDevice(int position, String permission) {
+        return position == DEVICE_INFOMATION &&
+                (permission.equals(BO_MANAGER) || permission.equals(BO_STAFF));
     }
 
     public void onDeleteDeviceClick(FloatingActionMenu floatingActionsMenu) {
         floatingActionsMenu.close(true);
         new AlertDialog.Builder(mActivity).setTitle(mActivity.getString(R.string.title_delete))
-            .setMessage(mActivity.getString(R.string.msg_delete_producer)
-                + " "
-                + mDevice.getProductionName())
-            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (mInfomationFragment != null) mInfomationFragment.onDeleteDevice();
-                }
-            })
-            .setNegativeButton(android.R.string.no, null)
-            .create()
-            .show();
+                .setMessage(mActivity.getString(R.string.msg_delete_producer)
+                        + " "
+                        + mDevice.getProductionName())
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (mInfomationFragment != null) mInfomationFragment.onDeleteDevice();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .create()
+                .show();
     }
 
     public DeviceDetailPagerAdapter getAdapter() {
@@ -156,8 +162,14 @@ public class DeviceDetailViewModel extends BaseObservable
         return mActivity;
     }
 
-    public ObservableInt getFloatingVisible() {
-        return mFloatingVisible;
+    @Bindable
+    public boolean getIsAllowEditDeleteDevice() {
+        return mIsAllowEditDeleteDevice;
+    }
+
+    public void setIsAllowEditDeleteDevice(boolean isAllowEditDeleteDevice) {
+        mIsAllowEditDeleteDevice = isAllowEditDeleteDevice;
+        notifyPropertyChanged(BR.isAllowEditDeleteDevice);
     }
 
     @Bindable
@@ -168,15 +180,5 @@ public class DeviceDetailViewModel extends BaseObservable
     private void setUsingDevice(boolean usingDevice) {
         mIsUsingDevice = usingDevice;
         notifyPropertyChanged(BR.usingDevice);
-    }
-
-    @Bindable
-    private boolean isBoManager() {
-        return mIsBoManager;
-    }
-
-    private void setBoManager(boolean boManager) {
-        mIsBoManager = boManager;
-        notifyPropertyChanged(BR.boManager);
     }
 }

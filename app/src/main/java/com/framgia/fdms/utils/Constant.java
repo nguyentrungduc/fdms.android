@@ -104,15 +104,6 @@ public class Constant {
         public static final String RETURN = "returned";
     }
 
-    public static final class Role {
-        public static final String STAFF = "staff";
-        public static final String DIVISION_MANAGER = "division_manager";
-        public static final String BO_MANAGER = "manager";
-        public static final String BO_STAFF = "bo_staff";
-        public static final String ADMIN = "admin";
-        public static final String ACCOUNTANT = "accountant";
-    }
-
     public class ApiParram {
         public static final String CATEGORY_ID = "category_id";
         public static final String STATUS_ID = "status_id";

@@ -13,7 +13,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
-import com.android.databinding.library.baseAdapters.BR;
+import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
+import static com.framgia.fdms.data.anotation.Permission.BO_STAFF;
 import static com.framgia.fdms.screen.assignment.AssignmentType.ASSIGN_BY_REQUEST;
 import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel.RequestStatusType.APPROVED_ID;
 import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel.RequestStatusType.CANCELLED_ID;
@@ -75,6 +77,7 @@ public class RequestInformationViewModel extends BaseObservable
     private String mRequestTitleEmpty;
     private boolean isAcceptStatus;
     private OnRequestUpdateSuccessListenner mListenner;
+    private boolean mIsShowRequestForAndAssignee;
 
     public RequestInformationViewModel(Fragment fragment, List<Request.RequestAction> actions,
                                        String statusRequest, Request actionRequest,
@@ -223,8 +226,6 @@ public class RequestInformationViewModel extends BaseObservable
     }
 
     public void initActionRequestMenu() {
-        String requestStatus = mRequest.getRequestStatus();
-
         if (mRequest.getRequestStatusId() == DONE) {
             return;
         }
@@ -234,7 +235,7 @@ public class RequestInformationViewModel extends BaseObservable
         editAction.setName(mContext.getString(R.string.action_edit));
         mListAction.add(editAction);
 
-        if (mUser.isBoStaff() && requestStatus.equals(WAITING_DONE) && mRequest.getId() > 0) {
+        if (isAllowAssignDevice(mUser.getRole(), mRequest)) {
             Request.RequestAction assignAction = new Request().new RequestAction();
             assignAction.setId(ASSIGNMENT);
             assignAction.setName(mContext.getString(R.string.title_assignment));
@@ -279,6 +280,11 @@ public class RequestInformationViewModel extends BaseObservable
             button.setButtonSize(SIZE_MINI);
             mFloatingActionsMenu.addMenuButton(button);
         }
+    }
+
+    public boolean isAllowAssignDevice(String permision, Request request) {
+        return (permision.equals(BO_MANAGER) || permision.equals(BO_STAFF))
+                && request.getRequestStatusId() == WAITING_DONE_ID;
     }
 
     @Override
@@ -347,6 +353,8 @@ public class RequestInformationViewModel extends BaseObservable
         initActionRequestMenu();
         setActionMenuVisibility(
                 mListAction != null && mListAction.size() > 0 ? View.VISIBLE : View.GONE);
+        setShowRequestForAndAssignee(mUser.getRole().equals(BO_MANAGER) ||
+                user.getRole().equals(BO_STAFF));
     }
 
     @Override
@@ -436,6 +444,16 @@ public class RequestInformationViewModel extends BaseObservable
     public void setAcceptStatus(boolean acceptStatus) {
         isAcceptStatus = acceptStatus;
         notifyPropertyChanged(BR.acceptStatus);
+    }
+
+    @Bindable
+    public boolean isShowRequestForAndAssignee() {
+        return mIsShowRequestForAndAssignee;
+    }
+
+    public void setShowRequestForAndAssignee(boolean showRequestForAndAssignee) {
+        mIsShowRequestForAndAssignee = showRequestForAndAssignee;
+        notifyPropertyChanged(BR.showRequestForAndAssignee);
     }
 
     @IntDef({

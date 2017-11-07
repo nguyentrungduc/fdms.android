@@ -74,7 +74,6 @@ public class ListDeviceViewModel extends BaseObservable
     private ListDeviceContract.Presenter mPresenter;
     private Context mContext;
 
-    private boolean mIsBo;
     private int mEmptyViewVisible = View.GONE;
 
     private boolean mIsRefresh;
@@ -203,7 +202,7 @@ public class ListDeviceViewModel extends BaseObservable
         if (role == null) {
             return;
         }
-        setBo(user.isBo());
+        // TODO: 11/6/2017 setup show button add device, return device, assign device for newmember
     }
 
     @Override
@@ -346,16 +345,6 @@ public class ListDeviceViewModel extends BaseObservable
     @Bindable
     public ListDeviceAdapter getAdapter() {
         return mAdapter;
-    }
-
-    @Bindable
-    public boolean isBo() {
-        return mIsBo;
-    }
-
-    public void setBo(boolean bo) {
-        mIsBo = bo;
-        notifyPropertyChanged(BR.bo);
     }
 
     @Bindable
