@@ -29,7 +29,6 @@ import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_DONE;
 
 public class UserRequestAdapter
         extends BaseRecyclerViewAdapter<Request, UserRequestAdapter.ViewHolder> {
-    private static final int FIRST_ITEM = 0;
     private List<Request> mRequests = new ArrayList<>();
     private OnRequestClickListenner mListenner;
     private User mUser;
@@ -64,6 +63,15 @@ public class UserRequestAdapter
         if (user == null) return;
         mUser = user;
         notifyDataSetChanged();
+    }
+
+
+    public void addRequest(Request request) {
+        if (mRequests == null) {
+            return;
+        }
+        mRequests.add(0, request);
+        notifyItemInserted(0);
     }
 
     @Override

@@ -79,6 +79,8 @@ public class UserRequestViewModel extends BaseFragmentModel
                 }
             };
 
+    private int mScrollPosition;
+
     public UserRequestViewModel(FragmentActivity activity, Fragment fragment) {
         mContext = activity.getApplicationContext();
         mFragment = fragment;
@@ -153,9 +155,10 @@ public class UserRequestViewModel extends BaseFragmentModel
             return;
         }
         Bundle bundle = data.getExtras();
-        Status status = bundle.getParcelable(BUNDLE_DATA);
+
         switch (requestCode) {
             case REQUEST_STATUS:
+                Status status = bundle.getParcelable(BUNDLE_DATA);
                 if (status == null) {
                     return;
                 }
@@ -174,12 +177,21 @@ public class UserRequestViewModel extends BaseFragmentModel
                 }
                 break;
             case REQUEST_REQUEST_CREATED_BY:
+                status = bundle.getParcelable(BUNDLE_DATA);
                 if (status == null) {
                     return;
                 }
                 setRequestBy(status);
                 mAdapter.clear();
                 mPresenter.getData(mRequestBy, mStatus);
+                break;
+
+            case REQUEST_CREATE_REQUEST:
+                Request request = (Request) bundle.getSerializable(BUNDLE_DATA);
+                if (request != null) {
+                    mAdapter.addRequest(request);
+                    setScrollPosition(0);
+                }
                 break;
             default:
                 break;
@@ -417,5 +429,15 @@ public class UserRequestViewModel extends BaseFragmentModel
     private void setRequestBy(Status requestBy) {
         mRequestBy = requestBy;
         notifyPropertyChanged(BR.requestBy);
+    }
+
+    @Bindable
+    public int getScrollPosition() {
+        return mScrollPosition;
+    }
+
+    public void setScrollPosition(int scrollPosition) {
+        mScrollPosition = scrollPosition;
+        notifyPropertyChanged(BR.scrollPosition);
     }
 }

@@ -73,6 +73,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 }
             };
     private Navigator mNavigator;
+    private int mScrollPosition;
 
     public RequestManagerViewModel(Fragment fragment) {
         mNavigator = new Navigator(fragment);
@@ -147,9 +148,9 @@ public class RequestManagerViewModel extends BaseFragmentModel
             return;
         }
         Bundle bundle = data.getExtras();
-        Status dataResponse = bundle.getParcelable(BUNDLE_DATA);
         switch (requestCode) {
             case REQUEST_SELECTION:
+                Status dataResponse = bundle.getParcelable(BUNDLE_DATA);
                 if (dataResponse == null) {
                     return;
                 }
@@ -160,7 +161,9 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 mAdapter.clear();
                 mPresenter.getData(mRequestFor, mStatus);
                 break;
+
             case REQUEST_STATUS:
+                dataResponse = bundle.getParcelable(BUNDLE_DATA);
                 if (dataResponse == null) {
                     return;
                 }
@@ -171,6 +174,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 mAdapter.clear();
                 mPresenter.getData(mRequestFor, mStatus);
                 break;
+
             case REQUEST_DETAIL:
                 Request request =
                         (Request) bundle.getSerializable(BUNDLE_RESPONE);
@@ -178,10 +182,19 @@ public class RequestManagerViewModel extends BaseFragmentModel
                     onUpdateActionSuccess(request);
                 }
                 break;
+
             case REQUEST_CREATE_ASSIGNMENT:
                 mNavigator.showToast(bundle.getInt(BUNDLE_SUCCESS));
                 mAdapter.clear();
                 getData();
+                break;
+
+            case REQUEST_CREATE_REQUEST:
+                request = (Request) bundle.getSerializable(BUNDLE_DATA);
+                if (request != null) {
+                    mAdapter.addRequest(request);
+                    setScrollPosition(0);
+                }
                 break;
             default:
                 break;
@@ -337,5 +350,15 @@ public class RequestManagerViewModel extends BaseFragmentModel
     public void setEmptyViewVisible(int emptyViewVisible) {
         mEmptyViewVisible = emptyViewVisible;
         notifyPropertyChanged(BR.emptyViewVisible);
+    }
+
+    @Bindable
+    public int getScrollPosition() {
+        return mScrollPosition;
+    }
+
+    public void setScrollPosition(int scrollPosition) {
+        mScrollPosition = scrollPosition;
+        notifyPropertyChanged(BR.scrollPosition);
     }
 }
