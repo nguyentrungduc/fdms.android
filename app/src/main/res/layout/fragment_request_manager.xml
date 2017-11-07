@@ -130,6 +130,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     app:layoutManager="LinearLayoutManager"
+                    app:scrollPosition="@{viewModel.scrollPosition}"
                     app:recyclerAdapter="@{viewModel.adapter}"
                     app:scrollListenner="@{viewModel.scrollListenner}"
                     />

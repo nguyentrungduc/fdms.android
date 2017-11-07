@@ -35,7 +35,6 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_RELATIVE;
 public class RequestCreationViewModel extends BaseObservable
         implements RequestCreationContract.ViewModel {
 
-    private ArrayAdapter<Status> mAdapterCategory;
     private RequestCreationContract.Presenter mPresenter;
     private AppCompatActivity mActivity;
     private String mRequestTitle;
@@ -59,9 +58,6 @@ public class RequestCreationViewModel extends BaseObservable
         mContext = activity.getApplicationContext();
         mRequestCreatorType = requestCreatorType;
         mRequest = new RequestCreatorRequest();
-        mAdapterCategory =
-                new ArrayAdapter<>(mActivity, R.layout.support_simple_spinner_dropdown_item);
-
     }
 
     @Override
@@ -129,7 +125,14 @@ public class RequestCreationViewModel extends BaseObservable
 
     @Override
     public void onGetRequestSuccess(Request request) {
-        mActivity.setResult(RESULT_OK);
+        Toast.makeText(mContext, R.string.msg_create_request_success, Toast.LENGTH_SHORT).show();
+        finnishActivityWithResult(request);
+    }
+
+    public void finnishActivityWithResult(Request request) {
+        Intent intent = new Intent();
+        intent.putExtra(BUNDLE_DATA, request);
+        mActivity.setResult(RESULT_OK, intent);
         mActivity.finish();
     }
 
