@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.Bindable;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.PopupMenu;
@@ -17,13 +16,15 @@ import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseFragmentContract;
 import com.framgia.fdms.BaseFragmentModel;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.anotation.Permission;
+import com.framgia.fdms.data.anotation.RequestStatus;
 import com.framgia.fdms.data.model.Request;
-import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
 import com.framgia.fdms.screen.assignment.AssignmentType;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
+import com.framgia.fdms.screen.request.requestmanager.select.assignee.SelectAssigneeActivity;
 import com.framgia.fdms.screen.request.userrequest.UserRequestAdapter;
 import com.framgia.fdms.screen.requestcreation.RequestCreationActivity;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
@@ -43,6 +44,7 @@ import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestAction.CANCEL;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_ASSIGNER;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_REQUEST;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
@@ -62,6 +64,8 @@ public class RequestManagerViewModel extends BaseFragmentModel
 
     private Status mStatus;
     private Status mRequestFor;
+    private Status mAssignee;
+
     private boolean mIsRefresh;
     private int mEmptyViewVisible = View.GONE; // show empty state when no date
     private SwipeRefreshLayout.OnRefreshListener mRefreshLayout =
@@ -69,19 +73,20 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 @Override
                 public void onRefresh() {
                     mAdapter.clear();
-                    getData();
+                    mPresenter.getData(mRequestFor, mStatus, mAssignee);
                 }
             };
     private Navigator mNavigator;
     private int mScrollPosition;
+
+    private boolean mIsShowAssignee;
 
     public RequestManagerViewModel(Fragment fragment) {
         mNavigator = new Navigator(fragment);
         mFragment = fragment;
         mContext = fragment.getContext();
         mAdapter = new UserRequestAdapter(mContext, new ArrayList<Request>(), this, new User());
-        setStatus(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_all_request_status)));
-        setRequestFor(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_all_request_for)));
+        initDefaultFilter();
     }
 
     @Override
@@ -127,6 +132,11 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 REQUEST_CREATE_REQUEST);
     }
 
+    public void onAssigneeClick() {
+        mFragment.startActivityForResult(
+                SelectAssigneeActivity.getInstance(mFragment.getActivity()), REQUEST_ASSIGNER);
+    }
+
     @Override
     public void setAllowLoadMore(boolean allowLoadMore) {
         mIsAllowLoadMore = allowLoadMore;
@@ -135,11 +145,6 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void onLoadError(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void getData() {
-        mPresenter.getData(null, null);
     }
 
     @Override
@@ -159,7 +164,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 }
                 setRequestFor(dataResponse);
                 mAdapter.clear();
-                mPresenter.getData(mRequestFor, mStatus);
+                mPresenter.getData(mRequestFor, mStatus, mAssignee);
                 break;
 
             case REQUEST_STATUS:
@@ -172,7 +177,17 @@ public class RequestManagerViewModel extends BaseFragmentModel
                 }
                 setStatus(dataResponse);
                 mAdapter.clear();
-                mPresenter.getData(mRequestFor, mStatus);
+                mPresenter.getData(mRequestFor, mStatus, mAssignee);
+                break;
+
+            case REQUEST_ASSIGNER:
+                dataResponse = bundle.getParcelable(BUNDLE_DATA);
+                if (dataResponse == null) {
+                    return;
+                }
+                setAssignee(dataResponse);
+                mAdapter.clear();
+                mPresenter.getData(mRequestFor, mStatus, mAssignee);
                 break;
 
             case REQUEST_DETAIL:
@@ -186,7 +201,8 @@ public class RequestManagerViewModel extends BaseFragmentModel
             case REQUEST_CREATE_ASSIGNMENT:
                 mNavigator.showToast(bundle.getInt(BUNDLE_SUCCESS));
                 mAdapter.clear();
-                getData();
+                initDefaultFilter();
+                mPresenter.getData(mRequestFor, mStatus, mAssignee);
                 break;
 
             case REQUEST_CREATE_REQUEST:
@@ -196,6 +212,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
                     setScrollPosition(0);
                 }
                 break;
+
             default:
                 break;
         }
@@ -212,13 +229,56 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void refreshData() {
         mAdapter.clear();
-        mPresenter.getData(mRequestFor, mStatus);
+        mPresenter.getData(mRequestFor, mStatus, mAssignee);
     }
 
     @Override
     public void setCurrentUser(User user) {
-        if (user == null) return;
+        if (user == null) {
+            return;
+        }
         mAdapter.updateUser(user);
+        setStatus(getDefaultStatus(user.getRole()));
+        setShowAssignee(user.getRole().equals(Permission.BO_STAFF));
+        mPresenter.getData(mRequestFor, mStatus, mAssignee);
+    }
+
+    /**
+     * Display as default filter with request status
+     * BO Manager - Approved
+     * BO Staff - Waitting done
+     * DM/SM - Waiting approve
+     *
+     * @param role
+     * @return
+     */
+    private Status getDefaultStatus(String role) {
+        switch (role) {
+            case Permission.BO_MANAGER:
+                return new Status(RequestStatus.APPROVED,
+                        mContext.getString(R.string.title_request_appoved));
+            case Permission.DIVISION_MANAGER:
+            case Permission.SECTION_MANAGER:
+                return new Status(RequestStatus.WAITING_APPROVE,
+                        mContext.getString(R.string.title_waiting_approved));
+            case Permission.BO_STAFF:
+                return new Status(RequestStatus.WAITING_DONE,
+                        mContext.getString(R.string.title_waiting_done));
+            default:
+                return new Status(RequestStatus.ALL,
+                        mContext.getString(R.string.title_all_request));
+        }
+    }
+
+    /**
+     * Default filter is
+     * - All request status
+     * - All request for
+     */
+    private void initDefaultFilter() {
+        setStatus(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_all_request_status)));
+        setRequestFor(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_all_request_for)));
+        setAssignee(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_all_assignee)));
     }
 
     public void onSelectStatusClick() {
@@ -360,5 +420,25 @@ public class RequestManagerViewModel extends BaseFragmentModel
     public void setScrollPosition(int scrollPosition) {
         mScrollPosition = scrollPosition;
         notifyPropertyChanged(BR.scrollPosition);
+    }
+
+    @Bindable
+    public Status getAssignee() {
+        return mAssignee;
+    }
+
+    public void setAssignee(Status assignee) {
+        mAssignee = assignee;
+        notifyPropertyChanged(BR.assignee);
+    }
+
+    @Bindable
+    public boolean isShowAssignee() {
+        return mIsShowAssignee;
+    }
+
+    public void setShowAssignee(boolean showAssignee) {
+        mIsShowAssignee = showAssignee;
+        notifyPropertyChanged(BR.showAssignee);
     }
 }

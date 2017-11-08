@@ -508,6 +508,7 @@ public class CreateDeviceViewModel extends BaseObservable
 
     public void setStatus(Status status) {
         mDevice.setDeviceStatusId(status.getId());
+        mDevice.setDeviceStatusName(status.getName());
         mStatus = status;
         notifyPropertyChanged(BR.status);
     }

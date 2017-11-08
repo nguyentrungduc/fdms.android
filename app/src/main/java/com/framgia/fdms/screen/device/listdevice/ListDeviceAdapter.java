@@ -6,10 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.databinding.ItemListDataBinding;
+
 import java.util.List;
 
 /**
@@ -17,12 +19,12 @@ import java.util.List;
  */
 
 public class ListDeviceAdapter
-    extends BaseRecyclerViewAdapter<Device, ListDeviceAdapter.ViewHolder> {
+        extends BaseRecyclerViewAdapter<Device, ListDeviceAdapter.ViewHolder> {
     private List<Device> mDevices;
     private ItemDeviceClickListenner mListenner;
 
     public ListDeviceAdapter(@NonNull Context context, @NonNull List<Device> devices,
-        @NonNull ItemDeviceClickListenner listenner) {
+                             @NonNull ItemDeviceClickListenner listenner) {
         super(context);
         mDevices = devices;
         mListenner = listenner;
@@ -31,8 +33,8 @@ public class ListDeviceAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemListDataBinding binding =
-            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                R.layout.item_listdevice, parent, false);
+                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                        R.layout.item_listdevice, parent, false);
         return new ViewHolder(binding, mListenner);
     }
 
@@ -67,12 +69,15 @@ public class ListDeviceAdapter
         if (mDevices == null || mDevices.size() == 0 || device == null) {
             return;
         }
-        int index = mDevices.indexOf(device);
-        if (index < 0) {
-            return;
+
+        for (int i = 0; i < mDevices.size(); i++) {
+            if (mDevices.get(i).getId() == device.getId()) {
+                mDevices.remove(i);
+                notifyItemRemoved(i);
+                return;
+            }
         }
-        mDevices.remove(index);
-        notifyItemRemoved(index);
+
     }
 
     public void clear() {

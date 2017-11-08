@@ -23,6 +23,6 @@ public interface BaseFragmentContract {
     interface Presenter extends BasePresenter {
         void onLoadMore();
 
-        void getData(Status relative, Status status);
+        void getData(Status relative, Status status, Status assignee);
     }
 }

@@ -146,7 +146,7 @@ public class UserRequestViewModel extends BaseFragmentModel
 
     @Override
     public void getData() {
-        mPresenter.getData(null, null);
+        mPresenter.getData(null, null, null);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class UserRequestViewModel extends BaseFragmentModel
                 }
                 setStatus(status);
                 mAdapter.clear();
-                mPresenter.getData(mRelative, mStatus);
+                mPresenter.getData(mRelative, mStatus, null);
                 break;
             case REQUEST_DETAIL:
                 Respone<Request> requestRespone =
@@ -183,7 +183,7 @@ public class UserRequestViewModel extends BaseFragmentModel
                 }
                 setRequestBy(status);
                 mAdapter.clear();
-                mPresenter.getData(mRequestBy, mStatus);
+                mPresenter.getData(mRequestBy, mStatus, null);
                 break;
 
             case REQUEST_CREATE_REQUEST:
@@ -209,7 +209,7 @@ public class UserRequestViewModel extends BaseFragmentModel
     @Override
     public void refreshData() {
         mAdapter.clear();
-        mPresenter.getData(mRelative, mStatus);
+        mPresenter.getData(mRelative, mStatus, null);
     }
 
     @Override

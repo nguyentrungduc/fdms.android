@@ -42,7 +42,6 @@ public final class RequestManagerPresenter implements RequestManagerContract.Pre
         mSubscription = new CompositeDisposable();
         mRequestRepository = deviceRepository;
         mUserRepository = userRepository;
-        getRequest(ALL_REQUEST_STATUS_ID, ALL_RELATIVE_ID, mPage, PER_PAGE);
         getCurrentUser();
     }
 
@@ -53,7 +52,8 @@ public final class RequestManagerPresenter implements RequestManagerContract.Pre
     }
 
     @Override
-    public void getData(Status relative, Status status) {
+    public void getData(Status relative, Status status, Status assignee) {
+        // TODO: 11/8/2017 update filter by assignee later when api available 
         mViewModel.setRefresh(true);
         mPage = FIRST_PAGE;
         if (relative != null) {

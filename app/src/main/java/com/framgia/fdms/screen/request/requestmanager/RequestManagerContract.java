@@ -19,8 +19,6 @@ interface RequestManagerContract {
 
         void onLoadError(String msg);
 
-        void getData();
-
         void onActivityResult(int requestCode, int resultCode, Intent data);
 
         void onUpdateActionSuccess(Request request);

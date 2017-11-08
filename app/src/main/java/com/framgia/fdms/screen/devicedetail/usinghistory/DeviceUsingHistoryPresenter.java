@@ -78,7 +78,7 @@ final class DeviceUsingHistoryPresenter implements DeviceUsingHistoryContract.Pr
     }
 
     @Override
-    public void getData(Status relative, Status status) {
+    public void getData(Status relative, Status status, Status assignee) {
         // no ops
     }
 }

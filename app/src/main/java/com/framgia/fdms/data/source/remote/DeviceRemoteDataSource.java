@@ -107,7 +107,7 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         boughtDate = createPartFromString(String.valueOf(format.format(device.getBoughtDate())));
         originalPrice = createPartFromString(device.getOriginalPrice());
         isMeetingRoom = createPartFromString(String.valueOf(device.isDeviceMeetingRoom()));
-        if (device.getMeetingRoom().getId() > 0) {
+        if (device.getMeetingRoom()!= null && device.getMeetingRoom().getId() > 0) {
             meetingRoomId = createPartFromString(String.valueOf(device.getMeetingRoom().getId()));
             params.put(MEETING_ROOM_ID, meetingRoomId);
         }
