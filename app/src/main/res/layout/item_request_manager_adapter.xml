@@ -64,7 +64,7 @@
                     android:text="@{requestModel.request.title}"
                     android:textSize="@dimen/sp_16"
                     android:textStyle="bold"
-                    bind:deviceStatus="@{requestModel.request.requestStatus}"
+                    bind:deviceStatus="@{requestModel.request.requestStatusId}"
                     />
 
                 <ImageView

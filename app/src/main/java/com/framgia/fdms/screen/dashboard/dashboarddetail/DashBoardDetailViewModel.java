@@ -6,22 +6,20 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.PopupMenu;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.anotation.RequestStatus;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Request;
-import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.device.OnDeviceClickListenner;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
@@ -37,13 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
-        .DEVICE_DASHBOARD;
-import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment
-        .REQUEST_DASHBOARD;
+import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment.DEVICE_DASHBOARD;
+import static com.framgia.fdms.screen.dashboard.dashboarddetail.DashBoardDetailFragment.REQUEST_DASHBOARD;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
-import static com.framgia.fdms.utils.Constant.MANAGE_REQUEST_GROUP;
-import static com.framgia.fdms.utils.Constant.RequestAction.CANCEL;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
 
 /**
@@ -290,7 +284,7 @@ public class DashBoardDetailViewModel extends BaseObservable
     @Override
     public void onActionRequestClick(final int requestId, final int actionId) {
         switch (actionId) {
-            case CANCEL:
+            case RequestStatus.CANCELLED:
                 new LovelyTextInputDialog(mContext).setTopColorRes(R.color.colorPrimary)
                         .setTitle(R.string.msg_cancel_request)
                         .setIcon(R.drawable.ic_error_white)

@@ -21,7 +21,7 @@ import java.util.List;
 
 import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
 import static com.framgia.fdms.data.anotation.Permission.BO_STAFF;
-import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_DONE;
+import static com.framgia.fdms.data.anotation.RequestStatus.WAITING_DONE;
 
 /**
  * Created by beepi on 09/05/2017.
@@ -124,7 +124,7 @@ public class UserRequestAdapter
             mRequest = request;
             mIsShowAddDevice = (mUser.getRole().equals(BO_MANAGER) ||
                     mUser.getRole().equals(BO_STAFF)) &&
-                    mRequest.getRequestStatus().equals(WAITING_DONE);
+                    mRequest.getRequestStatusId()== WAITING_DONE;
         }
 
         @Bindable

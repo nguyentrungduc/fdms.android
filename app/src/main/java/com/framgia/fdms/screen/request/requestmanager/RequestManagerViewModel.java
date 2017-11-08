@@ -43,7 +43,6 @@ import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
-import static com.framgia.fdms.utils.Constant.RequestAction.CANCEL;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_ASSIGNER;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_REQUEST;
@@ -339,7 +338,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
     @Override
     public void onActionRequestClick(final int reqeuestId, final int actionId) {
         switch (actionId) {
-            case CANCEL:
+            case RequestStatus.CANCELLED:
                 new LovelyTextInputDialog(mNavigator.getContext()).setTopColorRes(
                         R.color.colorPrimary)
                         .setTitle(R.string.msg_cancel_request)

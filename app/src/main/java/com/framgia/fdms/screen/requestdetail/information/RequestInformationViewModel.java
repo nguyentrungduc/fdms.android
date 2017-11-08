@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -23,7 +22,6 @@ import com.framgia.fdms.screen.assignment.AssignmentActivity;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
-import com.framgia.fdms.utils.Constant;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
@@ -34,22 +32,16 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
 import static com.framgia.fdms.data.anotation.Permission.BO_STAFF;
+import static com.framgia.fdms.data.anotation.RequestStatus.APPROVED;
+import static com.framgia.fdms.data.anotation.RequestStatus.ASSIGNMENT;
+import static com.framgia.fdms.data.anotation.RequestStatus.CANCELLED;
+import static com.framgia.fdms.data.anotation.RequestStatus.DONE;
+import static com.framgia.fdms.data.anotation.RequestStatus.EDIT;
+import static com.framgia.fdms.data.anotation.RequestStatus.WAITING_APPROVE;
+import static com.framgia.fdms.data.anotation.RequestStatus.WAITING_DONE;
 import static com.framgia.fdms.screen.assignment.AssignmentType.ASSIGN_BY_REQUEST;
-import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel.RequestStatusType.APPROVED_ID;
-import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel.RequestStatusType.CANCELLED_ID;
-import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel.RequestStatusType.DONE_ID;
-import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel.RequestStatusType.WAITING_APPROVE_ID;
-import static com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel.RequestStatusType.WAITING_DONE_ID;
 import static com.framgia.fdms.screen.selection.SelectionType.EDIT_STATUS_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
-import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_DONE;
-import static com.framgia.fdms.utils.Constant.RequestAction.APPROVED;
-import static com.framgia.fdms.utils.Constant.RequestAction.ASSIGNMENT;
-import static com.framgia.fdms.utils.Constant.RequestAction.CANCEL;
-import static com.framgia.fdms.utils.Constant.RequestAction.DONE;
-import static com.framgia.fdms.utils.Constant.RequestAction.EDIT;
-import static com.framgia.fdms.utils.Constant.RequestAction.RECEIVE;
-import static com.framgia.fdms.utils.Constant.RequestAction.WAITING_APPROVE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_ASSIGNEE;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_RELATIVE;
@@ -193,7 +185,7 @@ public class RequestInformationViewModel extends BaseObservable
     }
 
     public void onClickChooseRequestForRelativeStaff() {
-        if (!isEdit() || Constant.DeviceStatus.APPROVED.equals(mRequest.getRequestStatus())) {
+        if (!isEdit() || APPROVED == mRequest.getRequestStatusId()) {
             return;
         }
         mFragment.startActivityForResult(
@@ -245,20 +237,17 @@ public class RequestInformationViewModel extends BaseObservable
         for (final Request.RequestAction requestAction : mListAction) {
             final FloatingActionButton button = new FloatingActionButton(mContext);
             switch (requestAction.getId()) {
-                case CANCEL:
+                case CANCELLED:
                     button.setImageResource(R.drawable.ic_cancel_white_24px);
                     break;
                 case WAITING_APPROVE:
                     button.setImageResource(R.drawable.ic_timer);
                     break;
-                case APPROVED:
+                case WAITING_DONE:
                     button.setImageResource(R.drawable.ic_done_white_24dp);
-                    break;
-                case RECEIVE:
-                    button.setImageResource(R.drawable.ic_receive_24dp);
                     break;
                 case DONE:
-                    button.setImageResource(R.drawable.ic_done_white_24dp);
+                    button.setImageResource(R.drawable.ic_receive_24dp);
                     break;
                 case EDIT:
                     button.setImageResource(R.drawable.ic_edit_white_24dp);
@@ -284,7 +273,7 @@ public class RequestInformationViewModel extends BaseObservable
 
     public boolean isAllowAssignDevice(String permision, Request request) {
         return (permision.equals(BO_MANAGER) || permision.equals(BO_STAFF))
-                && request.getRequestStatusId() == WAITING_DONE_ID;
+                && request.getRequestStatusId() == WAITING_DONE;
     }
 
     @Override
@@ -298,7 +287,7 @@ public class RequestInformationViewModel extends BaseObservable
             case EDIT:
                 initEditRequest();
                 break;
-            case CANCEL:
+            case CANCELLED:
                 new LovelyTextInputDialog(mContext).setTopColorRes(R.color.colorPrimary)
                         .setTitle(R.string.msg_cancel_request)
                         .setIcon(R.drawable.ic_error_white)
@@ -366,7 +355,7 @@ public class RequestInformationViewModel extends BaseObservable
 
     public void initEditRequest() {
         setEdit(true);
-        if (Constant.DeviceStatus.APPROVED.equals(mRequest.getRequestStatus())) {
+        if (APPROVED == mRequest.getRequestStatusId()) {
             setAcceptStatus(true);
         }
         mFloatingActionsMenu.hideMenu(true);
@@ -454,16 +443,5 @@ public class RequestInformationViewModel extends BaseObservable
     public void setShowRequestForAndAssignee(boolean showRequestForAndAssignee) {
         mIsShowRequestForAndAssignee = showRequestForAndAssignee;
         notifyPropertyChanged(BR.showRequestForAndAssignee);
-    }
-
-    @IntDef({
-            CANCELLED_ID, WAITING_APPROVE_ID, APPROVED_ID, WAITING_DONE_ID, DONE_ID
-    })
-    public @interface RequestStatusType {
-        int CANCELLED_ID = 1;
-        int WAITING_APPROVE_ID = 2;
-        int APPROVED_ID = 3;
-        int WAITING_DONE_ID = 4;
-        int DONE_ID = 5;
     }
 }

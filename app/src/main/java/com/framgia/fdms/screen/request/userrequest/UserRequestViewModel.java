@@ -19,6 +19,7 @@ import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseFragmentContract;
 import com.framgia.fdms.BaseFragmentModel;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.anotation.RequestStatus;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
@@ -43,7 +44,6 @@ import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST_ALL
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_RESPONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
-import static com.framgia.fdms.utils.Constant.RequestAction.CANCEL;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_REQUEST;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DETAIL;
@@ -277,7 +277,7 @@ public class UserRequestViewModel extends BaseFragmentModel
     @Override
     public void onActionRequestClick(final int reqeuestId, final int actionId) {
         switch (actionId) {
-            case CANCEL:
+            case RequestStatus.CANCELLED:
                 new LovelyTextInputDialog(mContext).setTopColorRes(R.color.colorPrimary)
                         .setTitle(R.string.msg_cancel_request)
                         .setIcon(R.drawable.ic_error_white)
