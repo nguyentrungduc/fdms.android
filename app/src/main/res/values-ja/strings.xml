@@ -362,4 +362,5 @@
     <string name="title_request_status_detail">Request status</string>
     <string name="msg_update_request_success">Request update successfully</string>
     <string name="msg_create_request_success">Create request success</string>
+    <string name="title_broken">Broken</string>
 </resources>

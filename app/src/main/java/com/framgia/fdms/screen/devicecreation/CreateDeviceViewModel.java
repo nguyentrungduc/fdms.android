@@ -13,11 +13,13 @@ import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
+
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
+import com.framgia.fdms.screen.devicecreation.selectdevicestatus.SelectDeviceStatusActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.Utils;
@@ -28,6 +30,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
 import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
@@ -53,7 +56,7 @@ import static com.framgia.fdms.utils.Constant.USING;
  * Exposes the data to be used in the Createdevice screen.
  */
 public class CreateDeviceViewModel extends BaseObservable
-    implements CreateDeviceContract.ViewModel, DatePickerDialog.OnDateSetListener {
+        implements CreateDeviceContract.ViewModel, DatePickerDialog.OnDateSetListener {
 
     private static final String DEFAULT_STATUS_NAME = "available";
     private static final String DEVICE_USING_CONTENT = "using";
@@ -97,7 +100,7 @@ public class CreateDeviceViewModel extends BaseObservable
     private boolean mIsAllowEditMeetingRoom;
 
     public CreateDeviceViewModel(CreateDeviceActivity activity, Device device,
-        DeviceStatusType type) {
+                                 DeviceStatusType type) {
         mContext = activity.getApplicationContext();
         mActivity = activity;
         if (device == null) {
@@ -136,8 +139,8 @@ public class CreateDeviceViewModel extends BaseObservable
         }
         if (mCalendar == null) mCalendar = Calendar.getInstance();
         DatePickerDialog datePicker =
-            DatePickerDialog.newInstance(this, mCalendar.get(Calendar.YEAR),
-                mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+                DatePickerDialog.newInstance(this, mCalendar.get(Calendar.YEAR),
+                        mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
         datePicker.show(mActivity.getFragmentManager(), "");
     }
 
@@ -151,23 +154,24 @@ public class CreateDeviceViewModel extends BaseObservable
             return;
         }
         mActivity.startActivityForResult(
-            SelectionActivity.getInstance(mContext, SelectionType.CATEGORY, OUT_OF_INDEX),
-            REQUEST_CATEGORY);
+                SelectionActivity.getInstance(mContext, SelectionType.CATEGORY, OUT_OF_INDEX),
+                REQUEST_CATEGORY);
     }
 
     public void onChooseMeetingRoom() {
         mActivity.startActivityForResult(
-            SelectionActivity.getInstance(mContext, SelectionType.MEETING_ROOM),
-            REQUEST_MEETING_ROOM);
+                SelectionActivity.getInstance(mContext, SelectionType.MEETING_ROOM),
+                REQUEST_MEETING_ROOM);
     }
 
     public void onChooseStatus() {
         if ((mStatus.getName() != null && mStatus.getName().equals(Status.USING_STATUS))
-            || mDeviceType == CREATE) {
+                || mDeviceType == CREATE) {
             return;
         }
         mActivity.startActivityForResult(
-            SelectionActivity.getInstance(mContext, SelectionType.STATUS), REQUEST_STATUS);
+                SelectDeviceStatusActivity.getInstance(mContext, mDevice.getDeviceStatusId()),
+                REQUEST_STATUS);
     }
 
     public void onChooseBranch() {
@@ -175,17 +179,17 @@ public class CreateDeviceViewModel extends BaseObservable
             return;
         }
         mActivity.startActivityForResult(
-            SelectionActivity.getInstance(mContext, SelectionType.BRANCH), REQUEST_BRANCH);
+                SelectionActivity.getInstance(mContext, SelectionType.BRANCH), REQUEST_BRANCH);
     }
 
     public void onChooseVendor() {
         mActivity.startActivityForResult(
-            SelectionActivity.getInstance(mContext, SelectionType.VENDOR), REQUEST_VENDOR);
+                SelectionActivity.getInstance(mContext, SelectionType.VENDOR), REQUEST_VENDOR);
     }
 
     public void onChooseMaker() {
         mActivity.startActivityForResult(
-            SelectionActivity.getInstance(mContext, SelectionType.MARKER), REQUEST_MAKER);
+                SelectionActivity.getInstance(mContext, SelectionType.MARKER), REQUEST_MAKER);
     }
 
     @Override
@@ -219,7 +223,7 @@ public class CreateDeviceViewModel extends BaseObservable
     @Override
     public void onRegisterError() {
         Snackbar.make(mActivity.findViewById(android.R.id.content),
-            R.string.msg_create_device_error, Snackbar.LENGTH_LONG).show();
+                R.string.msg_create_device_error, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -240,8 +244,9 @@ public class CreateDeviceViewModel extends BaseObservable
         setStatus(new Status(device.getDeviceStatusId(), device.getDeviceStatusName()));
         setBarCode(device.isBarcode());
         setQrCode(!device.isBarcode());
-        setAllowEditMeetingRoom(
-            device.isDeviceMeetingRoom() && device.getDeviceStatusId() == USING);
+        setAllowEditMeetingRoom((device.isDeviceMeetingRoom() &&
+                device.getDeviceStatusId() == USING) ||
+                device.getDeviceStatusId() == AVAIABLE);
     }
 
     @Override
@@ -331,11 +336,11 @@ public class CreateDeviceViewModel extends BaseObservable
     public void onPrintClick() {
         if (mDevice == null || mDevice.getDeviceCode() == null || mDeviceCode == null) return;
         Bitmap dstBitmap = Bitmap.createBitmap(mDeviceCode.getWidth() * SCALE_BITMAP,
-            mDeviceCode.getHeight() * SCALE_BITMAP, Bitmap.Config.ARGB_8888);
+                mDeviceCode.getHeight() * SCALE_BITMAP, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(dstBitmap);
         canvas.drawColor(Color.WHITE);
         canvas.drawBitmap(mDeviceCode, mDeviceCode.getWidth() * (SCALE_BITMAP - 1),
-            mDeviceCode.getHeight() * (SCALE_BITMAP - 1), null);
+                mDeviceCode.getHeight() * (SCALE_BITMAP - 1), null);
         PrintHelper photoPrinter = new PrintHelper(getActivity());
         photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
         photoPrinter.printBitmap(mDevice.getDeviceCode(), dstBitmap);
@@ -355,7 +360,7 @@ public class CreateDeviceViewModel extends BaseObservable
         switch (requestCode) {
             case REQUEST_CATEGORY:
                 if (status.getName().equals(mContext.getString(R.string.action_clear))
-                    || status.getId() == OUT_OF_INDEX) {
+                        || status.getId() == OUT_OF_INDEX) {
                     status.setName(mContext.getString(R.string.title_empty));
                 }
                 setCategory(status);
@@ -380,21 +385,21 @@ public class CreateDeviceViewModel extends BaseObservable
                 break;
             case REQUEST_VENDOR:
                 if (status.getName().equals(mContext.getString(R.string.action_clear))
-                    || status.getId() == OUT_OF_INDEX) {
+                        || status.getId() == OUT_OF_INDEX) {
                     status.setName(mContext.getString(R.string.title_empty));
                 }
                 mDevice.setVendor((Producer) status);
                 break;
             case REQUEST_MAKER:
                 if (status.getName().equals(mContext.getString(R.string.action_clear))
-                    || status.getId() == OUT_OF_INDEX) {
+                        || status.getId() == OUT_OF_INDEX) {
                     status.setName(mContext.getString(R.string.title_empty));
                 }
                 mDevice.setMarker((Producer) status);
                 break;
             case REQUEST_MEETING_ROOM:
                 if (status.getName().equals(mContext.getString(R.string.action_clear))
-                    || status.getId() == OUT_OF_INDEX) {
+                        || status.getId() == OUT_OF_INDEX) {
                     status.setName(mContext.getString(R.string.title_empty));
                 }
                 mDevice.setMeetingRoom((Producer) status);
@@ -624,7 +629,7 @@ public class CreateDeviceViewModel extends BaseObservable
 
     public void onCheckedChange(boolean isChecked) {
         setStatus(!isChecked ? new Status(AVAIABLE, DEFAULT_STATUS_NAME)
-            : new Status(USING, DEVICE_USING_CONTENT));
+                : new Status(USING, DEVICE_USING_CONTENT));
     }
 
     @Bindable
