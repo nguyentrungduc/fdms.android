@@ -28,6 +28,8 @@ public interface BaseSelectionContract {
         void setAllowLoadMore(boolean allowLoadMore);
 
         String getString(int resourceId);
+
+        void clearData();
     }
 
     /**

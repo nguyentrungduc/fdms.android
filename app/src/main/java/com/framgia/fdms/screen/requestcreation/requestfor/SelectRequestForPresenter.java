@@ -1,12 +1,15 @@
-package com.framgia.fdms.screen.request.requestmanager.select.assignee;
+package com.framgia.fdms.screen.requestcreation.requestfor;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.AssigneeDataSource;
-import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.source.StatusRepository;
+import com.framgia.fdms.data.source.api.error.BaseException;
+import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.screen.baseselection.BaseSelectionActivity;
 import com.framgia.fdms.screen.baseselection.BaseSelectionContract;
 import com.framgia.fdms.screen.baseselection.BaseSelectionPresenter;
@@ -21,19 +24,20 @@ import io.reactivex.schedulers.Schedulers;
 
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
+import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
 /**
  * Listens to user actions from the UI ({@link BaseSelectionActivity}), retrieves the data and
  * updates
  * the UI as required.
  */
-public class SelectAssignPresenter extends BaseSelectionPresenter {
+public class SelectRequestForPresenter extends BaseSelectionPresenter {
 
-    private AssigneeDataSource mAssigneeRepository;
+    private StatusRepository mAssigneeRepository;
 
 
-    public SelectAssignPresenter(BaseSelectionContract.ViewModel viewModel,
-                                 AssigneeDataSource assigneeRepository) {
+    public SelectRequestForPresenter(BaseSelectionContract.ViewModel viewModel,
+                                     StatusRepository assigneeRepository) {
         super(viewModel);
         mAssigneeRepository = assigneeRepository;
     }
@@ -41,22 +45,31 @@ public class SelectAssignPresenter extends BaseSelectionPresenter {
     @Override
     public void getData(String query) {
         mKeySearch = query;
-        Disposable disposable = mAssigneeRepository
-                .getListAssignee(query)
+        mPage = FIRST_PAGE;
+        getData(mKeySearch, mPage);
+    }
+
+    @SuppressLint("LongLogTag")
+    public void getData(String query, final int page) {
+        Disposable subscription = mAssigneeRepository
+                .getListRelative(query, page, PER_PAGE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Status>>() {
                     @Override
                     public void accept(List<Status> statuses) throws Exception {
-                        if (mPage == FIRST_PAGE && TextUtils.isEmpty(mKeySearch)) {
-                            statuses.add(0,  new Status(OUT_OF_INDEX,
-                                    mViewModel.getString(R.string.title_all_assignee)));
+                        if (page == FIRST_PAGE && TextUtils.isEmpty(mKeySearch)) {
+                            statuses.add(0, new Status(OUT_OF_INDEX,
+                                    mViewModel.getString(R.string.title_none)));
+                            mViewModel.clearData();
                         }
                         mViewModel.onGetDataSuccess(statuses);
+                        mViewModel.setAllowLoadMore(statuses != null && statuses.size() >= PER_PAGE);
                     }
-                }, new Consumer<Throwable>() {
+                }, new RequestError() {
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
+                    public void onRequestError(BaseException error) {
+                        mViewModel.onGetDataFailed(error.getMessage());
                         mViewModel.hideProgress();
                     }
                 }, new Action() {
@@ -65,12 +78,14 @@ public class SelectAssignPresenter extends BaseSelectionPresenter {
                         mViewModel.hideProgress();
                     }
                 });
-        mCompositeDisposable.add(disposable);
+
+        mCompositeDisposable.add(subscription);
     }
 
     @Override
     public void loadMoreData() {
-        // no ops
+        mPage++;
+        getData(mKeySearch, mPage);
     }
 
 }

@@ -1,12 +1,10 @@
-package com.framgia.fdms.screen.request.requestmanager.select.assignee;
+package com.framgia.fdms.screen.requestcreation.assignee;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.AssigneeDataSource;
-import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.screen.baseselection.BaseSelectionActivity;
 import com.framgia.fdms.screen.baseselection.BaseSelectionContract;
 import com.framgia.fdms.screen.baseselection.BaseSelectionPresenter;
@@ -27,13 +25,12 @@ import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
  * updates
  * the UI as required.
  */
-public class SelectAssignPresenter extends BaseSelectionPresenter {
+public class SelectAssignRequestPresenter extends BaseSelectionPresenter {
 
     private AssigneeDataSource mAssigneeRepository;
 
-
-    public SelectAssignPresenter(BaseSelectionContract.ViewModel viewModel,
-                                 AssigneeDataSource assigneeRepository) {
+    public SelectAssignRequestPresenter(BaseSelectionContract.ViewModel viewModel,
+                                        AssigneeDataSource assigneeRepository) {
         super(viewModel);
         mAssigneeRepository = assigneeRepository;
     }
@@ -50,9 +47,11 @@ public class SelectAssignPresenter extends BaseSelectionPresenter {
                     public void accept(List<Status> statuses) throws Exception {
                         if (mPage == FIRST_PAGE && TextUtils.isEmpty(mKeySearch)) {
                             statuses.add(0,  new Status(OUT_OF_INDEX,
-                                    mViewModel.getString(R.string.title_all_assignee)));
+                                    mViewModel.getString(R.string.title_none)));
+                            mViewModel.clearData();
                         }
                         mViewModel.onGetDataSuccess(statuses);
+                        mViewModel.setAllowLoadMore(false);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -71,6 +70,7 @@ public class SelectAssignPresenter extends BaseSelectionPresenter {
     @Override
     public void loadMoreData() {
         // no ops
+        mViewModel.hideProgress();
     }
 
 }

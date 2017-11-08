@@ -112,7 +112,7 @@ public class BaseSelectionViewModel extends BaseObservable implements
 
     @Override
     public void onSearch(String query) {
-        mAdapter.clearData();
+        clearData();
         mPresenter.getData(query);
     }
 
@@ -171,5 +171,10 @@ public class BaseSelectionViewModel extends BaseObservable implements
     @Override
     public String getString(int resourceId) {
         return mActivity.getString(resourceId);
+    }
+
+    @Override
+    public void clearData() {
+        mAdapter.clearData();
     }
 }
