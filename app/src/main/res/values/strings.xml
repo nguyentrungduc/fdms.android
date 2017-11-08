@@ -372,4 +372,8 @@
     <string name="msg_update_request_success">Request update successfully</string>
     <string name="msg_create_request_success">Create request success</string>
     <string name="title_broken">Broken</string>
+    <string name="title_request_appoved">approved</string>
+    <string name="title_waiting_approved">waiting approve</string>
+    <string name="title_waiting_done">waiting done</string>
+    <string name="title_all_assignee">All Assignee</string>
 </resources>

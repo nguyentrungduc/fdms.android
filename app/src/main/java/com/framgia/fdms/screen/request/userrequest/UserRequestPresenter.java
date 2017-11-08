@@ -56,7 +56,7 @@ public final class UserRequestPresenter implements UserRequestContract.Presenter
     }
 
     @Override
-    public void getData(Status relative, Status status) {
+    public void getData(Status relative, Status status, Status assignee) {
         mPage = FIRST_PAGE;
         if (relative != null) {
             mRelativeId = relative.getId();

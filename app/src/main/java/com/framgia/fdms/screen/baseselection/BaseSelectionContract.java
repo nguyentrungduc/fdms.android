@@ -26,6 +26,8 @@ public interface BaseSelectionContract {
         void hideProgress();
 
         void setAllowLoadMore(boolean allowLoadMore);
+
+        String getString(int resourceId);
     }
 
     /**

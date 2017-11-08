@@ -99,6 +99,9 @@
         <activity
             android:name=".screen.user.UserActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".screen.request.requestmanager.select.assignee.SelectAssigneeActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

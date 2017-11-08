@@ -262,6 +262,7 @@ public class Device extends BaseObservable implements Parcelable {
     public void setDeviceStatusId(int deviceStatusId) {
         mDeviceStatusId = deviceStatusId;
         notifyPropertyChanged(BR.deviceStatusId);
+        notifyPropertyChanged(BR.resourceId);
     }
 
     @Bindable
@@ -331,6 +332,7 @@ public class Device extends BaseObservable implements Parcelable {
 
     public void setDeviceStatusName(String deviceStatusName) {
         mDeviceStatusName = deviceStatusName;
+        notifyPropertyChanged(BR.deviceStatusName);
     }
 
     @Bindable

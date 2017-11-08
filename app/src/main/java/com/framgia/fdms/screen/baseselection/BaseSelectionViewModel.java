@@ -45,13 +45,13 @@ public class BaseSelectionViewModel extends BaseObservable implements
                 return;
             }
             LinearLayoutManager layoutManager =
-                (LinearLayoutManager) recyclerView.getLayoutManager();
+                    (LinearLayoutManager) recyclerView.getLayoutManager();
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
             if (mAllowLoadMore
-                && !mIsLoadMore
-                && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                    && !mIsLoadMore
+                    && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                 setLoadMore(true);
                 setLoadingMoreVisibility(VISIBLE);
                 mPresenter.loadMoreData();
@@ -166,5 +166,10 @@ public class BaseSelectionViewModel extends BaseObservable implements
     @Override
     public void setAllowLoadMore(boolean allowLoadMore) {
         mAllowLoadMore = allowLoadMore;
+    }
+
+    @Override
+    public String getString(int resourceId) {
+        return mActivity.getString(resourceId);
     }
 }
