@@ -367,4 +367,6 @@
     <string name="title_waiting_approved">waiting approve</string>
     <string name="title_waiting_done">waiting done</string>
     <string name="title_all_assignee">All Assignee</string>
+    <string name="title_status_cancel">Cancel</string>
+    <string name="title_approved">Approved</string>
 </resources>

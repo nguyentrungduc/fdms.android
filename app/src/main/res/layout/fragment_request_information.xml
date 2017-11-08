@@ -195,7 +195,7 @@
                                 android:focusable="false"
                                 android:text="@{viewModel.request.requestStatus}"
                                 android:textSize="@dimen/sp_16"
-                                bind:deviceStatus="@{viewModel.request.requestStatus}"
+                                bind:deviceStatus="@{viewModel.request.requestStatusId}"
                                 />
                         </android.support.design.widget.TextInputLayout>
                     </LinearLayout>

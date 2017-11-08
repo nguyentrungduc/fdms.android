@@ -12,41 +12,24 @@ public class Constant {
     public static final int PICK_IMAGE_REQUEST = 4;
     public static final int ALL_REQUEST_STATUS_ID = -1;
     public static final int ALL_RELATIVE_ID = -1;
-    public static final int MANAGE_REQUEST_GROUP = 1;
-    public static final int MY_REQUEST_GROUP = 2;
     public static final String PERCENT = " %";
     public static final String NOT_SEARCH = "NOT_SEARCH";
-    public static final String BLANK = "";
     public static final int USING = 1;
     public static final int AVAIABLE = 2;
     public static final int BROKEN = 3;
-    public static final int MAX_NOTIFICATION = 99;
-    public static final String TITLE_UNKNOWN = "Unknown";
-    public static final String ACTION_CLEAR = "Clear";
     public static final String TYPE_DIALOG = "TYPE_DIALOG";
     public static final String FOLDER_NAME_FAMS = "Report FAMS";
     public static final String TYPE_PDF = "application/pdf";
     public static final String TYPE_WORD = "application/msword";
     public static final String TITLE_NOW = "Now";
     public static final String TAG_PRODUCER_DIALOG = "PRODUCER_DIALOG";
-    public static final String TAG_MEETING_ROOM_DIALOG = "TAG_MEETING_ROOM_DIALOG";
-    public static final int FIRST_INDEX = 0;
     public static final String DRAWER_IS_CLOSE = "CLOSE";
     public static final String DRAWER_IS_OPEN = "OPEN";
-    public static final String TITLE_NA = "N/A";
     public static final String TITLE_ALL = "All";
     public static final String NONE = "None";
 
-    private Constant() {
-        // No-op
-    }
-
     public static final class BundleConstant {
-        public static final String BUNDLE_CATEGORIES = "BUNDLE_CATEGORIES";
-        public static final String BUNDLE_STATUSES = "BUNDLE_STATUSES";
         public static final String BUNDLE_TYPE = "BUNDLE_TYPE";
-        public static final String BUNDLE_CATEGORY = "BUNDLE_CATEGORY";
-        public static final String BUNDLE_STATUE = "BUNDLE_STATUE";
         public static final String BUNDLE_DEVICE = "BUNDLE_DEVICE";
         public static final String BUNDLE_MEETING_ROOM = "BUNDLE_MEETING_ROOM";
         public static final String BUNDLE_CONTENT = "BUNDLE_CONTENT";
@@ -65,8 +48,6 @@ public class Constant {
         public static final String BUNDLE_SUCCESS = "BUNDLE_SUCCESS";
         public static final String BUNDLE_SHOW_GROUP_DEVICE = "BUNDLE_SHOW_GROUP_DEVICE";
         public static final String BUNDLE_DEVICE_GROUP_TYPE = "BUNDLE_DEVICE_GROUP_TYPE";
-        public static final String BUNDLE_MANAGE_DEVICE = "BUNDLE_MANAGE_DEVICE";
-        public static final String BUNDLE_GROUP_REQUEST = "BUNDLE_GROUP_REQUEST";
         public static final String BUNDLE_PRODUCER_TYPE = "BUNDLE_PRODUCER_TYPE";
         public static final String BUNDLE_PRODUCER_DIALOG_TYPE = "BUNDLE_PRODUCER_DIALOG_TYPE";
     }
@@ -163,14 +144,6 @@ public class Constant {
         public static final String BRANCH_ID = "branch_id";
     }
 
-    public class DeviceStatus {
-        public static final String CANCELLED = "cancelled";
-        public static final String WAITING_APPROVE = "waiting approve";
-        public static final String APPROVED = "approved";
-        public static final String WAITING_DONE = "waiting done";
-        public static final String DONE = "done";
-    }
-
     public class BundleRequest {
         public static final String BUND_REQUEST = "BUND_REQUEST";
         public static final String BUNDLE_REQUEST_TYPE = "BUNDLE_REQUEST_TYPE";
@@ -183,16 +156,5 @@ public class Constant {
         public static final int ENGLISH_POSITION = 0;
         public static final int VIETNAMESE_POSITION = 1;
         public static final int JAPANESE_POSITION = 2;
-    }
-
-    public class RequestAction {
-        public static final int CANCEL = 1;
-        public static final int WAITING_APPROVE = 2;
-        public static final int APPROVED = 3;
-        public static final int RECEIVE = 4;
-        public static final int DONE = 5;
-        public static final int EDIT = 6;
-        public static final int RESEND = 7;
-        public static final int ASSIGNMENT = 8;
     }
 }

@@ -80,15 +80,15 @@ import static com.framgia.fdms.data.anotation.Permission.ADMIN;
 import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
 import static com.framgia.fdms.data.anotation.Permission.BO_STAFF;
 import static com.framgia.fdms.data.anotation.Permission.DIVISION_MANAGER;
+import static com.framgia.fdms.data.anotation.RequestStatus.APPROVED;
+import static com.framgia.fdms.data.anotation.RequestStatus.CANCELLED;
+import static com.framgia.fdms.data.anotation.RequestStatus.DONE;
+import static com.framgia.fdms.data.anotation.RequestStatus.WAITING_APPROVE;
+import static com.framgia.fdms.data.anotation.RequestStatus.WAITING_DONE;
 import static com.framgia.fdms.screen.dashboard.DashboardViewModel.Tab.TAB_DEVIVE_DASH_BOARD;
 import static com.framgia.fdms.screen.dashboard.DashboardViewModel.Tab.TAB_REQUEST_DASH_BOARD;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
-import static com.framgia.fdms.utils.Constant.DeviceStatus.APPROVED;
-import static com.framgia.fdms.utils.Constant.DeviceStatus.CANCELLED;
-import static com.framgia.fdms.utils.Constant.DeviceStatus.DONE;
-import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_APPROVE;
-import static com.framgia.fdms.utils.Constant.DeviceStatus.WAITING_DONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 /**
@@ -404,7 +404,7 @@ public final class BindingUtils {
     }
 
     @BindingAdapter("bind:deviceStatus")
-    public static void setTextColor(TextView view, String status) {
+    public static void setTextColor(TextView view, int status) {
         switch (status) {
             case CANCELLED:
                 view.setTextColor(view.getResources().getColor(R.color.color_red_500));
