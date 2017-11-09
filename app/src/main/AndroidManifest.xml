@@ -102,6 +102,13 @@
         <activity
             android:name=".screen.request.requestmanager.select.assignee.SelectAssigneeActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".screen.requestcreation.assignee.SelectAssigneeRequestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screen.requestcreation.requestfor.SelectRequestForActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

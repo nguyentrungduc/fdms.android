@@ -40,6 +40,7 @@ public class SelectDeviceStatusPresenter extends BaseSelectionPresenter {
                     @Override
                     public void accept(List<Status> statuses) throws Exception {
                         mViewModel.onGetDataSuccess(statuses);
+                        mViewModel.setAllowLoadMore(false);
 
                     }
                 }, new Consumer<Throwable>() {
@@ -59,6 +60,7 @@ public class SelectDeviceStatusPresenter extends BaseSelectionPresenter {
     @Override
     public void loadMoreData() {
         // no ops
+        mViewModel.hideProgress();
     }
 
 }

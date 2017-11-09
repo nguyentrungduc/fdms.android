@@ -7,7 +7,6 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.framgia.fdms.BR;
@@ -16,9 +15,10 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
+import com.framgia.fdms.screen.requestcreation.assignee.SelectAssigneeRequestActivity;
+import com.framgia.fdms.screen.requestcreation.requestfor.SelectRequestForActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
-import com.framgia.fdms.utils.Constant;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
@@ -267,11 +267,10 @@ public class RequestCreationViewModel extends BaseObservable
 
     public void onClickChooseRequestForRelativeStaff() {
         mActivity.startActivityForResult(
-                SelectionActivity.getInstance(mContext, SelectionType.RELATIVE_STAFF),
-                REQUEST_RELATIVE);
+                SelectRequestForActivity.getInstance(mContext), REQUEST_RELATIVE);
     }
 
-    public void updateDefaultAssignee(){
+    public void updateDefaultAssignee() {
         if (mAssignee.getId() < 0 && mDefaultAssignee != null) {
             setAssignee(mDefaultAssignee);
         }
@@ -279,6 +278,6 @@ public class RequestCreationViewModel extends BaseObservable
 
     public void onClickAssignee() {
         mActivity.startActivityForResult(
-                SelectionActivity.getInstance(mContext, SelectionType.ASSIGNEE), REQUEST_ASSIGNEE);
+                SelectAssigneeRequestActivity.getInstance(mContext), REQUEST_ASSIGNEE);
     }
 }
