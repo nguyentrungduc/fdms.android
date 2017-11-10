@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.anotation.Branch;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
@@ -500,7 +501,7 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         }
 
         if (filterModel.getBranch() != null && filterModel.getBranch().getId() != OUT_OF_INDEX) {
-            parrams.put(DEVICE_BRANCH_ID, String.valueOf(filterModel.getBranch().getId()));
+            parrams.put(DEVICE_BRANCH_ID, getBranchCode(filterModel.getBranch().getId()));
         }
 
         if (page != OUT_OF_INDEX) {
@@ -511,6 +512,18 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         }
 
         return parrams;
+    }
+
+    private String getBranchCode(int deviceId){
+        switch (deviceId){
+            default:
+            case Branch.Id.ID_HA_NOI:
+                return Branch.Code.HA_NOI;
+            case Branch.Id.ID_DA_NANG:
+                return Branch.Code.DA_NANG;
+            case Branch.Id.ID_HO_CHI_MINH:
+                return Branch.Code.HO_CHI_MINH;
+        }
     }
 
     private RequestBody createPartFromString(String partString) {
