@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface BranchDataSource {
     Observable<List<Status>> getListBranch();
+
+    Observable<List<Status>> getListBranch(String querry);
 }

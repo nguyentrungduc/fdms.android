@@ -86,8 +86,8 @@ public class Constant {
     }
 
     public class ApiParram {
-        public static final String CATEGORY_ID = "category_id";
-        public static final String STATUS_ID = "status_id";
+        public static final String CATEGORY_ID = "device[category_id]";
+        public static final String STATUS_ID = "device[status_id]";
         public static final String VENDOR_ID = "device[vendor_id]";
         public static final String MAKER_ID = "device[maker_id]";
         public static final String WARRANTY = "device[warranty]";
@@ -98,7 +98,7 @@ public class Constant {
         public static final String IS_BAR_CODE = "device[is_barcode]";
         public static final String IS_MEETING_ROOM = "device[is_meeting_room]";
         public static final String MEETING_ROOM_ID = "device[meeting_room_id]";
-        public static final String DEVICE_BRANCH_ID = "device[branch_id]";
+        public static final String DEVICE_BRANCH_ID = "device[branch]";
         public static final String PAGE = "page";
         public static final String REQUEST_TYPE = "manager_request";
         public static final String PER_PAGE = "per_page";
@@ -113,8 +113,8 @@ public class Constant {
         public static final String PICTURE = "device[picture]";
         public static final String REQUEST_STATUS_ID = "request_status_id";
         public static final String RELATIVE_ID = "relative_id";
-        public static final String DEVICE_NAME = "device_name";
-        public static final String STAFF_USING_NAME = "using";
+        public static final String DEVICE_NAME = "device[production_name]";
+        public static final String STAFF_USING_NAME = "device[using]";
         public static final String ROOM_NAME = "name";
         public static final String REQUEST_TITLE = "request[title]";
         public static final String REQUEST_DESCRIPTION = "request[description]";

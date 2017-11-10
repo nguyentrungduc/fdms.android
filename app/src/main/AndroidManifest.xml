@@ -109,6 +109,24 @@
         <activity
             android:name=".screen.requestcreation.requestfor.SelectRequestForActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".screen.device.listdevice.selectcategory.SelectDeviceCategoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screen.device.listdevice.selectdevicestatus.SelectDeviceStatusActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screen.device.listdevice.selectvendor.SelectVendorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screen.device.listdevice.selectmaker.SelectMakerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screen.device.listdevice.meetingroom.SelectMeetingRoomActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screen.device.listdevice.selectbranch.SelectBranchActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

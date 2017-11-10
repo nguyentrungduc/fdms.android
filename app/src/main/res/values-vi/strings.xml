@@ -162,7 +162,7 @@
     <string name="title_ok">Ok</string>
     <string name="title_assignt">Assignt</string>
     <string name="title_available">Available</string>
-    <string name="title_using">\tUsing</string>
+    <string name="title_using">Using</string>
     <string formatted="false" name="text_request_title_notification">Request %s is created</string>
     <string formatted="false" name="text_from_notification">From %s</string>
     <string formatted="false" name="text_date_time_notification">At %s</string>

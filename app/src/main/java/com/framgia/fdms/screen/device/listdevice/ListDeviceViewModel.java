@@ -13,6 +13,7 @@ import android.support.v7.widget.SearchView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
@@ -23,25 +24,25 @@ import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
 import com.framgia.fdms.screen.assignment.AssignmentType;
+import com.framgia.fdms.screen.device.listdevice.selectbranch.SelectBranchActivity;
+import com.framgia.fdms.screen.device.listdevice.meetingroom.SelectMeetingRoomActivity;
+import com.framgia.fdms.screen.device.listdevice.selectcategory.SelectDeviceCategoryActivity;
+import com.framgia.fdms.screen.device.listdevice.selectdevicestatus.SelectDeviceStatusActivity;
+import com.framgia.fdms.screen.device.listdevice.selectmaker.SelectMakerActivity;
+import com.framgia.fdms.screen.device.listdevice.selectvendor.SelectVendorActivity;
 import com.framgia.fdms.screen.devicecreation.CreateDeviceActivity;
 import com.framgia.fdms.screen.devicecreation.DeviceStatusType;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.returndevice.ReturnDeviceActivity;
-import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import com.github.clans.fab.FloatingActionMenu;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.VISIBLE;
-import static com.framgia.fdms.screen.selection.SelectionType.BRANCH_ALL;
-import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
-import static com.framgia.fdms.screen.selection.SelectionType.MARKER;
-import static com.framgia.fdms.screen.selection.SelectionType.MEETING_ROOM;
-import static com.framgia.fdms.screen.selection.SelectionType.STATUS;
-import static com.framgia.fdms.screen.selection.SelectionType.VENDOR;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICE;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
@@ -63,9 +64,9 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_VENDOR;
  * Exposes the data to be used in the ListDevice screen.
  */
 public class ListDeviceViewModel extends BaseObservable
-    implements ListDeviceContract.ViewModel, ItemDeviceClickListenner,
-    FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
-    OnSearchMenuItemClickListener, DrawerLayout.DrawerListener {
+        implements ListDeviceContract.ViewModel, ItemDeviceClickListenner,
+        FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
+        OnSearchMenuItemClickListener, DrawerLayout.DrawerListener {
 
     private ListDeviceFragment mFragment;
     private boolean mIsLoadingMore;
@@ -91,13 +92,13 @@ public class ListDeviceViewModel extends BaseObservable
                 return;
             }
             LinearLayoutManager layoutManager =
-                (LinearLayoutManager) recyclerView.getLayoutManager();
+                    (LinearLayoutManager) recyclerView.getLayoutManager();
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
             if (mIsAllowLoadMore
-                && !mIsLoadingMore
-                && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                    && !mIsLoadingMore
+                    && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                 setLoadingMore(true);
                 mPresenter.loadMoreData();
             }
@@ -105,32 +106,32 @@ public class ListDeviceViewModel extends BaseObservable
     };
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener =
-        new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mAdapter.clear();
-                loadData();
-            }
-        };
+            new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    mAdapter.clear();
+                    loadData();
+                }
+            };
 
     private SearchView.OnQueryTextListener mQueryTextListener =
-        new SearchView.OnQueryTextListener() {
+            new SearchView.OnQueryTextListener() {
 
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                mIsChangeFilter = true;
-                mFilterModel.setDeviceName(query);
-                setDrawerStatus(DRAWER_IS_CLOSE);
-                return false;
-            }
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    mIsChangeFilter = true;
+                    mFilterModel.setDeviceName(query);
+                    setDrawerStatus(DRAWER_IS_CLOSE);
+                    return false;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                mIsChangeFilter = true;
-                mFilterModel.setDeviceName(newText);
-                return false;
-            }
-        };
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    mIsChangeFilter = true;
+                    mFilterModel.setDeviceName(newText);
+                    return false;
+                }
+            };
 
     public ListDeviceViewModel(ListDeviceFragment fragment) {
         mFragment = fragment;
@@ -207,38 +208,38 @@ public class ListDeviceViewModel extends BaseObservable
 
     @Override
     public void onChooseCategoryClick() {
-        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, CATEGORY),
-            REQUEST_CATEGORY);
+        mFragment.startActivityForResult(SelectDeviceCategoryActivity.getInstance(mContext),
+                REQUEST_CATEGORY);
     }
 
     @Override
     public void onChooseStatusClick() {
-        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, STATUS),
-            REQUEST_STATUS);
+        mFragment.startActivityForResult(SelectDeviceStatusActivity.getInstance(mContext),
+                REQUEST_STATUS);
     }
 
     @Override
     public void onChooseMakerClick() {
-        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, MARKER),
-            REQUEST_MAKER);
+        mFragment.startActivityForResult(SelectMakerActivity.getInstance(mContext),
+                REQUEST_MAKER);
     }
 
     @Override
     public void onChooseVendorClick() {
-        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, VENDOR),
-            REQUEST_VENDOR);
+        mFragment.startActivityForResult(SelectVendorActivity.getInstance(mContext),
+                REQUEST_VENDOR);
     }
 
     @Override
     public void onChooseMeetingRoomClick() {
-        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, MEETING_ROOM),
-            REQUEST_MEETING_ROOM);
+        mFragment.startActivityForResult(SelectMeetingRoomActivity.getInstance(mContext),
+                REQUEST_MEETING_ROOM);
     }
 
     @Override
     public void onChooseBranchClick() {
-        mFragment.startActivityForResult(SelectionActivity.getInstance(mContext, BRANCH_ALL),
-            REQUEST_BRANCH);
+        mFragment.startActivityForResult(SelectBranchActivity.getInstance(mContext),
+                REQUEST_BRANCH);
     }
 
     @Override
@@ -266,7 +267,7 @@ public class ListDeviceViewModel extends BaseObservable
     @Override
     public void onDeviceLoaded(List<Device> devices) {
         setEmptyViewVisible(
-            devices.isEmpty() && mAdapter.getItemCount() == 0 ? VISIBLE : View.GONE);
+                devices.isEmpty() && mAdapter.getItemCount() == 0 ? VISIBLE : View.GONE);
         setLoadingMore(false);
         mAdapter.onUpdatePage(devices);
         setRefresh(false);
@@ -303,27 +304,27 @@ public class ListDeviceViewModel extends BaseObservable
     public void onRegisterDeviceClick(FloatingActionMenu floatingActionsMenu) {
         floatingActionsMenu.close(true);
         mFragment.startActivityForResult(
-            CreateDeviceActivity.getInstance(mFragment.getContext(), DeviceStatusType.CREATE),
-            REQUEST_CREATE_DEVICE);
+                CreateDeviceActivity.getInstance(mFragment.getContext(), DeviceStatusType.CREATE),
+                REQUEST_CREATE_DEVICE);
     }
 
     @Override
     public void onAssignDeviceForNewMemberClick(FloatingActionMenu floatingActionsMenu) {
         floatingActionsMenu.close(true);
         mFragment.startActivityForResult(AssignmentActivity.getInstance(mFragment.getContext(),
-            AssignmentType.ASSIGN_BY_NEW_MEMBER), REQUEST_CREATE_ASSIGNMENT);
+                AssignmentType.ASSIGN_BY_NEW_MEMBER), REQUEST_CREATE_ASSIGNMENT);
     }
 
     @Override
     public void getDataWithDevice(Device device) {
         if (device == null
-            || device.getDeviceCategoryId() <= 0
-            || device.getDeviceCategoryName() == null) {
+                || device.getDeviceCategoryId() <= 0
+                || device.getDeviceCategoryName() == null) {
             return;
         }
         mFilterModel.initDefaultFilter();
         mFilterModel.setCategory(
-            new Status(device.getDeviceCategoryId(), device.getDeviceCategoryName()));
+                new Status(device.getDeviceCategoryId(), device.getDeviceCategoryName()));
         mAdapter.clear();
         mPresenter.getData(mFilterModel, FIRST_PAGE);
     }
@@ -378,8 +379,8 @@ public class ListDeviceViewModel extends BaseObservable
     @Override
     public void onItemDeviceClick(Device device) {
         mFragment.startActivityForResult(
-            DeviceDetailActivity.getInstance(mFragment.getContext(), device),
-            REQUEST_MANAGE_DEVICE);
+                DeviceDetailActivity.getInstance(mFragment.getContext(), device),
+                REQUEST_MANAGE_DEVICE);
     }
 
     @Bindable
@@ -417,7 +418,7 @@ public class ListDeviceViewModel extends BaseObservable
         switch (item.getItemId()) {
             case R.id.action_filter:
                 setDrawerStatus(
-                    mDrawerStatus.equals(DRAWER_IS_CLOSE) ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
+                        mDrawerStatus.equals(DRAWER_IS_CLOSE) ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
                 break;
             case R.id.action_search:
                 mAdapter.clear();

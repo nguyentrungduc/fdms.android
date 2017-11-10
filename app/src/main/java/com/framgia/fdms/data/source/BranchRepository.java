@@ -20,4 +20,9 @@ public class BranchRepository implements BranchDataSource {
     public Observable<List<Status>> getListBranch() {
         return mRemoteDataSource.getListBranch();
     }
+
+    @Override
+    public Observable<List<Status>> getListBranch(String querry) {
+        return mRemoteDataSource.getListBranch(querry);
+    }
 }
