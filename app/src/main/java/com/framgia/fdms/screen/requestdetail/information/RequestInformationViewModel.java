@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.anotation.Permission;
+import com.framgia.fdms.data.anotation.RequestStatus;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;

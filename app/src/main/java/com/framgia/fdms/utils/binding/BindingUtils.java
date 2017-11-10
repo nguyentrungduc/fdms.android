@@ -793,6 +793,11 @@ public final class BindingUtils {
         viewPager.setAdapter(pagerAdapter);
     }
 
+    @BindingAdapter("bind:limitOffSet")
+    public static void setViewPagerLimitOffset(ViewPager view, int limit) {
+        view.setOffscreenPageLimit(limit);
+    }
+
     @BindingAdapter("bind:viewPager")
     public static void setupWithViewPager(TabLayout tabLayout, ViewPager viewPager) {
         tabLayout.setupWithViewPager(viewPager);
