@@ -47,10 +47,10 @@ final class DeviceDetailPresenter implements DeviceDetailContract.Presenter {
 
     @Override
     public void getDevice(final Device localDevice) {
-        if (localDevice.getDeviceId() < 1) {
+        if (localDevice.getId() < 0) {
             return;
         }
-        Disposable subscription = mRepository.getDevice(localDevice.getDeviceId())
+        Disposable subscription = mRepository.getDevice(localDevice.getId())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(new Consumer<Device>() {

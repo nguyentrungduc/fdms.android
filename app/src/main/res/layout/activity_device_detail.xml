@@ -40,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:adapter="@{viewModel.adapter}"
+            app:limitOffSet="@{viewModel.adapter.count}"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:bindViewModel="@{viewModel}"
             tools:context="com.framgia.fdms.screen.devicedetail.DeviceDetailActivity">

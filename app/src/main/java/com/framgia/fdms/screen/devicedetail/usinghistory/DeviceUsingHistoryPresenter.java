@@ -34,6 +34,7 @@ final class DeviceUsingHistoryPresenter implements DeviceUsingHistoryContract.Pr
         mCompositeSubscription = new CompositeDisposable();
         mRepository = repository;
         mDeviceCode = deviceCode;
+        getUsingHistoryDevice();
     }
 
     @Override
