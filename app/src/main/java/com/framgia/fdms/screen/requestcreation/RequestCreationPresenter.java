@@ -1,7 +1,6 @@
 package com.framgia.fdms.screen.requestcreation;
 
 import android.text.TextUtils;
-
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
@@ -11,9 +10,6 @@ import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
-
-import java.util.List;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
@@ -21,10 +17,10 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
-import static com.framgia.fdms.utils.Constant.PER_PAGE;
-
 
 /**
  * Listens to user actions from the UI ({@link RequestCreationActivity}), retrieves the data and
@@ -42,10 +38,8 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
     private int mRequestType;
 
     public RequestCreationPresenter(RequestCreationContract.ViewModel viewModel,
-                                    @RequestCreatorType int requestType,
-                                    RequestRepository requestRepository,
-                                    UserRepository userRepository,
-                                    StatusRepository statusRepository) {
+            @RequestCreatorType int requestType, RequestRepository requestRepository,
+            UserRepository userRepository, StatusRepository statusRepository) {
         mViewModel = viewModel;
         mRequestType = requestType;
         mSubscription = new CompositeDisposable();
@@ -114,11 +108,17 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
             isValid = false;
             mViewModel.onInputTitleError();
         }
-        if (mUser.getRole().equals(BO_MANAGER) &&
-                mRequestType == RequestCreatorType.MEMBER_REQUEST &&
-                request.getRequestFor() <= 0) {
+        if (mUser.getRole().equals(BO_MANAGER)
+                && mRequestType == RequestCreatorType.MEMBER_REQUEST
+                && request.getRequestFor() <= 0) {
             isValid = false;
             mViewModel.onInputRequestForError();
+        }
+        if (mUser.getRole().equals(BO_MANAGER)
+                && mRequestType == RequestCreatorType.MEMBER_REQUEST
+                && request.getGroup().equals(null)) {
+            isValid = false;
+            mViewModel.onInputGroupForError();
         }
         return isValid;
     }
@@ -140,11 +140,25 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
     }
 
     @Override
+    public void getGroupByStaffId() {
+        mViewModel.onGetGroupSuccess(fakeData());
+    }
+
+    @Override
     public void onStart() {
     }
 
     @Override
     public void onStop() {
         mSubscription.clear();
+    }
+
+    public List<String> fakeData() {
+        List<String> data = new ArrayList<>();
+        data.add("Back office");
+        data.add("Div 1");
+        data.add("Div 2");
+        data.add("Div 3");
+        return data;
     }
 }
