@@ -144,7 +144,7 @@ public interface FDMSApi {
 
     @GET("api/devices?")
     Observable<Respone<List<Device>>> getListDeviceByMeetingRoomId(
-        @Query("meeting_room_id") int meetingRoomId, @Query("page") int page,
+        @Query("device[meeting_room_id]") int meetingRoomId, @Query("page") int page,
         @Query("per_page") int perPage);
 
     @GET("api/meeting_rooms")

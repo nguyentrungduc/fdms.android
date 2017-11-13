@@ -379,4 +379,8 @@
     <string name="title_status_cancel">Cancel</string>
     <string name="title_approved">Approved</string>
     <string name="title_none">None</string>
+    <string name="title_loading">Loading...</string>
+    <string name="title_using_statuses_all">All</string>
+    <string name="title_using_statuses_using">Using</string>
+    <string name="title_using_statuses_returned">Returned</string>
 </resources>

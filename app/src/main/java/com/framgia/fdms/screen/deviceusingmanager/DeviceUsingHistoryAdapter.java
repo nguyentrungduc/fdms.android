@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.model.AssignmentResponse;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.databinding.ItemDeviceUsingHistoryBinding;
@@ -64,7 +65,7 @@ public class DeviceUsingHistoryAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Device getChild(int groupPos, int childPos) {
+    public AssignmentResponse getChild(int groupPos, int childPos) {
         if (getGroup(groupPos) != null && getGroup(groupPos).getUsingDevices() != null) {
             return getGroup(groupPos).getUsingDevices().get(childPos);
         }

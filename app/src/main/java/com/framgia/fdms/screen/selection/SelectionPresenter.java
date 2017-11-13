@@ -323,7 +323,7 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
 
     @Override
     public void getDeviceUsingHistoryStatus() {
-        Disposable disposable = mDeviceUsingHistoryRepository.getListStatus()
+        Disposable disposable = mDeviceUsingHistoryRepository.getUsingStatuses()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(new Consumer<Disposable>() {

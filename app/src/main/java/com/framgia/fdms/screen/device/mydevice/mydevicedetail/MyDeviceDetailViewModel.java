@@ -1,15 +1,20 @@
 package com.framgia.fdms.screen.device.mydevice.mydevicedetail;
 
+import android.app.ProgressDialog;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
 import com.framgia.fdms.BR;
+import com.framgia.fdms.R;
+import com.framgia.fdms.data.model.AssignmentResponse;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.screen.device.listdevice.ItemDeviceClickListenner;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +26,7 @@ import static android.view.View.VISIBLE;
  */
 
 public class MyDeviceDetailViewModel extends BaseObservable
-    implements MyDeviceDetailContract.ViewModel, ItemDeviceClickListenner {
+        implements MyDeviceDetailContract.ViewModel {
 
     private static final String TAG = "MyDeviceDetailViewModel";
 
@@ -32,6 +37,7 @@ public class MyDeviceDetailViewModel extends BaseObservable
     private boolean mIsLoadingMore;
     private boolean mIsAllowLoadMore;
     private int mEmptyStateVisibility = GONE;
+    private ProgressDialog mProgressDialog;
 
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
         @Override
@@ -41,13 +47,13 @@ public class MyDeviceDetailViewModel extends BaseObservable
                 return;
             }
             LinearLayoutManager layoutManager =
-                (LinearLayoutManager) recyclerView.getLayoutManager();
+                    (LinearLayoutManager) recyclerView.getLayoutManager();
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
             if (mIsAllowLoadMore
-                && !mIsLoadingMore
-                && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                    && !mIsLoadingMore
+                    && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                 mIsLoadingMore = true;
                 mPresenter.loadMoreData();
             }
@@ -56,7 +62,7 @@ public class MyDeviceDetailViewModel extends BaseObservable
 
     public MyDeviceDetailViewModel(Fragment fragment) {
         mNavigator = new Navigator(fragment);
-        setAdapter(new MyDeviceDetailAdapter(new ArrayList<Device>(), this));
+        setAdapter(new MyDeviceDetailAdapter(new ArrayList<AssignmentResponse>(), this));
     }
 
     @Override
@@ -92,7 +98,7 @@ public class MyDeviceDetailViewModel extends BaseObservable
     }
 
     @Override
-    public void onGetDeviceSuccess(List<Device> devices) {
+    public void onGetDeviceSuccess(List<AssignmentResponse> devices) {
         mIsLoadingMore = false;
         mAdapter.updateData(devices);
         setEmptyStateVisibility(mAdapter != null && mAdapter.getItemCount() == 0 ? VISIBLE : GONE);
@@ -124,8 +130,36 @@ public class MyDeviceDetailViewModel extends BaseObservable
     }
 
     @Override
-    public void onItemDeviceClick(Device device) {
+    public void onItemDeviceClick(AssignmentResponse device) {
+        mPresenter.getDeviceByDeviceId(device.getDeviceId());
+    }
+
+    @Override
+    public void onGetDeviceByIdSuccess(Device device) {
         mNavigator.startActivity(DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
+    }
+
+    @Override
+    public void onGetDeviceByIdFailure(String message) {
+        mNavigator.showToast(message);
+    }
+
+    @Override
+    public void showGetDeviceByIdProgress() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(mNavigator.getContext());
+            mProgressDialog.setMessage(mNavigator.getContext().getString(R.string.title_loading));
+        }
+        if (mProgressDialog != null && !mProgressDialog.isShowing()) {
+            mProgressDialog.show();
+        }
+    }
+
+    @Override
+    public void hideGetDeviceByIdProgress() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
     @Bindable

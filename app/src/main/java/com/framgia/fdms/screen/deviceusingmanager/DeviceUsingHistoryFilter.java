@@ -1,8 +1,13 @@
 package com.framgia.fdms.screen.deviceusingmanager;
 
+import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import com.framgia.fdms.BR;
+import com.framgia.fdms.FDMSApplication;
+import com.framgia.fdms.R;
+import com.framgia.fdms.data.anotation.Branch;
+import com.framgia.fdms.data.anotation.UsingStatus;
 import com.framgia.fdms.data.model.Status;
 
 import static com.framgia.fdms.utils.Constant.DeviceUsingStatus.ALL;
@@ -24,10 +29,11 @@ public class DeviceUsingHistoryFilter extends BaseObservable {
     }
 
     public void initDefaultData() {
+        Context context = FDMSApplication.getInstant();
         setDeviceCode("");
         setStaffName("");
-        setStatus(new Status(OUT_OF_INDEX, USING));
-        setBranch(new Status(OUT_OF_INDEX, ALL));
+        setStatus(new Status(UsingStatus.USING, context.getString(R.string.title_using_statuses_using)));
+        setBranch(new Status(Branch.Id.ALL, context.getString(R.string.action_all)));
     }
 
     @Bindable

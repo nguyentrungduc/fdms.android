@@ -4,9 +4,11 @@ import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.Device;
+import com.framgia.fdms.data.model.AssignmentResponse;
 import com.framgia.fdms.databinding.ItemMyDeviceBinding;
+
 import java.util.List;
 
 /**
@@ -14,16 +16,16 @@ import java.util.List;
  */
 
 public class MyDeviceDetailAdapter extends RecyclerView.Adapter<MyDeviceDetailAdapter.ViewHolder> {
-    private List<Device> mDevices;
+    private List<AssignmentResponse> mDevices;
     private MyDeviceDetailViewModel mViewModel;
     private LayoutInflater mLayoutInflater;
 
-    public MyDeviceDetailAdapter(List<Device> devices, MyDeviceDetailViewModel viewModel) {
+    public MyDeviceDetailAdapter(List<AssignmentResponse> devices, MyDeviceDetailViewModel viewModel) {
         mDevices = devices;
         mViewModel = viewModel;
     }
 
-    public void updateData(List<Device> devices) {
+    public void updateData(List<AssignmentResponse> devices) {
         if (devices == null) {
             return;
         }
@@ -59,7 +61,7 @@ public class MyDeviceDetailAdapter extends RecyclerView.Adapter<MyDeviceDetailAd
             mBinding = binding;
         }
 
-        public void bindData(Device device) {
+        public void bindData(AssignmentResponse device) {
             if (device == null) {
                 return;
             }

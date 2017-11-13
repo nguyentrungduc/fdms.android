@@ -10,10 +10,12 @@ import android.support.v7.widget.SearchView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.model.AssignmentResponse;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.Status;
@@ -21,6 +23,7 @@ import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,9 +44,9 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_USI
  */
 
 public class DeviceUsingManagerViewModel extends BaseObservable
-    implements DeviceUsingManagerContract.ViewModel, SearchView.OnQueryTextListener,
-    FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
-    OnSearchMenuItemClickListener, DrawerLayout.DrawerListener, AbsListView.OnScrollListener {
+        implements DeviceUsingManagerContract.ViewModel, SearchView.OnQueryTextListener,
+        FloatingSearchView.OnSearchListener, FloatingSearchView.OnClearSearchActionListener,
+        OnSearchMenuItemClickListener, DrawerLayout.DrawerListener, AbsListView.OnScrollListener {
 
     private DeviceUsingManagerContract.Presenter mPresenter;
     private String mDrawerStatus = DRAWER_IS_CLOSE;
@@ -64,13 +67,13 @@ public class DeviceUsingManagerViewModel extends BaseObservable
 
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount,
-        int totalItemCount) {
+                         int totalItemCount) {
         if (totalItemCount == 0) {
             return;
         }
         if (mIsAllowLoadMore
-            && !mIsLoadingMore
-            && (visibleItemCount + firstVisibleItem) >= totalItemCount) {
+                && !mIsLoadingMore
+                && (visibleItemCount + firstVisibleItem) >= totalItemCount) {
             setLoadingMore(true);
             mPresenter.loadMoreData();
         }
@@ -123,19 +126,19 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     @Override
     public void onChooseStatusClick() {
         mNavigator.startActivityForResult(
-            SelectionActivity.getInstance(mNavigator.getContext(), DEVICE_USING_HISTORY),
-            REQUEST_DEVICE_USING_STATUS);
+                SelectionActivity.getInstance(mNavigator.getContext(), DEVICE_USING_HISTORY),
+                REQUEST_DEVICE_USING_STATUS);
     }
 
     @Override
     public void onChooseBranchClick() {
         mNavigator.startActivityForResult(
-            SelectionActivity.getInstance(mNavigator.getContext(), BRANCH_ALL), REQUEST_BRANCH);
+                SelectionActivity.getInstance(mNavigator.getContext(), BRANCH_ALL), REQUEST_BRANCH);
     }
 
     @Override
-    public void onItemDeviceClick(Device device) {
-        mNavigator.startActivity(DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
+    public void onItemDeviceClick(AssignmentResponse device) {
+        mPresenter.getDeviceByDeviceId(device.getDeviceId());
     }
 
     @Override
@@ -172,6 +175,16 @@ public class DeviceUsingManagerViewModel extends BaseObservable
     @Override
     public void setAllowLoadMore(boolean allowLoadMore) {
         mIsAllowLoadMore = allowLoadMore;
+    }
+
+    @Override
+    public void onGetDeviceSuccess(Device device) {
+        mNavigator.startActivity(DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
+    }
+
+    @Override
+    public void onGetDeviceFailure(String message) {
+        mNavigator.showToast(message);
     }
 
     @Override
@@ -244,7 +257,7 @@ public class DeviceUsingManagerViewModel extends BaseObservable
                 break;
             case R.id.action_filter:
                 setDrawerStatus(
-                    mDrawerStatus == DRAWER_IS_CLOSE ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
+                        mDrawerStatus == DRAWER_IS_CLOSE ? DRAWER_IS_OPEN : DRAWER_IS_CLOSE);
                 break;
             default:
                 break;
