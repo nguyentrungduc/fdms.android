@@ -129,7 +129,7 @@ public final class UserRequestPresenter implements UserRequestContract.Presenter
             .subscribe(new Consumer<Respone<Request>>() {
                 @Override
                 public void accept(Respone<Request> requestRespone) throws Exception {
-                    mViewModel.onUpdateActionSuccess(requestRespone);
+                    mViewModel.onUpdateActionSuccess(requestRespone.getData());
                 }
             }, new RequestError() {
                 @Override
@@ -148,7 +148,7 @@ public final class UserRequestPresenter implements UserRequestContract.Presenter
     }
 
     @Override
-    public void cancelRequest(int requestId, int actionId, String description) {
+    public void cancelRequest(final int requestId, int actionId, String description) {
         Disposable subscription = mRequestRepository.cancelRequest(requestId, actionId, description)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -161,7 +161,7 @@ public final class UserRequestPresenter implements UserRequestContract.Presenter
             .subscribe(new Consumer<Respone<Request>>() {
                 @Override
                 public void accept(Respone<Request> requestRespone) throws Exception {
-                    mViewModel.onUpdateActionSuccess(requestRespone);
+                    mViewModel.onUpdateActionSuccess(requestRespone.getData());
                 }
             }, new RequestError() {
                 @Override

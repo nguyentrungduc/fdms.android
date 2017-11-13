@@ -75,6 +75,7 @@ public final class DashBoardDetailPresenter implements DashBoardDetailContract.P
                     @Override
                     public void onRequestError(BaseException error) {
                         mViewModel.onDashBoardError(error.getMessage());
+                        mViewModel.setRefresh(false);
                     }
                 });
         mCompositeSubscriptions.add(subscription);
@@ -95,6 +96,7 @@ public final class DashBoardDetailPresenter implements DashBoardDetailContract.P
                     @Override
                     public void onRequestError(BaseException error) {
                         mViewModel.onDashBoardError(error.getMessage());
+                        mViewModel.setRefresh(false);
                     }
                 });
         mCompositeSubscriptions.add(subscription);

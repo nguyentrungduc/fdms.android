@@ -24,15 +24,6 @@ public class Dashboard {
     @SerializedName("hover_background_color")
     private String mHoverBackgroundColor;
 
-    public Dashboard(String title, int count, String color, String backgroundColor,
-        String hoverBackgroundColor) {
-        mTitle = title;
-        mCount = count;
-        mColor = color;
-        mBackgroundColor = backgroundColor;
-        mHoverBackgroundColor = hoverBackgroundColor;
-    }
-
     public String getTitle() {
         return mTitle;
     }

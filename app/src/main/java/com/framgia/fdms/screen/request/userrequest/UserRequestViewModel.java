@@ -170,10 +170,10 @@ public class UserRequestViewModel extends BaseFragmentModel
                 mPresenter.getData(mRelative, mStatus, null);
                 break;
             case REQUEST_DETAIL:
-                Respone<Request> requestRespone =
-                        (Respone<Request>) bundle.getSerializable(BUNDLE_RESPONE);
-                if (requestRespone != null) {
-                    onUpdateActionSuccess(requestRespone);
+                Request request =
+                        (Request) bundle.getSerializable(BUNDLE_RESPONE);
+                if (request != null) {
+                    onUpdateActionSuccess(request);
                 }
                 break;
             case REQUEST_REQUEST_CREATED_BY:
@@ -187,7 +187,7 @@ public class UserRequestViewModel extends BaseFragmentModel
                 break;
 
             case REQUEST_CREATE_REQUEST:
-                Request request = (Request) bundle.getSerializable(BUNDLE_DATA);
+                request = (Request) bundle.getSerializable(BUNDLE_DATA);
                 if (request != null) {
                     mAdapter.addRequest(request);
                     setScrollPosition(0);
@@ -199,11 +199,11 @@ public class UserRequestViewModel extends BaseFragmentModel
     }
 
     @Override
-    public void onUpdateActionSuccess(Respone<Request> requestRespone) {
-        if (requestRespone == null || requestRespone.getData() == null) return;
-        mAdapter.updateItem(requestRespone.getData());
-        Snackbar.make(mFragment.getView(), requestRespone.getMessage(), Snackbar.LENGTH_LONG)
-                .show();
+    public void onUpdateActionSuccess(Request request) {
+        if (request == null){
+            return;
+        }
+        mAdapter.updateItem(request);
     }
 
     @Override
