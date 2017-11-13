@@ -9,7 +9,7 @@
 
         <variable
             name="device"
-            type="com.framgia.fdms.data.model.Device"
+            type="com.framgia.fdms.data.model.AssignmentResponse"
             />
 
         <variable

@@ -2,6 +2,8 @@ package com.framgia.fdms.screen.devicedetail.usinghistory;
 
 import android.databinding.Bindable;
 import android.support.v4.app.Fragment;
+import android.view.View;
+
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.BaseFragmentContract;
 import com.framgia.fdms.BaseFragmentModel;
@@ -10,6 +12,7 @@ import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.user.UserActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
+
 import java.util.List;
 
 /**
@@ -17,17 +20,17 @@ import java.util.List;
  */
 
 public class DeviceUsingHistoryViewModel extends BaseFragmentModel
-    implements DeviceUsingHistoryContract.ViewModel,
-    BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<DeviceUsingHistory> {
+        implements DeviceUsingHistoryContract.ViewModel,
+        BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<DeviceUsingHistory> {
 
     private BaseFragmentContract.Presenter mPresenter;
     private DeviceUsingHistoryContract.Presenter mDeviceUsingHistoryPresenter;
     private DeviceUsingAdapter mAdapter;
-    private Fragment mFragment;
+    private String mErrorLoadingMessage;
     private Navigator mNavigator;
+    private int mEmptyViewVisible;
 
     public DeviceUsingHistoryViewModel(Fragment fragment) {
-        mFragment = fragment;
         mAdapter = new DeviceUsingAdapter();
         mAdapter.setListener(this);
         mNavigator = new Navigator(fragment);
@@ -64,11 +67,13 @@ public class DeviceUsingHistoryViewModel extends BaseFragmentModel
     @Override
     public void onGetUsingHistoryDeviceSuccess(List<DeviceUsingHistory> histories) {
         mAdapter.addData(histories);
+        setEmptyViewVisible(histories != null && histories.size() != 0 ? View.GONE : View.VISIBLE);
     }
 
     @Override
     public void onGetUsingHistoryDeviceFailed(String msg) {
-        mNavigator.showToast(msg);
+        setEmptyViewVisible(View.VISIBLE);
+        setErrorLoadingMessage(msg);
     }
 
     @Override
@@ -82,5 +87,25 @@ public class DeviceUsingHistoryViewModel extends BaseFragmentModel
         user.setName(item.getStaffName());
         user.setEmail(item.getStaffEmail());
         mNavigator.startActivity(UserActivity.getInstance(mNavigator.getContext(), user));
+    }
+
+    @Bindable
+    public String getErrorLoadingMessage() {
+        return mErrorLoadingMessage;
+    }
+
+    public void setErrorLoadingMessage(String errorLoadingMessage) {
+        mErrorLoadingMessage = errorLoadingMessage;
+        notifyPropertyChanged(BR.errorLoadingMessage);
+    }
+
+    @Bindable
+    public int getEmptyViewVisible() {
+        return mEmptyViewVisible;
+    }
+
+    public void setEmptyViewVisible(int emptyViewVisible) {
+        mEmptyViewVisible = emptyViewVisible;
+        notifyPropertyChanged(BR.emptyViewVisible);
     }
 }

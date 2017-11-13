@@ -1,10 +1,13 @@
 package com.framgia.fdms.screen.deviceusingmanager;
 
 import android.content.Intent;
+
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
+import com.framgia.fdms.data.model.AssignmentResponse;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
+
 import java.util.List;
 
 /**
@@ -26,7 +29,7 @@ public interface DeviceUsingManagerContract {
 
         void onChooseBranchClick();
 
-        void onItemDeviceClick(Device device);
+        void onItemDeviceClick(AssignmentResponse device);
 
         void showProgress();
 
@@ -35,6 +38,10 @@ public interface DeviceUsingManagerContract {
         void onActivityResult(int requestCode, int resultCode, Intent data);
 
         void setAllowLoadMore(boolean allowLoadMore);
+
+        void onGetDeviceSuccess(Device device);
+
+        void onGetDeviceFailure(String message);
     }
 
     /**
@@ -45,5 +52,7 @@ public interface DeviceUsingManagerContract {
         void getDeviceUsingHistory(DeviceUsingHistoryFilter filter);
 
         void loadMoreData();
+
+        void getDeviceByDeviceId(int deviceId);
     }
 }

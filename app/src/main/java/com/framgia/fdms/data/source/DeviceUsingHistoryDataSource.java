@@ -14,6 +14,6 @@ public class DeviceUsingHistoryDataSource {
         Observable<List<DeviceUsingHistory>> getListDeviceHistory(DeviceUsingHistoryFilter filter,
             int page, int perPage);
 
-        Observable<List<Status>> getListStatus();
+        Observable<List<Status>> getUsingStatuses();
     }
 }

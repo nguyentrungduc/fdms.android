@@ -13,12 +13,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+
 import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.databinding.DialogDeviceInformationBinding;
 import com.framgia.fdms.utils.navigator.Navigator;
+
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -29,8 +31,8 @@ import static android.view.View.VISIBLE;
  */
 
 public class DeviceDetailHistoryViewModel extends BaseObservable
-    implements DeviceDetailHistoryContract.ViewModel,
-    BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<DeviceHistoryDetail> {
+        implements DeviceDetailHistoryContract.ViewModel,
+        BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<DeviceHistoryDetail> {
 
     private DeviceDetailHistoryContract.Presenter mPresenter;
     private DeviceDetailHistoryAdapter mAdapter;
@@ -40,6 +42,7 @@ public class DeviceDetailHistoryViewModel extends BaseObservable
     private boolean mIsLoadingMore;
     private boolean mIsAllowLoadMore = true;
     private AppCompatActivity mActivity;
+    private String mErrorLoadingMessage;
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -49,13 +52,13 @@ public class DeviceDetailHistoryViewModel extends BaseObservable
                 return;
             }
             LinearLayoutManager layoutManager =
-                (LinearLayoutManager) recyclerView.getLayoutManager();
+                    (LinearLayoutManager) recyclerView.getLayoutManager();
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
             int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
             if (mIsAllowLoadMore
-                && !mIsLoadingMore
-                && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                    && !mIsLoadingMore
+                    && (visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                 setLoadingMore(true);
                 mPresenter.loadMoreData();
             }
@@ -86,7 +89,8 @@ public class DeviceDetailHistoryViewModel extends BaseObservable
 
     @Override
     public void onGetDeviceHistoryFailed(String message) {
-        mNavigator.showToast(message);
+        setEmptyViewVisible(mAdapter.getItemCount() != 0 ? GONE : VISIBLE);
+        setErrorLoadingMessage(message);
     }
 
     @Override
@@ -173,8 +177,8 @@ public class DeviceDetailHistoryViewModel extends BaseObservable
         Context context = mNavigator.getContext();
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
         DialogDeviceInformationBinding binding =
-            DataBindingUtil.inflate(LayoutInflater.from(context),
-                R.layout.dialog_device_information, null, false);
+                DataBindingUtil.inflate(LayoutInflater.from(context),
+                        R.layout.dialog_device_information, null, false);
         binding.setDevice(item.getDevice());
         binding.imageClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,9 +193,19 @@ public class DeviceDetailHistoryViewModel extends BaseObservable
         int height = displayMetrics.heightPixels;
 
         BottomSheetBehavior bottomSheetBehavior =
-            BottomSheetBehavior.from(((View) binding.getRoot().getParent()));
+                BottomSheetBehavior.from(((View) binding.getRoot().getParent()));
         bottomSheetBehavior.setPeekHeight(height);
 
         bottomSheetDialog.show();
+    }
+
+    @Bindable
+    public String getErrorLoadingMessage() {
+        return mErrorLoadingMessage;
+    }
+
+    public void setErrorLoadingMessage(String errorLoadingMessage) {
+        mErrorLoadingMessage = errorLoadingMessage;
+        notifyPropertyChanged(BR.errorLoadingMessage);
     }
 }

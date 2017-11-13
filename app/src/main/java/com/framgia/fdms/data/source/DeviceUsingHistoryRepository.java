@@ -25,7 +25,7 @@ public class DeviceUsingHistoryRepository implements DeviceUsingHistoryDataSourc
     }
 
     @Override
-    public Observable<List<Status>> getListStatus() {
-        return mRemoteDataSource.getListStatus();
+    public Observable<List<Status>> getUsingStatuses() {
+        return mRemoteDataSource.getUsingStatuses();
     }
 }

@@ -2,9 +2,11 @@ package com.framgia.fdms.data.model;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+
 import com.framgia.fdms.BR;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +15,7 @@ import java.util.List;
  */
 public class DeviceUsingHistory extends BaseObservable {
     @Expose
-    @SerializedName(value = "staff_name", alternate = { "name", "staff" })
+    @SerializedName("staff_name")
     private String mStaffName;
     @Expose
     @SerializedName("staff_email")
@@ -24,16 +26,16 @@ public class DeviceUsingHistory extends BaseObservable {
     @Expose
     @SerializedName("return_date")
     private Date mEndDate;
-    @SerializedName(value = "device", alternate = { "assignment_details" })
+    @SerializedName("assignment_details")
     @Expose
-    private List<Device> mUsingDevices;
+    private List<AssignmentResponse> mUsingDevices;
 
     @Bindable
-    public List<Device> getUsingDevices() {
+    public List<AssignmentResponse> getUsingDevices() {
         return mUsingDevices;
     }
 
-    public void setUsingDevices(List<Device> usingDevices) {
+    public void setUsingDevices(List<AssignmentResponse> usingDevices) {
         mUsingDevices = usingDevices;
         notifyPropertyChanged(BR.usingDevices);
     }
