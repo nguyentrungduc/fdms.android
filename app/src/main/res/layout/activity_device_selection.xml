@@ -1,73 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
-            type="com.framgia.fdms.screen.deviceselection.DeviceSelectionViewModel"
-            />
+            type="com.framgia.fdms.screen.deviceselection.DeviceSelectionViewModel" />
 
     </data>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        bind:refreshAble="@{viewModel.refresh}"
-        bind:swipeRefreshListener="@{viewModel.onRefreshListener}"
-        >
+        android:layout_height="match_parent">
 
-        <android.support.design.widget.CoordinatorLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
+            android:orientation="vertical">
 
-            <LinearLayout
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                bind:titleToolbar="@{@string/title_search}"
+                bind:view="@{viewModel.activity}" />
+
+            <include
+                layout="@layout/empty_state"
+                bind:image="@{@drawable/ic_not_found_data}"
+                bind:text="@{@string/msg_no_device}"
+                bind:visibleState="@{viewModel.emptyViewVisible}" />
+
+            <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorPrimary"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    bind:titleToolbar="@{@string/title_search}"
-                    bind:view="@{viewModel.activity}"
-                    />
-
-                <include
-                    layout="@layout/empty_state"
-                    bind:image="@{@drawable/ic_not_found_data}"
-                    bind:text="@{@string/msg_no_device}"
-                    bind:visibleState="@{viewModel.emptyViewVisible}"
-                    />
-
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    bind:layoutManager="LinearLayoutManager"
-                    bind:recyclerAdapter="@{viewModel.adapter}"
-                    bind:scrollListenner="@{viewModel.scrollListenner}"
-                    />
-            </LinearLayout>
+                bind:layoutManager="LinearLayoutManager"
+                bind:recyclerAdapter="@{viewModel.adapter}"
+                bind:scrollListenner="@{viewModel.scrollListenner}" />
 
             <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
                 android:indeterminateDrawable="@drawable/rotate_progressbar"
-                android:visibility="@{viewModel.isLoadingMore ? View.VISIBLE : View.GONE}"
-                />
-        </android.support.design.widget.CoordinatorLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+                android:visibility="@{viewModel.isLoadingMore ? View.VISIBLE : View.GONE}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/filter_bottom_sheet"
+            bottomSheetState="@{viewModel.bottomSheetState}"
+            bottomSheetCallback="@{viewModel}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="true"
+            android:orientation="vertical"
+            app:layout_behavior="@string/bottom_sheet_behavior">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/colorPrimary"
+                    android:clickable="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:layout_marginStart="@dimen/dp_8"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:onClick="@{() ->viewModel.onResetFilterClicked()}"
+                    android:text="@string/action_reset_filter"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView2"
+                    app:layout_constraintStart_toStartOf="@+id/textView2"
+                    app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="0dp"
+                    android:layout_height="19dp"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:layout_marginEnd="@dimen/dp_8"
+                    android:layout_marginStart="@dimen/dp_8"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:gravity="center"
+                    android:text="@string/device_filter_title"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_16"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView2"
+                    app:layout_constraintEnd_toStartOf="@+id/textView4"
+                    app:layout_constraintStart_toEndOf="@+id/imageView"
+                    app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:layout_marginEnd="@dimen/dp_8"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:onClick="@{() ->viewModel.onApplyFilterClicked()}"
+                    android:text="@string/action_apply"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView2"
+                    app:layout_constraintEnd_toEndOf="@+id/textView2"
+                    app:layout_constraintTop_toTopOf="@+id/textView2" />
+            </android.support.constraint.ConstraintLayout>
+
+            <include
+                layout="@layout/device_bottom_dialog"
+                bind:viewModel="@{viewModel}" />
+        </LinearLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

@@ -99,7 +99,7 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
             return;
         }
         mNavigator.startActivityForResult(
-            DeviceSelectionActivity.getInstance(mContext, mCategory.getId()), REQUEST_DEVICE);
+            DeviceSelectionActivity.getInstance(mContext), REQUEST_DEVICE);
     }
 
     @Override

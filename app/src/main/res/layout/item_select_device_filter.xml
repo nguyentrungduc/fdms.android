@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.framgia.fdms.data.model.Status" />
+
+        <variable
+            name="selectedPos"
+            type="int" />
+
+        <variable
+            name="curentPos"
+            type="int" />
+
+        <variable
+            name="listenner"
+            type="com.framgia.fdms.BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@{selectedPos==curentPos? @drawable/bg_item_select_device_selected: @drawable/bg_item_select_device_normal}"
+            android:onClick="@{() ->listenner.onItemRecyclerViewClick(model)}"
+            android:padding="@dimen/dp_8"
+            android:text="@{model.name}"
+            android:textColor="@{selectedPos==curentPos? @android:color/white: @color/color_grey_700}"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
