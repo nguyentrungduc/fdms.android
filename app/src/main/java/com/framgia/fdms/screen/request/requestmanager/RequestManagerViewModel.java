@@ -77,6 +77,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
             };
     private Navigator mNavigator;
     private int mScrollPosition;
+    private boolean mIsAllowAddRequest;
 
     private boolean mIsShowAssignee;
 
@@ -237,9 +238,23 @@ public class RequestManagerViewModel extends BaseFragmentModel
             return;
         }
         mAdapter.updateUser(user);
+        setAllowAddRequest(isAllowAddRequest(user.getRole()));
         setStatus(getDefaultStatus(user.getRole()));
         setShowAssignee(user.getRole().equals(Permission.BO_STAFF));
         mPresenter.getData(mRequestFor, mStatus, mAssignee);
+    }
+
+    public boolean isAllowAddRequest(@Permission String role) {
+        switch (role) {
+            case Permission.BO_MANAGER:
+            case Permission.DIVISION_MANAGER:
+            case Permission.SECTION_MANAGER:
+            case Permission.ADMIN:
+            case Permission.GROUP_LEADER:
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -439,5 +454,15 @@ public class RequestManagerViewModel extends BaseFragmentModel
     public void setShowAssignee(boolean showAssignee) {
         mIsShowAssignee = showAssignee;
         notifyPropertyChanged(BR.showAssignee);
+    }
+
+    @Bindable
+    public boolean isAllowAddRequest() {
+        return mIsAllowAddRequest;
+    }
+
+    public void setAllowAddRequest(boolean allowAddRequest) {
+        mIsAllowAddRequest = allowAddRequest;
+        notifyPropertyChanged(BR.allowAddRequest);
     }
 }

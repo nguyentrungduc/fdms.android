@@ -181,6 +181,7 @@
             android:layout_alignParentRight="true"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/dp_20"
+            android:visibility="@{viewModel.isAllowAddRequest? View.VISIBLE : View.GONE}"
             android:onClick="@{() -> viewModel.onRegisterRequestClick()}"
             app:backgroundTint="@color/colorPrimaryDark"
             app:srcCompat="@drawable/ic_add_white_24dp" />

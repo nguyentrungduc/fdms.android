@@ -37,7 +37,7 @@ public @interface Permission {
      * - manage meeting rooms
      * - view device using histories
      * - manage requests: chuyển trạng thái từ "approved" sang "waiting done"
-     *  - View Dashboard Device, Request
+     * - View Dashboard Device, Request
      */
     // TODO: 11/6/2017 change to "BO Manager" when server is available
     String BO_MANAGER = "manager";
@@ -60,7 +60,7 @@ public @interface Permission {
      * Action
      * - view all devices
      * - export devices list to excel format
-     *  - View Dashboard Device
+     * - View Dashboard Device
      */
     String ACCOUNTANT = "Accountant";
 
@@ -73,6 +73,7 @@ public @interface Permission {
      */
     String DIVISION_MANAGER = "Division Manager";
     String SECTION_MANAGER = "Section Manager";
+    String GROUP_LEADER = "Group Leader";
 
     /**
      * Action

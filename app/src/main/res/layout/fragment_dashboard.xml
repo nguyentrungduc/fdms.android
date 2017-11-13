@@ -20,6 +20,7 @@
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
+        android:background="@android:color/white"
         android:layout_height="match_parent"
         >
         <LinearLayout
@@ -32,14 +33,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"
-                >
+                android:layout_gravity="center_horizontal">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="@dimen/dp_1"
-                    >
+                    android:padding="@dimen/dp_1">
 
                     <TextView
                         android:id="@+id/image_request_dashboard"
@@ -53,8 +53,7 @@
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp_12"
                         android:textStyle="bold"
-                        bind:tabDashBoard="@{viewModel.tab}"
-                        />
+                        bind:tabDashBoard="@{viewModel.tab}" />
 
                     <TextView
                         android:id="@+id/image_device_dashboard"
@@ -69,8 +68,7 @@
                         android:textSize="@dimen/sp_12"
                         android:textStyle="bold"
                         android:visibility="@{viewModel.showDeviceDashboard ? View.VISIBLE : View.GONE}"
-                        bind:tabDashBoard="@{viewModel.tab}"
-                        />
+                        bind:tabDashBoard="@{viewModel.tab}" />
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
