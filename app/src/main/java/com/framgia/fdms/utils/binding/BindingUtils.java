@@ -41,7 +41,6 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.bumptech.glide.Glide;
 import com.framgia.fdms.R;
@@ -53,6 +52,7 @@ import com.framgia.fdms.screen.devicedetail.DeviceDetailViewModel;
 import com.framgia.fdms.screen.main.MainViewModel;
 import com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel;
 import com.framgia.fdms.utils.Utils;
+import com.framgia.fdms.widget.CustomSpinner;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
 import com.framgia.fdms.widget.OnSearchMenuItemClickListener;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -65,12 +65,10 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Calendar;
 import java.util.Date;
-
 import uk.co.deanwild.materialshowcaseview.IShowcaseListener;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -106,13 +104,13 @@ public final class BindingUtils {
         // No-op
     }
 
-    @BindingAdapter({"recyclerAdapter"})
+    @BindingAdapter({ "recyclerAdapter" })
     public static void setAdapterForRecyclerView(RecyclerView recyclerView,
-                                                 RecyclerView.Adapter adapter) {
+            RecyclerView.Adapter adapter) {
         recyclerView.setAdapter(adapter);
     }
 
-    @BindingAdapter(value = {"app:imageUrl", "app:error"}, requireAll = false)
+    @BindingAdapter(value = { "app:imageUrl", "app:error" }, requireAll = false)
     public static void loadImage(ImageView view, String imageUrl, Drawable error) {
         if (error == null) {
             Glide.with(view.getContext())
@@ -156,33 +154,49 @@ public final class BindingUtils {
         });
     }
 
-    @BindingAdapter({"spinnerAdapter"})
+    @BindingAdapter("errorText")
+    public static void setErrorText(TextView layout, String text) {
+        layout.setError(text);
+    }
+
+    @BindingAdapter({ "spinnerAdapter" })
     public static void setAdapterForSpinner(AppCompatSpinner spinner,
-                                            ArrayAdapter<String> adapter) {
+            ArrayAdapter<String> adapter) {
         spinner.setAdapter(adapter);
     }
 
-    @BindingAdapter({"bind:font"})
+    @BindingAdapter({ "spinnerAdapter" })
+    public static void setAdapterForSpinner(CustomSpinner spinner, ArrayAdapter<String> adapter) {
+        spinner.setAdapter(adapter);
+    }
+
+    @BindingAdapter({ "spinnerListener" })
+    public static void setListenerForSpinner(CustomSpinner spinner,
+            AdapterView.OnItemSelectedListener listener) {
+        spinner.setListener(listener);
+    }
+
+    @BindingAdapter({ "bind:font" })
     public static void setFont(TextView textView, String fontName) {
         textView.setTypeface(Typeface.createFromAsset(textView.getContext().getAssets(), fontName));
     }
 
-    @BindingAdapter({"scrollListenner"})
+    @BindingAdapter({ "scrollListenner" })
     public static void setScrollListenner(RecyclerView recyclerView,
-                                          RecyclerView.OnScrollListener listener) {
+            RecyclerView.OnScrollListener listener) {
         recyclerView.addOnScrollListener(listener);
     }
 
-    @BindingAdapter(value = {"bind:adapter", "model", "linearDot"}, requireAll = false)
+    @BindingAdapter(value = { "bind:adapter", "model", "linearDot" }, requireAll = false)
     public static void setupViewPager(final ViewPager viewPager, FragmentPagerAdapter adapter,
-                                      final ViewPagerScroll viewModel, final LinearLayout layout) {
+            final ViewPagerScroll viewModel, final LinearLayout layout) {
         viewPager.setAdapter(adapter);
         if (viewModel == null) return;
         if (adapter != null) viewPager.setOffscreenPageLimit(adapter.getCount());
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
+                    int positionOffsetPixels) {
             }
 
             @Override
@@ -212,20 +226,21 @@ public final class BindingUtils {
                         PorterDuff.Mode.SRC_IN);
     }
 
-    @BindingAdapter({"bind:activity"})
+    @BindingAdapter({ "bind:activity" })
     public static void setupViewPager(Toolbar view, AppCompatActivity activity) {
         activity.setSupportActionBar(view);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @BindingAdapter(value = {
-            "bind:searchListenner", "bind:clearListenner", "bind:menuItemClick", "bind:searchText", "bind:searchHint"
+            "bind:searchListenner", "bind:clearListenner", "bind:menuItemClick", "bind:searchText",
+            "bind:searchHint"
     }, requireAll = false)
     public static void setOnQueryChangeListenner(final FloatingSearchView searchView,
-                                                 FloatingSearchView.OnSearchListener onSearchListener,
-                                                 FloatingSearchView.OnClearSearchActionListener clearSearchActionListener,
-                                                 final OnSearchMenuItemClickListener onSearchMenuItemClickListener, String searchText,
-                                                 String searchHint) {
+            FloatingSearchView.OnSearchListener onSearchListener,
+            FloatingSearchView.OnClearSearchActionListener clearSearchActionListener,
+            final OnSearchMenuItemClickListener onSearchMenuItemClickListener, String searchText,
+            String searchHint) {
         searchView.setOnSearchListener(onSearchListener);
         searchView.setOnClearSearchActionListener(clearSearchActionListener);
         searchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
@@ -240,9 +255,9 @@ public final class BindingUtils {
         searchView.setSearchHint(searchHint);
     }
 
-    @BindingAdapter({"pieData", "totalValue", "description"})
+    @BindingAdapter({ "pieData", "totalValue", "description" })
     public static void setData(final PieChart pieChart, PieData pieData, final int total,
-                               String description) {
+            String description) {
         final Resources resources = pieChart.getContext().getResources();
         if (pieData.getDataSetCount() > 0) {
             pieChart.setUsePercentValues(true);
@@ -305,9 +320,9 @@ public final class BindingUtils {
         return decimalFormat.format(number);
     }
 
-    @BindingAdapter(value = {"currency", "textAttrChangedAM"}, requireAll = false)
+    @BindingAdapter(value = { "currency", "textAttrChangedAM" }, requireAll = false)
     public static void setChange(final EditText view, final String currency,
-                                 final InverseBindingListener textAttrChanged) {
+            final InverseBindingListener textAttrChanged) {
         view.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -336,7 +351,7 @@ public final class BindingUtils {
     * set Toolbar Activity device return
     * */
 
-    @BindingAdapter({"view", "titleToolbar"})
+    @BindingAdapter({ "view", "titleToolbar" })
     public static void bindToolbar(Toolbar view, AppCompatActivity activity, String resTitle) {
         if (activity == null) {
             return;
@@ -348,13 +363,13 @@ public final class BindingUtils {
         activity.setTitle(resTitle);
     }
 
-    @BindingAdapter({"model"})
+    @BindingAdapter({ "model" })
     public static void setupViewPagerDashBorad(final ViewPager viewPager,
-                                               final DashboardViewModel viewModel) {
+            final DashboardViewModel viewModel) {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
+                    int positionOffsetPixels) {
             }
 
             @Override
@@ -426,16 +441,16 @@ public final class BindingUtils {
         }
     }
 
-    @BindingAdapter(value = {"bind:queryTextListener", "bind:searchText"}, requireAll = false)
+    @BindingAdapter(value = { "bind:queryTextListener", "bind:searchText" }, requireAll = false)
     public static void querySearchView(SearchView searchView,
-                                       SearchView.OnQueryTextListener listener, String searchText) {
+            SearchView.OnQueryTextListener listener, String searchText) {
         searchView.setOnQueryTextListener(listener);
         if (searchText != null) {
             searchView.setQuery(searchText, false);
         }
     }
 
-    @BindingAdapter({"resourceId"})
+    @BindingAdapter({ "resourceId" })
     public static void setImage(ImageView view, int resource) {
         view.setImageResource(resource);
     }
@@ -450,7 +465,7 @@ public final class BindingUtils {
             "deviceCategoryId", "deviceCategoryIdAttrChanged"
     }, requireAll = false)
     public static void setCategoryId(AppCompatSpinner view, int newSelectedValue,
-                                     final InverseBindingListener bindingListener) {
+            final InverseBindingListener bindingListener) {
         AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -484,7 +499,7 @@ public final class BindingUtils {
         view.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
+                    int positionOffsetPixels) {
             }
 
             @Override
@@ -514,7 +529,7 @@ public final class BindingUtils {
 
     @BindingAdapter("swipeRefreshListener")
     public static void setOnRefreshUserRequest(SwipeRefreshLayout view,
-                                               SwipeRefreshLayout.OnRefreshListener listener) {
+            SwipeRefreshLayout.OnRefreshListener listener) {
         view.setOnRefreshListener(listener);
     }
 
@@ -525,7 +540,7 @@ public final class BindingUtils {
 
     @BindingAdapter("setVisibility")
     public static void setVisibility(com.github.clans.fab.FloatingActionButton view,
-                                     RequestInformationViewModel viewModel) {
+            RequestInformationViewModel viewModel) {
         int visibility = viewModel.getStatusRequest().equals(DONE) || viewModel.getStatusRequest()
                 .equals(APPROVED) ? View.GONE : View.VISIBLE;
         view.setVisibility(visibility);
@@ -559,7 +574,7 @@ public final class BindingUtils {
 
     @BindingAdapter("hideButton")
     public static void hideFloatButton(RecyclerView recyclerView,
-                                       final FloatingActionButton button) {
+            final FloatingActionButton button) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -599,9 +614,9 @@ public final class BindingUtils {
         });
     }
 
-    @BindingAdapter({"showcaseSequence", "contentShowCase", "dismissText"})
+    @BindingAdapter({ "showcaseSequence", "contentShowCase", "dismissText" })
     public static void setTooltip(final View view, final FDMSShowcaseSequence sequence,
-                                  String content, String dismissText) {
+            String content, String dismissText) {
         sequence.addSequenceItem(view, content, dismissText);
     }
 
@@ -642,7 +657,7 @@ public final class BindingUtils {
 
     @BindingAdapter("hideMenuButton")
     public static void hideFloatMenuButton(RecyclerView recyclerView,
-                                           final FloatingActionsMenu button) {
+            final FloatingActionsMenu button) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -663,26 +678,26 @@ public final class BindingUtils {
 
     @BindingAdapter("expandableAdapter")
     public static void setExpandableAdapter(ExpandableListView expandableListView,
-                                            BaseExpandableListAdapter baseExpandableListAdapter) {
+            BaseExpandableListAdapter baseExpandableListAdapter) {
         expandableListView.setAdapter(baseExpandableListAdapter);
     }
 
     @BindingAdapter("scrollListener")
     public static void setExpandableScrollListener(ExpandableListView expandableListView,
-                                                   AbsListView.OnScrollListener listener) {
+            AbsListView.OnScrollListener listener) {
         expandableListView.setOnScrollListener(listener);
     }
 
     @BindingAdapter("scrollListener")
     public static void setOnScrollListener(ExpandableListView expandableListView,
-                                           AbsListView.OnScrollListener listener) {
+            AbsListView.OnScrollListener listener) {
         expandableListView.setOnScrollListener(listener);
     }
 
-    @BindingAdapter({"itemSelected", "currentItem", "model", "staffType"})
+    @BindingAdapter({ "itemSelected", "currentItem", "model", "staffType" })
     public static void setNavigationItemSelected(NavigationView navigationView,
-                                                 NavigationView.OnNavigationItemSelectedListener listen, int currentItem,
-                                                 MainViewModel viewModel, String staffType) {
+            NavigationView.OnNavigationItemSelectedListener listen, int currentItem,
+            MainViewModel viewModel, String staffType) {
         navigationView.setNavigationItemSelectedListener(listen);
         navigationView.setCheckedItem(currentItem);
         if (navigationView.getHeaderCount() == 0) {
@@ -740,9 +755,9 @@ public final class BindingUtils {
         }
     }
 
-    @BindingAdapter({"statusDrawerLayout", "side"})
+    @BindingAdapter({ "statusDrawerLayout", "side" })
     public static void setStatusDrawerLayout(DrawerLayout drawerLayout, final String status,
-                                             int side) {
+            int side) {
         if (status != null) {
             if (status.equals(DRAWER_IS_CLOSE)) {
                 drawerLayout.closeDrawer(side);
@@ -755,13 +770,13 @@ public final class BindingUtils {
 
     @BindingAdapter("bind:adapter")
     public static void setAdapter(ExpandableListView expandableListView,
-                                  BaseExpandableListAdapter adapter) {
+            BaseExpandableListAdapter adapter) {
         expandableListView.setAdapter(adapter);
     }
 
-    @BindingAdapter({"drawerListener"})
+    @BindingAdapter({ "drawerListener" })
     public static void setDrawerListener(DrawerLayout drawerLayout,
-                                         DrawerLayout.DrawerListener listener) {
+            DrawerLayout.DrawerListener listener) {
         drawerLayout.setDrawerListener(listener);
     }
 
@@ -823,7 +838,7 @@ public final class BindingUtils {
         view.setText(Utils.getStringDate(date, view.getContext()));
     }
 
-    @BindingAdapter({"borrowDateText", "returnDateText"})
+    @BindingAdapter({ "borrowDateText", "returnDateText" })
     public static void setDatesText(TextView view, Date borrowDate, Date returnDate) {
         view.setText(
                 (Utils.getStringDate(borrowDate, view.getContext())) + "->" + (Utils.getStringDate(

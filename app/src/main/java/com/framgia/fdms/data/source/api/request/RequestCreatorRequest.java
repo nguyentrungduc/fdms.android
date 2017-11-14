@@ -18,6 +18,7 @@ public class RequestCreatorRequest extends BaseRequest {
     private int mAssignee;
     @SerializedName("request[request_status_id]")
     private int mStatusId;
+    private String mGroup;
     private Request mRequest;
 
     public String getTitle() {
@@ -66,5 +67,13 @@ public class RequestCreatorRequest extends BaseRequest {
 
     public void setRequest(Request request) {
         mRequest = request;
+    }
+
+    public String getGroup() {
+        return mGroup;
+    }
+
+    public void setGroup(String group) {
+        mGroup = group;
     }
 }

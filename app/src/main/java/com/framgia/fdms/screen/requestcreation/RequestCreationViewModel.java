@@ -7,8 +7,9 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Request;
@@ -17,8 +18,7 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 import com.framgia.fdms.screen.requestcreation.assignee.SelectAssigneeRequestActivity;
 import com.framgia.fdms.screen.requestcreation.requestfor.SelectRequestForActivity;
-import com.framgia.fdms.screen.selection.SelectionActivity;
-import com.framgia.fdms.screen.selection.SelectionType;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
@@ -33,7 +33,7 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_RELATIVE;
  */
 
 public class RequestCreationViewModel extends BaseObservable
-        implements RequestCreationContract.ViewModel {
+        implements RequestCreationContract.ViewModel, AdapterView.OnItemSelectedListener {
 
     private RequestCreationContract.Presenter mPresenter;
     private AppCompatActivity mActivity;
@@ -42,21 +42,22 @@ public class RequestCreationViewModel extends BaseObservable
     private Status mRequestFor;
     private Status mAssignee;
     private RequestCreatorRequest mRequest;
-
     private Status mDefaultAssignee;
 
+    private String mGroup;
+    private ArrayAdapter<String> mAdapter;
     private Context mContext;
     private String mTitleError;
     private String mDescriptionError;
     private String mRequestForError;
+    private String mGroupError;
     private int mProgressBarVisibility = View.GONE;
     private boolean mIsManager;
     @RequestCreatorType
     private int mRequestCreatorType;
 
-
     public RequestCreationViewModel(AppCompatActivity activity,
-                                    @RequestCreatorType int requestCreatorType) {
+            @RequestCreatorType int requestCreatorType) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
         mRequestCreatorType = requestCreatorType;
@@ -115,6 +116,7 @@ public class RequestCreationViewModel extends BaseObservable
             case REQUEST_RELATIVE:
                 setRequestFor(status);
                 updateDefaultAssignee();
+                mPresenter.getGroupByStaffId();
                 break;
             case REQUEST_ASSIGNEE:
                 setAssignee(status);
@@ -156,6 +158,12 @@ public class RequestCreationViewModel extends BaseObservable
     }
 
     @Override
+    public void onInputGroupForError() {
+        mGroupError = mContext.getString(R.string.msg_error_user_name);
+        notifyPropertyChanged(BR.groupError);
+    }
+
+    @Override
     public void onGetUserSuccess(User user) {
         setManager(user.getRole().equals(BO_MANAGER));
         if (isManager()) {
@@ -171,6 +179,11 @@ public class RequestCreationViewModel extends BaseObservable
     @Override
     public void onGetDefaultAssignSuccess(Status assignee) {
         mDefaultAssignee = assignee;
+    }
+
+    @Override
+    public void onGetGroupSuccess(List<String> groups) {
+        setAdapter(new ArrayAdapter<>(mContext, R.layout.item_group, groups));
     }
 
     @Bindable
@@ -266,8 +279,8 @@ public class RequestCreationViewModel extends BaseObservable
     }
 
     public void onClickChooseRequestForRelativeStaff() {
-        mActivity.startActivityForResult(
-                SelectRequestForActivity.getInstance(mContext), REQUEST_RELATIVE);
+        mActivity.startActivityForResult(SelectRequestForActivity.getInstance(mContext),
+                REQUEST_RELATIVE);
     }
 
     public void updateDefaultAssignee() {
@@ -277,7 +290,48 @@ public class RequestCreationViewModel extends BaseObservable
     }
 
     public void onClickAssignee() {
-        mActivity.startActivityForResult(
-                SelectAssigneeRequestActivity.getInstance(mContext), REQUEST_ASSIGNEE);
+        mActivity.startActivityForResult(SelectAssigneeRequestActivity.getInstance(mContext),
+                REQUEST_ASSIGNEE);
+    }
+
+    @Bindable
+    public ArrayAdapter<String> getAdapter() {
+        return mAdapter;
+    }
+
+    public void setAdapter(ArrayAdapter<String> adapter) {
+        mAdapter = adapter;
+        notifyPropertyChanged(BR.adapter);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        setGroup((String) parent.getItemAtPosition(position));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        setGroup((String) parent.getItemAtPosition(0));
+    }
+
+    @Bindable
+    public String getGroup() {
+        return mGroup;
+    }
+
+    public void setGroup(String group) {
+        mGroup = group;
+        mRequest.setGroup(group);
+        notifyPropertyChanged(BR.group);
+    }
+
+    @Bindable
+    public String getGroupError() {
+        return mGroupError;
+    }
+
+    public void setGroupError(String groupError) {
+        mGroupError = groupError;
+        notifyPropertyChanged(BR.groupError);
     }
 }

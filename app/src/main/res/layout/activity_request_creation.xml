@@ -115,6 +115,15 @@
                             />
                     </android.support.design.widget.TextInputLayout>
 
+                    <com.framgia.fdms.widget.CustomSpinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="@{viewModel.requestCreatorType == RequestCreatorType.MEMBER_REQUEST ? View.VISIBLE : View.GONE}"
+                        app:spinnerAdapter="@{viewModel.adapter}"
+                        app:spinnerListener="@{viewModel}"
+                        app:title="@string/title_assign_group"
+                        />
+
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -122,7 +131,6 @@
                         android:paddingTop="@dimen/dp_10"
                         android:textColorHint="@color/color_brown"
                         >
-
                         <android.support.design.widget.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
