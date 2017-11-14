@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -49,6 +51,7 @@ import com.framgia.fdms.databinding.NavHeaderMainBinding;
 import com.framgia.fdms.screen.ViewPagerScroll;
 import com.framgia.fdms.screen.dashboard.DashboardViewModel;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailViewModel;
+import com.framgia.fdms.screen.deviceselection.BottomSheetCallback;
 import com.framgia.fdms.screen.main.MainViewModel;
 import com.framgia.fdms.screen.requestdetail.information.RequestInformationViewModel;
 import com.framgia.fdms.utils.Utils;
@@ -110,7 +113,33 @@ public final class BindingUtils {
         recyclerView.setAdapter(adapter);
     }
 
-    @BindingAdapter(value = { "app:imageUrl", "app:error" }, requireAll = false)
+    @BindingAdapter({"recyclerLayoutManager"})
+    public static void setLayoutManager(RecyclerView recyclerView,
+                                        RecyclerView.LayoutManager layoutManager) {
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+    @BindingAdapter({"bottomSheetState", "bottomSheetCallback"})
+    public static void setBottomSheetState(final View view, int state,
+                                           final BottomSheetCallback callback) {
+        BottomSheetBehavior<View> bottomSheetBehavior =
+                BottomSheetBehavior.from(view);
+        bottomSheetBehavior.setPeekHeight(0);
+        bottomSheetBehavior.setState(state);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                callback.onStateChanged(bottomSheet, newState);
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+    }
+
+    @BindingAdapter(value = {"app:imageUrl", "app:error"}, requireAll = false)
     public static void loadImage(ImageView view, String imageUrl, Drawable error) {
         if (error == null) {
             Glide.with(view.getContext())

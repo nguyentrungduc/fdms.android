@@ -383,4 +383,10 @@
     <string name="title_using_statuses_all">All</string>
     <string name="title_using_statuses_using">Using</string>
     <string name="title_using_statuses_returned">Returned</string>
+    <string name="device_filter_title">Filter</string>
+    <string name="action_reset_filter">Reset</string>
+    <string name="title_group">Group</string>
+    <string name="title_device_select_category">Category</string>
+    <string name="menu_done">Done</string>
+    <string name="action_apply">Apply</string>
 </resources>
