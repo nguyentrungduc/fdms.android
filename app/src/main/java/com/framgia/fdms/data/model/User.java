@@ -4,13 +4,11 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.StringDef;
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.data.anotation.Permission;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Date;
-
 
 /**
  * Created by levutantuan on 3/31/17.
@@ -303,6 +301,7 @@ public class User extends BaseObservable implements Parcelable {
         notifyPropertyChanged(BR.gender);
     }
 
+    @Permission
     @Bindable
     public int getRole() {
         return mRole;
