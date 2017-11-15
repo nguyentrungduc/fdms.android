@@ -10,14 +10,14 @@ public class AssignmentRequest {
     private int mRequestId;
     private int mAssigneeId;
     private String mDescription;
-    private List<AssignmentItemRequest> mItemRequests;
+    private List<Device> mDevices;
 
     public AssignmentRequest(int requestId, int assigneeId, String description,
-        List<AssignmentItemRequest> itemRequests) {
+        List<Device> devices) {
         mRequestId = requestId;
         mAssigneeId = assigneeId;
         mDescription = description;
-        mItemRequests = itemRequests;
+        mDevices = devices;
     }
 
     public int getRequestId() {
@@ -44,11 +44,11 @@ public class AssignmentRequest {
         mDescription = description;
     }
 
-    public List<AssignmentItemRequest> getItemRequests() {
-        return mItemRequests;
+    public List<Device> getDevices() {
+        return mDevices;
     }
 
-    public void setItemRequests(List<AssignmentItemRequest> itemRequests) {
-        mItemRequests = itemRequests;
+    public void setDevices(List<Device> devices) {
+        mDevices = devices;
     }
 }

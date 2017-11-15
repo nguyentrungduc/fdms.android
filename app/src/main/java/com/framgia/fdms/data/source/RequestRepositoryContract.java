@@ -1,14 +1,16 @@
 package com.framgia.fdms.data.source;
 
-import com.framgia.fdms.data.model.AssignmentItemRequest;
 import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Dashboard;
+import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
-import io.reactivex.Observable;
+
 import java.util.List;
+
+import io.reactivex.Observable;
 
 /**
  * Created by beepi on 11/05/2017.
@@ -39,5 +41,5 @@ public interface RequestRepositoryContract {
 
     Observable<Request> registerAssignment(AssignmentRequest request);
 
-    Observable<String> registerAssignment(int staffId, List<AssignmentItemRequest> items);
+    Observable<String> registerAssignment(int staffId, List<Device> items);
 }

@@ -8,9 +8,9 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.AssignmentItemRequest;
 import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Request;
@@ -22,17 +22,12 @@ import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.navigator.Navigator;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.screen.selection.SelectionType.CATEGORY;
-import static com.framgia.fdms.screen.selection.SelectionType.DEVICE_GROUP;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICES;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
-import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORIES;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE;
-import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE_GROUPS;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_USER_BORROW;
-import static com.framgia.fdms.utils.Utils.hideSoftKeyboard;
 
 /**
  * Exposes the data to be used in the Assignment screen.
@@ -44,13 +39,8 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     private Request mRequest;
     private AssignmentAdapter mAdapter;
     private Context mContext;
-    private Status mDeviceGroup;
-    private Status mCategory;
-    private Device mDevice;
+
     private Navigator mNavigator;
-    private String mDeviceGroupHint;
-    private String mCategoryHint;
-    private String mDeviceHint;
     @AssignmentType
     private int mAssignmentType;
     private Status mStaff;
@@ -60,9 +50,6 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
         mNavigator = new Navigator(activity);
         mContext = activity.getApplicationContext();
         mAdapter = new AssignmentAdapter(mContext, this);
-        setDeviceGroupHint(mContext.getString(R.string.title_assign_group));
-        setCategoryHint(mContext.getString(R.string.title_assign_cagegory));
-        setDeviceHint(mContext.getString(R.string.title_assign_device));
     }
 
     @Override
@@ -80,26 +67,9 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
         mPresenter = presenter;
     }
 
-    public void onShowDeviceGroups() {
-        mNavigator.startActivityForResult(SelectionActivity.getInstance(mContext, DEVICE_GROUP),
-            REQUEST_DEVICE_GROUPS);
-    }
-
-    public void onShowCategories() {
-        if (mDeviceGroup == null) {
-            return;
-        }
+    public void onAddDeviceClicked() {
         mNavigator.startActivityForResult(
-            SelectionActivity.getInstance(mContext, CATEGORY, mDeviceGroup.getId()),
-            REQUEST_CATEGORIES);
-    }
-
-    public void onShowDevices() {
-        if (mCategory == null) {
-            return;
-        }
-        mNavigator.startActivityForResult(
-            DeviceSelectionActivity.getInstance(mContext), REQUEST_DEVICE);
+                DeviceSelectionActivity.getInstance(mContext), REQUEST_DEVICE);
     }
 
     @Override
@@ -110,25 +80,10 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
         Bundle bundle = data.getExtras();
         Status status;
         switch (requestCode) {
-            case REQUEST_DEVICE_GROUPS:
-                status = bundle.getParcelable(BUNDLE_DATA);
-                if (status != null) {
-                    setDeviceGroup(status);
-                    resetCategory();
-                    resetDevice();
-                }
-                break;
-            case REQUEST_CATEGORIES:
-                status = bundle.getParcelable(BUNDLE_DATA);
-                if (status != null) {
-                    setCategory(status);
-                    resetDevice();
-                }
-                break;
             case REQUEST_DEVICE:
                 Device device = bundle.getParcelable(BUNDLE_DEVICES);
                 if (device != null) {
-                    setDevice(device);
+                    mAdapter.addItem(device);
                 }
                 break;
 
@@ -144,31 +99,13 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     }
 
     @Override
-    public void onAddItemClick() {
-        hideSoftKeyboard(mActivity);
-        if (!mPresenter.validateAddItem(mCategory, mDevice, mDeviceGroup)) {
-            return;
-        }
-        mAdapter.addItem(new AssignmentItemRequest.Builder().deviceId(mDevice.getId())
-            .deviceCategoryId(mCategory.getId())
-            .categoryGroupId(mDeviceGroup.getId())
-            .deviceCategoryName(mCategory.getName())
-            .deviceCategoryGroupName(mDeviceGroup.getName())
-            .deviceCode(mDevice.getDeviceCode())
-            .create());
-        resetDeviceGroup();
-        resetCategory();
-        resetDevice();
-    }
-
-    @Override
     public void onSaveClick() {
         switch (mAssignmentType) {
             default:
             case AssignmentType.ASSIGN_BY_REQUEST:
                 AssignmentRequest assignmentRequest =
-                    new AssignmentRequest(mRequest.getId(), mRequest.getAssigneeId(),
-                        mRequest.getDescription(), mAdapter.getData());
+                        new AssignmentRequest(mRequest.getId(), mRequest.getAssigneeId(),
+                                mRequest.getDescription(), mAdapter.getData());
                 mPresenter.registerAssignment(assignmentRequest);
                 break;
             case AssignmentType.ASSIGN_BY_NEW_MEMBER:
@@ -179,14 +116,14 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
 
     public void onChooseStaffClick() {
         mNavigator.startActivityForResult(
-            SelectionActivity.getInstance(mActivity.getApplicationContext(),
-                SelectionType.USER_BORROW), REQUEST_USER_BORROW);
+                SelectionActivity.getInstance(mActivity.getApplicationContext(),
+                        SelectionType.USER_BORROW), REQUEST_USER_BORROW);
     }
 
     @Override
     public void onLoadError(String msg) {
         Snackbar.make(getActivity().findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG)
-            .show();
+                .show();
     }
 
     @Override
@@ -214,7 +151,7 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     @Override
     public void onChooseExportActivityFailed() {
         Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.error_authentication,
-            Snackbar.LENGTH_LONG).show();
+                Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -233,21 +170,6 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
 
     public AppCompatActivity getActivity() {
         return mActivity;
-    }
-
-    private void resetDeviceGroup() {
-        mDeviceGroup = null;
-        setDeviceGroupHint(mContext.getString(R.string.title_request_assignment));
-    }
-
-    private void resetCategory() {
-        mCategory = null;
-        setCategoryHint(mContext.getString(R.string.title_btn_category));
-    }
-
-    private void resetDevice() {
-        mDevice = null;
-        setDeviceHint(mContext.getString(R.string.title_device_code));
     }
 
     @Bindable
@@ -278,66 +200,6 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     public void setAdapter(AssignmentAdapter adapter) {
         mAdapter = adapter;
         notifyPropertyChanged(BR.adapter);
-    }
-
-    @Bindable
-    public Status getDeviceGroup() {
-        return mDeviceGroup;
-    }
-
-    public void setDeviceGroup(Status deviceGroup) {
-        mDeviceGroup = deviceGroup;
-        notifyPropertyChanged(BR.deviceGroup);
-    }
-
-    @Bindable
-    public Status getCategory() {
-        return mCategory;
-    }
-
-    public void setCategory(Status category) {
-        mCategory = category;
-        notifyPropertyChanged(BR.category);
-    }
-
-    @Bindable
-    public Device getDevice() {
-        return mDevice;
-    }
-
-    public void setDevice(Device device) {
-        mDevice = device;
-        notifyPropertyChanged(BR.device);
-    }
-
-    @Bindable
-    public String getDeviceGroupHint() {
-        return mDeviceGroupHint;
-    }
-
-    public void setDeviceGroupHint(String deviceGroupHint) {
-        mDeviceGroupHint = deviceGroupHint;
-        notifyPropertyChanged(BR.deviceGroupHint);
-    }
-
-    @Bindable
-    public String getCategoryHint() {
-        return mCategoryHint;
-    }
-
-    public void setCategoryHint(String categoryHint) {
-        mCategoryHint = categoryHint;
-        notifyPropertyChanged(BR.categoryHint);
-    }
-
-    @Bindable
-    public String getDeviceHint() {
-        return mDeviceHint;
-    }
-
-    public void setDeviceHint(String deviceHint) {
-        mDeviceHint = deviceHint;
-        notifyPropertyChanged(BR.deviceHint);
     }
 
     @Bindable
