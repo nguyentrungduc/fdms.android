@@ -1,13 +1,13 @@
 package com.framgia.fdms.data.anotation;
 
 import android.support.annotation.IntDef;
-import android.support.annotation.StringDef;
 
 import static com.framgia.fdms.data.anotation.Permission.ACCOUNTANT;
 import static com.framgia.fdms.data.anotation.Permission.ADMIN;
 import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
 import static com.framgia.fdms.data.anotation.Permission.BO_STAFF;
 import static com.framgia.fdms.data.anotation.Permission.DIVISION_MANAGER;
+import static com.framgia.fdms.data.anotation.Permission.GROUP_LEADER;
 import static com.framgia.fdms.data.anotation.Permission.NORMAL_USER;
 import static com.framgia.fdms.data.anotation.Permission.SECTION_MANAGER;
 
@@ -15,7 +15,10 @@ import static com.framgia.fdms.data.anotation.Permission.SECTION_MANAGER;
  * All user permission in system
  */
 
-@IntDef({ADMIN, BO_MANAGER, BO_STAFF, ACCOUNTANT, DIVISION_MANAGER, SECTION_MANAGER, NORMAL_USER})
+@IntDef({
+    ADMIN, BO_MANAGER, BO_STAFF, ACCOUNTANT, DIVISION_MANAGER, SECTION_MANAGER, GROUP_LEADER,
+    NORMAL_USER
+})
 public @interface Permission {
     /**
      * Action

@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Request;
@@ -19,11 +18,13 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 import com.framgia.fdms.screen.requestcreation.assignee.SelectAssigneeRequestActivity;
 import com.framgia.fdms.screen.requestcreation.requestfor.SelectRequestForActivity;
-
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
+import static com.framgia.fdms.data.anotation.Permission.DIVISION_MANAGER;
+import static com.framgia.fdms.data.anotation.Permission.GROUP_LEADER;
+import static com.framgia.fdms.data.anotation.Permission.SECTION_MANAGER;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
 import static com.framgia.fdms.utils.Constant.NONE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
@@ -35,7 +36,7 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_RELATIVE;
  */
 
 public class RequestCreationViewModel extends BaseObservable
-        implements RequestCreationContract.ViewModel, AdapterView.OnItemSelectedListener {
+    implements RequestCreationContract.ViewModel, AdapterView.OnItemSelectedListener {
 
     private RequestCreationContract.Presenter mPresenter;
     private AppCompatActivity mActivity;
@@ -54,12 +55,13 @@ public class RequestCreationViewModel extends BaseObservable
     private String mRequestForError;
     private String mGroupError;
     private int mProgressBarVisibility = View.GONE;
-    private boolean mIsManager;
+    private boolean isAllowAddRequestFor;
+    private boolean isAllowAddAssignee;
     @RequestCreatorType
     private int mRequestCreatorType;
 
     public RequestCreationViewModel(AppCompatActivity activity,
-                                    @RequestCreatorType int requestCreatorType) {
+        @RequestCreatorType int requestCreatorType) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
         mRequestCreatorType = requestCreatorType;
@@ -167,8 +169,12 @@ public class RequestCreationViewModel extends BaseObservable
 
     @Override
     public void onGetUserSuccess(User user) {
-        setManager(user.getRole() == BO_MANAGER);
-        if (isManager()) {
+        setAllowAddAssignee(user.getRole() == BO_MANAGER);
+        setAllowAddRequestFor(user.getRole() == BO_MANAGER
+            || user.getRole() == DIVISION_MANAGER
+            || user.getRole() == SECTION_MANAGER
+            || user.getRole() == GROUP_LEADER);
+        if (isAllowAddRequestFor()) {
             if (mRequestCreatorType == RequestCreatorType.MY_REQUEST) {
                 setRequestFor(new Status(user.getId(), user.getName()));
             } else {
@@ -251,13 +257,13 @@ public class RequestCreationViewModel extends BaseObservable
     }
 
     @Bindable
-    public boolean isManager() {
-        return mIsManager;
+    public boolean isAllowAddRequestFor() {
+        return isAllowAddRequestFor;
     }
 
-    private void setManager(boolean manager) {
-        mIsManager = manager;
-        notifyPropertyChanged(BR.manager);
+    public void setAllowAddRequestFor(boolean allowAddRequestFor) {
+        isAllowAddRequestFor = allowAddRequestFor;
+        notifyPropertyChanged(BR.allowAddRequestFor);
     }
 
     @Bindable
@@ -282,7 +288,7 @@ public class RequestCreationViewModel extends BaseObservable
 
     public void onClickChooseRequestForRelativeStaff() {
         mActivity.startActivityForResult(SelectRequestForActivity.getInstance(mContext),
-                REQUEST_RELATIVE);
+            REQUEST_RELATIVE);
     }
 
     public void updateDefaultAssignee() {
@@ -293,7 +299,7 @@ public class RequestCreationViewModel extends BaseObservable
 
     public void onClickAssignee() {
         mActivity.startActivityForResult(SelectAssigneeRequestActivity.getInstance(mContext),
-                REQUEST_ASSIGNEE);
+            REQUEST_ASSIGNEE);
     }
 
     @Bindable
@@ -335,5 +341,15 @@ public class RequestCreationViewModel extends BaseObservable
     public void setGroupError(String groupError) {
         mGroupError = groupError;
         notifyPropertyChanged(BR.groupError);
+    }
+
+    @Bindable
+    public boolean isAllowAddAssignee() {
+        return isAllowAddAssignee;
+    }
+
+    public void setAllowAddAssignee(boolean allowAddAssignee) {
+        isAllowAddAssignee = allowAddAssignee;
+        notifyPropertyChanged(BR.allowAddAssignee);
     }
 }
