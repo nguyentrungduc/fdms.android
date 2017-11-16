@@ -43,7 +43,6 @@ public @interface Permission {
      * - manage requests: chuyển trạng thái từ "approved" sang "waiting done"
      * - View Dashboard Device, Request
      */
-    // TODO: 11/6/2017 change to "BO Manager" when server is available
     int BO_MANAGER = 1;
 
     /**

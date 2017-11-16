@@ -9,11 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
-import com.framgia.fdms.data.model.AssignmentItemRequest;
+import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.databinding.ItemAssignmentBinding;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +23,8 @@ import java.util.List;
  * Created by MyPC on 09/06/2017.
  */
 public class AssignmentAdapter
-    extends BaseRecyclerViewAdapter<AssignmentItemRequest, AssignmentAdapter.ViewHolder> {
-    private List<AssignmentItemRequest> mRequests;
+        extends BaseRecyclerViewAdapter<Device, AssignmentAdapter.ViewHolder> {
+    private List<Device> mRequests;
 
     private AssignmentViewModel mViewModel;
 
@@ -32,13 +34,13 @@ public class AssignmentAdapter
         mRequests = new ArrayList<>();
     }
 
-    public List<AssignmentItemRequest> getData() {
-        return mRequests == null ? new ArrayList<AssignmentItemRequest>() : mRequests;
+    public List<Device> getData() {
+        return mRequests == null ? new ArrayList<Device>() : mRequests;
     }
 
-    public void addItem(AssignmentItemRequest request) {
-        for (AssignmentItemRequest requestTemp : mRequests) {
-            if (requestTemp.getDeviceId() == request.getDeviceId()) {
+    public void addItem(Device request) {
+        for (Device requestTemp : mRequests) {
+            if (requestTemp.getId() == request.getId()) {
                 return;
             }
         }
@@ -47,7 +49,7 @@ public class AssignmentAdapter
     }
 
     @Override
-    public void onUpdatePage(List<AssignmentItemRequest> data) {
+    public void onUpdatePage(List<Device> data) {
         if (data == null) {
             return;
         }
@@ -58,8 +60,8 @@ public class AssignmentAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemAssignmentBinding binding =
-            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                R.layout.item_assignment, parent, false);
+                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                        R.layout.item_assignment, parent, false);
         return new ViewHolder(binding, mViewModel);
     }
 
@@ -86,12 +88,12 @@ public class AssignmentAdapter
             mViewModel = viewModel;
         }
 
-        void bindData(AssignmentItemRequest request) {
+        void bindData(Device request) {
             if (request == null) {
                 return;
             }
             ViewHolderModel model =
-                new ViewHolderModel(request, mViewModel, this, getAdapterPosition());
+                    new ViewHolderModel(request, mViewModel, this, getAdapterPosition());
             mBinding.setViewHolderModel(model);
             mBinding.executePendingBindings();
         }
@@ -101,31 +103,34 @@ public class AssignmentAdapter
             if (getAdapterPosition() >= 0 && getAdapterPosition() < mRequests.size()) {
                 mRequests.remove(getAdapterPosition());
                 notifyItemRemoved(getAdapterPosition());
-                notifyItemRangeChanged(getAdapterPosition(), mRequests.size());
             }
         }
     }
 
     public class ViewHolderModel extends BaseObservable {
-        private AssignmentItemRequest mRequest;
+        private Device mDevice;
         private AssignmentViewModel mViewModel;
         private View.OnClickListener mOnDeleteClick;
         private int mPosition;
 
-        public ViewHolderModel(AssignmentItemRequest request, AssignmentViewModel viewModel,
-            View.OnClickListener onDelteClick, int position) {
-            mRequest = request;
+        public ViewHolderModel(Device device,
+                               AssignmentViewModel viewModel,
+                               View.OnClickListener onDelteClick,
+                               int position) {
+            mDevice = device;
             mViewModel = viewModel;
             mOnDeleteClick = onDelteClick;
             mPosition = position;
         }
 
-        public AssignmentItemRequest getRequest() {
-            return mRequest;
+        @Bindable
+        public Device getDevice() {
+            return mDevice;
         }
 
-        public void setRequest(AssignmentItemRequest request) {
-            mRequest = request;
+        public void setDevice(Device device) {
+            mDevice = device;
+            notifyPropertyChanged(BR.device);
         }
 
         @Bindable
