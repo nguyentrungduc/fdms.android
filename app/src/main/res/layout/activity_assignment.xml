@@ -122,6 +122,30 @@
                             />
                     </android.support.design.widget.TextInputLayout>
 
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dp_5"
+                        android:paddingEnd="@dimen/dp_10"
+                        android:paddingLeft="@dimen/dp_10"
+                        android:paddingRight="@dimen/dp_10"
+                        android:paddingStart="@dimen/dp_10"
+                        android:textColorHint="@color/colorAccent"
+                        android:visibility="@{viewModel.assignmentType == AssignmentType.ASSIGN_BY_MEETING_ROOM? View.VISIBLE: View.GONE}"
+                        >
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="true"
+                            android:focusable="false"
+                            android:hint="@string/title_meeting_room"
+                            android:inputType="textAutoComplete|textAutoCorrect"
+                            android:onClick="@{() -> viewModel.onChooseMeetingRoomClicked()}"
+                            android:text="@{viewModel.meetingRoom.name}"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

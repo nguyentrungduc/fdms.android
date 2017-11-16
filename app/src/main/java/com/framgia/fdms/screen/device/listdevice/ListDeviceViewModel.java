@@ -25,8 +25,8 @@ import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
 import com.framgia.fdms.screen.assignment.AssignmentType;
-import com.framgia.fdms.screen.device.listdevice.selectbranch.SelectBranchActivity;
 import com.framgia.fdms.screen.device.listdevice.meetingroom.SelectMeetingRoomActivity;
+import com.framgia.fdms.screen.device.listdevice.selectbranch.SelectBranchActivity;
 import com.framgia.fdms.screen.device.listdevice.selectcategory.SelectDeviceCategoryActivity;
 import com.framgia.fdms.screen.device.listdevice.selectdevicestatus.SelectDeviceStatusActivity;
 import com.framgia.fdms.screen.device.listdevice.selectmaker.SelectMakerActivity;
@@ -51,6 +51,7 @@ import static com.framgia.fdms.utils.Constant.DRAWER_IS_CLOSE;
 import static com.framgia.fdms.utils.Constant.DRAWER_IS_OPEN;
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_ASSIGN_DEVICE_FOR_MEETING_ROOM;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_BRANCH;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CATEGORY;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_CREATE_ASSIGNMENT;
@@ -176,6 +177,7 @@ public class ListDeviceViewModel extends BaseObservable
                 mFilterModel.setBranch(data);
                 break;
             case REQUEST_CREATE_ASSIGNMENT:
+            case REQUEST_ASSIGN_DEVICE_FOR_MEETING_ROOM:
                 mNavigator.showToast(bundle.getInt(BUNDLE_SUCCESS));
                 mAdapter.clear();
                 mPresenter.getData(mFilterModel, FIRST_PAGE);
@@ -322,6 +324,13 @@ public class ListDeviceViewModel extends BaseObservable
         floatingActionsMenu.close(true);
         mFragment.startActivityForResult(AssignmentActivity.getInstance(mFragment.getContext(),
                 AssignmentType.ASSIGN_BY_NEW_MEMBER), REQUEST_CREATE_ASSIGNMENT);
+    }
+
+    @Override
+    public void onAssignDeviceForMeetingRoomClick(FloatingActionMenu floatingActionsMenu) {
+        floatingActionsMenu.close(true);
+        mFragment.startActivityForResult(AssignmentActivity.getInstance(mFragment.getContext(),
+                AssignmentType.ASSIGN_BY_MEETING_ROOM), REQUEST_ASSIGN_DEVICE_FOR_MEETING_ROOM);
     }
 
     @Override

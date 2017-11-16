@@ -54,7 +54,7 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
     }
 
     @Override
-    public void registerAssignment(AssignmentRequest request) {
+    public void registerAssignmentForRequest(AssignmentRequest request) {
         if (!validateAssignment(request.getDevices())) {
             return;
         }
@@ -76,7 +76,7 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
     }
 
     @Override
-    public void registerAssignment(Status staff, List<Device> requests) {
+    public void registerAssignmentForMember(Status staff, List<Device> requests) {
         if (!validateStaff(staff)) {
             return;
         }
@@ -98,6 +98,11 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
                     }
                 });
         mSubscription.add(disposable);
+    }
+
+    @Override
+    public void registerAssignmentForMeetingRoom(Status room, List<Device> requests) {
+        // TODO: 11/16/2017 assign for meeting room when api available
     }
 
     @Override

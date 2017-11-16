@@ -27,6 +27,7 @@ import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_DEVICES;
 import static com.framgia.fdms.utils.Constant.BundleConstant.BUNDLE_SUCCESS;
 import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_DEVICE;
+import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_MEETING_ROOM;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_USER_BORROW;
 
 /**
@@ -43,7 +44,10 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     private Navigator mNavigator;
     @AssignmentType
     private int mAssignmentType;
+
     private Status mStaff;
+
+    private Status mMeetingRoom;
 
     public AssignmentViewModel(AppCompatActivity activity) {
         mActivity = activity;
@@ -93,6 +97,13 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
                     setStaff(status);
                 }
                 break;
+            case REQUEST_MEETING_ROOM:
+                status = bundle.getParcelable(BUNDLE_DATA);
+                if (status != null && status.getId() != OUT_OF_INDEX) {
+                    setMeetingRoom(status);
+                }
+                break;
+
             default:
                 break;
         }
@@ -106,10 +117,13 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
                 AssignmentRequest assignmentRequest =
                         new AssignmentRequest(mRequest.getId(), mRequest.getAssigneeId(),
                                 mRequest.getDescription(), mAdapter.getData());
-                mPresenter.registerAssignment(assignmentRequest);
+                mPresenter.registerAssignmentForRequest(assignmentRequest);
                 break;
             case AssignmentType.ASSIGN_BY_NEW_MEMBER:
-                mPresenter.registerAssignment(mStaff, mAdapter.getData());
+                mPresenter.registerAssignmentForMember(mStaff, mAdapter.getData());
+                break;
+            case AssignmentType.ASSIGN_BY_MEETING_ROOM:
+                mPresenter.registerAssignmentForMeetingRoom(mMeetingRoom, mAdapter.getData());
                 break;
         }
     }
@@ -118,6 +132,12 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
         mNavigator.startActivityForResult(
                 SelectionActivity.getInstance(mActivity.getApplicationContext(),
                         SelectionType.USER_BORROW), REQUEST_USER_BORROW);
+    }
+
+    public void onChooseMeetingRoomClicked() {
+        mNavigator.startActivityForResult(
+                SelectionActivity.getInstance(mActivity.getApplicationContext(),
+                        SelectionType.MEETING_ROOM), REQUEST_MEETING_ROOM);
     }
 
     @Override
@@ -220,5 +240,15 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     public void setStaff(Status staff) {
         mStaff = staff;
         notifyPropertyChanged(BR.staff);
+    }
+
+    @Bindable
+    public Status getMeetingRoom() {
+        return mMeetingRoom;
+    }
+
+    public void setMeetingRoom(Status meetingRoom) {
+        mMeetingRoom = meetingRoom;
+        notifyPropertyChanged(BR.meetingRoom);
     }
 }

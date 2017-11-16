@@ -50,6 +50,8 @@ interface ListDeviceContract {
 
         void onAssignDeviceForNewMemberClick(FloatingActionMenu floatingActionsMenu);
 
+        void onAssignDeviceForMeetingRoomClick(FloatingActionMenu floatingActionsMenu);
+
         void getDataWithDevice(Device device);
 
         void onStartGetData();
