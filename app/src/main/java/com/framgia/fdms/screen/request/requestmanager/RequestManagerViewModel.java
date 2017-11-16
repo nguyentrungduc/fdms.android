@@ -240,11 +240,11 @@ public class RequestManagerViewModel extends BaseFragmentModel
         mAdapter.updateUser(user);
         setAllowAddRequest(isAllowAddRequest(user.getRole()));
         setStatus(getDefaultStatus(user.getRole()));
-        setShowAssignee(user.getRole().equals(Permission.BO_STAFF));
+        setShowAssignee(user.getRole() == Permission.BO_STAFF);
         mPresenter.getData(mRequestFor, mStatus, mAssignee);
     }
 
-    public boolean isAllowAddRequest(@Permission String role) {
+    public boolean isAllowAddRequest(@Permission int role) {
         switch (role) {
             case Permission.BO_MANAGER:
             case Permission.DIVISION_MANAGER:
@@ -266,7 +266,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
      * @param role
      * @return
      */
-    private Status getDefaultStatus(String role) {
+    private Status getDefaultStatus(@Permission int role) {
         switch (role) {
             case Permission.BO_MANAGER:
                 return new Status(RequestStatus.APPROVED,

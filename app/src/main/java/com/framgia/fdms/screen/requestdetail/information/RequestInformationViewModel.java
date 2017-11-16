@@ -273,8 +273,8 @@ public class RequestInformationViewModel extends BaseObservable
         }
     }
 
-    public boolean isAllowAssignDevice(String permision, Request request) {
-        return (permision.equals(BO_MANAGER) || permision.equals(BO_STAFF))
+    public boolean isAllowAssignDevice(@Permission int permision, Request request) {
+        return (permision == BO_MANAGER || permision == BO_STAFF)
                 && request.getRequestStatusId() == WAITING_DONE;
     }
 
@@ -344,8 +344,8 @@ public class RequestInformationViewModel extends BaseObservable
         initActionRequestMenu();
         setActionMenuVisibility(
                 mListAction != null && mListAction.size() > 0 ? View.VISIBLE : View.GONE);
-        setShowRequestForAndAssignee(mUser.getRole().equals(BO_MANAGER) ||
-                user.getRole().equals(BO_STAFF));
+        setShowRequestForAndAssignee(mUser.getRole() == BO_MANAGER ||
+                user.getRole() == BO_STAFF);
     }
 
     @Override

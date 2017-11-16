@@ -21,9 +21,6 @@ public class Respone<T> implements Serializable {
     @Expose
     @SerializedName("data")
     private T mData;
-    @Expose
-    @SerializedName("token")
-    private String mToken;
 
     public int getStatus() {
         return mStatus;
@@ -55,13 +52,5 @@ public class Respone<T> implements Serializable {
 
     public void setMessage(String message) {
         mMessage = message;
-    }
-
-    public String getToken() {
-        return mToken;
-    }
-
-    public void setToken(String token) {
-        mToken = token;
     }
 }

@@ -78,7 +78,7 @@ public class User extends BaseObservable implements Parcelable {
     @Expose
     @SerializedName("role")
     @Permission
-    private String mRole;
+    private int mRole;
     @Expose
     @SerializedName("birthday")
     private Date mBirthday;
@@ -125,7 +125,7 @@ public class User extends BaseObservable implements Parcelable {
         mAvatar = in.readString();
         mFromExcel = in.readByte() != 0;
         mGender = in.readString();
-        mRole = in.readString();
+        mRole = in.readInt();
         mEmployeeCode = in.readString();
         mStatus = in.readString();
         mToken = in.readString();
@@ -304,11 +304,11 @@ public class User extends BaseObservable implements Parcelable {
     }
 
     @Bindable
-    public String getRole() {
+    public int getRole() {
         return mRole;
     }
 
-    public void setRole(@Permission String role) {
+    public void setRole(@Permission int role) {
         mRole = role;
         notifyPropertyChanged(BR.role);
     }
@@ -414,7 +414,7 @@ public class User extends BaseObservable implements Parcelable {
         dest.writeString(mAvatar);
         dest.writeByte((byte) (mFromExcel ? 1 : 0));
         dest.writeString(mGender);
-        dest.writeString(mRole);
+        dest.writeInt(mRole);
         dest.writeString(mEmployeeCode);
         dest.writeString(mStatus);
         dest.writeString(mToken);
