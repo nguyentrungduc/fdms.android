@@ -107,6 +107,7 @@ public class DeviceDetailViewModel extends BaseObservable
             return;
         }
         mUser = user;
+        setIsAllowEditDeleteDevice(isAllowEditDeleteDevice(DEVICE_INFOMATION, mUser.getRole()));
     }
 
     @Override
@@ -132,9 +133,9 @@ public class DeviceDetailViewModel extends BaseObservable
         setIsAllowEditDeleteDevice(isAllowEditDeleteDevice(position, mUser.getRole()));
     }
 
-    public boolean isAllowEditDeleteDevice(int position, String permission) {
+    public boolean isAllowEditDeleteDevice(int position, int permission) {
         return position == DEVICE_INFOMATION &&
-                (permission.equals(BO_MANAGER) || permission.equals(BO_STAFF));
+                (permission == BO_MANAGER || permission == BO_STAFF);
     }
 
     public void onDeleteDeviceClick(FloatingActionMenu floatingActionsMenu) {

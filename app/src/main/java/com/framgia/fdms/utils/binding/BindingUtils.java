@@ -726,7 +726,7 @@ public final class BindingUtils {
     @BindingAdapter({ "itemSelected", "currentItem", "model", "staffType" })
     public static void setNavigationItemSelected(NavigationView navigationView,
             NavigationView.OnNavigationItemSelectedListener listen, int currentItem,
-            MainViewModel viewModel, String staffType) {
+            MainViewModel viewModel, int staffType) {
         navigationView.setNavigationItemSelectedListener(listen);
         navigationView.setCheckedItem(currentItem);
         if (navigationView.getHeaderCount() == 0) {
@@ -735,9 +735,6 @@ public final class BindingUtils {
             binding.setViewModel(viewModel);
             binding.executePendingBindings();
             navigationView.addHeaderView(binding.getRoot());
-        }
-        if (staffType == null) {
-            return;
         }
         MenuItem manageDevice = navigationView.getMenu().findItem(R.id.item_manage_device);
         MenuItem manageRequest = navigationView.getMenu().findItem(R.id.item_manage_request);
@@ -773,6 +770,7 @@ public final class BindingUtils {
                 manageDeviceCategory.setVisible(true);
                 break;
             case DIVISION_MANAGER:
+                deviceUsingHistory.setVisible(true);
                 manageDevice.setVisible(true);
                 manageRequest.setVisible(true);
                 break;

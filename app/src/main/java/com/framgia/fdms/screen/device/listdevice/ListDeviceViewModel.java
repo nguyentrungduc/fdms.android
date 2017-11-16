@@ -18,6 +18,7 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
+import com.framgia.fdms.data.anotation.Permission;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
@@ -83,6 +84,7 @@ public class ListDeviceViewModel extends BaseObservable
     private boolean mIsChangeFilter;
     private Navigator mNavigator;
     private int mPositionScroll = OUT_OF_INDEX;
+    private boolean mIsAllowAddDevice;
 
     private RecyclerView.OnScrollListener mScrollListenner = new RecyclerView.OnScrollListener() {
         @Override
@@ -199,11 +201,18 @@ public class ListDeviceViewModel extends BaseObservable
 
     @Override
     public void setupFloatingActionsMenu(User user) {
-        String role = user.getRole();
-        if (role == null) {
-            return;
+        setAllowAddDevice(isAllowAddDevice(user.getRole()));
+    }
+
+    private boolean isAllowAddDevice(@Permission int permission) {
+        switch (permission) {
+            case Permission.ADMIN:
+            case Permission.BO_MANAGER:
+            case Permission.BO_STAFF:
+                return true;
+            default:
+                return false;
         }
-        // TODO: 11/6/2017 setup show button add device, return device, assign device for newmember
     }
 
     @Override
@@ -493,5 +502,15 @@ public class ListDeviceViewModel extends BaseObservable
     @Bindable
     public SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
         return mOnRefreshListener;
+    }
+
+    @Bindable
+    public boolean isAllowAddDevice() {
+        return mIsAllowAddDevice;
+    }
+
+    public void setAllowAddDevice(boolean allowAddDevice) {
+        mIsAllowAddDevice = allowAddDevice;
+        notifyPropertyChanged(BR.allowAddDevice);
     }
 }

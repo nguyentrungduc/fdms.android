@@ -1,6 +1,7 @@
 package com.framgia.fdms.screen.requestcreation;
 
 import android.text.TextUtils;
+
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
@@ -10,6 +11,7 @@ import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
@@ -17,6 +19,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +41,8 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
     private int mRequestType;
 
     public RequestCreationPresenter(RequestCreationContract.ViewModel viewModel,
-            @RequestCreatorType int requestType, RequestRepository requestRepository,
-            UserRepository userRepository, StatusRepository statusRepository) {
+                                    @RequestCreatorType int requestType, RequestRepository requestRepository,
+                                    UserRepository userRepository, StatusRepository statusRepository) {
         mViewModel = viewModel;
         mRequestType = requestType;
         mSubscription = new CompositeDisposable();
@@ -108,13 +111,13 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
             isValid = false;
             mViewModel.onInputTitleError();
         }
-        if (mUser.getRole().equals(BO_MANAGER)
+        if (mUser.getRole() == BO_MANAGER
                 && mRequestType == RequestCreatorType.MEMBER_REQUEST
                 && request.getRequestFor() <= 0) {
             isValid = false;
             mViewModel.onInputRequestForError();
         }
-        if (mUser.getRole().equals(BO_MANAGER)
+        if (mUser.getRole() == BO_MANAGER
                 && mRequestType == RequestCreatorType.MEMBER_REQUEST
                 && request.getGroup().equals(null)) {
             isValid = false;

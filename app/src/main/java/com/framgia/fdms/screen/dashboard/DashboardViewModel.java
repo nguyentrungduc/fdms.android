@@ -106,8 +106,7 @@ public class DashboardViewModel extends BaseObservable implements DashboardContr
 
     @Override
     public void setupViewPager(User user) {
-        String role = user.getRole();
-        if (role == null) return;
+        int role = user.getRole();
         setShowDeviceDashboard(isShowDeviceDashboard(user.getRole()));
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(DashBoardDetailFragment.newInstance(REQUEST_DASHBOARD));
@@ -118,7 +117,7 @@ public class DashboardViewModel extends BaseObservable implements DashboardContr
         setPagerAdapter(mPagerAdapter);
     }
 
-    public boolean isShowDeviceDashboard(String permission) {
+    public boolean isShowDeviceDashboard(int permission) {
         switch (permission) {
             case ADMIN:
             case BO_MANAGER:

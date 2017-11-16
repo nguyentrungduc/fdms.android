@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
+
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Request;
@@ -18,6 +19,7 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 import com.framgia.fdms.screen.requestcreation.assignee.SelectAssigneeRequestActivity;
 import com.framgia.fdms.screen.requestcreation.requestfor.SelectRequestForActivity;
+
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -57,7 +59,7 @@ public class RequestCreationViewModel extends BaseObservable
     private int mRequestCreatorType;
 
     public RequestCreationViewModel(AppCompatActivity activity,
-            @RequestCreatorType int requestCreatorType) {
+                                    @RequestCreatorType int requestCreatorType) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
         mRequestCreatorType = requestCreatorType;
@@ -165,7 +167,7 @@ public class RequestCreationViewModel extends BaseObservable
 
     @Override
     public void onGetUserSuccess(User user) {
-        setManager(user.getRole().equals(BO_MANAGER));
+        setManager(user.getRole() == BO_MANAGER);
         if (isManager()) {
             if (mRequestCreatorType == RequestCreatorType.MY_REQUEST) {
                 setRequestFor(new Status(user.getId(), user.getName()));

@@ -68,9 +68,7 @@ public class LoginPresenter extends BaseObservable implements LoginContract.Pres
             .subscribe(new Consumer<Respone<User>>() {
                 @Override
                 public void accept(Respone<User> userRespone) throws Exception {
-                    User user = userRespone.getData();
-                    user.setToken(userRespone.getToken());
-                    saveUser(user);
+                    saveUser(userRespone.getData());
                     if (mView.isRememberAccount()) {
                         saveRememberAccount(userName, passWord);
                     } else {
