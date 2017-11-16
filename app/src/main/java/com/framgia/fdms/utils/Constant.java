@@ -77,6 +77,7 @@ public class Constant {
         public static final int REQUEST_EDIT = 22;
         public static final int REQUEST_MANAGE_DEVICE = 23;
         public static final int REQUEST_CREATE_DEVICE = 24;
+        public static final int REQUEST_ASSIGN_DEVICE_FOR_MEETING_ROOM = 25;
     }
 
     public static final class DeviceUsingStatus {

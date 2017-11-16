@@ -377,4 +377,5 @@
     <string name="title_group">Group</string>
     <string name="menu_done">Done</string>
     <string name="action_apply">Apply</string>
+    <string name="title_assignment_for_meeting_room">Assign device for meeting room</string>
 </resources>

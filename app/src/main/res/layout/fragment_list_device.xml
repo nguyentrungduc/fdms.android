@@ -124,6 +124,18 @@
                     <com.github.clans.fab.FloatingActionButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:onClick="@{() -> viewModel.onAssignDeviceForMeetingRoomClick(floatActionMenu)}"
+                        android:padding="@dimen/dp_10"
+                        android:src="@drawable/ic_meeting_room_green_24dp"
+                        android:tint="@color/colorPrimary"
+                        app:fab_colorNormal="@android:color/white"
+                        app:fab_colorPressed="@color/color_seashell"
+                        app:fab_colorRipple="@color/color_dark_gray"
+                        app:fab_label="@string/title_assignment_for_meeting_room" />
+
+                    <com.github.clans.fab.FloatingActionButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:onClick="@{() -> viewModel.onAssignDeviceForNewMemberClick(floatActionMenu)}"
                         android:padding="@dimen/dp_10"
                         android:src="@drawable/ic_assignment_new_member"

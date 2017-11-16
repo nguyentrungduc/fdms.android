@@ -43,9 +43,11 @@ interface AssignmentContract {
      * Presenter.
      */
     interface Presenter extends BasePresenter {
-        void registerAssignment(AssignmentRequest request);
+        void registerAssignmentForRequest(AssignmentRequest request);
 
-        void registerAssignment(Status staff, List<Device> requests);
+        void registerAssignmentForMember(Status staff, List<Device> requests);
+
+        void registerAssignmentForMeetingRoom(Status room, List<Device> requests);
 
         void getRequest(int requestId);
 

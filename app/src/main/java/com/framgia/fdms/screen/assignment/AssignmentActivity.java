@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.CategoryRepository;
 import com.framgia.fdms.data.source.DeviceRepository;
@@ -32,9 +33,9 @@ public class AssignmentActivity extends AppCompatActivity {
     private AssignmentContract.ViewModel mViewModel;
 
     public static Intent getInstance(Context context, @AssignmentType int assignmentType,
-        int requestId) {
+                                     int requestId) {
         return new Intent(context, AssignmentActivity.class).putExtra(BUNDLE_TYPE, assignmentType)
-            .putExtra(EXTRA_REQUEST_ID, requestId);
+                .putExtra(EXTRA_REQUEST_ID, requestId);
     }
 
     public static Intent getInstance(Context context, @AssignmentType int assignmentType) {
@@ -46,25 +47,38 @@ public class AssignmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         @AssignmentType int assignmentType =
-            getIntent().getExtras().getInt(BUNDLE_TYPE, ASSIGN_BY_REQUEST);
+                getIntent().getExtras().getInt(BUNDLE_TYPE, ASSIGN_BY_REQUEST);
         int deviceId = getIntent().getIntExtra(EXTRA_REQUEST_ID, 0);
 
         mViewModel = new AssignmentViewModel(this);
 
         AssignmentContract.Presenter presenter =
-            new AssignmentPresenter(mViewModel, assignmentType, deviceId,
-                new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
-                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))));
+                new AssignmentPresenter(mViewModel, assignmentType, deviceId,
+                        new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
+                        new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))));
         mViewModel.setPresenter(presenter);
         ((AssignmentViewModel) mViewModel).setAssignmentType(assignmentType);
 
         ActivityAssignmentBinding binding =
-            DataBindingUtil.setContentView(this, R.layout.activity_assignment);
+                DataBindingUtil.setContentView(this, R.layout.activity_assignment);
         binding.setViewModel((AssignmentViewModel) mViewModel);
 
-        String title = assignmentType == ASSIGN_BY_REQUEST ? getString(R.string.title_assignment)
-            : getString(R.string.title_assignment_for_new_member);
-        setTitle(title);
+        updateTitle(assignmentType);
+    }
+
+    private void updateTitle(@AssignmentType int assignmentType) {
+        switch (assignmentType) {
+            case AssignmentType.ASSIGN_BY_REQUEST:
+                setTitle(R.string.title_assignment);
+                break;
+            case AssignmentType.ASSIGN_BY_MEETING_ROOM:
+                setTitle(R.string.title_assignment_for_meeting_room);
+                break;
+            case AssignmentType.ASSIGN_BY_NEW_MEMBER:
+            default:
+                setTitle(R.string.title_assignment_for_new_member);
+                break;
+        }
     }
 
     @Override

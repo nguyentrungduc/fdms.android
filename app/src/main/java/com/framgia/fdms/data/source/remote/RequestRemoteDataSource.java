@@ -13,8 +13,6 @@ import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.utils.Utils;
 
-import org.apache.commons.collections4.MultiValuedMap;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,12 +26,6 @@ import io.reactivex.functions.Function;
 import static com.framgia.fdms.screen.requestcreation.RequestCreatorType.MY_REQUEST;
 import static com.framgia.fdms.utils.Constant.ALL_RELATIVE_ID;
 import static com.framgia.fdms.utils.Constant.ALL_REQUEST_STATUS_ID;
-import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_ASSIGNEE_ID;
-import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_ASSIGNMENT_DETAILS;
-import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_ASSIGNMENT_DEVICE_ID;
-import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_DESCRIPTION;
-import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_REQUEST_ID;
-import static com.framgia.fdms.utils.Constant.ApiParram.ASSIGNMENT_STAFF_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.PER_PAGE;
 import static com.framgia.fdms.utils.Constant.ApiParram.RELATIVE_ID;
