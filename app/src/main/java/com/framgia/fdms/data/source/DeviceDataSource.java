@@ -26,7 +26,7 @@ public class DeviceDataSource {
         Observable<List<Device>> getListDevices(String deviceName, int categoryId, int statusId,
                                                 int page, int perPage);
 
-        Observable<Device> registerdevice(Device registerdevice);
+        Observable<Device> createDevice(Device registerdevice);
 
         Observable<String> updateDevice(Device device);
 

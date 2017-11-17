@@ -4,6 +4,7 @@ import android.content.Intent;
 import com.framgia.fdms.BasePresenter;
 import com.framgia.fdms.BaseViewModel;
 import com.framgia.fdms.data.model.Device;
+import com.framgia.fdms.data.model.Status;
 
 /**
  * This specifies the contract between the view and the presenter.
@@ -66,6 +67,8 @@ interface CreateDeviceContract {
         void onPrintClick();
 
         void setProgressBar(int visibility);
+
+        void onGetDefaultBranchSuccess(Status status);
     }
 
     /**
@@ -83,5 +86,7 @@ interface CreateDeviceContract {
         void getDeviceCode(int deviceCategoryId, int branchId);
 
         boolean validateDataEditDevice(Device device);
+
+        void getDefaultBranch();
     }
 }

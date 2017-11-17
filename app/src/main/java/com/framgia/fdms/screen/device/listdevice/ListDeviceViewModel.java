@@ -187,6 +187,8 @@ public class ListDeviceViewModel extends BaseObservable
                     mNavigator.showToast(bundle.getInt(BUNDLE_SUCCESS));
                     mAdapter.addData(0, device);
                     setPositionScroll(0);
+                    mNavigator.startActivity(
+                            DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
                 }
                 break;
             case REQUEST_MANAGE_DEVICE:

@@ -91,7 +91,7 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
     }
 
     @Override
-    public Observable<Device> registerdevice(final Device device) {
+    public Observable<Device> createDevice(final Device device) {
         Map<String, RequestBody> params = new HashMap<>();
         RequestBody productionName, deviceStatusId, deviceCategoryId, vendorId, makerId,
                 meetingRoomId, serialNumber, modelNumber, deviceCode, isBarcode, isMeetingRoom,
@@ -101,13 +101,14 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         productionName = createPartFromString(device.getProductionName());
         deviceStatusId = createPartFromString(String.valueOf(device.getDeviceStatusId()));
         deviceCategoryId = createPartFromString(String.valueOf(device.getDeviceCategoryId()));
-        vendorId = createPartFromString(String.valueOf(device.getVendorId()));
-        makerId = createPartFromString(String.valueOf(device.getMarkerId()));
+        vendorId = createPartFromString(String.valueOf(device.getVendor().getId()));
+        makerId = createPartFromString(String.valueOf(device.getMarker().getId()));
         deviceCode = createPartFromString(device.getDeviceCode());
         isBarcode = createPartFromString(String.valueOf(device.isBarcode()));
         boughtDate = createPartFromString(String.valueOf(format.format(device.getBoughtDate())));
         originalPrice = createPartFromString(device.getOriginalPrice());
         isMeetingRoom = createPartFromString(String.valueOf(device.isDeviceMeetingRoom()));
+
         if (device.getMeetingRoom()!= null && device.getMeetingRoom().getId() > 0) {
             meetingRoomId = createPartFromString(String.valueOf(device.getMeetingRoom().getId()));
             params.put(MEETING_ROOM_ID, meetingRoomId);

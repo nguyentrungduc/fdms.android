@@ -39,8 +39,8 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
                 perPage);
     }
 
-    public Observable<Device> registerdevice(Device device) {
-        return mDeviceRemoteDataSource.registerdevice(device);
+    public Observable<Device> createDevice(Device device) {
+        return mDeviceRemoteDataSource.createDevice(device);
     }
 
     public Observable<String> updateDevice(Device device) {
