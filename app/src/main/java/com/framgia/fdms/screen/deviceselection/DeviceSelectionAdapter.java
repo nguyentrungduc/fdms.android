@@ -28,7 +28,7 @@ public class DeviceSelectionAdapter
     }
 
     @Override
-    public void onUpdatePage(List<Device> data) {
+    public void addItem(List<Device> data) {
         if (data == null) {
             return;
         }

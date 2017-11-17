@@ -280,7 +280,7 @@ public class ListDeviceViewModel extends BaseObservable
         setEmptyViewVisible(
                 devices.isEmpty() && mAdapter.getItemCount() == 0 ? VISIBLE : View.GONE);
         setLoadingMore(false);
-        mAdapter.onUpdatePage(devices);
+        mAdapter.addItem(devices);
         setRefresh(false);
     }
 

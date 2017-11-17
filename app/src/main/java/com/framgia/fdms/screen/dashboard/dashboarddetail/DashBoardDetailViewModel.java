@@ -188,13 +188,13 @@ public class DashBoardDetailViewModel extends BaseObservable
     @Override
     public void onGetTopRequestSuccess(List<Request> requests) {
         if (requests == null) return;
-        mAdapterTopRequest.onUpdatePage(requests);
+        mAdapterTopRequest.addItem(requests);
     }
 
     @Override
     public void onGetTopDeviceSuccess(List<Device> devices) {
         if (devices == null) return;
-        mAdapterTopDevice.onUpdatePage(devices);
+        mAdapterTopDevice.addItem(devices);
     }
 
     @Override

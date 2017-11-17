@@ -49,7 +49,7 @@ public class ListDeviceAdapter
     }
 
     @Override
-    public void onUpdatePage(List<Device> datas) {
+    public void addItem(List<Device> datas) {
         if (datas == null) {
             return;
         }

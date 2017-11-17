@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.assignment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -15,6 +16,8 @@ import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.databinding.ItemAssignmentBinding;
+import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
+import com.framgia.fdms.utils.navigator.Navigator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +28,6 @@ import java.util.List;
 public class AssignmentAdapter
         extends BaseRecyclerViewAdapter<Device, AssignmentAdapter.ViewHolder> {
     private List<Device> mRequests;
-
     private AssignmentViewModel mViewModel;
 
     protected AssignmentAdapter(@NonNull Context context, @NonNull AssignmentViewModel viewModel) {
@@ -48,8 +50,15 @@ public class AssignmentAdapter
         notifyDataSetChanged();
     }
 
+    public void removeItem(int position){
+        if (position >= 0 && position < mRequests.size()) {
+            mRequests.remove(position);
+            notifyDataSetChanged();
+        }
+    }
+
     @Override
-    public void onUpdatePage(List<Device> data) {
+    public void addItem(List<Device> data) {
         if (data == null) {
             return;
         }
@@ -78,7 +87,7 @@ public class AssignmentAdapter
     /**
      * ViewHolder
      */
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder  {
         private ItemAssignmentBinding mBinding;
         private AssignmentViewModel mViewModel;
 
@@ -88,79 +97,15 @@ public class AssignmentAdapter
             mViewModel = viewModel;
         }
 
-        void bindData(Device request) {
-            if (request == null) {
+        void bindData(Device device) {
+            if (device == null) {
                 return;
             }
-            ViewHolderModel model =
-                    new ViewHolderModel(request, mViewModel, this, getAdapterPosition());
-            mBinding.setViewHolderModel(model);
+            mBinding.setDevice(device);
+            mBinding.setViewModel(mViewModel);
+            mBinding.setPosition(getAdapterPosition());
             mBinding.executePendingBindings();
         }
-
-        @Override
-        public void onClick(View view) {
-            if (getAdapterPosition() >= 0 && getAdapterPosition() < mRequests.size()) {
-                mRequests.remove(getAdapterPosition());
-                notifyItemRemoved(getAdapterPosition());
-            }
-        }
     }
 
-    public class ViewHolderModel extends BaseObservable {
-        private Device mDevice;
-        private AssignmentViewModel mViewModel;
-        private View.OnClickListener mOnDeleteClick;
-        private int mPosition;
-
-        public ViewHolderModel(Device device,
-                               AssignmentViewModel viewModel,
-                               View.OnClickListener onDelteClick,
-                               int position) {
-            mDevice = device;
-            mViewModel = viewModel;
-            mOnDeleteClick = onDelteClick;
-            mPosition = position;
-        }
-
-        @Bindable
-        public Device getDevice() {
-            return mDevice;
-        }
-
-        public void setDevice(Device device) {
-            mDevice = device;
-            notifyPropertyChanged(BR.device);
-        }
-
-        @Bindable
-        public AssignmentViewModel getViewModel() {
-            return mViewModel;
-        }
-
-        public void setViewModel(AssignmentViewModel viewModel) {
-            mViewModel = viewModel;
-            notifyPropertyChanged(BR.viewModel);
-        }
-
-        @Bindable
-        public View.OnClickListener getOnDeleteClick() {
-            return mOnDeleteClick;
-        }
-
-        public void setOnDeleteClick(View.OnClickListener onDeleteClick) {
-            mOnDeleteClick = onDeleteClick;
-            notifyPropertyChanged(BR.onDeleteClick);
-        }
-
-        @Bindable
-        public int getPosition() {
-            return mPosition;
-        }
-
-        public void setPosition(int position) {
-            mPosition = position;
-            notifyPropertyChanged(BR.position);
-        }
-    }
 }

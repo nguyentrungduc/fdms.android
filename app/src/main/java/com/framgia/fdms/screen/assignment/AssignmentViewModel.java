@@ -16,6 +16,7 @@ import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
+import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.deviceselection.DeviceSelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
@@ -181,6 +182,14 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
         bundle.putInt(BUNDLE_SUCCESS, R.string.msg_assignment_success);
         intent.putExtras(bundle);
         mNavigator.finishActivityWithResult(intent, RESULT_OK);
+    }
+
+    public void onDeleteItemDeviceClicked(int position) {
+        mAdapter.removeItem(position);
+    }
+
+    public void onItemDeviceClicked(Device device) {
+        mNavigator.startActivity(DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
     }
 
     @Override

@@ -116,7 +116,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
     public void onGetRequestSuccess(List<Request> requests) {
         setLoadMore(false);
         setEmptyViewVisible(requests.isEmpty() ? View.VISIBLE : View.GONE);
-        mAdapter.onUpdatePage(requests);
+        mAdapter.addItem(requests);
     }
 
     @Override
