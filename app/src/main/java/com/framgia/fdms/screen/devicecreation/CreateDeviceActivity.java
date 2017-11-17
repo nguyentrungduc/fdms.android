@@ -6,10 +6,13 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
+import com.framgia.fdms.data.source.BranchRepository;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
+import com.framgia.fdms.data.source.remote.BranchRemoteDataSource;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityCreatedeviceBinding;
 
@@ -59,16 +62,19 @@ public class CreateDeviceActivity extends AppCompatActivity {
         mViewModel = new CreateDeviceViewModel(this, mDevice, mDeviceStatusType);
 
         DeviceRepository deviceRepository =
-            new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
+                new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
+        BranchRepository branchRepository =
+                new BranchRepository(new BranchRemoteDataSource(FDMSServiceClient.getInstance()));
         CreateDeviceContract.Presenter presenter =
-            new CreateDevicePresenter(mViewModel, deviceRepository);
+                new CreateDevicePresenter(mViewModel, deviceRepository, branchRepository);
+
         mViewModel.setPresenter(presenter);
 
         ActivityCreatedeviceBinding binding =
-            DataBindingUtil.setContentView(this, R.layout.activity_createdevice);
+                DataBindingUtil.setContentView(this, R.layout.activity_createdevice);
         binding.setViewModel((CreateDeviceViewModel) mViewModel);
         setTitle(mDeviceStatusType == DeviceStatusType.CREATE ? R.string.title_create_device
-            : R.string.title_edit_device);
+                : R.string.title_edit_device);
     }
 
     @Override

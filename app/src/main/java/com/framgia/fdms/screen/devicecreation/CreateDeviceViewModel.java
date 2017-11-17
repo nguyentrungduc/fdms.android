@@ -58,10 +58,6 @@ import static com.framgia.fdms.utils.Constant.USING;
 public class CreateDeviceViewModel extends BaseObservable
         implements CreateDeviceContract.ViewModel, DatePickerDialog.OnDateSetListener {
 
-    private static final String DEFAULT_STATUS_NAME = "available";
-    private static final String DEVICE_USING_CONTENT = "using";
-    private static final int DEFAULT_BRANCH_ID = 1;
-    private static final String DEFAULT_BRANCH_NAME = "Ha Noi";
     private static final int DEFAULT_WIDTH_QRCODE = 300;
     private static final int DEFAULT_HEIGHT_QRCODE = 300;
     private static final int DEFAULT_WIDTH_BARCODE = 200;
@@ -84,13 +80,13 @@ public class CreateDeviceViewModel extends BaseObservable
     private String mOriginalPriceError;
     private String mWarrantyError;
     private String mMeetingRoomError;
+
     private String mBoughtDate;
     private Device mDevice;
     private String mStatusError;
     private Status mCategory;
     private Status mStatus;
     private Status mBranch;
-    private Producer mVendor, mMarker, mMeetingRoom;
     private Calendar mCalendar = Calendar.getInstance();
     private boolean mIsQrCode = true;
     private boolean mIsBarCode;
@@ -104,18 +100,22 @@ public class CreateDeviceViewModel extends BaseObservable
         mContext = activity.getApplicationContext();
         mActivity = activity;
         if (device == null) {
-            mDevice = new Device();
-            mStatus = new Status(AVAIABLE, DEFAULT_STATUS_NAME);
-            mBranch = new Status(DEFAULT_BRANCH_ID, DEFAULT_BRANCH_NAME);
-            mDevice.setVendor(new Producer(OUT_OF_INDEX, ""));
-            mDevice.setMarker(new Producer(OUT_OF_INDEX, ""));
-            mDevice.setBranch(mBranch.getName());
-            mDevice.setDeviceStatusId(AVAIABLE);
+            mDevice = initDefaultDevice();
+            setAllowEditMeetingRoom(true);
         } else {
             mDevice = device;
         }
         mDeviceType = type;
         mNavigator = new Navigator(activity);
+    }
+
+    private Device initDefaultDevice() {
+        Device device = new Device();
+        mStatus = new Status(AVAIABLE, mActivity.getString(R.string.title_available));
+        device.setVendor(new Producer(OUT_OF_INDEX, ""));
+        device.setMarker(new Producer(OUT_OF_INDEX, ""));
+        device.setDeviceStatusId(AVAIABLE);
+        return device;
     }
 
     @Override
@@ -207,6 +207,8 @@ public class CreateDeviceViewModel extends BaseObservable
         mPresenter = presenter;
         if (mDeviceType == EDIT) {
             mPresenter.getDeviceById(mDevice);
+        } else {
+            mPresenter.getDefaultBranch();
         }
     }
 
@@ -352,6 +354,12 @@ public class CreateDeviceViewModel extends BaseObservable
     }
 
     @Override
+    public void onGetDefaultBranchSuccess(Status status) {
+        mBranch = status;
+        mDevice.setBranch(mBranch.getName());
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK || data == null) return;
         Bundle bundle = data.getExtras();
@@ -359,17 +367,15 @@ public class CreateDeviceViewModel extends BaseObservable
         assert status != null;
         switch (requestCode) {
             case REQUEST_CATEGORY:
-                if (status.getName().equals(mContext.getString(R.string.action_clear))
-                        || status.getId() == OUT_OF_INDEX) {
-                    status.setName(mContext.getString(R.string.title_empty));
+                if (status.getId() == OUT_OF_INDEX) {
+                    return;
                 }
                 setCategory(status);
                 mPresenter.getDeviceCode(mCategory.getId(), mBranch.getId());
                 break;
             case REQUEST_BRANCH:
-                if (status.getName().equals(mContext.getString(R.string.action_clear))) {
-                    status.setId(DEFAULT_BRANCH_ID);
-                    status.setName(DEFAULT_BRANCH_NAME);
+                if (status.getId() == OUT_OF_INDEX) {
+                    return;
                 }
                 mDevice.setBranch(status.getName());
                 setBranch(status);
@@ -378,29 +384,26 @@ public class CreateDeviceViewModel extends BaseObservable
                 }
                 break;
             case REQUEST_STATUS:
-                if (status.getName().equals(mContext.getString(R.string.action_clear))) {
-                    status.setName(mContext.getString(R.string.title_empty));
+                if (status.getId() == OUT_OF_INDEX) {
+                    return;
                 }
                 setStatus(status);
                 break;
             case REQUEST_VENDOR:
-                if (status.getName().equals(mContext.getString(R.string.action_clear))
-                        || status.getId() == OUT_OF_INDEX) {
-                    status.setName(mContext.getString(R.string.title_empty));
+                if (status.getId() == OUT_OF_INDEX) {
+                    return;
                 }
                 mDevice.setVendor((Producer) status);
                 break;
             case REQUEST_MAKER:
-                if (status.getName().equals(mContext.getString(R.string.action_clear))
-                        || status.getId() == OUT_OF_INDEX) {
-                    status.setName(mContext.getString(R.string.title_empty));
+                if (status.getId() == OUT_OF_INDEX) {
+                    return;
                 }
                 mDevice.setMarker((Producer) status);
                 break;
             case REQUEST_MEETING_ROOM:
-                if (status.getName().equals(mContext.getString(R.string.action_clear))
-                        || status.getId() == OUT_OF_INDEX) {
-                    status.setName(mContext.getString(R.string.title_empty));
+                if (status.getId() == OUT_OF_INDEX) {
+                    return;
                 }
                 mDevice.setMeetingRoom((Producer) status);
                 break;
@@ -606,31 +609,9 @@ public class CreateDeviceViewModel extends BaseObservable
         notifyPropertyChanged(BR.branch);
     }
 
-    @Bindable
-    public Producer getVendor() {
-        return mVendor;
-    }
-
-    public void setVendor(Producer vendor) {
-        mDevice.setVendorId(vendor.getId());
-        mVendor = vendor;
-        notifyPropertyChanged(BR.vendor);
-    }
-
-    @Bindable
-    public Producer getMarker() {
-        return mMarker;
-    }
-
-    public void setMarker(Producer marker) {
-        mDevice.setMarkerId(marker.getId());
-        mMarker = marker;
-        notifyPropertyChanged(BR.marker);
-    }
-
     public void onCheckedChange(boolean isChecked) {
-        setStatus(!isChecked ? new Status(AVAIABLE, DEFAULT_STATUS_NAME)
-                : new Status(USING, DEVICE_USING_CONTENT));
+        setStatus(!isChecked ? new Status(AVAIABLE, mActivity.getString(R.string.title_available))
+                : new Status(USING, mActivity.getString(R.string.title_using)));
     }
 
     @Bindable

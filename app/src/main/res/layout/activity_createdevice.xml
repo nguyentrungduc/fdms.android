@@ -199,7 +199,6 @@
                                 android:text="@={viewModel.device.ram}"
                                 android:textColor="@color/color_dark_gray"
                                 android:textSize="@dimen/sp_16"
-                                android:visibility="@{TextUtils.isEmpty(viewModel.device.ram)? View.GONE : View.VISIBLE}"
                                 />
                         </android.support.design.widget.TextInputLayout>
 
@@ -220,7 +219,6 @@
                                 android:text="@={viewModel.device.hardDriver}"
                                 android:textColor="@color/color_dark_gray"
                                 android:textSize="@dimen/sp_16"
-                                android:visibility="@{TextUtils.isEmpty(viewModel.device.hardDriver)? View.GONE : View.VISIBLE}"
                                 />
                         </android.support.design.widget.TextInputLayout>
 
@@ -241,7 +239,6 @@
                                 android:text="@={viewModel.device.invoiceNumber}"
                                 android:textColor="@color/color_dark_gray"
                                 android:textSize="@dimen/sp_16"
-                                android:visibility="@{TextUtils.isEmpty(viewModel.device.invoiceNumber)? View.GONE : View.VISIBLE}"
                                 />
                         </android.support.design.widget.TextInputLayout>
 
