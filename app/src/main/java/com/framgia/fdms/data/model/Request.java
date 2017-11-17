@@ -3,8 +3,6 @@ package com.framgia.fdms.data.model;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import com.android.databinding.library.baseAdapters.BR;
-import com.framgia.fdms.FDMSApplication;
-import com.framgia.fdms.R;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -63,6 +61,9 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     @Expose
     @SerializedName("create_at")
     private Date mCreatAt;
+    @Expose
+    @SerializedName("handler")
+    private String mHandler;
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -134,6 +135,16 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     public void setRequestStatusId(int requestStatusId) {
         mRequestStatusId = requestStatusId;
         notifyPropertyChanged(BR.requestStatusId);
+    }
+
+    @Bindable
+    public String getHandler() {
+        return mHandler;
+    }
+
+    public void setHandler(String handler) {
+        mHandler = handler;
+        notifyPropertyChanged(BR.handler);
     }
 
     @Bindable

@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
 import com.framgia.fdms.R;
@@ -15,7 +14,6 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.databinding.ItemRequestManagerAdapterBinding;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,13 +26,13 @@ import static com.framgia.fdms.data.anotation.RequestStatus.WAITING_DONE;
  */
 
 public class UserRequestAdapter
-        extends BaseRecyclerViewAdapter<Request, UserRequestAdapter.ViewHolder> {
+    extends BaseRecyclerViewAdapter<Request, UserRequestAdapter.ViewHolder> {
     private List<Request> mRequests = new ArrayList<>();
     private OnRequestClickListenner mListenner;
     private User mUser;
 
     public UserRequestAdapter(Context context, List<Request> requests,
-                              OnRequestClickListenner listenner, User user) {
+        OnRequestClickListenner listenner, User user) {
         super(context);
         mRequests = requests;
         mListenner = listenner;
@@ -65,7 +63,6 @@ public class UserRequestAdapter
         notifyDataSetChanged();
     }
 
-
     public void addRequest(Request request) {
         if (mRequests == null) {
             return;
@@ -77,8 +74,8 @@ public class UserRequestAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemRequestManagerAdapterBinding binding =
-                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                        R.layout.item_request_manager_adapter, parent, false);
+            DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.item_request_manager_adapter, parent, false);
         return new ViewHolder(binding);
     }
 
@@ -122,9 +119,10 @@ public class UserRequestAdapter
 
         public RequestModel(Request request) {
             mRequest = request;
-            mIsShowAddDevice = (mUser.getRole() == BO_MANAGER ||
-                    mUser.getRole() == BO_STAFF) &&
-                    mRequest.getRequestStatusId() == WAITING_DONE;
+            mIsShowAddDevice = (mUser.getRole() == BO_MANAGER || mUser.getRole() == BO_STAFF)
+                && mRequest.getRequestStatusId() == WAITING_DONE;
+            //fake data
+            mRequest.setHandler("- BO Staffs");
         }
 
         @Bindable
