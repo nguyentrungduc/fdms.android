@@ -57,7 +57,7 @@ public @interface Permission {
      * - manage requests: chuyển trạng thái từ "waiting done" sang "done"
      * - View Dashboard  Request, Device
      */
-    int BO_STAFF = 4;
+    int BO_STAFF = 5;
 
     /**
      * Action
@@ -65,7 +65,7 @@ public @interface Permission {
      * - export devices list to excel format
      * - View Dashboard Device
      */
-    int ACCOUNTANT = 6;
+    int ACCOUNTANT = 7;
 
     /**
      * Action of DIVISION MANAGER & SECTION MANAGER
@@ -75,8 +75,8 @@ public @interface Permission {
      * - View Dashboard  Request, Device
      */
     int DIVISION_MANAGER = 2;
-    int SECTION_MANAGER = 7;
-    int GROUP_LEADER = 3;
+    int SECTION_MANAGER = 3;
+    int GROUP_LEADER = 4;
 
     /**
      * Action
@@ -84,5 +84,5 @@ public @interface Permission {
      * - manage my requests: khi tạo request thì sẽ có trạng thái "waiting approve"
      * - View Dashboard  Request
      */
-    int NORMAL_USER = 5;
+    int NORMAL_USER = 6;
 }
