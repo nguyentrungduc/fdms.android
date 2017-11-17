@@ -123,8 +123,6 @@ public class DashboardViewModel extends BaseObservable implements DashboardContr
             case BO_MANAGER:
             case BO_STAFF:
             case ACCOUNTANT:
-            case DIVISION_MANAGER:
-            case SECTION_MANAGER:
                 return true;
             default:
                 return false;
