@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FGAS</string>
+    <string name="app_name">FGAS 17112017</string>
     <string name="action_login">Login</string>
     <string name="title_user_name">User Name</string>
     <string name="title_password">Password</string>
