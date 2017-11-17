@@ -118,6 +118,8 @@
                     <com.framgia.fdms.widget.CustomSpinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingEnd="@dimen/dp_5"
+                        android:paddingStart="@dimen/dp_5"
                         android:visibility="@{viewModel.requestCreatorType == RequestCreatorType.MEMBER_REQUEST ? View.VISIBLE : View.GONE}"
                         app:spinnerAdapter="@{viewModel.adapter}"
                         app:spinnerListener="@{viewModel}"

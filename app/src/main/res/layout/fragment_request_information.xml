@@ -114,8 +114,8 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
-                                        android:hint="@string/title_request_for"
                                         android:background="@{viewModel.isEdit ? @color/color_blue_grey_50 : @android:color/transparent }"
+                                        android:hint="@string/title_request_for"
                                         bind:ignore="TooDeepLayout"
                                         >
 
@@ -146,7 +146,6 @@
                             <FrameLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:visibility="@{viewModel.edit ? View.VISIBLE : View.GONE}"
                                 >
 
                                 <android.support.design.widget.TextInputLayout
@@ -182,8 +181,8 @@
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@{viewModel.isEdit ? @color/color_blue_grey_50 : @android:color/transparent }"
                             android:layout_marginStart="@dimen/dp_10"
+                            android:background="@{viewModel.isEdit ? @color/color_blue_grey_50 : @android:color/transparent }"
                             android:hint="@string/title_request_status_detail"
                             >
 

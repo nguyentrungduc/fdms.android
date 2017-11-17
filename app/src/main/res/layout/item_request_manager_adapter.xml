@@ -123,6 +123,42 @@
                 android:layout_marginTop="@dimen/dp_5"
                 android:gravity="center"
                 android:orientation="horizontal"
+                car_view:ignore="UseCompoundDrawables"
+                >
+
+                <ImageView
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
+                    android:padding="@dimen/dp_3"
+                    bind:srcCompat="@drawable/ic_assignee"
+                    car_view:ignore="ContentDescription"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:text="@{requestModel.request.assignee}"
+                    android:textColor="@color/color_black"
+                    android:textSize="@dimen/sp_14"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:text="@{requestModel.request.handler}"
+                    android:textSize="@dimen/sp_14"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:gravity="center"
+                android:orientation="horizontal"
                 >
 
                 <ImageView
@@ -144,10 +180,17 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_corner"
                     android:gravity="end"
+                    android:paddingBottom="@dimen/dp_2"
+                    android:paddingEnd="@dimen/dp_7"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_2"
                     android:text="@{requestModel.request.requestStatus}"
+                    android:textColor="@color/color_white"
                     android:textSize="@dimen/sp_14"
+                    bind:backgroundstatus="@{requestModel.request.requestStatusId}"
                     />
             </LinearLayout>
         </LinearLayout>

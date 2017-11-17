@@ -60,6 +60,7 @@ public class RequestInformationViewModel extends BaseObservable
     private List<Request.RequestAction> mListAction = new ArrayList<>();
     private String mStatusRequest;
     private Request mRequest;
+    private String mHandler;
     private int mProgressBarVisibility = View.GONE;
     private User mUser;
     private FloatingActionMenu mFloatingActionsMenu;
@@ -454,5 +455,15 @@ public class RequestInformationViewModel extends BaseObservable
     public void setShowRequestForAndAssignee(boolean showRequestForAndAssignee) {
         mIsShowRequestForAndAssignee = showRequestForAndAssignee;
         notifyPropertyChanged(BR.showRequestForAndAssignee);
+    }
+
+    @Bindable
+    public String getHandler() {
+        return mHandler;
+    }
+
+    public void setHandler(String handler) {
+        mHandler = handler;
+        notifyPropertyChanged(BR.handler);
     }
 }
