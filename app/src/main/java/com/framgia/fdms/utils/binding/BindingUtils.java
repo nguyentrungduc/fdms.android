@@ -81,6 +81,8 @@ import static com.framgia.fdms.data.anotation.Permission.ADMIN;
 import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
 import static com.framgia.fdms.data.anotation.Permission.BO_STAFF;
 import static com.framgia.fdms.data.anotation.Permission.DIVISION_MANAGER;
+import static com.framgia.fdms.data.anotation.Permission.GROUP_LEADER;
+import static com.framgia.fdms.data.anotation.Permission.SECTION_MANAGER;
 import static com.framgia.fdms.data.anotation.RequestStatus.APPROVED;
 import static com.framgia.fdms.data.anotation.RequestStatus.CANCELLED;
 import static com.framgia.fdms.data.anotation.RequestStatus.DONE;
@@ -748,6 +750,9 @@ public final class BindingUtils {
                 navigationView.getMenu().findItem(R.id.item_manage_meeting_room);
         MenuItem deviceUsingHistory =
                 navigationView.getMenu().findItem(R.id.item_device_using_history);
+        MenuItem myDevice =  navigationView.getMenu().findItem(R.id.item_my_device);
+        MenuItem myRequest =  navigationView.getMenu().findItem(R.id.item_my_request);
+
         manageDevice.setVisible(false);
         manageRequest.setVisible(false);
         manageVendor.setVisible(false);
@@ -756,6 +761,13 @@ public final class BindingUtils {
         deviceUsingHistory.setVisible(false);
         manageDeviceGroup.setVisible(false);
         manageDeviceCategory.setVisible(false);
+        myDevice.setVisible(false);
+        myRequest.setVisible(false);
+
+        // default enable request and device
+        myRequest.setVisible(true);
+        myRequest.setVisible(true);
+
         switch (staffType) {
             case BO_MANAGER:
             case BO_STAFF:
@@ -770,8 +782,13 @@ public final class BindingUtils {
                 manageDeviceCategory.setVisible(true);
                 break;
             case DIVISION_MANAGER:
+            case SECTION_MANAGER:
                 deviceUsingHistory.setVisible(true);
                 manageDevice.setVisible(true);
+                manageRequest.setVisible(true);
+                break;
+            case GROUP_LEADER:
+                deviceUsingHistory.setVisible(true);
                 manageRequest.setVisible(true);
                 break;
             case ACCOUNTANT:
