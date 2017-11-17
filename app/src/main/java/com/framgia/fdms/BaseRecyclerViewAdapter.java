@@ -12,7 +12,7 @@ import java.util.List;
 public abstract class BaseRecyclerViewAdapter<T, V extends RecyclerView.ViewHolder>
     extends RecyclerView.Adapter<V> {
 
-    private final Context mContext;
+    protected final Context mContext;
 
     protected BaseRecyclerViewAdapter(@NonNull Context context) {
         mContext = context;
@@ -22,7 +22,7 @@ public abstract class BaseRecyclerViewAdapter<T, V extends RecyclerView.ViewHold
         return mContext;
     }
 
-    public abstract void onUpdatePage(List<T> data);
+    public abstract void addItem(List<T> data);
 
     /**
      * OnRecyclerViewItemClickListener

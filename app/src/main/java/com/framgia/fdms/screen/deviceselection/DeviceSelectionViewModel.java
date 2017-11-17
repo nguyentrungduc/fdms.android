@@ -6,7 +6,6 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +18,6 @@ import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.screen.deviceselection.filter.BottomFilterAdapter;
-import com.framgia.fdms.screen.deviceselection.filter.BottomFilterDialog;
 import com.framgia.fdms.utils.navigator.Navigator;
 
 import java.util.ArrayList;
@@ -217,7 +215,7 @@ public class DeviceSelectionViewModel extends BaseObservable
         setEmptyViewVisible(
                 devices.isEmpty() && mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
         setLoadingMore(false);
-        mAdapter.onUpdatePage(devices);
+        mAdapter.addItem(devices);
         setRefresh(false);
     }
 

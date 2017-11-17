@@ -31,7 +31,7 @@ public class ListDeviceAssignmentViewModel extends BaseObservable
 
     public ListDeviceAssignmentViewModel(Fragment fragment, Request request) {
         mAdapter = new ListDeviceAssignmentAdapter(fragment.getContext(), this);
-        mAdapter.onUpdatePage(request.getDevices());
+        mAdapter.addItem(request.getDevices());
         mAdapter.setListenner(this);
         setEmptyViewVisible(
                 request.getDevices() != null && request.getDevices().size() != 0 ? GONE : VISIBLE);

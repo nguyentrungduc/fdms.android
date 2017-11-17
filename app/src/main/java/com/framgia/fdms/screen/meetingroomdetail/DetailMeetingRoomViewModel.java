@@ -157,7 +157,7 @@ public class DetailMeetingRoomViewModel extends BaseObservable
         setLoadingMore(false);
         setRefresh(false);
         mDevices.addAll(devices);
-        mListDeviceAdapter.onUpdatePage(devices);
+        mListDeviceAdapter.addItem(devices);
     }
 
     @Override

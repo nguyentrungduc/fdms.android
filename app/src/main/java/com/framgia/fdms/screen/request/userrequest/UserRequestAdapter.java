@@ -42,7 +42,7 @@ public class UserRequestAdapter
     }
 
     @Override
-    public void onUpdatePage(List<Request> datas) {
+    public void addItem(List<Request> datas) {
         if (datas != null) {
             mRequests.addAll(datas);
             notifyDataSetChanged();

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.Bindable;
 import android.databinding.ObservableField;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,7 +20,6 @@ import com.framgia.fdms.BaseFragmentModel;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.anotation.RequestStatus;
 import com.framgia.fdms.data.model.Request;
-import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
@@ -117,7 +115,7 @@ public class UserRequestViewModel extends BaseFragmentModel
     @Override
     public void onGetRequestSuccess(List<Request> requests) {
         setLoadMore(false);
-        mAdapter.onUpdatePage(requests);
+        mAdapter.addItem(requests);
         setEmptyViewVisible(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 

@@ -38,7 +38,7 @@ public class ListDeviceAssignmentAdapter
     }
 
     @Override
-    public void onUpdatePage(List<Request.DeviceRequest> data) {
+    public void addItem(List<Request.DeviceRequest> data) {
         if (data == null) {
             return;
         }

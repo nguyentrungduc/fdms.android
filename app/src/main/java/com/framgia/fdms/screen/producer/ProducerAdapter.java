@@ -38,7 +38,7 @@ public class ProducerAdapter extends BaseRecyclerViewAdapter<Producer, ProducerA
     }
 
     @Override
-    public void onUpdatePage(List<Producer> datas) {
+    public void addItem(List<Producer> datas) {
         if (datas == null) {
             return;
         }

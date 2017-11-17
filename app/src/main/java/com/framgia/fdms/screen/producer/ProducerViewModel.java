@@ -191,7 +191,7 @@ public class ProducerViewModel extends BaseObservable implements ProducerContrac
 
     @Override
     public void onLoadProducerSuccess(List<Producer> producers) {
-        mAdapter.onUpdatePage(producers);
+        mAdapter.addItem(producers);
         mIsLoadMore = false;
         setLoadingMoreVisibility(GONE);
         setRefresh(false);
