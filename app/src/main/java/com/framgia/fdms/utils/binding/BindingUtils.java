@@ -43,6 +43,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.bumptech.glide.Glide;
@@ -205,6 +206,12 @@ public final class BindingUtils {
     public static void setListenerForSpinner(CustomSpinner spinner,
         AdapterView.OnItemSelectedListener listener) {
         spinner.setListener(listener);
+    }
+
+    @BindingAdapter({ "spinnerListener" })
+    public static void setListenerForSpinner(Spinner spinner,
+                                             AdapterView.OnItemSelectedListener listener) {
+        spinner.setOnItemSelectedListener(listener);
     }
 
     @BindingAdapter({ "bind:font" })

@@ -81,6 +81,7 @@ public class RequestManagerViewModel extends BaseFragmentModel
 
     private boolean mIsShowAssignee;
 
+
     public RequestManagerViewModel(Fragment fragment) {
         mNavigator = new Navigator(fragment);
         mFragment = fragment;
@@ -466,3 +467,5 @@ public class RequestManagerViewModel extends BaseFragmentModel
         notifyPropertyChanged(BR.allowAddRequest);
     }
 }
+
+

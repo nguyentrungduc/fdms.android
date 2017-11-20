@@ -47,43 +47,20 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="vertical">-->
 
-                            <LinearLayout
+                            <android.support.v7.widget.AppCompatSpinner
+                                android:background="@drawable/bg_spinner"
                                 android:layout_width="match_parent"
+                                android:layout_margin="@dimen/dp_2"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/dp_2"
-                                android:layout_marginTop="@dimen/dp_5"
-                                android:baselineAligned="false"
-                                android:orientation="horizontal">
-
-                                <FrameLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/border_button"
-                                    android:onClick="@{() -> viewModel.onSelectTypeRequestClick()}"
-                                    android:padding="@dimen/dp_7">
-
-                                    <ImageView
-                                        android:layout_width="@dimen/dp_18"
-                                        android:layout_height="@dimen/dp_18"
-                                        android:layout_gravity="end"
-                                        app:srcCompat="@drawable/ic_arrow_drop_down"
-                                        bind:ignore="ContentDescription,TooDeepLayout" />
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:ellipsize="end"
-                                        android:enabled="false"
-                                        android:gravity="center_vertical"
-                                        android:text="@={viewModel.requestBy.name}"
-                                        android:textColor="@color/cardview_dark_background"
-                                        android:textColorHint="@color/cardview_shadow_start_color" />
-                                </FrameLayout>
-                            </LinearLayout>
+                                style="@android:style/Widget.Holo.Light.Spinner"
+                                android:spinnerMode="dropdown"
+                                android:paddingEnd="@dimen/dp_5"
+                                android:paddingStart="@dimen/dp_5"
+                                app:spinnerAdapter="@{viewModel.requestTypeAdapter}"
+                                app:spinnerListener="@{viewModel}"
+                                />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -113,6 +90,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:ellipsize="end"
+                                        android:background="@android:color/white"
                                         android:gravity="center_vertical"
                                         android:hint="@string/title_status_device"
                                         android:maxLines="1"

@@ -379,4 +379,7 @@
     <string name="menu_done">Done</string>
     <string name="action_apply">Apply</string>
     <string name="title_assignment_for_meeting_room">Assign device for meeting room</string>
+    <string name="title_all_requests">All requests</string>
+    <string name="title_request_for_me">Requests for me</string>
+    <string name="title_request_by_me">Requests by me</string>
 </resources>
