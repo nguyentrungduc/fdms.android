@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.Bindable;
 import android.databinding.ObservableField;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +13,8 @@ import android.support.v7.widget.PopupMenu;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.framgia.fdms.BR;
@@ -36,6 +39,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static com.framgia.fdms.screen.request.userrequest.UserRequestViewModel.RequestManagerViewType.ALL_REQUESTS;
+import static com.framgia.fdms.screen.request.userrequest.UserRequestViewModel.RequestManagerViewType.REQUESTS_BY_ME;
+import static com.framgia.fdms.screen.request.userrequest.UserRequestViewModel.RequestManagerViewType.REQUEST_FOR_ME;
 import static com.framgia.fdms.screen.requestcreation.RequestCreatorType.MY_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_CREATED_BY;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST_ALL;
@@ -54,7 +60,7 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
 
 public class UserRequestViewModel extends BaseFragmentModel
         implements UserRequestContract.ViewModel, OnRequestClickListenner,
-        DatePickerDialog.OnDateSetListener {
+        DatePickerDialog.OnDateSetListener,AdapterView.OnItemSelectedListener{
 
     private final Context mContext;
     private final Fragment mFragment;
@@ -78,15 +84,32 @@ public class UserRequestViewModel extends BaseFragmentModel
             };
 
     private int mScrollPosition;
+    private ArrayAdapter<String> mRequestTypeAdapter;
 
     public UserRequestViewModel(FragmentActivity activity, Fragment fragment) {
         mContext = activity.getApplicationContext();
         mFragment = fragment;
         mAdapter = new UserRequestAdapter(mContext, new ArrayList<Request>(), this, new User());
+        initDefaultFilter();
+        mCalendar = Calendar.getInstance();
+    }
+
+    private void initDefaultFilter() {
         setStatus(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_all_request)));
         setRelative(new Status(OUT_OF_INDEX, mContext.getString(R.string.title_request_relative)));
         setRequestBy(new Status(OUT_OF_INDEX, mContext.getString(R.string.text_request_for_me)));
-        mCalendar = Calendar.getInstance();
+        initRequestTypeAdapter();
+    }
+
+    private void initRequestTypeAdapter() {
+        List<String> requestTypes = new ArrayList<>();
+        requestTypes.add(ALL_REQUESTS,
+                mFragment.getContext().getString(R.string.title_all_requests));
+        requestTypes.add(REQUESTS_BY_ME,
+                mFragment.getContext().getString(R.string.title_request_by_me));
+        requestTypes.add(REQUEST_FOR_ME,
+                mFragment.getContext().getString(R.string.title_request_for_me));
+        mRequestTypeAdapter = new ArrayAdapter<>(mContext, R.layout.item_group, requestTypes);
     }
 
     @Override
@@ -198,7 +221,7 @@ public class UserRequestViewModel extends BaseFragmentModel
 
     @Override
     public void onUpdateActionSuccess(Request request) {
-        if (request == null){
+        if (request == null) {
             return;
         }
         mAdapter.updateItem(request);
@@ -437,5 +460,32 @@ public class UserRequestViewModel extends BaseFragmentModel
     public void setScrollPosition(int scrollPosition) {
         mScrollPosition = scrollPosition;
         notifyPropertyChanged(BR.scrollPosition);
+    }
+
+    @Bindable
+    public ArrayAdapter<String> getRequestTypeAdapter() {
+        return mRequestTypeAdapter;
+    }
+
+    public void setRequestTypeAdapter(ArrayAdapter<String> requestTypeAdapter) {
+        mRequestTypeAdapter = requestTypeAdapter;
+        notifyPropertyChanged(BR.requestTypeAdapter);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    @IntDef({ALL_REQUESTS, REQUESTS_BY_ME, REQUEST_FOR_ME})
+    public @interface RequestManagerViewType {
+        int ALL_REQUESTS = 0;
+        int REQUESTS_BY_ME = 1;
+        int REQUEST_FOR_ME = 2;
     }
 }
