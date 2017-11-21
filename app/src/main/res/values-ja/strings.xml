@@ -381,4 +381,5 @@
     <string name="title_all_requests">All requests</string>
     <string name="title_request_for_me">Requests for me</string>
     <string name="title_request_by_me">Requests by me</string>
+    <string name="using">Using -</string>
 </resources>
