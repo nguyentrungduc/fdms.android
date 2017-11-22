@@ -797,7 +797,7 @@ public final class BindingUtils {
 
         // default enable request and device
         myRequest.setVisible(true);
-        myRequest.setVisible(true);
+        myDevice.setVisible(true);
 
         switch (staffType) {
             case BO_MANAGER:
