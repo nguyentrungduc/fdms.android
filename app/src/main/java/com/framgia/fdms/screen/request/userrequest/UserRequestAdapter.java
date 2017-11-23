@@ -122,8 +122,6 @@ public class UserRequestAdapter
             mRequest = request;
             mIsShowAddDevice = (mUser.getRole() == BO_MANAGER || mUser.getRole() == BO_STAFF)
                 && mRequest.getRequestStatusId() == WAITING_DONE;
-            //fake data
-            mRequest.setHandler("- BO Staffs");
         }
 
         @Bindable

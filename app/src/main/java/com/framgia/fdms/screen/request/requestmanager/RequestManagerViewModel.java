@@ -279,6 +279,9 @@ public class RequestManagerViewModel extends BaseFragmentModel
             case Permission.BO_STAFF:
                 return new Status(RequestStatus.WAITING_DONE,
                         mContext.getString(R.string.title_waiting_done));
+            case Permission.GROUP_LEADER:
+                return new Status(RequestStatus.WAITING_FORWARD,
+                        mContext.getString(R.string.title_waiting_forward));
             default:
                 return new Status(RequestStatus.ALL,
                         mContext.getString(R.string.title_all_request));

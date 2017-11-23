@@ -68,7 +68,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">notification</string>
-    <string name="title_manage_request">Manage Request</string>
+    <string name="title_manage_request">Members\' Requests</string>
     <string name="title_scan">scanner</string>
     <string name="title_device">Device</string>
     <string name="title_code">Device Code</string>
@@ -105,7 +105,7 @@
     <string name="title_top_devices">Top Devices</string>
     <string name="title_request_dashboard">Requests Overview</string>
     <string name="title_manager_request">Manager Request</string>
-    <string name="title_my_request">My request</string>
+    <string name="title_my_request">My Requests</string>
     <string name="title_minus">—</string>
     <string name="title_plus">+</string>
     <string name="action_approve">Approve</string>
@@ -196,7 +196,7 @@
     <string name="title__card_number">Card number</string>
     <string name="title_export">Export device </string>
     <string name="title_user">User</string>
-    <string name="title_my_device">My Device</string>
+    <string name="title_my_device">My Devices</string>
     <string name="title_manager_device">Manage Device</string>
     <string name="title_pdf">PDF</string>
     <string name="title_word">Word</string>
@@ -308,7 +308,7 @@
     <string name="title_manage_maker">Manage Maker</string>
     <string name="title_manage_meeting_room">Manage Meeting Room</string>
     <string name="title_meeting_room_info">Meeting Room Info</string>
-    <string name="title_device_using_history">Device Using History</string>
+    <string name="title_device_using_history">Device Using Histories</string>
     <string name="title_logout_cap">Logout</string>
     <string name="title_scan_qrcode">SCAN QRCODE</string>
     <string name="fragment_all_device_using">All</string>
@@ -394,4 +394,5 @@
     <string name="title_request_for_me">Requests for me</string>
     <string name="title_request_by_me">Requests by me</string>
     <string name="using">Using -</string>
+    <string name="title_waiting_forward">waiting forward</string>
 </resources>
