@@ -392,6 +392,11 @@ public class RequestManagerViewModel extends BaseFragmentModel
     }
 
     @Override
+    public void showMessage(String message) {
+        mNavigator.showToast(message);
+    }
+
+    @Override
     public void onDetailRequestClick(Request request) {
         mFragment.startActivityForResult(
                 RequestDetailActivity.getInstance(mContext, request.getId()),
