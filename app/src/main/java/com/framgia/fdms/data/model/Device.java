@@ -580,7 +580,7 @@ public class Device extends BaseObservable implements Parcelable {
         if (mUser != null) {
             return mUser.getName();
         }
-        if (mMeetingRoom !=null){
+        if (mMeetingRoom != null){
             return mMeetingRoom.getName();
         }
         return null;
