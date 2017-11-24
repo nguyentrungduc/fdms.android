@@ -31,6 +31,7 @@ import com.framgia.fdms.screen.request.OnRequestClickListenner;
 import com.framgia.fdms.screen.requestcreation.RequestCreationActivity;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
+import com.framgia.fdms.utils.navigator.Navigator;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
@@ -85,13 +86,15 @@ public class UserRequestViewModel extends BaseFragmentModel
 
     private int mScrollPosition;
     private ArrayAdapter<String> mRequestTypeAdapter;
+    private Navigator mNavigator;
 
     public UserRequestViewModel(FragmentActivity activity, Fragment fragment) {
-        mContext = activity.getApplicationContext();
+        mContext = activity;
         mFragment = fragment;
         mAdapter = new UserRequestAdapter(mContext, new ArrayList<Request>(), this, new User());
         initDefaultFilter();
         mCalendar = Calendar.getInstance();
+        mNavigator = new Navigator(activity);
     }
 
     private void initDefaultFilter() {
@@ -299,7 +302,8 @@ public class UserRequestViewModel extends BaseFragmentModel
     public void onActionRequestClick(final int reqeuestId, final int actionId) {
         switch (actionId) {
             case RequestStatus.CANCELLED:
-                new LovelyTextInputDialog(mContext).setTopColorRes(R.color.colorPrimary)
+                new LovelyTextInputDialog(mContext)
+                        .setTopColorRes(R.color.colorPrimary)
                         .setTitle(R.string.msg_cancel_request)
                         .setIcon(R.drawable.ic_error_white)
                         .setConfirmButton(android.R.string.ok,
@@ -330,6 +334,11 @@ public class UserRequestViewModel extends BaseFragmentModel
                         actionId);
                 break;
         }
+    }
+
+    @Override
+    public void showMessage(String message) {
+        mNavigator.showToast(message);
     }
 
     @Override

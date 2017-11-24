@@ -129,6 +129,7 @@ public final class UserRequestPresenter implements UserRequestContract.Presenter
             .subscribe(new Consumer<Respone<Request>>() {
                 @Override
                 public void accept(Respone<Request> requestRespone) throws Exception {
+                    mViewModel.showMessage(requestRespone.getMessage());
                     mViewModel.onUpdateActionSuccess(requestRespone.getData());
                 }
             }, new RequestError() {
@@ -161,6 +162,7 @@ public final class UserRequestPresenter implements UserRequestContract.Presenter
             .subscribe(new Consumer<Respone<Request>>() {
                 @Override
                 public void accept(Respone<Request> requestRespone) throws Exception {
+                    mViewModel.showMessage(requestRespone.getMessage());
                     mViewModel.onUpdateActionSuccess(requestRespone.getData());
                 }
             }, new RequestError() {

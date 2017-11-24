@@ -40,6 +40,8 @@ interface UserRequestContract {
         void setAllowLoadMore(boolean allowLoadMore);
 
         void onActionRequestClick(int requestId, int actionId);
+
+        void showMessage(String message);
     }
 
     /**
