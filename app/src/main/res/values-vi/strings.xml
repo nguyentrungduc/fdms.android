@@ -384,4 +384,5 @@
     <string name="title_request_by_me">Requests by me</string>
     <string name="using">Using -</string>
     <string name="title_waiting_forward">waiting forward</string>
+    <string name="title_scaning">Scanning...</string>
 </resources>

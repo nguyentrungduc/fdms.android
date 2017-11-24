@@ -10,10 +10,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
+import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScannerBuilder;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
@@ -30,12 +32,14 @@ import com.framgia.fdms.screen.producer.ProducerFragment;
 import com.framgia.fdms.screen.profile.ProfileFragment;
 import com.framgia.fdms.screen.request.requestmanager.RequestManagerFragment;
 import com.framgia.fdms.screen.request.userrequest.UserRequestFragment;
-import com.framgia.fdms.screen.scanner.ScannerActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.utils.permission.PermissionUtil;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
+import com.google.android.gms.vision.barcode.Barcode;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.app.Activity.RESULT_OK;
@@ -243,7 +247,20 @@ public class MainViewModel extends BaseObservable
     }
 
     private void startScannerActivity() {
-        mActivity.startActivityForResult(ScannerActivity.newIntent(mActivity), REQUEST_SCANNER);
+        MaterialBarcodeScanner materialBarcodeScanner = new MaterialBarcodeScannerBuilder()
+                .withActivity(mActivity)
+                .withEnableAutoFocus(true)
+                .withBleepEnabled(true)
+                .withBackfacingCamera()
+                .withText(mActivity.getString(R.string.title_scaning))
+                .withResultListener(new MaterialBarcodeScanner.OnResultListener() {
+                    @Override
+                    public void onResult(Barcode barcode) {
+                        mPresenter.getDevice(barcode.rawValue);
+                    }
+                })
+                .build();
+        materialBarcodeScanner.startScan();
     }
 
     @Override

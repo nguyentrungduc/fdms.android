@@ -9,15 +9,20 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
+import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
+import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScannerBuilder;
+import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
-import com.framgia.fdms.screen.scanner.ScannerActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.utils.permission.PermissionUtil;
+import com.google.android.gms.vision.barcode.Barcode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +33,6 @@ import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_SCANNER;
 import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_USER_BORROW;
 import static com.framgia.fdms.utils.permission.PermissionUtil.MY_PERMISSIONS_REQUEST_CAMERA;
-
-import com.framgia.fdms.BR;
 
 /**
  * Exposes the data to be used in the ReturnDevice screen.
@@ -149,8 +152,26 @@ public class ReturnDeviceViewModel extends BaseObservable
     }
 
     private void startScannerActivity() {
-        mActivity.startActivityForResult(
-            ScannerActivity.newIntent(mActivity.getApplicationContext()), REQUEST_SCANNER);
+        MaterialBarcodeScanner materialBarcodeScanner = new MaterialBarcodeScannerBuilder()
+                .withActivity(mActivity)
+                .withEnableAutoFocus(true)
+                .withBleepEnabled(true)
+                .withBackfacingCamera()
+                .withText(mActivity.getString(R.string.title_scaning))
+                .withResultListener(new MaterialBarcodeScanner.OnResultListener() {
+                    @Override
+                    public void onResult(Barcode barcode) {
+                        mContextQrCode = barcode.rawValue;
+                        if (mAdapter.updateScanDevice(mContextQrCode)) {
+                            mNavigator.showToast(mActivity.getString(R.string.msg_scan_sucess));
+                            return;
+                        }
+                        mPresenter.getDeviceByCode(mContextQrCode);
+                    }
+                })
+                .build();
+        materialBarcodeScanner.startScan();
+
     }
 
     @Override
