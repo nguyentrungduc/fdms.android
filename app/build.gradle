@@ -84,7 +84,7 @@ dependencies {
   compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
     transitive = true;
   }
-
+  compile 'com.edwardvanraak:MaterialBarcodeScanner:0.0.6-ALPHA'
   testCompile "org.mockito:mockito-core:2.+"
   testCompile 'junit:junit:4.12'
   testCompile 'junit:junit:4.12'
