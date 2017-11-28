@@ -1,27 +1,22 @@
 package com.framgia.fdms.screen.devicecreation;
 
 import android.text.TextUtils;
-
 import com.framgia.fdms.data.model.Device;
-import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.BranchRepository;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
-
-import java.util.List;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import java.util.List;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.framgia.fdms.utils.Constant.OUT_OF_INDEX;
 
 /**
  * Listens to user actions from the UI ({@link CreateDeviceActivity}), retrieves the data and
@@ -208,7 +203,8 @@ final class CreateDevicePresenter implements CreateDeviceContract.Presenter {
             isValid = false;
             mViewModel.onInputOriginalPriceError();
         }
-        if (device.isDeviceMeetingRoom() && device.getMeetingRoom().getId() < 1) {
+        if (device.isDeviceMeetingRoom() && (device.getMeetingRoom() == null
+            || device.getMeetingRoom().getId() < 1)) {
             isValid = false;
             mViewModel.onInputMeetingRoomError();
         }
@@ -233,11 +229,8 @@ final class CreateDevicePresenter implements CreateDeviceContract.Presenter {
             isValid = false;
             mViewModel.onInputModellNumberError();
         }
-        if (device.getMeetingRoom() == null) {
-            device.setMeetingRoom(new Producer(OUT_OF_INDEX, ""));
-        }
-        if (device.isDeviceMeetingRoom() &&
-                device.getMeetingRoom() == null || device.getMeetingRoom().getId() < 1) {
+        if (device.isDeviceMeetingRoom() && (device.getMeetingRoom() == null
+            || device.getMeetingRoom().getId() < 1)) {
             isValid = false;
             mViewModel.onInputMeetingRoomError();
         }
