@@ -294,7 +294,9 @@ public final class BindingUtils {
         if (searchText != null) {
             searchView.setSearchText(searchText);
         }
-        searchView.setSearchHint(searchHint);
+        if(searchHint != null){
+            searchView.setSearchHint(searchHint);
+        }
     }
 
     @BindingAdapter({"pieData", "totalValue", "description"})
