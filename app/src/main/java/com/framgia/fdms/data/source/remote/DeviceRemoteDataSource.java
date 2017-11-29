@@ -39,7 +39,7 @@ import static com.framgia.fdms.utils.Constant.ApiParram.DESCRIPTION;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_BRANCH_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CATEGORY_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_CODE;
-import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_NAME;
+import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_NAME_OR_CODE;
 import static com.framgia.fdms.utils.Constant.ApiParram.DEVICE_STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.HARD_DRIVE;
 import static com.framgia.fdms.utils.Constant.ApiParram.INVOICE_NUMBER;
@@ -481,7 +481,7 @@ public class DeviceRemoteDataSource implements DeviceDataSource.RemoteDataSource
         }
 
         if (!TextUtils.isEmpty(filterModel.getDeviceName())) {
-            parrams.put(DEVICE_NAME, String.valueOf(filterModel.getDeviceName()));
+            parrams.put(DEVICE_NAME_OR_CODE, String.valueOf(filterModel.getDeviceName()));
         }
 
         if (!TextUtils.isEmpty(filterModel.getStaffName())) {

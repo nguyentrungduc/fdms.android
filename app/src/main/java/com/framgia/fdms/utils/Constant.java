@@ -114,7 +114,7 @@ public class Constant {
         public static final String PICTURE = "device[picture]";
         public static final String REQUEST_STATUS_ID = "request_status_id";
         public static final String RELATIVE_ID = "relative_id";
-        public static final String DEVICE_NAME = "device[production_name]";
+        public static final String DEVICE_NAME_OR_CODE = "text_search_device";
         public static final String STAFF_USING_NAME = "device[using]";
         public static final String ROOM_NAME = "name";
         public static final String REQUEST_TITLE = "request[title]";
