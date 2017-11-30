@@ -145,6 +145,13 @@
 
                 <include
                     layout="@layout/text_display"
+                    bind:image="@{@drawable/ic_using}"
+                    bind:text="@{device.currentUsing}"
+                    bind:title="@{@string/title_using_by}"
+                    />
+
+                <include
+                    layout="@layout/text_display"
                     bind:image="@{@drawable/ic_device_24dp}"
                     bind:text="@{device.deviceCategoryName}"
                     bind:title="@{@string/title_device_category}"

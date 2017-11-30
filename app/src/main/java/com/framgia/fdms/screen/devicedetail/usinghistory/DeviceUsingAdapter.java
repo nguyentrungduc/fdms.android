@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
-import com.framgia.fdms.data.model.DeviceUsingHistory;
+import com.framgia.fdms.data.model.NewDeviceUsingHistory;
 import com.framgia.fdms.databinding.ItemDeviceUsingBinding;
 import com.framgia.fdms.utils.Utils;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class DeviceUsingAdapter extends RecyclerView.Adapter<DeviceUsingAdapter.
     private static final String FORMAT_DATE = "%s -> %s";
 
     private Context mContext;
-    private List<DeviceUsingHistory> mHistories = new ArrayList<>();
+    private List<NewDeviceUsingHistory> mHistories = new ArrayList<>();
     private BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener mListener;
 
     public void setListener(BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener listener) {
@@ -34,7 +34,7 @@ public class DeviceUsingAdapter extends RecyclerView.Adapter<DeviceUsingAdapter.
         return new ViewHolder(binding, mListener);
     }
 
-    public void addData(List<DeviceUsingHistory> deviceUsingHistories) {
+    public void addData(List<NewDeviceUsingHistory> deviceUsingHistories) {
         if (deviceUsingHistories == null) return;
         mHistories.addAll(deviceUsingHistories);
         notifyDataSetChanged();
@@ -61,7 +61,7 @@ public class DeviceUsingAdapter extends RecyclerView.Adapter<DeviceUsingAdapter.
             mListener = listener;
         }
 
-        public void bindData(DeviceUsingHistory item) {
+        public void bindData(NewDeviceUsingHistory item) {
             if (item == null) {
                 return;
             }
@@ -71,17 +71,13 @@ public class DeviceUsingAdapter extends RecyclerView.Adapter<DeviceUsingAdapter.
             mBinding.executePendingBindings();
         }
 
-        private String getStrFormatTime(DeviceUsingHistory deviceUsingHistory) {
-            if (deviceUsingHistory == null
-                || deviceUsingHistory.getUsingDevices() == null
-                || deviceUsingHistory.getUsingDevices().size() == 0) {
+        private String getStrFormatTime(NewDeviceUsingHistory deviceUsingHistory) {
+            if (deviceUsingHistory == null) {
                 return "";
             }
             return String.format(FORMAT_DATE,
-                Utils.getStringDate(deviceUsingHistory.getUsingDevices().get(0).getBorrowDate(),
-                    mContext),
-                Utils.getStringDate(deviceUsingHistory.getUsingDevices().get(0).getReturnDate(),
-                    mContext));
+                Utils.getStringDate(deviceUsingHistory.getBorrowDate(), mContext),
+                Utils.getStringDate(deviceUsingHistory.getReturnDate(), mContext));
         }
     }
 }

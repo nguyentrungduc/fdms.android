@@ -22,10 +22,10 @@ public class DeviceUsingHistoryFragment extends Fragment {
 
     private DeviceUsingHistoryContract.ViewModel mViewModel;
 
-    public static DeviceUsingHistoryFragment newInstance(String deviceCode) {
+    public static DeviceUsingHistoryFragment newInstance(int deviceId) {
         DeviceUsingHistoryFragment fragment = new DeviceUsingHistoryFragment();
         Bundle args = new Bundle();
-        args.putString(EXTRA_DEVICE_CODE, deviceCode);
+        args.putInt(EXTRA_DEVICE_CODE, deviceId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,7 +39,7 @@ public class DeviceUsingHistoryFragment extends Fragment {
             new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
         DeviceUsingHistoryContract.Presenter presenter =
             new DeviceUsingHistoryPresenter(mViewModel, repository,
-                getArguments().getString(EXTRA_DEVICE_CODE));
+                getArguments().getInt(EXTRA_DEVICE_CODE));
 
         mViewModel.setPresenter(presenter);
         mViewModel.setDeviceUsingHistoryPresenter(presenter);

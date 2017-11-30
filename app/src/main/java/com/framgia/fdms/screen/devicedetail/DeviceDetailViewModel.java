@@ -57,7 +57,7 @@ public class DeviceDetailViewModel extends BaseObservable
         mInfomationFragment = DeviceInfomationFragment.newInstance(mDevice);
         fragments.add(mInfomationFragment);
         fragments.add(DeviceDetailHistoryFragment.newInstance(mDevice.getId()));
-        fragments.add(DeviceUsingHistoryFragment.newInstance(mDevice.getDeviceCode()));
+        fragments.add(DeviceUsingHistoryFragment.newInstance(mDevice.getId()));
         mAdapter =
                 new DeviceDetailPagerAdapter(mContext,
                         mActivity.getSupportFragmentManager(),
