@@ -4,6 +4,7 @@ import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
+import com.framgia.fdms.data.model.NewDeviceUsingHistory;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.screen.device.listdevice.DeviceFilterModel;
@@ -38,6 +39,8 @@ public class DeviceDataSource {
 
         Observable<List<DeviceUsingHistory>> getDeviceUsingHistory(String deviceCode, int page,
                                                                    int perPage);
+
+        Observable<List<NewDeviceUsingHistory>> getDeviceUsingHistories(int deviceId);
 
         Observable<List<DeviceHistoryDetail>> getDeviceDetailHistory(int deviceId, int page,
                                                                      int perPage);

@@ -1,7 +1,7 @@
 package com.framgia.fdms.screen.devicedetail.usinghistory;
 
 import com.framgia.fdms.BaseFragmentContract;
-import com.framgia.fdms.data.model.DeviceUsingHistory;
+import com.framgia.fdms.data.model.NewDeviceUsingHistory;
 import java.util.List;
 
 /**
@@ -12,7 +12,7 @@ interface DeviceUsingHistoryContract {
      * View.
      */
     interface ViewModel extends BaseFragmentContract.ViewModel {
-        void onGetUsingHistoryDeviceSuccess(List<DeviceUsingHistory> histories);
+        void onGetUsingHistoryDeviceSuccess(List<NewDeviceUsingHistory> histories);
 
         void onGetUsingHistoryDeviceFailed(String msg);
 

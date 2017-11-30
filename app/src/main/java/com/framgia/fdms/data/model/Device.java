@@ -575,6 +575,17 @@ public class Device extends BaseObservable implements Parcelable {
         notifyPropertyChanged(BR.invoiceNumber);
     }
 
+    @Bindable
+    public String getCurrentUsing() {
+        if (mUser != null) {
+            return mUser.getName();
+        }
+        if (mMeetingRoom !=null){
+            return mMeetingRoom.getName();
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return new Gson().toJson(this);

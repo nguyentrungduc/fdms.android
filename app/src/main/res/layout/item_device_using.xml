@@ -7,7 +7,7 @@
         <import type="com.framgia.fdms.utils.Utils"/>
         <variable
             name="deviceUsingHistory"
-            type="com.framgia.fdms.data.model.DeviceUsingHistory"
+            type="com.framgia.fdms.data.model.NewDeviceUsingHistory"
             />
         <variable
             name="listener"
@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp_5"
-                    android:text="@{deviceUsingHistory.staffName}"
+                    android:text="@{deviceUsingHistory.assignee.name}"
                     android:textSize="@dimen/sp_16"
                     />
 

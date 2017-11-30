@@ -4,13 +4,12 @@ import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
+import com.framgia.fdms.data.model.NewDeviceUsingHistory;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.remote.DeviceRemoteDataSource;
 import com.framgia.fdms.screen.device.listdevice.DeviceFilterModel;
-
 import io.reactivex.Observable;
-
 import java.util.List;
 
 public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
@@ -29,14 +28,14 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
     }
 
     public Observable<List<Device>> getListDevices(DeviceFilterModel filterModel, int page,
-                                                   int perPage) {
+        int perPage) {
         return mDeviceRemoteDataSource.getListDevices(filterModel, page, perPage);
     }
 
     public Observable<List<Device>> getListDevices(String deviceName, int categoryId, int statusId,
-                                                   int page, int perPage) {
+        int page, int perPage) {
         return mDeviceRemoteDataSource.getListDevices(deviceName, categoryId, statusId, page,
-                perPage);
+            perPage);
     }
 
     public Observable<Device> createDevice(Device device) {
@@ -61,12 +60,17 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
     }
 
     public Observable<List<DeviceUsingHistory>> getDeviceUsingHistory(String deviceCode, int page,
-                                                                      int perPage) {
+        int perPage) {
         return mDeviceRemoteDataSource.getDeviceUsingHistory(deviceCode, page, perPage);
     }
 
+    @Override
+    public Observable<List<NewDeviceUsingHistory>> getDeviceUsingHistories(int deviceId) {
+        return mDeviceRemoteDataSource.getDeviceUsingHistories(deviceId);
+    }
+
     public Observable<List<DeviceHistoryDetail>> getDeviceDetailHistory(int deviceId, int page,
-                                                                        int perPage) {
+        int perPage) {
         return mDeviceRemoteDataSource.getDeviceDetailHistory(deviceId, page, perPage);
     }
 
@@ -83,13 +87,13 @@ public class DeviceRepository implements DeviceDataSource.RemoteDataSource {
     }
 
     public Observable<List<Device>> getListDeviceByMeetingRoomId(int meetingRoomId, int page,
-                                                                 int perPage) {
+        int perPage) {
         return mDeviceRemoteDataSource.getListDeviceByMeetingRoomId(meetingRoomId, page, perPage);
     }
 
     @Override
     public Observable<List<DeviceUsingHistory>> getUserDevice(String status, String staffEmail,
-                                                              int page, int perPage) {
+        int page, int perPage) {
         return mDeviceRemoteDataSource.getUserDevice(status, staffEmail, page, perPage);
     }
 

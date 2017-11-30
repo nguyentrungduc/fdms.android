@@ -1,6 +1,7 @@
 package com.framgia.fdms.screen.devicedetail.usinghistory;
 
 import com.framgia.fdms.data.model.DeviceUsingHistory;
+import com.framgia.fdms.data.model.NewDeviceUsingHistory;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.DeviceRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
@@ -25,15 +26,14 @@ final class DeviceUsingHistoryPresenter implements DeviceUsingHistoryContract.Pr
     private final DeviceUsingHistoryContract.ViewModel mViewModel;
     private DeviceRepository mRepository;
     private CompositeDisposable mCompositeSubscription;
-    private String mDeviceCode;
-    private int mPage = 1;
+    private int mDeviceId;
 
     public DeviceUsingHistoryPresenter(DeviceUsingHistoryContract.ViewModel viewModel,
-        DeviceRepository repository, String deviceCode) {
+        DeviceRepository repository, int deviceId) {
         mViewModel = viewModel;
         mCompositeSubscription = new CompositeDisposable();
         mRepository = repository;
-        mDeviceCode = deviceCode;
+        mDeviceId = deviceId;
         getUsingHistoryDevice();
     }
 
@@ -49,12 +49,13 @@ final class DeviceUsingHistoryPresenter implements DeviceUsingHistoryContract.Pr
     @Override
     public void getUsingHistoryDevice() {
         mViewModel.showProgressbar();
-        Disposable subscription = mRepository.getDeviceUsingHistory(mDeviceCode, mPage, PER_PAGE)
+        Disposable disposable = mRepository.getDeviceUsingHistories(mDeviceId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<List<DeviceUsingHistory>>() {
+            .subscribe(new Consumer<List<NewDeviceUsingHistory>>() {
                 @Override
-                public void accept(List<DeviceUsingHistory> deviceUsingHistories) throws Exception {
+                public void accept(List<NewDeviceUsingHistory> deviceUsingHistories)
+                    throws Exception {
                     mViewModel.onGetUsingHistoryDeviceSuccess(deviceUsingHistories);
                 }
             }, new RequestError() {
@@ -69,13 +70,14 @@ final class DeviceUsingHistoryPresenter implements DeviceUsingHistoryContract.Pr
                     mViewModel.hideProgressbar();
                 }
             });
-        mCompositeSubscription.add(subscription);
+
+        mCompositeSubscription.add(disposable);
     }
 
     @Override
     public void onLoadMore() {
-        mPage++;
-        getUsingHistoryDevice();
+        // no ops
+        mViewModel.hideProgressbar();
     }
 
     @Override

@@ -14,8 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
-import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScannerBuilder;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
@@ -32,10 +30,10 @@ import com.framgia.fdms.screen.producer.ProducerFragment;
 import com.framgia.fdms.screen.profile.ProfileFragment;
 import com.framgia.fdms.screen.request.requestmanager.RequestManagerFragment;
 import com.framgia.fdms.screen.request.userrequest.UserRequestFragment;
+import com.framgia.fdms.screen.scanner.ScannerActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
 import com.framgia.fdms.utils.permission.PermissionUtil;
 import com.framgia.fdms.widget.FDMSShowcaseSequence;
-import com.google.android.gms.vision.barcode.Barcode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -247,20 +245,8 @@ public class MainViewModel extends BaseObservable
     }
 
     private void startScannerActivity() {
-        MaterialBarcodeScanner materialBarcodeScanner = new MaterialBarcodeScannerBuilder()
-                .withActivity(mActivity)
-                .withEnableAutoFocus(true)
-                .withBleepEnabled(true)
-                .withBackfacingCamera()
-                .withText(mActivity.getString(R.string.title_scaning))
-                .withResultListener(new MaterialBarcodeScanner.OnResultListener() {
-                    @Override
-                    public void onResult(Barcode barcode) {
-                        mPresenter.getDevice(barcode.rawValue);
-                    }
-                })
-                .build();
-        materialBarcodeScanner.startScan();
+        mNavigator.startActivityForResult(ScannerActivity.newIntent(mNavigator.getContext()),
+            REQUEST_SCANNER);
     }
 
     @Override

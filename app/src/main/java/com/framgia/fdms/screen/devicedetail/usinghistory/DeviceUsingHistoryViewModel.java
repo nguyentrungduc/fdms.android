@@ -3,16 +3,13 @@ package com.framgia.fdms.screen.devicedetail.usinghistory;
 import android.databinding.Bindable;
 import android.support.v4.app.Fragment;
 import android.view.View;
-
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.BaseFragmentContract;
 import com.framgia.fdms.BaseFragmentModel;
 import com.framgia.fdms.BaseRecyclerViewAdapter;
-import com.framgia.fdms.data.model.DeviceUsingHistory;
-import com.framgia.fdms.data.model.User;
+import com.framgia.fdms.data.model.NewDeviceUsingHistory;
 import com.framgia.fdms.screen.user.UserActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
-
 import java.util.List;
 
 /**
@@ -20,8 +17,8 @@ import java.util.List;
  */
 
 public class DeviceUsingHistoryViewModel extends BaseFragmentModel
-        implements DeviceUsingHistoryContract.ViewModel,
-        BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<DeviceUsingHistory> {
+    implements DeviceUsingHistoryContract.ViewModel,
+    BaseRecyclerViewAdapter.OnRecyclerViewItemClickListener<NewDeviceUsingHistory> {
 
     private BaseFragmentContract.Presenter mPresenter;
     private DeviceUsingHistoryContract.Presenter mDeviceUsingHistoryPresenter;
@@ -65,7 +62,7 @@ public class DeviceUsingHistoryViewModel extends BaseFragmentModel
     }
 
     @Override
-    public void onGetUsingHistoryDeviceSuccess(List<DeviceUsingHistory> histories) {
+    public void onGetUsingHistoryDeviceSuccess(List<NewDeviceUsingHistory> histories) {
         mAdapter.addData(histories);
         setEmptyViewVisible(histories != null && histories.size() != 0 ? View.GONE : View.VISIBLE);
     }
@@ -82,11 +79,9 @@ public class DeviceUsingHistoryViewModel extends BaseFragmentModel
     }
 
     @Override
-    public void onItemRecyclerViewClick(DeviceUsingHistory item) {
-        User user = new User();
-        user.setName(item.getStaffName());
-        user.setEmail(item.getStaffEmail());
-        mNavigator.startActivity(UserActivity.getInstance(mNavigator.getContext(), user));
+    public void onItemRecyclerViewClick(NewDeviceUsingHistory item) {
+        mNavigator.startActivity(
+            UserActivity.getInstance(mNavigator.getContext(), item.getAssignee()));
     }
 
     @Bindable
