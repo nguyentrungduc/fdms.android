@@ -24,6 +24,11 @@ public class UserRemoteDataSource implements UserDataSource.RemoteDataSource {
     }
 
     @Override
+    public Observable<Respone<User>> loginWsm(String userName, String passWord) {
+        return mFDMSApi.loginWsm(userName, passWord);
+    }
+
+    @Override
     public Observable<User> register(RegisterRequest request) {
         // TODO: 4/4/17 replace by call API later
         return Observable.just(null);

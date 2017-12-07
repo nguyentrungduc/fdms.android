@@ -33,6 +33,11 @@ public class UserRepository
         return mUserRemoteDataSource.login(userName, passWord);
     }
 
+    @Override
+    public Observable<Respone<User>> loginWsm(String userName, String passWord) {
+        return mUserRemoteDataSource.loginWsm(userName, passWord);
+    }
+
     public Observable<User> register(RegisterRequest request) {
         return mUserRemoteDataSource.register(request);
     }
