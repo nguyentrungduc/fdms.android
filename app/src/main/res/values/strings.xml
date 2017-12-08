@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FGAS</string>
+    <string name="app_name">FGAS 1.0.1.inventory</string>
     <string name="action_login">Login</string>
     <string name="title_user_name">User Name</string>
     <string name="title_password">Password</string>
@@ -396,4 +396,5 @@
     <string name="using">Using -</string>
     <string name="title_waiting_forward">waiting forward</string>
     <string name="title_using_by">Using by</string>
+    <string name="action_login_inventory">Inventory</string>
 </resources>

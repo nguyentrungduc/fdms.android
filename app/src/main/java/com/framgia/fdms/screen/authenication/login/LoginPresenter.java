@@ -56,7 +56,7 @@ public class LoginPresenter extends BaseObservable implements LoginContract.Pres
 
     @Override
     public void login(final String userName, final String passWord) {
-        Disposable subscription = mUserRepository.loginWsm(userName, passWord)
+        Disposable subscription = mUserRepository.login(userName, passWord)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(new Consumer<Disposable>() {
@@ -102,6 +102,37 @@ public class LoginPresenter extends BaseObservable implements LoginContract.Pres
             mView.onInputPasswordError();
         }
         return isValid;
+    }
+
+    @Override
+    public void loginInventory() {
+        Disposable subscription = mUserRepository.loginInventory()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mView.showProgressbar();
+                    }
+                })
+                .subscribe(new Consumer<Respone<User>>() {
+                    @Override
+                    public void accept(Respone<User> userRespone) throws Exception {
+                        saveUser(userRespone.getData());
+                        mView.onLoginSuccess();
+                    }
+                }, new RequestError() {
+                    @Override
+                    public void onRequestError(BaseException error) {
+                        mView.onLoginError(error.getMessage());
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mView.hideProgressbar();
+                    }
+                });
+        mCompositeSubscriptions.add(subscription);
     }
 
     public void saveRememberAccount(String user, String passWord) {

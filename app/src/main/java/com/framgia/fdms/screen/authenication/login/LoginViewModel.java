@@ -76,6 +76,10 @@ public class LoginViewModel extends BaseObservable implements LoginContract.View
         notifyPropertyChanged(BR.passwordError);
     }
 
+    public void onLoginInventoryClick(){
+        mPresenter.loginInventory();
+    }
+
     public void onLoginClick() {
         if (!mPresenter.validateDataInput(mUsername, mPassword)) {
             return;

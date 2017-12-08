@@ -29,5 +29,7 @@ public interface LoginContract {
         void login(String userName, String passWord);
 
         boolean validateDataInput(String username, String password);
+
+        void loginInventory();
     }
 }

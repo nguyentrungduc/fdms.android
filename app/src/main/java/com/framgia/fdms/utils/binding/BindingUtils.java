@@ -808,38 +808,9 @@ public final class BindingUtils {
         myRequest.setVisible(false);
 
         // default enable request and device
-        myRequest.setVisible(true);
-        myDevice.setVisible(true);
+        manageDevice.setVisible(true);
+        manageMeetingRoom.setVisible(true);
 
-        switch (staffType) {
-            case BO_MANAGER:
-            case BO_STAFF:
-            case ADMIN:
-                manageDevice.setVisible(true);
-                manageRequest.setVisible(true);
-                manageVendor.setVisible(true);
-                manageMaker.setVisible(true);
-                manageMeetingRoom.setVisible(true);
-                deviceUsingHistory.setVisible(true);
-                manageDeviceGroup.setVisible(true);
-                manageDeviceCategory.setVisible(true);
-                break;
-            case DIVISION_MANAGER:
-            case SECTION_MANAGER:
-                deviceUsingHistory.setVisible(true);
-                manageDevice.setVisible(true);
-                manageRequest.setVisible(true);
-                break;
-            case GROUP_LEADER:
-                deviceUsingHistory.setVisible(true);
-                manageRequest.setVisible(true);
-                break;
-            case ACCOUNTANT:
-                manageDevice.setVisible(true);
-                break;
-            default:
-                break;
-        }
     }
 
     @BindingAdapter({"statusDrawerLayout", "side"})

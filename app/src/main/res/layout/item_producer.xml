@@ -37,6 +37,7 @@
                 >
                 <ImageView
                     android:layout_width="@dimen/dp_25"
+                    android:visibility="gone"
                     android:layout_height="@dimen/dp_25"
                     android:layout_margin="@dimen/dp_5"
                     android:onClick="@{() -> viewModel.onEditProducerClick(producer)}"
@@ -46,6 +47,7 @@
                 <ImageView
                     android:layout_width="@dimen/dp_25"
                     android:layout_height="@dimen/dp_25"
+                    android:visibility="gone"
                     android:layout_margin="@dimen/dp_5"
                     android:onClick="@{() -> viewModel.onDeleteProducerClick(producer)}"
                     app:srcCompat="@drawable/ic_x_button"

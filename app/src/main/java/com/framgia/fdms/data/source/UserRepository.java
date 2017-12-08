@@ -38,6 +38,11 @@ public class UserRepository
         return mUserRemoteDataSource.loginWsm(userName, passWord);
     }
 
+    @Override
+    public Observable<Respone<User>> loginInventory() {
+        return mUserRemoteDataSource.loginInventory();
+    }
+
     public Observable<User> register(RegisterRequest request) {
         return mUserRemoteDataSource.register(request);
     }

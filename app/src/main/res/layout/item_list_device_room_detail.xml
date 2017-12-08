@@ -62,11 +62,12 @@
                             tools:ignore="ContentDescription,UnusedAttribute"
                             />
                         <TextView
+                            android:paddingLeft="@dimen/dp_8"
+                            android:paddingStart="@dimen/dp_8"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp_3"
                             android:text="@{viewModel.deviceName}"
-                            android:textColor="@color/color_blued"
                             android:textSize="@dimen/sp_16"
                             android:textStyle="bold"
                             />
@@ -89,9 +90,11 @@
                         android:layout_marginStart="@dimen/dp_3"
                         android:ellipsize="end"
                         android:maxLines="1"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"
                         android:maxWidth="@dimen/dp_170"
                         android:text="@{viewModel.deviceCode}"
-                        android:textSize="@dimen/sp_14"
+                        android:textSize="@dimen/sp_16"
                         />
                     <TextView
                         android:layout_width="wrap_content"

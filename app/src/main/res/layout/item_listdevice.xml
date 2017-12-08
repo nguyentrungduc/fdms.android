@@ -68,9 +68,8 @@
                     android:ellipsize="marquee"
                     android:lines="1"
                     android:text='@{item.productionName}'
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/sp_16"
-                    android:textStyle="bold"
+                    android:textColor="@color/color_dark_gray"
+                    android:textSize="@dimen/sp_14"
                     />
             </LinearLayout>
             <LinearLayout
@@ -129,8 +128,9 @@
                     android:layout_marginStart="@dimen/dp_7"
                     android:maxLines="1"
                     android:text='@{item.deviceCode}'
-                    android:textColor="@color/color_dark_gray"
-                    android:textSize="@dimen/sp_14"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold"
                     />
             </LinearLayout>
 
