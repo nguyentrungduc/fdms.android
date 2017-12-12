@@ -1,5 +1,7 @@
 package com.framgia.fdms.screen.meetingroomdetail;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,11 +21,17 @@ public class DetailMeetingRoomActivity extends AppCompatActivity {
 
     private DetailMeetingRoomContract.ViewModel mViewModel;
 
+    public static Intent getInstance(Context context, Producer meetingRoom){
+        Intent intent = new Intent(context, DetailMeetingRoomActivity.class);
+        intent.putExtra(Constant.BundleConstant.BUNDLE_MEETING_ROOM, meetingRoom);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Producer meetingRoom =
-            this.getIntent().getExtras().getParcelable(Constant.BundleConstant.BUNDLE_MEETING_ROOM);
+            getIntent().getExtras().getParcelable(Constant.BundleConstant.BUNDLE_MEETING_ROOM);
         Navigator navigator = new Navigator(this);
         mViewModel = new DetailMeetingRoomViewModel(this, meetingRoom, navigator);
 

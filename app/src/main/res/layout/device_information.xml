@@ -10,6 +10,9 @@
             name="device"
             type="com.framgia.fdms.data.model.Device"
             />
+        <variable
+            name="listenner"
+            type="com.framgia.fdms.screen.devicedetail.DeviceInfoListenner"/>
     </data>
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -85,7 +88,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_calendar_24dp"
+                        bind:srcCompat="@drawable/ic_calendar_24dp"
                         />
 
                     <LinearLayout
@@ -143,12 +146,62 @@
                     bind:title="@{@string/title_device_status}"
                     />
 
-                <include
-                    layout="@layout/text_display"
-                    bind:image="@{@drawable/ic_using}"
-                    bind:text="@{device.currentUsing}"
-                    bind:title="@{@string/title_using_by}"
-                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()-> listenner.onCurrentUsingPersonClicked(device)}"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp_8"
+                    android:visibility="@{device.currentUsing!=null? View.VISIBLE : View.GONE}"
+                    >
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        bind:srcCompat="@drawable/ic_using"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/dp_16"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dp_5"
+                                android:text="@{@string/title_using_by}"
+                                android:textSize="@dimen/sp_18"
+                                />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:text="@{device.currentUsing}"
+                                android:textSize="@dimen/sp_16"
+                                android:textStyle="bold"
+                                />
+                        </LinearLayout>
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_1"
+                            android:layout_marginTop="@dimen/dp_5"
+                            android:background="@color/color_gray_mos"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <include
                     layout="@layout/text_display"
