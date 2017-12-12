@@ -8,11 +8,15 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
+
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.screen.devicecreation.CreateDeviceActivity;
 import com.framgia.fdms.screen.devicecreation.DeviceStatusType;
+import com.framgia.fdms.screen.devicedetail.DeviceInfoListenner;
+import com.framgia.fdms.screen.meetingroomdetail.DetailMeetingRoomActivity;
+import com.framgia.fdms.screen.user.UserActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
 
 import static android.app.Activity.RESULT_OK;
@@ -25,7 +29,7 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_EDIT;
  */
 
 public class DeviceInfomationViewModel extends BaseObservable
-    implements DeviceInfomationContract.ViewModel {
+        implements DeviceInfomationContract.ViewModel, DeviceInfoListenner {
 
     private DeviceInfomationContract.Presenter mPresenter;
     private Device mDevice;
@@ -35,7 +39,7 @@ public class DeviceInfomationViewModel extends BaseObservable
     private Navigator mNavigator;
 
     public DeviceInfomationViewModel(Context context, FragmentActivity activity, Device device,
-        Navigator navigator) {
+                                     Navigator navigator) {
         mContext = context;
         mActivity = activity;
         mDevice = device;
@@ -65,8 +69,8 @@ public class DeviceInfomationViewModel extends BaseObservable
     @Override
     public void onEditDevice() {
         mActivity.startActivityForResult(
-            CreateDeviceActivity.getInstance(mContext, mDevice, DeviceStatusType.EDIT),
-            REQUEST_EDIT);
+                CreateDeviceActivity.getInstance(mContext, mDevice, DeviceStatusType.EDIT),
+                REQUEST_EDIT);
     }
 
     @Override
@@ -106,7 +110,7 @@ public class DeviceInfomationViewModel extends BaseObservable
     @Override
     public void onError() {
         Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.error_device_detail,
-            Snackbar.LENGTH_SHORT).show();
+                Snackbar.LENGTH_SHORT).show();
     }
 
     public ObservableField<Integer> getProgressBarVisibility() {
@@ -126,5 +130,17 @@ public class DeviceInfomationViewModel extends BaseObservable
     private void showInformation() {
         if (mDevice == null) onError();
         onGetDeviceSuccess(mDevice);
+    }
+
+    @Override
+    public void onCurrentUsingPersonClicked(Device device) {
+        if (device.getUser() != null) {
+            mNavigator.startActivity(UserActivity.getInstance(mNavigator.getContext(),
+                    device.getUser()));
+        } else if (device.getMeetingRoom() != null) {
+            mNavigator.startActivity(DetailMeetingRoomActivity.getInstance(mNavigator.getContext(),
+                    device.getMeetingRoom()));
+        }
+
     }
 }

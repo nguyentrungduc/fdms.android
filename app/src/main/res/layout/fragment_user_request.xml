@@ -57,6 +57,7 @@
                                 style="@android:style/Widget.Holo.Light.Spinner"
                                 android:spinnerMode="dropdown"
                                 android:paddingEnd="@dimen/dp_5"
+                                android:visibility="gone"
                                 android:paddingStart="@dimen/dp_5"
                                 app:spinnerAdapter="@{viewModel.requestTypeAdapter}"
                                 app:spinnerListener="@{viewModel}"
@@ -67,8 +68,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/dp_2"
                                 android:baselineAligned="false"
-                                android:orientation="horizontal"
-                                android:weightSum="3">
+                                android:orientation="horizontal">
 
                                 <FrameLayout
                                     android:layout_width="@dimen/dp_0"
@@ -100,6 +100,7 @@
                                 </FrameLayout>
 
                                 <FrameLayout
+                                    android:visibility="gone"
                                     android:layout_width="@dimen/dp_0"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/dp_5"
@@ -138,6 +139,7 @@
                                 </FrameLayout>
 
                                 <FrameLayout
+                                    android:visibility="gone"
                                     android:layout_width="@dimen/dp_0"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/dp_5"

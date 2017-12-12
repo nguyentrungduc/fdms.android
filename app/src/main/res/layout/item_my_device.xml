@@ -39,9 +39,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{device.deviceCategoryName}"
-                android:textColor="@color/color_gray"
-                android:textSize="@dimen/sp_18"
+                android:text="@{device.deviceCode}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"
                 android:textStyle="bold"
                 />
 
@@ -56,16 +56,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@{device.deviceCode}"
-                    android:textColor="@color/color_blue_170"
-                    android:textSize="@dimen/sp_16"
+                    android:text="@{device.deviceCategoryName}"
+                    android:textColor="@color/color_dark_gray"
+                    android:textSize="@dimen/sp_14"
                     android:textStyle="italic"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp_15"
+                    android:textColor="@color/color_dark_gray"
+                    android:textSize="@dimen/sp_14"
                     app:borrowDateText="@{device.borrowDate}"
                     app:returnDateText="@{device.returnDate}"
                     />

@@ -572,9 +572,8 @@ public class ProducerViewModel extends BaseObservable implements ProducerContrac
     @Override
     public void onItemRecyclerViewClick(Producer item) {
         if (isShowBranchFilter()) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(Constant.BundleConstant.BUNDLE_MEETING_ROOM, item);
-            mNavigator.startActivity(DetailMeetingRoomActivity.class, bundle);
+            mNavigator.startActivity(DetailMeetingRoomActivity.getInstance(mNavigator.getContext(),
+                    item));
         }
     }
 
