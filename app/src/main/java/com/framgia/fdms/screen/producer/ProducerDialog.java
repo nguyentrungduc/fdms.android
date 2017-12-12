@@ -168,6 +168,9 @@ public class ProducerDialog extends DialogFragment implements ProducerDialogCont
     }
 
     public void onChooseGroupTypeClick() {
+        if (mDialogType == EDIT){
+            return;
+        }
         dismiss();
         mActionCallback.onChooseGroupTypeClickDialog(mTempProducer, mDeviceGroup);
     }
