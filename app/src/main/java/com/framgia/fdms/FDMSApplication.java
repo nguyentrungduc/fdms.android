@@ -6,6 +6,8 @@ import android.support.multidex.MultiDex;
 import com.crashlytics.android.Crashlytics;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
+import com.framgia.fdms.data.source.api.service.WSMServiceClient;
+
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -24,6 +26,7 @@ public class FDMSApplication extends Application {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
         FDMSServiceClient.initialize(this);
+        WSMServiceClient.initialize(this);
         sInstant = this;
     }
 
