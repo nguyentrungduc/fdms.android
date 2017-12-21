@@ -34,8 +34,7 @@ public interface FDMSApi {
         @Query("user[password]") String passWord);
 
     @POST("api/login-wsm")
-    Observable<Respone<User>> loginWsm(@Query("user[email]") String userName,
-        @Query("user[password]") String passWord);
+    Observable<Respone<User>> loginWsm(@Query("user[email]") String userName);
 
     @GET("api/devices")
     Observable<Respone<List<Device>>> getListDevices(@QueryMap Map<String, String> parrams);

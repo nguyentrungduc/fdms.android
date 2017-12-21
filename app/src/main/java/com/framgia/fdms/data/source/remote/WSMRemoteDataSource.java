@@ -6,6 +6,7 @@ import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.data.model.WSMResponse;
 import com.framgia.fdms.data.model.WSMUserResponse;
 import com.framgia.fdms.data.source.WSMDataSource;
+import com.framgia.fdms.data.source.api.request.SignInRequest;
 import com.framgia.fdms.data.source.api.service.WSMApi;
 
 import io.reactivex.Observable;
@@ -26,6 +27,7 @@ public class WSMRemoteDataSource extends BaseWSMRemoteDataSource implements WSMD
         String deviceId = Settings.Secure.getString(
                 FDMSApplication.getInstant().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-        return mWSMApi.loginByWsmApi(userName, passWord, deviceId);
+        SignInRequest signInRequest = new SignInRequest(userName, passWord, deviceId);
+        return mWSMApi.loginByWsmApi(signInRequest);
     }
 }

@@ -58,6 +58,12 @@ public class LoginViewModel extends BaseObservable implements LoginContract.View
     }
 
     @Override
+    public void onLoginError(int msg) {
+        Snackbar.make(mActivity.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT)
+                .show();
+    }
+
+    @Override
     public void onLoginSuccess() {
         mContext.startActivity(MainActivity.getInstance(mContext));
         ((Activity) (mContext)).finish();

@@ -2,13 +2,19 @@ package com.framgia.fdms.screen.authenication.login;
 
 import android.databinding.BaseObservable;
 import android.text.TextUtils;
+
+import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.User;
+import com.framgia.fdms.data.model.WSMResponse;
+import com.framgia.fdms.data.model.WSMUserResponse;
 import com.framgia.fdms.data.source.UserRepository;
+import com.framgia.fdms.data.source.WSMRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceApi;
 import com.google.gson.Gson;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -27,14 +33,16 @@ import static com.framgia.fdms.data.source.local.sharepref.SharePreferenceKey.US
 public class LoginPresenter extends BaseObservable implements LoginContract.Presenter {
     private LoginContract.ViewModel mView;
     private UserRepository mUserRepository;
+    private WSMRepository mWSMRepository;
     private CompositeDisposable mCompositeSubscriptions = new CompositeDisposable();
     private SharePreferenceApi mSharedPreferences;
 
     public LoginPresenter(LoginContract.ViewModel view, UserRepository userRepository,
-        SharePreferenceApi sharedPreferences) {
+                          SharePreferenceApi sharedPreferences, WSMRepository wsmRepository) {
         this.mView = view;
         mUserRepository = userRepository;
         mSharedPreferences = sharedPreferences;
+        mWSMRepository = wsmRepository;
     }
 
     @Override
@@ -56,37 +64,74 @@ public class LoginPresenter extends BaseObservable implements LoginContract.Pres
 
     @Override
     public void login(final String userName, final String passWord) {
-        Disposable subscription = mUserRepository.login(userName, passWord)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(new Consumer<Disposable>() {
-                @Override
-                public void accept(Disposable disposable) throws Exception {
-                    mView.showProgressbar();
-                }
-            })
-            .subscribe(new Consumer<Respone<User>>() {
-                @Override
-                public void accept(Respone<User> userRespone) throws Exception {
-                    saveUser(userRespone.getData());
-                    if (mView.isRememberAccount()) {
-                        saveRememberAccount(userName, passWord);
-                    } else {
-                        removeRememberAccount();
+        Disposable subscription = mWSMRepository.loginByWsmApi(userName, passWord)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mView.showProgressbar();
                     }
-                    mView.onLoginSuccess();
-                }
-            }, new RequestError() {
-                @Override
-                public void onRequestError(BaseException error) {
-                    mView.onLoginError(error.getMessage());
-                }
-            }, new Action() {
-                @Override
-                public void run() throws Exception {
-                    mView.hideProgressbar();
-                }
-            });
+                })
+                .subscribe(new Consumer<WSMResponse<WSMUserResponse>>() {
+                    @Override
+                    public void accept(WSMResponse<WSMUserResponse> wsmUserResponseWSMResponse)
+                            throws Exception {
+                        if (wsmUserResponseWSMResponse == null ||
+                                wsmUserResponseWSMResponse.getData() == null ||
+                                wsmUserResponseWSMResponse.getData().getUserInfo() == null) {
+                            mView.onLoginError(R.string.msg_login_error);
+                            return;
+                        }
+                        loginFgasServer(userName, passWord);
+                    }
+                }, new RequestError() {
+                    @Override
+                    public void onRequestError(BaseException error) {
+                        mView.onLoginError(error.getMessage());
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mView.hideProgressbar();
+                    }
+                });
+        mCompositeSubscriptions.add(subscription);
+    }
+
+
+    private void loginFgasServer(final String email,final String passWord) {
+        Disposable subscription = mUserRepository.loginWsm(email)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mView.showProgressbar();
+                    }
+                })
+                .subscribe(new Consumer<Respone<User>>() {
+                    @Override
+                    public void accept(Respone<User> userRespone) throws Exception {
+                        saveUser(userRespone.getData());
+                        if (mView.isRememberAccount()) {
+                            saveRememberAccount(email, passWord);
+                        } else {
+                            removeRememberAccount();
+                        }
+                        mView.onLoginSuccess();
+                    }
+                }, new RequestError() {
+                    @Override
+                    public void onRequestError(BaseException error) {
+                        mView.onLoginError(error.getMessage());
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mView.hideProgressbar();
+                    }
+                });
         mCompositeSubscriptions.add(subscription);
     }
 

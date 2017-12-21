@@ -6,7 +6,7 @@ package com.framgia.fdms.utils;
 public class Constant {
     // TODO: 4/3/2017 develop later
     public static final String END_POINT_URL = "http://stg-dms.framgia.vn/";
-    public static final String WSM_END_POINT_URL = "http://edev.framgia.vn/";
+    public static final String WSM_END_POINT_URL = "https://edev.framgia.vn/";
     public static final int OUT_OF_INDEX = -1;
     public static final int PER_PAGE = 20;
     public static final int FIRST_PAGE = 1;

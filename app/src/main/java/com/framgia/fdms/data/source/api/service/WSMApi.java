@@ -4,8 +4,10 @@ import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.model.WSMResponse;
 import com.framgia.fdms.data.model.WSMUserResponse;
+import com.framgia.fdms.data.source.api.request.SignInRequest;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -15,8 +17,5 @@ import retrofit2.http.Query;
 
 public interface WSMApi {
     @POST("api/sign_in")
-    Observable<WSMResponse<WSMUserResponse>> loginByWsmApi(
-            @Query("sign_in[email]") String userName,
-            @Query("sign_in[password]") String passWord,
-            @Query("sign_in[device_id]") String deviceId);
+    Observable<WSMResponse<WSMUserResponse>> loginByWsmApi(@Body SignInRequest signInRequest);
 }

@@ -18,7 +18,7 @@ public class UserDataSource {
     public interface RemoteDataSource {
         Observable<Respone<User>> login(String userName, String passWord);
 
-        Observable<Respone<User>> loginWsm(String userName, String passWord);
+        Observable<Respone<User>> loginWsm(String email);
 
         Observable<User> register(RegisterRequest request);
 

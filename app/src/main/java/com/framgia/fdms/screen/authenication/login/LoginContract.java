@@ -10,6 +10,8 @@ public interface LoginContract {
     interface ViewModel extends BaseViewModel<Presenter> {
         void onLoginError(String msg);
 
+        void onLoginError(int msg);
+
         void onLoginSuccess();
 
         void onInputUserNameError();

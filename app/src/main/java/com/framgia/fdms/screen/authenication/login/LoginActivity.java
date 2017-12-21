@@ -7,9 +7,12 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.source.UserRepository;
+import com.framgia.fdms.data.source.WSMRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
+import com.framgia.fdms.data.source.api.service.WSMServiceClient;
 import com.framgia.fdms.data.source.local.sharepref.SharePreferenceImp;
 import com.framgia.fdms.data.source.remote.UserRemoteDataSource;
+import com.framgia.fdms.data.source.remote.WSMRemoteDataSource;
 import com.framgia.fdms.databinding.ActivityLoginBinding;
 
 /**
@@ -29,8 +32,11 @@ public class LoginActivity extends Activity {
         mViewModel = new LoginViewModel(this, this);
         UserRepository repository =
             new UserRepository(new UserRemoteDataSource(FDMSServiceClient.getInstance()));
+        WSMRepository wsmRepository =
+                new WSMRepository(new WSMRemoteDataSource(WSMServiceClient.getInstance()));
+
         LoginContract.Presenter presenter = new LoginPresenter(mViewModel, repository,
-            new SharePreferenceImp(getApplicationContext()));
+            new SharePreferenceImp(getApplicationContext()), wsmRepository);
         mViewModel.setPresenter(presenter);
         ActivityLoginBinding binding =
             DataBindingUtil.setContentView(this, R.layout.activity_login);
