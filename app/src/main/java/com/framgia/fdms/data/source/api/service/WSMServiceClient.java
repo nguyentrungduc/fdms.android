@@ -9,7 +9,7 @@ public class WSMServiceClient extends ServiceClient {
     private static WSMApi sApi;
 
     public static void initialize(@NonNull Application application) {
-        sApi = createService(application, Constant.END_POINT_URL, WSMApi.class);
+        sApi = createService(application, Constant.WSM_END_POINT_URL, WSMApi.class);
     }
 
     public static WSMApi getInstance() {

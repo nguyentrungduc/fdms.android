@@ -164,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_2"
-                    android:text="@{item.deviceStatusId == Constant.USING ? item.user.name : item.deviceStatusName}"
+                    android:text="@{item.deviceStatusId == Constant.USING ? item.currentUsing : item.deviceStatusName}"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_14"
                     />
