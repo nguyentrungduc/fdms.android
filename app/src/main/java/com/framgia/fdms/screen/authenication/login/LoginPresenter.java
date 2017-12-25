@@ -56,7 +56,7 @@ public class LoginPresenter extends BaseObservable implements LoginContract.Pres
 
     @Override
     public void login(final String userName, final String passWord) {
-        Disposable subscription = mUserRepository.login(userName, passWord)
+        Disposable subscription = mUserRepository.loginWsm(userName, passWord)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(new Consumer<Disposable>() {
