@@ -385,4 +385,6 @@
     <string name="using">Using -</string>
     <string name="title_waiting_forward">waiting forward</string>
     <string name="title_using_by">Using by</string>
+    <string name="msg_assgin_meetingroom_missing_id">Please add a meeting room to assign device</string>
+    <string name="action_please_wait">Please wait!</string>
 </resources>

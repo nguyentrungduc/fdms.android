@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.assignment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -13,11 +14,14 @@ import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Device;
+import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.deviceselection.DeviceSelectionActivity;
+import com.framgia.fdms.screen.meetingroomdetail.DetailMeetingRoomActivity;
+import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.screen.selection.SelectionType;
 import com.framgia.fdms.utils.navigator.Navigator;
@@ -49,12 +53,21 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     private Status mStaff;
 
     private Status mMeetingRoom;
+    private ProgressDialog mDialog;
 
     public AssignmentViewModel(AppCompatActivity activity) {
         mActivity = activity;
         mNavigator = new Navigator(activity);
+
         mContext = activity.getApplicationContext();
         mAdapter = new AssignmentAdapter(mContext, this);
+    }
+
+    private void initDialog() {
+        mDialog = new ProgressDialog(mActivity);
+        mDialog.setTitle(R.string.title_loading);
+        mDialog.setMessage(mActivity.getString(R.string.action_please_wait));
+        mDialog.setCancelable(false);
     }
 
     @Override
@@ -195,6 +208,34 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
     @Override
     public void onError(int stringId) {
         mNavigator.showToast(stringId);
+    }
+
+    @Override
+    public void onAssignDeviceForMeetingRoomSuccess(Status room) {
+        mNavigator.startActivity(DetailMeetingRoomActivity.getInstance(mNavigator.getContext(),
+                (Producer) room));
+    }
+
+    @Override
+    public void onAssignDeviceForRequestSuccess(int id) {
+        mNavigator.startActivity(RequestDetailActivity.getInstance(mNavigator.getContext(), id));
+    }
+
+    @Override
+    public void showProgress() {
+        if (mDialog == null) {
+            initDialog();
+        }
+        if (!mDialog.isShowing()) {
+            mDialog.show();
+        }
+    }
+
+    @Override
+    public void hideProgress() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
     }
 
     public AppCompatActivity getActivity() {

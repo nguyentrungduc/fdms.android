@@ -16,6 +16,7 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -54,22 +55,34 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
     }
 
     @Override
-    public void registerAssignmentForRequest(AssignmentRequest request) {
-        if (!validateAssignment(request.getDevices())) {
+    public void registerAssignmentForRequest(final AssignmentRequest assignmentRequest) {
+        if (!validateAssignment(assignmentRequest.getDevices())) {
             return;
         }
-        Disposable subscription = mRequestRepository.registerAssignment(request)
+        Disposable subscription = mRequestRepository.assignDeviceForRequest(assignmentRequest)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mViewModel.showProgress();
+                    }
+                })
                 .subscribe(new Consumer<Request>() {
                     @Override
                     public void accept(Request request) throws Exception {
-                        mViewModel.onAssignmentSuccess();
+                        mViewModel.onAssignDeviceForRequestSuccess(assignmentRequest.getRequestId());
                     }
                 }, new RequestError() {
                     @Override
                     public void onRequestError(BaseException error) {
+                        mViewModel.hideProgress();
                         mViewModel.onLoadError(error.getMessage());
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mViewModel.hideProgress();
                     }
                 });
         mSubscription.add(subscription);
@@ -83,9 +96,15 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
         if (!validateAssignment(requests)) {
             return;
         }
-        Disposable disposable = mRequestRepository.registerAssignment(staff.getId(), requests)
+        Disposable disposable = mRequestRepository.assignDeviceForNewMember(staff.getId(), requests)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mViewModel.showProgress();
+                    }
+                })
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String status) throws Exception {
@@ -94,15 +113,49 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
                 }, new RequestError() {
                     @Override
                     public void onRequestError(BaseException error) {
+                        mViewModel.hideProgress();
                         mViewModel.onLoadError(error.getMessage());
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mViewModel.hideProgress();
                     }
                 });
         mSubscription.add(disposable);
     }
 
     @Override
-    public void registerAssignmentForMeetingRoom(Status room, List<Device> requests) {
-        // TODO: 11/16/2017 assign for meeting room when api available
+    public void registerAssignmentForMeetingRoom(final Status room, List<Device> requests) {
+       if (!isValidateMeetingRoom(room)){
+            return;
+       }
+        Disposable disposable = mRequestRepository.assignDeviceForMeetingRoom(room.getId(), requests)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        mViewModel.showProgress();
+                    }
+                })
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String status) throws Exception {
+                        mViewModel.onAssignDeviceForMeetingRoomSuccess(room);
+                    }
+                }, new RequestError() {
+                    @Override
+                    public void onRequestError(BaseException error) {
+                        mViewModel.onLoadError(error.getMessage());
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mViewModel.hideProgress();
+                    }
+                });
+        mSubscription.add(disposable);
     }
 
     @Override
@@ -157,6 +210,15 @@ final class AssignmentPresenter implements AssignmentContract.Presenter {
         if (staff == null) {
             isValid = false;
             mViewModel.onError(R.string.msg_input_staff_error);
+        }
+        return isValid;
+    }
+
+    public boolean isValidateMeetingRoom(Status room) {
+        boolean isValid = true;
+        if (room == null || room.getId() <= 0) {
+            isValid = false;
+            mViewModel.onError(R.string.msg_assgin_meetingroom_missing_id);
         }
         return isValid;
     }

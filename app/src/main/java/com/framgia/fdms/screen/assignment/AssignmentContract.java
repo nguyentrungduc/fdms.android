@@ -37,6 +37,14 @@ interface AssignmentContract {
         void onAssignmentSuccess();
 
         void onError(int stringId);
+
+        void onAssignDeviceForMeetingRoomSuccess(Status room);
+
+        void onAssignDeviceForRequestSuccess(int id);
+
+        void showProgress();
+
+        void hideProgress();
     }
 
     /**

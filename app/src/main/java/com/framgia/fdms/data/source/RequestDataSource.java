@@ -40,8 +40,10 @@ public interface RequestDataSource {
 
         Observable<Request> getRequest(int requetsId);
 
-        Observable<Request> registerAssignment(AssignmentRequest request);
+        Observable<Request> assignDeviceForRequest(AssignmentRequest request);
 
-        Observable<String> registerAssignment(int staffId, List<Device> items);
+        Observable<String> assignDeviceForNewMember(int staffId, List<Device> items);
+
+        Observable<String> assignDeviceForMeetingRoom(int meetingRoomId, List<Device> items);
     }
 }
