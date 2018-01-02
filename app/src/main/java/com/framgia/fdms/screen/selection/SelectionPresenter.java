@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.selection;
 
+import com.framgia.fdms.data.model.AssigneeUser;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.BranchRepository;
@@ -235,9 +236,9 @@ public final class SelectionPresenter implements SelectionContract.Presenter {
         Disposable subscription = mStatusRepository.getListRelative(mKeySearch, mPage, PER_PAGE)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<List<Status>>() {
+            .subscribe(new Consumer<List<AssigneeUser>>() {
                 @Override
-                public void accept(List<Status> statuses) throws Exception {
+                public void accept(List<AssigneeUser> statuses) throws Exception {
                     mViewModel.onGetDataSuccess(statuses);
                     mViewModel.setAllowLoadMore(statuses != null && statuses.size() == PER_PAGE);
                 }

@@ -119,7 +119,7 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
         }
         if (mUser.getRole() == BO_MANAGER
                 && mRequestType == RequestCreatorType.MEMBER_REQUEST
-                && request.getGroup().equals(null)) {
+                && request.getGroupId() <= 0) {
             isValid = false;
             mViewModel.onInputGroupForError();
         }
@@ -143,11 +143,6 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
     }
 
     @Override
-    public void getGroupByStaffId() {
-        mViewModel.onGetGroupSuccess(fakeData());
-    }
-
-    @Override
     public void onStart() {
     }
 
@@ -156,12 +151,4 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
         mSubscription.clear();
     }
 
-    public List<String> fakeData() {
-        List<String> data = new ArrayList<>();
-        data.add("Back office");
-        data.add("Div 1");
-        data.add("Div 2");
-        data.add("Div 3");
-        return data;
-    }
 }

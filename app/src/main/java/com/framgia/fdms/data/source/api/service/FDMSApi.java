@@ -1,5 +1,6 @@
 package com.framgia.fdms.data.source.api.service;
 
+import com.framgia.fdms.data.model.AssigneeUser;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
@@ -72,7 +73,7 @@ public interface FDMSApi {
     Observable<Respone<List<Status>>> getListStatusRequest();
 
     @GET("api/user_groups")
-    Observable<Respone<List<Status>>> getListRelative(@QueryMap Map<String, String> params);
+    Observable<Respone<List<AssigneeUser>>> getListRelative(@QueryMap Map<String, String> params);
 
     @GET("api/user_assigns")
     Observable<Respone<List<Status>>> getListAssign();
