@@ -129,14 +129,26 @@ public interface FDMSApi {
         @QueryMap Map<String, String> params);
 
     @POST("api/assignments")
-    Observable<Respone<Request>> registerAssignment(@Query("assignment[request_id]") int requestId,
-        @Query("assignment[assignee_id]") int assigneeId,
-        @Query("assignment[description]") String description,
-        @Query("device_ids[]") List<Integer> deviceIds);
+    Observable<Respone<Request>> assignDeviceForRequest(@Query("assignment[request_id]")
+                                                                int requestId,
+                                                        @Query("assignment[assignee_id]")
+                                                                int assigneeId,
+                                                        @Query("assignment[description]")
+                                                                String description,
+                                                        @Query("device_ids[]")
+                                                                List<Integer> deviceIds);
 
     @POST("api/assign_devices")
-    Observable<Respone<String>> registerAssignmentForStaff(@Query("staff_id") int staffId,
-        @Query("device_ids[]") List<Integer> deviceIds);
+    Observable<Respone<String>> assignDeviceForNewMember(@Query("staff_id")
+                                                                 int staffId,
+                                                         @Query("device_ids[]")
+                                                                 List<Integer> deviceIds);
+
+    @POST("api/assign_devices")
+    Observable<Respone<String>> assignDeviceForMeetingRoom(@Query("meeting_room_id")
+                                                                   int staffId,
+                                                           @Query("device_ids[]")
+                                                                   List<Integer> deviceIds);
 
     @GET("api/requests/{id}")
     Observable<Respone<Request>> getRequest(@Path("id") int requetsId);

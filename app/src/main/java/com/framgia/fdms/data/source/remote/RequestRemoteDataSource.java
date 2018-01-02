@@ -153,13 +153,13 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<Request> registerAssignment(AssignmentRequest request) {
+    public Observable<Request> assignDeviceForRequest(AssignmentRequest request) {
         List<Integer> values = new ArrayList<>();
         for (Device device : request.getDevices()) {
             values.add(device.getId());
         }
 
-        return mFDMSApi.registerAssignment(request.getRequestId(),
+        return mFDMSApi.assignDeviceForRequest(request.getRequestId(),
                 request.getAssigneeId(),
                 request.getDescription(),
                 values)
@@ -173,12 +173,28 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<String> registerAssignment(int staffId, List<Device> items) {
+    public Observable<String> assignDeviceForNewMember(int staffId, List<Device> items) {
         List<Integer> values = new ArrayList<>();
         for (Device device : items) {
             values.add(device.getId());
         }
-        return mFDMSApi.registerAssignmentForStaff(staffId, values)
+        return mFDMSApi.assignDeviceForNewMember(staffId, values)
+                .flatMap(new Function<Respone<String>, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(@NonNull Respone<String> requestRespone)
+                            throws Exception {
+                        return Utils.getMesssage(requestRespone);
+                    }
+                });
+    }
+
+    @Override
+    public Observable<String> assignDeviceForMeetingRoom(int meetingRoomId, List<Device> items) {
+        List<Integer> values = new ArrayList<>();
+        for (Device device : items) {
+            values.add(device.getId());
+        }
+        return mFDMSApi.assignDeviceForMeetingRoom(meetingRoomId, values)
                 .flatMap(new Function<Respone<String>, ObservableSource<String>>() {
                     @Override
                     public ObservableSource<String> apply(@NonNull Respone<String> requestRespone)

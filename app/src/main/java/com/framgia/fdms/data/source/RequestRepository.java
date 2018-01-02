@@ -81,12 +81,17 @@ public class RequestRepository implements RequestRepositoryContract {
     }
 
     @Override
-    public Observable<Request> registerAssignment(AssignmentRequest request) {
-        return mRemoteDataSource.registerAssignment(request);
+    public Observable<Request> assignDeviceForRequest(AssignmentRequest request) {
+        return mRemoteDataSource.assignDeviceForRequest(request);
     }
 
     @Override
-    public Observable<String> registerAssignment(int staffId, List<Device> items) {
-        return mRemoteDataSource.registerAssignment(staffId, items);
+    public Observable<String> assignDeviceForNewMember(int staffId, List<Device> items) {
+        return mRemoteDataSource.assignDeviceForNewMember(staffId, items);
+    }
+
+    @Override
+    public Observable<String> assignDeviceForMeetingRoom(int meetingRoomId, List<Device> items) {
+        return mRemoteDataSource.assignDeviceForMeetingRoom(meetingRoomId, items);
     }
 }
