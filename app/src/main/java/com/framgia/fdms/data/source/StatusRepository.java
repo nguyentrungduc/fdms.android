@@ -1,5 +1,6 @@
 package com.framgia.fdms.data.source;
 
+import com.framgia.fdms.data.model.AssigneeUser;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.remote.StatusRemoteDataSource;
 import io.reactivex.Observable;
@@ -36,7 +37,7 @@ public class StatusRepository {
         return mStatusRemoteDataSource.getListStatusEditRequest(requestStatusId, query);
     }
 
-    public Observable<List<Status>> getListRelative(String query, int page, int perPage) {
+    public Observable<List<AssigneeUser>> getListRelative(String query, int page, int perPage) {
         return mStatusRemoteDataSource.getListRelative(query, page, perPage);
     }
 

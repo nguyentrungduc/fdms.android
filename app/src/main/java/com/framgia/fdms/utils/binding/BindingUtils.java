@@ -197,12 +197,12 @@ public final class BindingUtils {
 
     @BindingAdapter({"spinnerAdapter"})
     public static void setAdapterForSpinner(AppCompatSpinner spinner,
-                                            ArrayAdapter<String> adapter) {
+                                            ArrayAdapter adapter) {
         spinner.setAdapter(adapter);
     }
 
     @BindingAdapter({"spinnerAdapter"})
-    public static void setAdapterForSpinner(CustomSpinner spinner, ArrayAdapter<String> adapter) {
+    public static void setAdapterForSpinner(CustomSpinner spinner, ArrayAdapter adapter) {
         spinner.setAdapter(adapter);
     }
 

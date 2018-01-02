@@ -40,8 +40,6 @@ public interface RequestCreationContract {
         void onGetUserSuccess(User user);
 
         void onGetDefaultAssignSuccess(Status assignee);
-
-        void onGetGroupSuccess(List<String> groups);
     }
 
     /**
@@ -55,7 +53,5 @@ public interface RequestCreationContract {
         boolean validateDataInput(RequestCreatorRequest request);
 
         void getDefaultAssignee();
-
-        void getGroupByStaffId();
     }
 }

@@ -109,9 +109,6 @@
             android:name=".screen.requestcreation.assignee.SelectAssigneeRequestActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".screen.requestcreation.requestfor.SelectRequestForActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".screen.device.listdevice.selectcategory.SelectDeviceCategoryActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -128,6 +125,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".screen.device.listdevice.selectbranch.SelectBranchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".screen.requestcreation.requestfor.SelectRequestForActivity"
             android:screenOrientation="portrait" />
     </application>
 

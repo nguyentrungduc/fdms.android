@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.framgia.fdms.FDMSApplication;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.anotation.RequestStatus;
+import com.framgia.fdms.data.model.AssigneeUser;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
@@ -146,12 +147,12 @@ public class StatusRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<List<Status>> getListRelative(final String query, int page, int perPage) {
+    public Observable<List<AssigneeUser>> getListRelative(final String query, int page, int perPage) {
         return mFDMSApi.getListRelative(getParams(query, page, perPage))
-                .flatMap(new Function<Respone<List<Status>>, ObservableSource<List<Status>>>() {
+                .flatMap(new Function<Respone<List<AssigneeUser>>, ObservableSource<List<AssigneeUser>>>() {
                     @Override
-                    public ObservableSource<List<Status>> apply(
-                            @NonNull Respone<List<Status>> listRespone) throws Exception {
+                    public ObservableSource<List<AssigneeUser>> apply(
+                            @NonNull Respone<List<AssigneeUser>> listRespone) throws Exception {
                         return Utils.getResponse(listRespone);
                     }
                 });
