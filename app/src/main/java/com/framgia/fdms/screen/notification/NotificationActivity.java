@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import com.framgia.fdms.R;
 import com.framgia.fdms.databinding.ActivityNotificationBinding;
@@ -35,6 +36,12 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_notification, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         mViewModel.onStart();
@@ -48,7 +55,14 @@ public class NotificationActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) onBackPressed();
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            case R.id.action_read_all_notification:
+                mViewModel.setAllNotificationAsRead();
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

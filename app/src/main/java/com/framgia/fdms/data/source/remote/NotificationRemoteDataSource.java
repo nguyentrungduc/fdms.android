@@ -1,8 +1,15 @@
 package com.framgia.fdms.data.source.remote;
 
 import com.framgia.fdms.data.model.Notification;
+import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.source.NotificationDataSource;
+import com.framgia.fdms.data.source.api.service.FDMSApi;
+import com.framgia.fdms.utils.Utils;
+
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,31 +19,45 @@ import java.util.List;
  * <></>
  */
 
-public class NotificationRemoteDataSource implements NotificationDataSource {
+public class NotificationRemoteDataSource extends BaseRemoteDataSource implements
+        NotificationDataSource {
 
     private static NotificationRemoteDataSource sInstances;
 
-    private NotificationRemoteDataSource() {
+    public NotificationRemoteDataSource(FDMSApi fdmsApi) {
+        super(fdmsApi);
     }
 
-    public static NotificationRemoteDataSource getInstances() {
+
+    public static NotificationRemoteDataSource getInstances(FDMSApi fdmsApi) {
         if (sInstances == null) {
-            sInstances = new NotificationRemoteDataSource();
+            sInstances = new NotificationRemoteDataSource(fdmsApi);
         }
         return sInstances;
     }
 
     @Override
-    public Observable<List<Notification>> getNotifications() {
-        List<Notification> notifications = new ArrayList<>();
-        notifications.add(new Notification("Để làm ứng dụng Android", "Hoang Van Nha", new Date()));
-        notifications.add(new Notification("Để làm ứng dụng IOS", "Nguyen Van Tuan", new Date()));
-        notifications.add(new Notification("Để làm ứng dụng WEB", "Nguyễn Hà Phan", new Date()));
-        notifications.add(new Notification("Để làm ứng dụng Ruby", "Tran Hiếu", new Date()));
-        notifications.add(
-            new Notification("Để làm ứng dụng Test Android", "Tran Dinh Sang", new Date()));
-        notifications.add(new Notification("Để làm ứng dụng Android", "Hoang Van Nha", new Date()));
-        notifications.add(new Notification("Để làm ứng dụng Android", "Hoang Van Nha", new Date()));
-        return Observable.just(notifications);
+    public Observable<List<Notification>> getNotifications(int page, int perPage) {
+        return mFDMSApi.getNotifications(page, perPage)
+                .flatMap(new Function<Respone<List<Notification>>,
+                        ObservableSource<List<Notification>>>() {
+                    @Override
+                    public ObservableSource<List<Notification>> apply(
+                            Respone<List<Notification>> listRespone) throws Exception {
+                        return Utils.getResponse(listRespone);
+                    }
+                });
+    }
+
+    @Override
+    public Observable<String> markNoficationAsRead(int notifcationId) {
+        // TODO: 1/3/18 implement api
+        return Observable.just("markNoficationAsRead "+notifcationId +" successfully");
+    }
+
+    @Override
+    public Observable<String> markAllNoficationsAsRead() {
+        // TODO: 1/3/18 implement api
+        return Observable.just("markAllNoficationsAsRead successfully");
     }
 }

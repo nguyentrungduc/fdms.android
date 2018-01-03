@@ -163,10 +163,8 @@
     <string name="title_assignt">Assignt</string>
     <string name="title_available">Available</string>
     <string name="title_using">Using</string>
-    <string formatted="false" name="text_request_title_notification">Request %s is created</string>
-    <string formatted="false" name="text_from_notification">From %s</string>
     <string formatted="false" name="text_date_time_notification">At %s</string>
-    <string name="title_notification">Notification</string>
+    <string name="title_notification">Notifications</string>
     <string name="action_user_return_device">User return device</string>
     <string name="title_percent">\t%\t</string>
     <string name="text_number_notification_more">99+</string>
@@ -398,4 +396,5 @@
     <string name="title_using_by">Using by</string>
     <string name="msg_assgin_meetingroom_missing_id">Please add a meeting room to assign device</string>
     <string name="action_please_wait">Please wait!</string>
+    <string name="menu_read_all_notification">Mark all as read</string>
 </resources>
