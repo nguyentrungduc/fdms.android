@@ -33,6 +33,8 @@ public interface MainContract {
         void onError(String msg);
 
         void setTabDeviceManage(Device device);
+
+        void onGetUnreadNotificationSuccess(String unreadNotifications);
     }
 
     /**
@@ -40,6 +42,8 @@ public interface MainContract {
      */
     interface Presenter extends BasePresenter {
         void getDevice(String resultQrCode);
+
+        void getUnreadNotifications();
 
         void getCurrentUser();
 

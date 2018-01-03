@@ -21,6 +21,7 @@ import java.util.List;
 
 public class NotificationRemoteDataSource extends BaseRemoteDataSource implements
         NotificationDataSource {
+    private static int UNREAD_NOTIFICATION = 101;
 
     private static NotificationRemoteDataSource sInstances;
 
@@ -52,12 +53,23 @@ public class NotificationRemoteDataSource extends BaseRemoteDataSource implement
     @Override
     public Observable<String> markNoficationAsRead(int notifcationId) {
         // TODO: 1/3/18 implement api
-        return Observable.just("markNoficationAsRead "+notifcationId +" successfully");
+        return Observable.just("markNoficationAsRead " + notifcationId + " successfully");
     }
 
     @Override
     public Observable<String> markAllNoficationsAsRead() {
         // TODO: 1/3/18 implement api
         return Observable.just("markAllNoficationsAsRead successfully");
+    }
+
+    @Override
+    public Observable<Integer> getUnreadNotification() {
+        // TODO: 1/3/18 implement api later
+        UNREAD_NOTIFICATION--;
+        if (UNREAD_NOTIFICATION > 96) {
+            return Observable.just(UNREAD_NOTIFICATION);
+        }else {
+            return Observable.just(0);
+        }
     }
 }

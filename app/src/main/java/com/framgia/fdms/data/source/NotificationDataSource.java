@@ -15,4 +15,8 @@ public interface NotificationDataSource {
     Observable<String> markNoficationAsRead(int notifcationId);
 
     Observable<String> markAllNoficationsAsRead();
+
+    Observable<Integer> getUnreadNotification();
+
+
 }
