@@ -10,5 +10,9 @@ import java.util.List;
  */
 
 public interface NotificationDataSource {
-    Observable<List<Notification>> getNotifications();
+    Observable<List<Notification>> getNotifications(int page, int perPage);
+
+    Observable<String> markNoficationAsRead(int notifcationId);
+
+    Observable<String> markAllNoficationsAsRead();
 }

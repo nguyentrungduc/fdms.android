@@ -18,6 +18,14 @@ public interface NotificationContract {
         void onLoadNotificationSuccess(List<Notification> notifications);
 
         void onLoadNotificationFails(String msg);
+
+        void setAllowLoadMore(boolean isLoadingMore);
+
+        void setAllNotificationAsRead();
+
+        void onMarkAllNotificationAsReadFailed(String message);
+
+        void onMarkAllNotificationAsReadSuccessfull(String result);
     }
 
     /**
@@ -25,5 +33,13 @@ public interface NotificationContract {
      */
     interface Presenter extends BasePresenter {
         void getNotifications();
+
+        void loadMoreNotification();
+
+        void refreshData();
+
+        void markAllNotificaionAsRead();
+
+        void markNotificaionAsRead(Notification notification);
     }
 }

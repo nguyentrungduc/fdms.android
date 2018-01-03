@@ -47,4 +47,5 @@
     <color name="color_red_200">#EF9A9A</color>
     <color name="color_red_900">#B71C1C</color>
     <color name="color_accent_100">#FF8A88</color>
+    <color name="color_blue_gray_50">#EDF1FA</color>
 </resources>

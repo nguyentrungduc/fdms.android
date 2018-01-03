@@ -2,7 +2,11 @@ package com.framgia.fdms.data.model;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import com.android.databinding.library.baseAdapters.BR;
+
+import com.framgia.fdms.BR;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 /**
@@ -11,46 +15,82 @@ import java.util.Date;
  */
 
 public class Notification extends BaseObservable {
-    private String mTitle;
-    private String mUserRequest;
-    private Date mDateTime;
+    @SerializedName("id")
+    @Expose
+    private int mId;
+    @SerializedName("body")
+    @Expose
+    private String mBody;
+    @SerializedName("link")
+    @Expose
+    private String mLink;
+    @SerializedName("checked")
+    @Expose
+    private boolean mChecked;
+    @SerializedName("created_at")
+    @Expose
+    private Date mCreatedAt;
+    @SerializedName("sender")
+    @Expose
+    private User mSender;
 
-    public Notification() {
+    @Bindable
+    public int getId() {
+        return mId;
     }
 
-    public Notification(String title, String userRequest, Date dateTime) {
-        mTitle = title;
-        mUserRequest = userRequest;
-        mDateTime = dateTime;
+    public void setId(int id) {
+        mId = id;
+        notifyPropertyChanged(BR.id);
     }
 
     @Bindable
-    public String getTitle() {
-        return mTitle;
+    public String getBody() {
+        return mBody;
     }
 
-    public void setTitle(String title) {
-        mTitle = title;
-        notifyPropertyChanged(BR.title);
-    }
-
-    @Bindable
-    public String getUserRequest() {
-        return mUserRequest;
-    }
-
-    public void setUserRequest(String userRequest) {
-        mUserRequest = userRequest;
-        notifyPropertyChanged(BR.userRequest);
+    public void setBody(String body) {
+        mBody = body;
+        notifyPropertyChanged(BR.body);
     }
 
     @Bindable
-    public Date getDateTime() {
-        return mDateTime;
+    public String getLink() {
+        return mLink;
     }
 
-    public void setDateTime(Date dateTime) {
-        mDateTime = dateTime;
-        notifyPropertyChanged(BR.dateTime);
+    public void setLink(String link) {
+        mLink = link;
+        notifyPropertyChanged(BR.link);
+    }
+
+    @Bindable
+    public boolean isChecked() {
+        return mChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        mChecked = checked;
+        notifyPropertyChanged(BR.checked);
+    }
+
+    @Bindable
+    public Date getCreatedAt() {
+        return mCreatedAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        mCreatedAt = createdAt;
+        notifyPropertyChanged(BR.creatAt);
+    }
+
+    @Bindable
+    public User getSender() {
+        return mSender;
+    }
+
+    public void setSender(User sender) {
+        mSender = sender;
+        notifyPropertyChanged(BR.sender);
     }
 }

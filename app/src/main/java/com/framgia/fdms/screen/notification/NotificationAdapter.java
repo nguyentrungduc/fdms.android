@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.framgia.fdms.data.model.Notification;
 import com.framgia.fdms.databinding.ItemNotificationBinding;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,12 +21,23 @@ public class NotificationAdapter
     private List<Notification> mNotifications;
     private LayoutInflater mInflater;
 
-    public NotificationAdapter(NotificationContract.ViewModel viewModel,
-        List<Notification> notifications) {
+    public NotificationAdapter(NotificationContract.ViewModel viewModel) {
         mViewModel = viewModel;
-        mNotifications = notifications;
+        mNotifications = new ArrayList<>();
     }
 
+    public void clearData() {
+        mNotifications.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addData(List<Notification> notifications) {
+        if (notifications==null){
+            return;
+        }
+        mNotifications.addAll(notifications);
+        notifyDataSetChanged();
+    }
     @Override
     public NotificationHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (mInflater == null) {

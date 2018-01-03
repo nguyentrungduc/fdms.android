@@ -1,6 +1,7 @@
 package com.framgia.fdms.data.source;
 
 import com.framgia.fdms.data.model.Notification;
+import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.data.source.remote.NotificationRemoteDataSource;
 import io.reactivex.Observable;
 import java.util.List;
@@ -15,19 +16,29 @@ public class NotificationRepository implements NotificationDataSource {
     private static NotificationRepository sInstances;
     private NotificationRemoteDataSource mDataSource;
 
-    private NotificationRepository() {
-        mDataSource = NotificationRemoteDataSource.getInstances();
+    private NotificationRepository(FDMSApi fdmsApi) {
+        mDataSource = NotificationRemoteDataSource.getInstances(fdmsApi);
     }
 
-    public static NotificationRepository getInstances() {
+    public static NotificationRepository getInstances(FDMSApi fdmsApi) {
         if (sInstances == null) {
-            sInstances = new NotificationRepository();
+            sInstances = new NotificationRepository(fdmsApi);
         }
         return sInstances;
     }
 
     @Override
-    public Observable<List<Notification>> getNotifications() {
-        return mDataSource.getNotifications();
+    public Observable<List<Notification>> getNotifications(int page, int perPage) {
+        return mDataSource.getNotifications(page, perPage);
+    }
+
+    @Override
+    public Observable<String> markNoficationAsRead(int notifcationId) {
+        return mDataSource.markNoficationAsRead(notifcationId);
+    }
+
+    @Override
+    public Observable<String> markAllNoficationsAsRead() {
+        return mDataSource.markAllNoficationsAsRead();
     }
 }
