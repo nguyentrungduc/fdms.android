@@ -80,6 +80,7 @@ public class MainViewModel extends BaseObservable
     private int mCurrentItem;
     private String mStatusDrawerLayout;
     private Navigator mNavigator;
+    private String mUnreadNotifications;
     private User mUser;
     private View.OnClickListener mListener = new View.OnClickListener() {
         @Override
@@ -306,6 +307,11 @@ public class MainViewModel extends BaseObservable
         setCurrentItem(R.id.item_manage_device);
     }
 
+    @Override
+    public void onGetUnreadNotificationSuccess(String unreadNotifications) {
+        setUnreadNotifications(unreadNotifications);
+    }
+
     public AppCompatActivity getActivity() {
         return mActivity;
     }
@@ -374,6 +380,16 @@ public class MainViewModel extends BaseObservable
     public void setUser(User user) {
         mUser = user;
         notifyPropertyChanged(BR.user);
+    }
+
+    @Bindable
+    public String getUnreadNotifications() {
+        return mUnreadNotifications;
+    }
+
+    public void setUnreadNotifications(String unreadNotifications) {
+        mUnreadNotifications = unreadNotifications;
+        notifyPropertyChanged(BR.unreadNotifications);
     }
 
     /**

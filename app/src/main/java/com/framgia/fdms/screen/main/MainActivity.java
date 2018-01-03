@@ -6,9 +6,11 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.source.NotificationRepository;
 import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.data.source.local.UserLocalDataSource;
@@ -30,7 +32,7 @@ import static com.framgia.fdms.utils.Utils.changeLanguage;
  * Newmain Screen.
  */
 public class MainActivity extends AppCompatActivity
-    implements DashBoardDetailViewModel.OnDashBoardDetailClickListener {
+        implements DashBoardDetailViewModel.OnDashBoardDetailClickListener {
     private MainContract.ViewModel mViewModel;
 
     public static Intent getInstance(Context context) {
@@ -45,13 +47,22 @@ public class MainActivity extends AppCompatActivity
         SharePreferenceImp preferences = new SharePreferenceImp(this);
         initLanguage(preferences.get(LANGUAGE_PRES, Integer.class));
         ActivityNewmainBinding binding =
-            DataBindingUtil.setContentView(this, R.layout.activity_newmain);
+                DataBindingUtil.setContentView(this, R.layout.activity_newmain);
         DeviceRepository deviceRepository =
-            new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
+                new DeviceRepository(new DeviceRemoteDataSource(FDMSServiceClient.getInstance()));
+        UserRepository userRepository =  new UserRepository(
+                new UserLocalDataSource(new SharePreferenceImp(this)));
+        NotificationRepository notificationRepository = NotificationRepository
+                .getInstances(FDMSServiceClient.getInstance());
+
         mViewModel = new MainViewModel(this);
         MainContract.Presenter presenter =
-            new MainPresenter(mViewModel, deviceRepository, new SharePreferenceImp(this),
-                new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))));
+                new MainPresenter(mViewModel,
+                        deviceRepository,
+                        new SharePreferenceImp(this),
+                        userRepository,
+                        notificationRepository);
+
         mViewModel.setPresenter(presenter);
         binding.setViewModel((MainViewModel) mViewModel);
         setSupportActionBar(binding.toolbar);
@@ -81,7 +92,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-        @NonNull int[] grantResults) {
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (mViewModel != null) {
             mViewModel.onRequestPermissionsResult(requestCode, permissions, grantResults);

@@ -41,4 +41,9 @@ public class NotificationRepository implements NotificationDataSource {
     public Observable<String> markAllNoficationsAsRead() {
         return mDataSource.markAllNoficationsAsRead();
     }
+
+    @Override
+    public Observable<Integer> getUnreadNotification() {
+        return mDataSource.getUnreadNotification();
+    }
 }

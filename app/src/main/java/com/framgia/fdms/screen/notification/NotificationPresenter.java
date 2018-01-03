@@ -55,6 +55,8 @@ public final class NotificationPresenter implements NotificationContract.Present
                     @Override
                     public void accept(List<Notification> notifications) throws Exception {
                         mViewModel.onLoadNotificationSuccess(notifications);
+                        mViewModel.setAllowLoadMore(notifications != null
+                                && notifications.size() == PER_PAGE);
                     }
                 }, new RequestError() {
                     @Override
