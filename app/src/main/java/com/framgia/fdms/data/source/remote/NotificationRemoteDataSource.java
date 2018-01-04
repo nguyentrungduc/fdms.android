@@ -52,14 +52,32 @@ public class NotificationRemoteDataSource extends BaseRemoteDataSource implement
 
     @Override
     public Observable<String> markNoficationAsRead(int notifcationId) {
-        // TODO: 1/3/18 implement api
-        return Observable.just("markNoficationAsRead " + notifcationId + " successfully");
+        return mFDMSApi.markNotificationAsRead(notifcationId)
+                .flatMap(new Function<Respone, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(Respone stringRespone)
+                            throws Exception {
+                        if (stringRespone != null) {
+                            return Observable.just(stringRespone.getMessage());
+                        }
+                        return Observable.error(new Exception());
+                    }
+                });
     }
 
     @Override
     public Observable<String> markAllNoficationsAsRead() {
-        // TODO: 1/3/18 implement api
-        return Observable.just("markAllNoficationsAsRead successfully");
+        return mFDMSApi.markAllNotificationsAsRead()
+                .flatMap(new Function<Respone, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(Respone stringRespone)
+                            throws Exception {
+                        if (stringRespone != null) {
+                            return Observable.just(stringRespone.getMessage());
+                        }
+                        return Observable.error(new Exception());
+                    }
+                });
     }
 
     @Override
@@ -68,7 +86,7 @@ public class NotificationRemoteDataSource extends BaseRemoteDataSource implement
         UNREAD_NOTIFICATION--;
         if (UNREAD_NOTIFICATION > 96) {
             return Observable.just(UNREAD_NOTIFICATION);
-        }else {
+        } else {
             return Observable.just(0);
         }
     }
