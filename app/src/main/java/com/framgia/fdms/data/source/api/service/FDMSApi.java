@@ -276,4 +276,12 @@ public interface FDMSApi {
     @GET("/api/notifications")
     Observable<Respone<List<Notification>>> getNotifications(@Query("page") int page,
                                                              @Query("per_page") int perPage);
+
+
+    @PATCH("/api/notifications/read_all")
+    Observable<Respone> markAllNotificationsAsRead();
+
+    @PATCH("/api/notifications/{id}")
+    Observable<Respone> markNotificationAsRead(@Path("id") int notificationId);
+
 }
