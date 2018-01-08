@@ -1,18 +1,19 @@
 package com.framgia.fdms.data.source.remote;
 
 import com.framgia.fdms.data.model.Notification;
+import com.framgia.fdms.data.model.NotificationResult;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.source.NotificationDataSource;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
-import com.framgia.fdms.utils.Utils;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import static com.framgia.fdms.utils.Constant.FIRST_PAGE;
+import static com.framgia.fdms.utils.Constant.PER_PAGE;
 
 /**
  * Created by Nhahv0902 on 6/1/2017.
@@ -21,7 +22,6 @@ import java.util.List;
 
 public class NotificationRemoteDataSource extends BaseRemoteDataSource implements
         NotificationDataSource {
-    private static int UNREAD_NOTIFICATION = 101;
 
     private static NotificationRemoteDataSource sInstances;
 
@@ -40,12 +40,19 @@ public class NotificationRemoteDataSource extends BaseRemoteDataSource implement
     @Override
     public Observable<List<Notification>> getNotifications(int page, int perPage) {
         return mFDMSApi.getNotifications(page, perPage)
-                .flatMap(new Function<Respone<List<Notification>>,
+                .flatMap(new Function<Respone<NotificationResult>,
                         ObservableSource<List<Notification>>>() {
                     @Override
                     public ObservableSource<List<Notification>> apply(
-                            Respone<List<Notification>> listRespone) throws Exception {
-                        return Utils.getResponse(listRespone);
+                            Respone<NotificationResult> result) throws Exception {
+                        if (result == null) {
+                            return Observable.error(new NullPointerException());
+                        }
+                        if (result.isError()) {
+                            return Observable.error(
+                                    new NullPointerException("ERROR" + result.getStatus()));
+                        }
+                        return Observable.just(result.getData().getNotifications());
                     }
                 });
     }
@@ -82,12 +89,20 @@ public class NotificationRemoteDataSource extends BaseRemoteDataSource implement
 
     @Override
     public Observable<Integer> getUnreadNotification() {
-        // TODO: 1/3/18 implement api later
-        UNREAD_NOTIFICATION--;
-        if (UNREAD_NOTIFICATION > 96) {
-            return Observable.just(UNREAD_NOTIFICATION);
-        } else {
-            return Observable.just(0);
-        }
+        return mFDMSApi.getNotifications(FIRST_PAGE, PER_PAGE)
+                .flatMap(new Function<Respone<NotificationResult>, Observable<Integer>>() {
+                    @Override
+                    public Observable<Integer> apply(
+                            Respone<NotificationResult> result) throws Exception {
+                        if (result == null) {
+                            return Observable.error(new NullPointerException());
+                        }
+                        if (result.isError()) {
+                            return Observable.error(
+                                    new NullPointerException("ERROR" + result.getStatus()));
+                        }
+                        return Observable.just(result.getData().getCountUnreadMesssages());
+                    }
+                });
     }
 }
