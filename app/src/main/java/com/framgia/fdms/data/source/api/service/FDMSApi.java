@@ -7,6 +7,7 @@ import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.NewDeviceUsingHistory;
 import com.framgia.fdms.data.model.Notification;
+import com.framgia.fdms.data.model.NotificationResult;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
@@ -274,7 +275,7 @@ public interface FDMSApi {
     Observable<Respone<String>> deleteDeviceGroup(@Path("id") int deviceGroupId);
 
     @GET("/api/notifications")
-    Observable<Respone<List<Notification>>> getNotifications(@Query("page") int page,
+    Observable<Respone<NotificationResult>> getNotifications(@Query("page") int page,
                                                              @Query("per_page") int perPage);
 
 
