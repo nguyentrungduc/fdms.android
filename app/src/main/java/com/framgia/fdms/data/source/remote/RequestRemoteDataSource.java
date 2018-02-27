@@ -23,6 +23,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
+import static com.framgia.fdms.screen.requestcreation.member.RequestCreatorType.MEMBER_REQUEST;
 import static com.framgia.fdms.screen.requestcreation.member.RequestCreatorType.MY_REQUEST;
 import static com.framgia.fdms.utils.Constant.ALL_RELATIVE_ID;
 import static com.framgia.fdms.utils.Constant.ALL_REQUEST_STATUS_ID;
@@ -32,6 +33,7 @@ import static com.framgia.fdms.utils.Constant.ApiParram.RELATIVE_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_ASSIGNEE_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_DESCRIPTION;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_FOR_USER_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_GROUP_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_REQUEST_DETAILS;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_STATUS_ID_EDIT;
@@ -53,10 +55,24 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<List<Request>> getRequests(int requestType, int requestStatusId,
-                                                 int relativeId, int page, int perPage) {
+    public Observable<List<Request>> getMemberRequests(int requestStatusId,
+                                                       int relativeId, int page, int perPage) {
         return mFDMSApi.getRequests(
-                getRequestParams(requestType, requestStatusId, relativeId, page, perPage))
+                getRequestParams(MEMBER_REQUEST, requestStatusId, relativeId, page, perPage))
+                .flatMap(new Function<Respone<List<Request>>, ObservableSource<List<Request>>>() {
+                    @Override
+                    public ObservableSource<List<Request>> apply(Respone<List<Request>> listRespone)
+                            throws Exception {
+                        return Utils.getResponse(listRespone);
+                    }
+                });
+    }
+
+    @Override
+    public Observable<List<Request>> getMyRequests(int requestStatusId,
+                                                   int relativeId, int page, int perPage) {
+        return mFDMSApi.getRequests(
+                getRequestParams(MY_REQUEST, requestStatusId, relativeId, page, perPage))
                 .flatMap(new Function<Respone<List<Request>>, ObservableSource<List<Request>>>() {
                     @Override
                     public ObservableSource<List<Request>> apply(Respone<List<Request>> listRespone)
@@ -87,6 +103,9 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
         }
         if (request.getAssignee() > 0) {
             parrams.put(REQUEST_ASSIGNEE_ID, String.valueOf(request.getAssignee()));
+        }
+        if (request.getGroupId() > 0) {
+            parrams.put(REQUEST_GROUP_ID, String.valueOf(request.getGroupId()));
         }
         return mFDMSApi.registerRequest(parrams)
                 .flatMap(new Function<Respone<Request>, ObservableSource<Request>>() {

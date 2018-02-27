@@ -25,7 +25,7 @@ public class RequestRepository implements RequestRepositoryContract {
     }
 
     public static RequestRepository getInstant(
-        RequestDataSource.RemoteDataSource remoteDataSource) {
+            RequestDataSource.RemoteDataSource remoteDataSource) {
         if (sRequestRepository == null) {
             sRequestRepository = new RequestRepository(remoteDataSource);
         }
@@ -33,10 +33,15 @@ public class RequestRepository implements RequestRepositoryContract {
     }
 
     @Override
-    public Observable<List<Request>> getRequests(int requestType, int requestStatusId,
-        int relativeId, int perPage, int page) {
-        return mRemoteDataSource.getRequests(requestType, requestStatusId, relativeId, perPage,
-            page);
+    public Observable<List<Request>> getMemberRequests(int requestStatusId,
+                                                       int relativeId, int page, int perPage) {
+        return mRemoteDataSource.getMemberRequests(requestStatusId, relativeId, perPage, page);
+    }
+
+    @Override
+    public Observable<List<Request>> getMyRequests(int requestStatusId,
+                                                   int relativeId, int page, int perPage) {
+        return mRemoteDataSource.getMyRequests(requestStatusId, relativeId, page, perPage);
     }
 
     @Override
@@ -66,7 +71,7 @@ public class RequestRepository implements RequestRepositoryContract {
 
     @Override
     public Observable<Respone<Request>> cancelRequest(int requestId, int statusId,
-        String description) {
+                                                      String description) {
         return mRemoteDataSource.cancelRequest(requestId, statusId, description);
     }
 

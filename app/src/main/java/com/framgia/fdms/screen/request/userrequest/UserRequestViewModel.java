@@ -154,7 +154,7 @@ public class UserRequestViewModel extends BaseFragmentModel
     @Override
     public void onRegisterRequestClick() {
         mFragment.startActivityForResult(
-                RequestForMemberActivity.getInstance(mFragment.getActivity(), MY_REQUEST),
+                RequestForMemberActivity.getInstance(mFragment.getActivity()),
                 REQUEST_CREATE_REQUEST);
     }
 

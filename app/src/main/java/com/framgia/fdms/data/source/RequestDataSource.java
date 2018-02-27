@@ -23,8 +23,27 @@ public interface RequestDataSource {
     interface RemoteDataSource {
         Observable<List<Dashboard>> getDashboardRequest();
 
-        Observable<List<Request>> getRequests(int requestType, int requestStatusId, int relativeId,
-                                              int perPage, int page);
+        /**
+         * Get member request filter by
+         * @param requestStatusId
+         * @param relativeId
+         * @param page
+         * @param perPage
+         * @return
+         */
+        Observable<List<Request>> getMemberRequests(int requestStatusId, int relativeId,
+                                                    int page, int perPage);
+
+        /**
+         * get request was created for current user filter by
+         * @param requestStatusId
+         * @param relativeId
+         * @param page
+         * @param perPage
+         * @return
+         */
+        Observable<List<Request>> getMyRequests(int requestStatusId, int relativeId,
+                                                    int page, int perPage);
 
         Observable<List<Status>> getStatus();
 

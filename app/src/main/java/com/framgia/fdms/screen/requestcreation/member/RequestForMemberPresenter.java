@@ -36,14 +36,11 @@ public final class RequestForMemberPresenter implements RequestForMemberContract
     private UserRepository mUserRepository;
     private StatusRepository mStatusRepository;
     private User mUser;
-    @RequestCreatorType
-    private int mRequestType;
 
     public RequestForMemberPresenter(RequestForMemberContract.ViewModel viewModel,
-                                     @RequestCreatorType int requestType, RequestRepository requestRepository,
+                                     RequestRepository requestRepository,
                                      UserRepository userRepository, StatusRepository statusRepository) {
         mViewModel = viewModel;
-        mRequestType = requestType;
         mSubscription = new CompositeDisposable();
         mRequestRepository = requestRepository;
         mUserRepository = userRepository;
@@ -73,7 +70,9 @@ public final class RequestForMemberPresenter implements RequestForMemberContract
 
     @Override
     public void registerRequest(RequestCreatorRequest request) {
-        if (!validateDataInput(request)) return;
+        if (!validateDataInput(request)){
+            return;
+        }
         Disposable subscription = mRequestRepository.registerRequest(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -110,15 +109,11 @@ public final class RequestForMemberPresenter implements RequestForMemberContract
             isValid = false;
             mViewModel.onInputTitleError();
         }
-        if (mUser.getRole() == BO_MANAGER
-                && mRequestType == RequestCreatorType.MEMBER_REQUEST
-                && request.getRequestFor() <= 0) {
+        if (mUser.getRole() == BO_MANAGER && request.getRequestFor() <= 0) {
             isValid = false;
             mViewModel.onInputRequestForError();
         }
-        if (mUser.getRole() == BO_MANAGER
-                && mRequestType == RequestCreatorType.MEMBER_REQUEST
-                && request.getGroupId() <= 0) {
+        if (mUser.getRole() == BO_MANAGER && request.getGroupId() <= 0) {
             isValid = false;
             mViewModel.onInputGroupForError();
         }

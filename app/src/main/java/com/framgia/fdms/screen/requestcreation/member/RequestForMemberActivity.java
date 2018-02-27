@@ -26,12 +26,10 @@ import static com.framgia.fdms.utils.Constant.BundleRequest.BUNDLE_REQUEST_TYPE;
 public class RequestForMemberActivity extends AppCompatActivity {
 
     private RequestForMemberContract.ViewModel mViewModel;
-    private int mManageRequestType;
 
-    public static Intent getInstance(Context context, @RequestCreatorType int manageRequestType) {
+    public static Intent getInstance(Context context) {
         Intent intent = new Intent(context, RequestForMemberActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt(BUNDLE_REQUEST_TYPE, manageRequestType);
         intent.putExtras(bundle);
         return intent;
     }
@@ -39,11 +37,9 @@ public class RequestForMemberActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getDataFromIntent();
-        mViewModel = new RequestForMemberViewModel(this, mManageRequestType);
+        mViewModel = new RequestForMemberViewModel(this);
 
         RequestForMemberContract.Presenter presenter = new RequestForMemberPresenter(mViewModel,
-                mManageRequestType,
                 new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
                 new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))),
                 new StatusRepository(new StatusRemoteDataSource(FDMSServiceClient.getInstance())));
@@ -76,11 +72,5 @@ public class RequestForMemberActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mViewModel.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void getDataFromIntent() {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle == null) return;
-        mManageRequestType = bundle.getInt(BUNDLE_REQUEST_TYPE);
     }
 }
