@@ -58,14 +58,10 @@ public class RequestForMemberViewModel extends BaseObservable
     private int mProgressBarVisibility = View.GONE;
     private boolean isAllowAddRequestFor;
     private boolean isAllowAddAssignee;
-    @RequestCreatorType
-    private int mRequestCreatorType;
 
-    public RequestForMemberViewModel(AppCompatActivity activity,
-                                     @RequestCreatorType int requestCreatorType) {
+    public RequestForMemberViewModel(AppCompatActivity activity) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
-        mRequestCreatorType = requestCreatorType;
         mRequest = new RequestCreatorRequest();
     }
 
@@ -171,19 +167,21 @@ public class RequestForMemberViewModel extends BaseObservable
 
     @Override
     public void onGetUserSuccess(User user) {
-        setAllowAddAssignee(user.getRole() == BO_MANAGER);
-        setAllowAddRequestFor(user.getRole() == BO_MANAGER
+        boolean isAllowAddAssignee = user.getRole() == BO_MANAGER;
+        boolean isAllowAddRequestFor = isAllowAddRequestFor(user);
+
+        setAllowAddAssignee(isAllowAddAssignee);
+        setAllowAddRequestFor(isAllowAddRequestFor);
+
+        setRequestFor(new AssigneeUser(OUT_OF_INDEX, NONE));
+        setAssignee(new Status(OUT_OF_INDEX, NONE));
+    }
+
+    private boolean isAllowAddRequestFor(User user) {
+        return user.getRole() == BO_MANAGER
                 || user.getRole() == DIVISION_MANAGER
                 || user.getRole() == SECTION_MANAGER
-                || user.getRole() == GROUP_LEADER);
-        if (isAllowAddRequestFor()) {
-            if (mRequestCreatorType == RequestCreatorType.MY_REQUEST) {
-                setRequestFor(new AssigneeUser(user.getId(), user.getName()));
-            } else {
-                setRequestFor(new AssigneeUser(OUT_OF_INDEX, NONE));
-            }
-            setAssignee(new Status(OUT_OF_INDEX, NONE));
-        }
+                || user.getRole() == GROUP_LEADER;
     }
 
     @Override
@@ -261,16 +259,6 @@ public class RequestForMemberViewModel extends BaseObservable
     public void setAllowAddRequestFor(boolean allowAddRequestFor) {
         isAllowAddRequestFor = allowAddRequestFor;
         notifyPropertyChanged(BR.allowAddRequestFor);
-    }
-
-    @Bindable
-    public int getRequestCreatorType() {
-        return mRequestCreatorType;
-    }
-
-    public void setRequestCreatorType(int requestCreatorType) {
-        this.mRequestCreatorType = requestCreatorType;
-        notifyPropertyChanged(BR.requestCreatorType);
     }
 
     @Bindable

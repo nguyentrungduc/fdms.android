@@ -7,7 +7,6 @@
     <data>
 
         <import type="android.view.View"/>
-        <import type="com.framgia.fdms.screen.requestcreation.member.RequestCreatorType"/>
         <variable
             name="viewModel"
             type="com.framgia.fdms.screen.requestcreation.member.RequestForMemberViewModel"
@@ -99,7 +98,6 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_10"
                         android:textColorHint="@color/color_brown"
-                        android:visibility="@{viewModel.requestCreatorType == RequestCreatorType.MEMBER_REQUEST ? View.VISIBLE : View.GONE}"
                         app:errorText="@{viewModel.requestForError}"
                         >
 
@@ -120,7 +118,6 @@
                         android:layout_height="wrap_content"
                         android:paddingEnd="@dimen/dp_5"
                         android:paddingStart="@dimen/dp_5"
-                        android:visibility="@{viewModel.requestCreatorType == RequestCreatorType.MEMBER_REQUEST ? View.VISIBLE : View.GONE}"
                         app:spinnerAdapter="@{viewModel.adapter}"
                         app:spinnerListener="@{viewModel}"
                         app:title="@string/title_assign_group"

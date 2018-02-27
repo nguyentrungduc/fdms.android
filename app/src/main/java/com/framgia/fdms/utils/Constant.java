@@ -122,6 +122,7 @@ public class Constant {
         public static final String REQUEST_DESCRIPTION = "request[description]";
         public static final String REQUEST_FOR_USER_ID = "request[for_user_id]";
         public static final String REQUEST_ASSIGNEE_ID = "request[assignee_id]";
+        public static final String REQUEST_GROUP_ID = "request[group_id]";
         public static final String REQUEST_STATUS_ID_EDIT = "request[request_status_id]";
         public static final String REQUEST_REQUEST_DETAILS = "request[request_details_attributes]";
         public static final String ASSIGNMENT_REQUEST_ID = "assignment[request_id]";
