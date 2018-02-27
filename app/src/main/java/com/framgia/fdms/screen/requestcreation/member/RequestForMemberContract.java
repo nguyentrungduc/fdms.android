@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.requestcreation;
+package com.framgia.fdms.screen.requestcreation.member;
 
 import android.content.Intent;
 import com.framgia.fdms.BasePresenter;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * This specifies the contract between the view and the presenter.
  */
-public interface RequestCreationContract {
+public interface RequestForMemberContract {
     /**
      * View.
      */
