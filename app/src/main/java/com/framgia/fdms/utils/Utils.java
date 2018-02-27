@@ -14,16 +14,24 @@ import android.view.inputmethod.InputMethodManager;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Respone;
 
+import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 import io.reactivex.Observable;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
+import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_ASSIGNEE_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_DESCRIPTION;
+import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_FOR_USER_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_GROUP_ID;
+import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_TITLE;
 import static com.framgia.fdms.utils.Constant.PERCENT;
 import static com.framgia.fdms.utils.Constant.TITLE_NOW;
 
@@ -159,5 +167,26 @@ public class Utils {
         Configuration config = new Configuration(resources.getConfiguration());
         config.setLocale(locale);
         resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
+    public static Map<String,String> creatParramRequest(RequestCreatorRequest request){
+        Map<String, String> parrams = new HashMap<>();
+
+        if (!TextUtils.isEmpty(request.getTitle())) {
+            parrams.put(REQUEST_TITLE, request.getTitle());
+        }
+        if (!TextUtils.isEmpty(request.getDescription())) {
+            parrams.put(REQUEST_DESCRIPTION, request.getDescription());
+        }
+        if (request.getRequestFor() > 0) {
+            parrams.put(REQUEST_FOR_USER_ID, String.valueOf(request.getRequestFor()));
+        }
+        if (request.getAssignee() > 0) {
+            parrams.put(REQUEST_ASSIGNEE_ID, String.valueOf(request.getAssignee()));
+        }
+        if (request.getGroupId() > 0) {
+            parrams.put(REQUEST_GROUP_ID, String.valueOf(request.getGroupId()));
+        }
+        return parrams;
     }
 }

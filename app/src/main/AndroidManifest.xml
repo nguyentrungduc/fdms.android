@@ -52,6 +52,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
+            android:name=".screen.requestcreation.forme.RequestForMeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".screen.scanner.ScannerActivity"
             android:screenOrientation="portrait" />
         <activity

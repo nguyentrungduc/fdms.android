@@ -130,7 +130,7 @@ public class Constant {
         public static final String ASSIGNMENT_DESCRIPTION = "assignment[description]";
         public static final String ASSIGNMENT_STAFF_ID = "staff_id";
         public static final String ASSIGNMENT_ASSIGNMENT_DETAILS =
-            "assignment[assignment_details_attributes]";
+                "assignment[assignment_details_attributes]";
         public static final String ASSIGNMENT_ASSIGNMENT_DEVICE_ID = "device_ids[]";
         public static final String DEVICE_GROUP_ID = "device_group_id";
         public static final String USER_NAME = "username";
@@ -138,9 +138,9 @@ public class Constant {
         public static final String DEVICE_CATEGORY_NAME = "device_category_name";
         public static final String DEVICE_CATEGORY_NAME_MANAGER = "device_category[name]";
         public static final String DEVICE_CATEGORY_DESCRIPTION_MANAGER =
-            "device_category[description]";
+                "device_category[description]";
         public static final String DEVICE_CATEGORY_GROUP_ID_MANAGER =
-            "device_category[device_group_id]";
+                "device_category[device_group_id]";
         public static final String STATUS = "status";
         public static final String TEXT_USER_SEARCH = "text_user_search";
         public static final String USING_HISTORY_DEVICE_CODE = "device_code";
