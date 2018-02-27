@@ -7,10 +7,10 @@
     <data>
 
         <import type="android.view.View"/>
-        <import type="com.framgia.fdms.screen.requestcreation.RequestCreatorType"/>
+        <import type="com.framgia.fdms.screen.requestcreation.member.RequestCreatorType"/>
         <variable
             name="viewModel"
-            type="com.framgia.fdms.screen.requestcreation.RequestCreationViewModel"
+            type="com.framgia.fdms.screen.requestcreation.member.RequestForMemberViewModel"
             />
 
     </data>

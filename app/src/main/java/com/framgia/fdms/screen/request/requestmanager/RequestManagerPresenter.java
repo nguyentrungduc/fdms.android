@@ -16,7 +16,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
-import static com.framgia.fdms.screen.requestcreation.RequestCreatorType.MEMBER_REQUEST;
+import static com.framgia.fdms.screen.requestcreation.member.RequestCreatorType.MEMBER_REQUEST;
 import static com.framgia.fdms.utils.Constant.ALL_RELATIVE_ID;
 import static com.framgia.fdms.utils.Constant.ALL_REQUEST_STATUS_ID;
 import static com.framgia.fdms.utils.Constant.FIRST_PAGE;

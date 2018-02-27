@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.requestcreation;
+package com.framgia.fdms.screen.requestcreation.member;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,13 +23,13 @@ import static com.framgia.fdms.utils.Constant.BundleRequest.BUNDLE_REQUEST_TYPE;
 /**
  * Requestcreation Screen.
  */
-public class RequestCreationActivity extends AppCompatActivity {
+public class RequestForMemberActivity extends AppCompatActivity {
 
-    private RequestCreationContract.ViewModel mViewModel;
+    private RequestForMemberContract.ViewModel mViewModel;
     private int mManageRequestType;
 
     public static Intent getInstance(Context context, @RequestCreatorType int manageRequestType) {
-        Intent intent = new Intent(context, RequestCreationActivity.class);
+        Intent intent = new Intent(context, RequestForMemberActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(BUNDLE_REQUEST_TYPE, manageRequestType);
         intent.putExtras(bundle);
@@ -40,9 +40,9 @@ public class RequestCreationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getDataFromIntent();
-        mViewModel = new RequestCreationViewModel(this, mManageRequestType);
+        mViewModel = new RequestForMemberViewModel(this, mManageRequestType);
 
-        RequestCreationContract.Presenter presenter = new RequestCreationPresenter(mViewModel,
+        RequestForMemberContract.Presenter presenter = new RequestForMemberPresenter(mViewModel,
                 mManageRequestType,
                 new RequestRepository(new RequestRemoteDataSource(FDMSServiceClient.getInstance())),
                 new UserRepository(new UserLocalDataSource(new SharePreferenceImp(this))),
@@ -51,7 +51,7 @@ public class RequestCreationActivity extends AppCompatActivity {
 
         ActivityRequestCreationBinding binding =
                 DataBindingUtil.setContentView(this, R.layout.activity_request_creation);
-        binding.setViewModel((RequestCreationViewModel) mViewModel);
+        binding.setViewModel((RequestForMemberViewModel) mViewModel);
         setTitle(getString(R.string.title_create_request));
     }
 

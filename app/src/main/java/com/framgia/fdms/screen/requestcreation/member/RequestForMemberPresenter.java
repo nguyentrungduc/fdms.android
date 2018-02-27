@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.requestcreation;
+package com.framgia.fdms.screen.requestcreation.member;
 
 import android.text.TextUtils;
 
@@ -20,18 +20,17 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
 
 /**
- * Listens to user actions from the UI ({@link RequestCreationActivity}), retrieves the data and
+ * Listens to user actions from the UI ({@link RequestForMemberActivity}), retrieves the data and
  * updates
  * the UI as required.
  */
-public final class RequestCreationPresenter implements RequestCreationContract.Presenter {
-    private final RequestCreationContract.ViewModel mViewModel;
+public final class RequestForMemberPresenter implements RequestForMemberContract.Presenter {
+    private final RequestForMemberContract.ViewModel mViewModel;
     private CompositeDisposable mSubscription;
     private RequestRepository mRequestRepository;
     private UserRepository mUserRepository;
@@ -40,9 +39,9 @@ public final class RequestCreationPresenter implements RequestCreationContract.P
     @RequestCreatorType
     private int mRequestType;
 
-    public RequestCreationPresenter(RequestCreationContract.ViewModel viewModel,
-                                    @RequestCreatorType int requestType, RequestRepository requestRepository,
-                                    UserRepository userRepository, StatusRepository statusRepository) {
+    public RequestForMemberPresenter(RequestForMemberContract.ViewModel viewModel,
+                                     @RequestCreatorType int requestType, RequestRepository requestRepository,
+                                     UserRepository userRepository, StatusRepository statusRepository) {
         mViewModel = viewModel;
         mRequestType = requestType;
         mSubscription = new CompositeDisposable();

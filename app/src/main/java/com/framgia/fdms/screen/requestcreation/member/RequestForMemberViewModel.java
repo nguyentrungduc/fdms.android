@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.requestcreation;
+package com.framgia.fdms.screen.requestcreation.member;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,10 +36,10 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_RELATIVE;
  * Exposes the data to be used in the Requestcreation screen.
  */
 
-public class RequestCreationViewModel extends BaseObservable
-        implements RequestCreationContract.ViewModel, AdapterView.OnItemSelectedListener {
+public class RequestForMemberViewModel extends BaseObservable
+        implements RequestForMemberContract.ViewModel, AdapterView.OnItemSelectedListener {
 
-    private RequestCreationContract.Presenter mPresenter;
+    private RequestForMemberContract.Presenter mPresenter;
     private AppCompatActivity mActivity;
     private String mRequestTitle;
     private String mRequestDescription;
@@ -61,8 +61,8 @@ public class RequestCreationViewModel extends BaseObservable
     @RequestCreatorType
     private int mRequestCreatorType;
 
-    public RequestCreationViewModel(AppCompatActivity activity,
-                                    @RequestCreatorType int requestCreatorType) {
+    public RequestForMemberViewModel(AppCompatActivity activity,
+                                     @RequestCreatorType int requestCreatorType) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
         mRequestCreatorType = requestCreatorType;
@@ -80,7 +80,7 @@ public class RequestCreationViewModel extends BaseObservable
     }
 
     @Override
-    public void setPresenter(RequestCreationContract.Presenter presenter) {
+    public void setPresenter(RequestForMemberContract.Presenter presenter) {
         mPresenter = presenter;
         mPresenter.getCurrentUser();
     }

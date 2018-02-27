@@ -23,7 +23,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
-import static com.framgia.fdms.screen.requestcreation.RequestCreatorType.MY_REQUEST;
+import static com.framgia.fdms.screen.requestcreation.member.RequestCreatorType.MY_REQUEST;
 import static com.framgia.fdms.utils.Constant.ALL_RELATIVE_ID;
 import static com.framgia.fdms.utils.Constant.ALL_REQUEST_STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.PAGE;

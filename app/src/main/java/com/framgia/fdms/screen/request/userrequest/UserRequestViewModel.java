@@ -28,7 +28,7 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
 import com.framgia.fdms.screen.assignment.AssignmentType;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
-import com.framgia.fdms.screen.requestcreation.RequestCreationActivity;
+import com.framgia.fdms.screen.requestcreation.member.RequestForMemberActivity;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
 import com.framgia.fdms.utils.navigator.Navigator;
@@ -43,7 +43,7 @@ import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.screen.request.userrequest.UserRequestViewModel.RequestManagerViewType.ALL_REQUESTS;
 import static com.framgia.fdms.screen.request.userrequest.UserRequestViewModel.RequestManagerViewType.REQUESTS_BY_ME;
 import static com.framgia.fdms.screen.request.userrequest.UserRequestViewModel.RequestManagerViewType.REQUEST_FOR_ME;
-import static com.framgia.fdms.screen.requestcreation.RequestCreatorType.MY_REQUEST;
+import static com.framgia.fdms.screen.requestcreation.member.RequestCreatorType.MY_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_CREATED_BY;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST_ALL;
 import static com.framgia.fdms.screen.selection.SelectionViewModel.BUNDLE_DATA;
@@ -154,7 +154,7 @@ public class UserRequestViewModel extends BaseFragmentModel
     @Override
     public void onRegisterRequestClick() {
         mFragment.startActivityForResult(
-                RequestCreationActivity.getInstance(mFragment.getActivity(), MY_REQUEST),
+                RequestForMemberActivity.getInstance(mFragment.getActivity(), MY_REQUEST),
                 REQUEST_CREATE_REQUEST);
     }
 
