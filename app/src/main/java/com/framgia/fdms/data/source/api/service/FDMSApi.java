@@ -6,7 +6,6 @@ import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.DeviceHistoryDetail;
 import com.framgia.fdms.data.model.DeviceUsingHistory;
 import com.framgia.fdms.data.model.NewDeviceUsingHistory;
-import com.framgia.fdms.data.model.Notification;
 import com.framgia.fdms.data.model.NotificationResult;
 import com.framgia.fdms.data.model.Producer;
 import com.framgia.fdms.data.model.Request;
@@ -84,7 +83,10 @@ public interface FDMSApi {
     Observable<Respone<List<Status>>> getListAssign();
 
     @POST("api/requests")
-    Observable<Respone<Request>> registerRequest(@QueryMap Map<String, String> params);
+    Observable<Respone<Request>> registerRequestForMember(@QueryMap Map<String, String> params);
+
+    @POST("api/my_requests")
+    Observable<Respone<Request>> registerMyRequest(@QueryMap Map<String, String> params);
 
     @GET("api/device_codes")
     Observable<Respone<Device>> getDevice(@Query("device_id") int deviceId);

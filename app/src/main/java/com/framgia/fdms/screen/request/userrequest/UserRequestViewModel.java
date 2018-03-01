@@ -28,6 +28,7 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.screen.assignment.AssignmentActivity;
 import com.framgia.fdms.screen.assignment.AssignmentType;
 import com.framgia.fdms.screen.request.OnRequestClickListenner;
+import com.framgia.fdms.screen.requestcreation.forme.RequestForMeActivity;
 import com.framgia.fdms.screen.requestcreation.member.RequestForMemberActivity;
 import com.framgia.fdms.screen.requestdetail.RequestDetailActivity;
 import com.framgia.fdms.screen.selection.SelectionActivity;
@@ -154,7 +155,7 @@ public class UserRequestViewModel extends BaseFragmentModel
     @Override
     public void onRegisterRequestClick() {
         mFragment.startActivityForResult(
-                RequestForMemberActivity.getInstance(mFragment.getActivity()),
+                RequestForMeActivity.getInstance(mFragment.getActivity()),
                 REQUEST_CREATE_REQUEST);
     }
 

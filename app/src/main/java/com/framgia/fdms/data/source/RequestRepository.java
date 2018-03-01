@@ -7,10 +7,8 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
-
-import java.util.List;
-
 import io.reactivex.Observable;
+import java.util.List;
 
 /**
  * Created by beepi on 11/05/2017.
@@ -33,14 +31,14 @@ public class RequestRepository implements RequestRepositoryContract {
     }
 
     @Override
-    public Observable<List<Request>> getMemberRequests(int requestStatusId,
-                                                       int relativeId, int page, int perPage) {
+    public Observable<List<Request>> getMemberRequests(int requestStatusId, int relativeId,
+            int page, int perPage) {
         return mRemoteDataSource.getMemberRequests(requestStatusId, relativeId, perPage, page);
     }
 
     @Override
-    public Observable<List<Request>> getMyRequests(int requestStatusId,
-                                                   int relativeId, int page, int perPage) {
+    public Observable<List<Request>> getMyRequests(int requestStatusId, int relativeId, int page,
+            int perPage) {
         return mRemoteDataSource.getMyRequests(requestStatusId, relativeId, page, perPage);
     }
 
@@ -56,7 +54,12 @@ public class RequestRepository implements RequestRepositoryContract {
 
     @Override
     public Observable<Request> registerRequest(RequestCreatorRequest request) {
-        return mRemoteDataSource.registerRequest(request);
+        return mRemoteDataSource.registerRequestForMember(request);
+    }
+
+    @Override
+    public Observable<Request> registerMyRequest(RequestCreatorRequest request) {
+        return mRemoteDataSource.registerMyRequest(request);
     }
 
     @Override
@@ -71,7 +74,7 @@ public class RequestRepository implements RequestRepositoryContract {
 
     @Override
     public Observable<Respone<Request>> cancelRequest(int requestId, int statusId,
-                                                      String description) {
+            String description) {
         return mRemoteDataSource.cancelRequest(requestId, statusId, description);
     }
 

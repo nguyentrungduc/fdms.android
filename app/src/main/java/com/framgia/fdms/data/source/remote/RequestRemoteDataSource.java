@@ -1,7 +1,6 @@
 package com.framgia.fdms.data.source.remote;
 
 import android.text.TextUtils;
-
 import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
@@ -12,16 +11,14 @@ import com.framgia.fdms.data.source.RequestDataSource;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.utils.Utils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.framgia.fdms.screen.requestcreation.member.RequestCreatorType.MEMBER_REQUEST;
 import static com.framgia.fdms.screen.requestcreation.member.RequestCreatorType.MY_REQUEST;
@@ -55,8 +52,8 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<List<Request>> getMemberRequests(int requestStatusId,
-                                                       int relativeId, int page, int perPage) {
+    public Observable<List<Request>> getMemberRequests(int requestStatusId, int relativeId,
+            int page, int perPage) {
         return mFDMSApi.getRequests(
                 getRequestParams(MEMBER_REQUEST, requestStatusId, relativeId, page, perPage))
                 .flatMap(new Function<Respone<List<Request>>, ObservableSource<List<Request>>>() {
@@ -69,8 +66,8 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<List<Request>> getMyRequests(int requestStatusId,
-                                                   int relativeId, int page, int perPage) {
+    public Observable<List<Request>> getMyRequests(int requestStatusId, int relativeId, int page,
+            int perPage) {
         return mFDMSApi.getRequests(
                 getRequestParams(MY_REQUEST, requestStatusId, relativeId, page, perPage))
                 .flatMap(new Function<Respone<List<Request>>, ObservableSource<List<Request>>>() {
@@ -89,25 +86,20 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     }
 
     @Override
-    public Observable<Request> registerRequest(RequestCreatorRequest request) {
-        Map<String, String> parrams = new HashMap<>();
+    public Observable<Request> registerRequestForMember(RequestCreatorRequest request) {
+        return mFDMSApi.registerRequestForMember(Utils.creatParramRequest(request))
+                .flatMap(new Function<Respone<Request>, ObservableSource<Request>>() {
+                    @Override
+                    public ObservableSource<Request> apply(Respone<Request> requestRespone)
+                            throws Exception {
+                        return Utils.getResponse(requestRespone);
+                    }
+                });
+    }
 
-        if (!TextUtils.isEmpty(request.getTitle())) {
-            parrams.put(REQUEST_TITLE, request.getTitle());
-        }
-        if (!TextUtils.isEmpty(request.getDescription())) {
-            parrams.put(REQUEST_DESCRIPTION, request.getDescription());
-        }
-        if (request.getRequestFor() > 0) {
-            parrams.put(REQUEST_FOR_USER_ID, String.valueOf(request.getRequestFor()));
-        }
-        if (request.getAssignee() > 0) {
-            parrams.put(REQUEST_ASSIGNEE_ID, String.valueOf(request.getAssignee()));
-        }
-        if (request.getGroupId() > 0) {
-            parrams.put(REQUEST_GROUP_ID, String.valueOf(request.getGroupId()));
-        }
-        return mFDMSApi.registerRequest(parrams)
+    @Override
+    public Observable<Request> registerMyRequest(RequestCreatorRequest request) {
+        return mFDMSApi.registerMyRequest(Utils.creatParramRequest(request))
                 .flatMap(new Function<Respone<Request>, ObservableSource<Request>>() {
                     @Override
                     public ObservableSource<Request> apply(Respone<Request> requestRespone)
@@ -136,7 +128,7 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
 
     @Override
     public Observable<Respone<Request>> cancelRequest(int requestId, int actionId,
-                                                      String description) {
+            String description) {
         return mFDMSApi.cancelRequest(requestId, actionId, description);
     }
 
@@ -178,10 +170,8 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
             values.add(device.getId());
         }
 
-        return mFDMSApi.assignDeviceForRequest(request.getRequestId(),
-                request.getAssigneeId(),
-                request.getDescription(),
-                values)
+        return mFDMSApi.assignDeviceForRequest(request.getRequestId(), request.getAssigneeId(),
+                request.getDescription(), values)
                 .flatMap(new Function<Respone<Request>, ObservableSource<Request>>() {
                     @Override
                     public ObservableSource<Request> apply(@NonNull Respone<Request> requestRespone)
@@ -226,17 +216,18 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     @Override
     public Observable<List<Dashboard>> getDashboardRequest() {
         return mFDMSApi.getDashboardRequest()
-                .flatMap(new Function<Respone<List<Dashboard>>, ObservableSource<List<Dashboard>>>() {
-                    @Override
-                    public ObservableSource<List<Dashboard>> apply(Respone<List<Dashboard>> listRespone)
-                            throws Exception {
-                        return Utils.getResponse(listRespone);
-                    }
-                });
+                .flatMap( new Function<Respone<List<Dashboard>>, ObservableSource<List<Dashboard>>>
+                                () {
+                            @Override
+                            public ObservableSource<List<Dashboard>> apply(
+                                    Respone<List<Dashboard>> listRespone) throws Exception {
+                                return Utils.getResponse(listRespone);
+                            }
+                        });
     }
 
     private Map<String, Integer> getRequestParams(int requestType, int requestStatusId,
-                                                  int relativeId, int page, int perPage) {
+            int relativeId, int page, int perPage) {
         Map<String, Integer> parrams = new HashMap<>();
         if (requestStatusId != ALL_REQUEST_STATUS_ID) {
             parrams.put(REQUEST_STATUS_ID, requestStatusId);

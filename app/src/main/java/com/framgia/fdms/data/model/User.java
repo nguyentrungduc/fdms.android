@@ -9,6 +9,7 @@ import com.framgia.fdms.data.anotation.Permission;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by levutantuan on 3/31/17.
@@ -104,6 +105,9 @@ public class User extends BaseObservable implements Parcelable {
     @Expose
     @SerializedName("branch")
     private String mBranch;
+    @SerializedName("groups")
+    @Expose
+    private List<Status> mGroups;
 
     public User() {
     }
@@ -129,6 +133,7 @@ public class User extends BaseObservable implements Parcelable {
         mToken = in.readString();
         mCardNumber = in.readString();
         mBranch = in.readString();
+        mGroups = in.createTypedArrayList(Status.CREATOR);
     }
 
     @Bindable
@@ -392,6 +397,16 @@ public class User extends BaseObservable implements Parcelable {
         notifyPropertyChanged(BR.token);
     }
 
+    @Bindable
+    public List<Status> getGroups() {
+        return mGroups;
+    }
+
+    public void setGroups(List<Status> groups) {
+        mGroups = groups;
+        notifyPropertyChanged(com.framgia.fdms.BR.groups);
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -419,5 +434,6 @@ public class User extends BaseObservable implements Parcelable {
         dest.writeString(mToken);
         dest.writeString(mCardNumber);
         dest.writeString(mBranch);
+        dest.writeTypedList(mGroups);
     }
 }

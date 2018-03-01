@@ -7,10 +7,8 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Respone;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
-
-import java.util.List;
-
 import io.reactivex.Observable;
+import java.util.List;
 
 /**
  * Created by beepi on 11/05/2017.
@@ -47,7 +45,9 @@ public interface RequestDataSource {
 
         Observable<List<Status>> getStatus();
 
-        Observable<Request> registerRequest(RequestCreatorRequest request);
+        Observable<Request> registerRequestForMember(RequestCreatorRequest request);
+
+        Observable<Request> registerMyRequest(RequestCreatorRequest request);
 
         Observable<List<Request>> getTopRequest(int topRequest);
 

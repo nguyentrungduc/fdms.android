@@ -40,6 +40,8 @@ public interface RequestRepositoryContract {
 
     Observable<Request> registerRequest(RequestCreatorRequest request);
 
+    Observable<Request> registerMyRequest(RequestCreatorRequest request);
+
     Observable<List<Request>> getTopRequest(int topRequest);
 
     Observable<Respone<Request>> updateActionRequest(int requestId, int statusId);

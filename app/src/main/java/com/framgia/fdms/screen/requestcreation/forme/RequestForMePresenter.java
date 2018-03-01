@@ -1,4 +1,4 @@
-package com.framgia.fdms.screen.requestcreation.member;
+package com.framgia.fdms.screen.requestcreation.forme;
 
 import android.text.TextUtils;
 import com.framgia.fdms.data.model.Request;
@@ -19,24 +19,22 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
-import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
-
 /**
- * Listens to user actions from the UI ({@link RequestForMemberActivity}), retrieves the data and
+ * Listens to user actions from the UI ({@link RequestForMeActivity}), retrieves the data and
  * updates
  * the UI as required.
  */
-public final class RequestForMemberPresenter implements RequestForMemberContract.Presenter {
-    private final RequestForMemberContract.ViewModel mViewModel;
+public final class RequestForMePresenter implements RequestForMeContract.Presenter {
+    private final RequestForMeContract.ViewModel mViewModel;
     private CompositeDisposable mSubscription;
     private RequestRepository mRequestRepository;
     private UserRepository mUserRepository;
     private StatusRepository mStatusRepository;
     private User mUser;
 
-    public RequestForMemberPresenter(RequestForMemberContract.ViewModel viewModel,
-                                     RequestRepository requestRepository,
-                                     UserRepository userRepository, StatusRepository statusRepository) {
+    public RequestForMePresenter(RequestForMeContract.ViewModel viewModel,
+            RequestRepository requestRepository, UserRepository userRepository,
+            StatusRepository statusRepository) {
         mViewModel = viewModel;
         mSubscription = new CompositeDisposable();
         mRequestRepository = requestRepository;
@@ -67,10 +65,10 @@ public final class RequestForMemberPresenter implements RequestForMemberContract
 
     @Override
     public void registerRequest(RequestCreatorRequest request) {
-        if (!validateDataInput(request)){
+        if (!validateDataInput(request)) {
             return;
         }
-        Disposable subscription = mRequestRepository.registerRequest(request)
+        Disposable subscription = mRequestRepository.registerMyRequest(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -105,14 +103,6 @@ public final class RequestForMemberPresenter implements RequestForMemberContract
         if (TextUtils.isEmpty(request.getTitle())) {
             isValid = false;
             mViewModel.onInputTitleError();
-        }
-        if (mUser.getRole() == BO_MANAGER && request.getRequestFor() <= 0) {
-            isValid = false;
-            mViewModel.onInputRequestForError();
-        }
-        if (mUser.getRole() == BO_MANAGER && request.getGroupId() <= 0) {
-            isValid = false;
-            mViewModel.onInputGroupForError();
         }
         return isValid;
     }
