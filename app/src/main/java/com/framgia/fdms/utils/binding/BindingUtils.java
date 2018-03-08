@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -930,5 +931,10 @@ public final class BindingUtils {
         view.setText(
                 (Utils.getStringDate(borrowDate, view.getContext())) + "->" + (Utils.getStringDate(
                         returnDate, view.getContext())));
+    }
+
+    @BindingAdapter("convertDateToString")
+    public static void convertDateToString(TextView textView, Date date){
+        textView.setText(Utils.dateToString(date));
     }
 }

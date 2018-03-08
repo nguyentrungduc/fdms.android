@@ -2,6 +2,8 @@ package com.framgia.fdms.data.model;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.android.databinding.library.baseAdapters.BR;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
@@ -15,7 +17,7 @@ import java.util.List;
  * Created by beepi on 09/05/2017.
  */
 
-public class Request extends BaseObservable implements Serializable, Cloneable {
+public class Request extends BaseObservable implements Parcelable, Cloneable {
     @Expose
     @SerializedName("id")
     private int mId;
@@ -27,28 +29,19 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     private String mDescription;
     @Expose
     @SerializedName("request_status")
-    private String mRequestStatus;
-    @Expose
-    @SerializedName("request_status_id")
-    private int mRequestStatusId;
+    private Status mRequestStatus;
     @Expose
     @SerializedName("assignee")
-    private String mAssignee;
+    private Status mAssignee;
     @Expose
-    @SerializedName("assignee_id")
-    private int mAssigneeId;
+    @SerializedName("for_user")
+    private Status mRequestFor;
     @Expose
-    @SerializedName("request_for")
-    private String mRequestFor;
-    @Expose
-    @SerializedName("request_for_id")
-    private int mRequestForId;
-    @Expose
-    @SerializedName("creater")
-    private String mCreater;
+    @SerializedName("creator")
+    private Status mCreater;
     @Expose
     @SerializedName("updater")
-    private String mUpdater;
+    private Status mUpdater;
     @Expose
     @SerializedName("device_assignment")
     private List<DeviceRequest> mDevices;
@@ -64,6 +57,34 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     @Expose
     @SerializedName("handler")
     private String mHandler;
+
+    public Request(){}
+
+    public Request(Parcel in) {
+        mId = in.readInt();
+        mTitle = in.readString();
+        mDescription = in.readString();
+        mRequestStatus = in.readParcelable(Status.class.getClassLoader());
+        mAssignee = in.readParcelable(Status.class.getClassLoader());
+        mRequestFor = in.readParcelable(Status.class.getClassLoader());
+        mCreater = in.readParcelable(Status.class.getClassLoader());
+        mUpdater = in.readParcelable(Status.class.getClassLoader());
+        mDevices = in.createTypedArrayList(DeviceRequest.CREATOR);
+        mRequestActionList = in.createTypedArrayList(RequestAction.CREATOR);
+        mHandler = in.readString();
+    }
+
+    public static final Creator<Request> CREATOR = new Creator<Request>() {
+        @Override
+        public Request createFromParcel(Parcel in) {
+            return new Request(in);
+        }
+
+        @Override
+        public Request[] newArray(int size) {
+            return new Request[size];
+        }
+    };
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -118,23 +139,13 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     }
 
     @Bindable
-    public String getRequestStatus() {
+    public Status getRequestStatus() {
         return mRequestStatus;
     }
 
-    public void setRequestStatus(String requestStatus) {
+    public void setRequestStatus(Status requestStatus) {
         mRequestStatus = requestStatus;
         notifyPropertyChanged(BR.requestStatus);
-    }
-
-    @Bindable
-    public int getRequestStatusId() {
-        return mRequestStatusId;
-    }
-
-    public void setRequestStatusId(int requestStatusId) {
-        mRequestStatusId = requestStatusId;
-        notifyPropertyChanged(BR.requestStatusId);
     }
 
     @Bindable
@@ -148,50 +159,40 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
     }
 
     @Bindable
-    public String getAssignee() {
+    public Status getAssignee() {
         return mAssignee;
     }
 
-    public void setAssignee(String assignee) {
+    public void setAssignee(Status assignee) {
         mAssignee = assignee;
         notifyPropertyChanged(BR.assignee);
     }
 
     @Bindable
-    public String getRequestFor() {
+    public Status getRequestFor() {
         return mRequestFor;
     }
 
-    public void setRequestFor(String requestFor) {
+    public void setRequestFor(Status requestFor) {
         mRequestFor = requestFor;
         notifyPropertyChanged(BR.requestFor);
     }
 
     @Bindable
-    public int getRequestForId() {
-        return mRequestForId;
-    }
-
-    public void setRequestForId(int requestForId) {
-        mRequestForId = requestForId;
-        notifyPropertyChanged(BR.requestForId);
-    }
-
-    @Bindable
-    public String getCreater() {
+    public Status getCreater() {
         return mCreater;
     }
 
-    public void setCreater(String creater) {
+    public void setCreater(Status creater) {
         mCreater = creater;
     }
 
     @Bindable
-    public String getUpdater() {
+    public Status getUpdater() {
         return mUpdater;
     }
 
-    public void setUpdater(String updater) {
+    public void setUpdater(Status updater) {
         mUpdater = updater;
         notifyPropertyChanged(BR.updater);
     }
@@ -216,17 +217,27 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
         notifyPropertyChanged(BR.creatAt);
     }
 
-    @Bindable
-    public int getAssigneeId() {
-        return mAssigneeId;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setAssigneeId(int assigneeId) {
-        mAssigneeId = assigneeId;
-        notifyPropertyChanged(BR.assigneeId);
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mId);
+        parcel.writeString(mTitle);
+        parcel.writeString(mDescription);
+        parcel.writeParcelable(mRequestStatus, i);
+        parcel.writeParcelable(mAssignee, i);
+        parcel.writeParcelable(mRequestFor, i);
+        parcel.writeParcelable(mCreater, i);
+        parcel.writeParcelable(mUpdater, i);
+        parcel.writeTypedList(mDevices);
+        parcel.writeTypedList(mRequestActionList);
+        parcel.writeString(mHandler);
     }
 
-    public static class DeviceRequest extends BaseObservable implements Serializable, Cloneable {
+    public static class DeviceRequest extends BaseObservable implements Parcelable, Cloneable {
         @Expose
         @SerializedName("id")
         private int mId;
@@ -246,6 +257,28 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
         @SerializedName("device_category_id")
         private int mCategoryId;
         private Status mCategory;
+
+        protected DeviceRequest(Parcel in) {
+            mId = in.readInt();
+            mDeviceName = in.readString();
+            mDescription = in.readString();
+            mNumber = in.readInt();
+            mCategoryName = in.readString();
+            mCategoryId = in.readInt();
+            mCategory = in.readParcelable(Status.class.getClassLoader());
+        }
+
+        public static final Creator<DeviceRequest> CREATOR = new Creator<DeviceRequest>() {
+            @Override
+            public DeviceRequest createFromParcel(Parcel in) {
+                return new DeviceRequest(in);
+            }
+
+            @Override
+            public DeviceRequest[] newArray(int size) {
+                return new DeviceRequest[size];
+            }
+        };
 
         @Override
         public Object clone() throws CloneNotSupportedException {
@@ -334,15 +367,52 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
         public String toString() {
             return new Gson().toJson(this);
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeInt(mId);
+            parcel.writeString(mDeviceName);
+            parcel.writeString(mDescription);
+            parcel.writeInt(mNumber);
+            parcel.writeString(mCategoryName);
+            parcel.writeInt(mCategoryId);
+            parcel.writeParcelable(mCategory, i);
+        }
     }
 
-    public class RequestAction extends BaseObservable implements Serializable {
+
+
+    public static class RequestAction extends BaseObservable implements Parcelable {
         @Expose
         @SerializedName("id")
         private int mId;
         @Expose
         @SerializedName("name")
         private String mName;
+
+        public RequestAction(){}
+
+        public RequestAction(Parcel in) {
+            mId = in.readInt();
+            mName = in.readString();
+        }
+
+        public static final Creator<RequestAction> CREATOR = new Creator<RequestAction>() {
+            @Override
+            public RequestAction createFromParcel(Parcel in) {
+                return new RequestAction(in);
+            }
+
+            @Override
+            public RequestAction[] newArray(int size) {
+                return new RequestAction[size];
+            }
+        };
 
         @Bindable
         public int getId() {
@@ -362,6 +432,17 @@ public class Request extends BaseObservable implements Serializable, Cloneable {
         public void setName(String name) {
             mName = name;
             notifyPropertyChanged(BR.name);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeInt(mId);
+            parcel.writeString(mName);
         }
     }
 }
