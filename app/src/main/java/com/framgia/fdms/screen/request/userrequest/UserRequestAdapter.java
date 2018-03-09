@@ -121,7 +121,7 @@ public class UserRequestAdapter
         public RequestModel(Request request) {
             mRequest = request;
             mIsShowAddDevice = (mUser.getRole() == BO_MANAGER || mUser.getRole() == BO_STAFF)
-                && mRequest.getRequestStatusId() == WAITING_DONE;
+                && mRequest.getRequestStatus().getId() == WAITING_DONE;
         }
 
         @Bindable

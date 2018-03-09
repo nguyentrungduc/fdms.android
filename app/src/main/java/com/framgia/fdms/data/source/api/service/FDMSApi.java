@@ -70,7 +70,7 @@ public interface FDMSApi {
     @GET("api/device_dashboards")
     Observable<Respone<List<Dashboard>>> getDashboardDevice();
 
-    @GET("api/requests")
+    @GET("api/my_requests")
     Observable<Respone<List<Request>>> getRequests(@QueryMap Map<String, Integer> params);
 
     @GET("api/request_statuses")
