@@ -10,16 +10,14 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Respone;
-
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 import io.reactivex.Observable;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +27,7 @@ import java.util.TimeZone;
 
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_ASSIGNEE_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_DESCRIPTION;
+import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_EXPECTED_DATE;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_FOR_USER_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_GROUP_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_TITLE;
@@ -83,7 +82,7 @@ public class Utils {
 
     public static String dateToString(Date date) {
         if (date == null) date = new Date();
-        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault());
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         return formatter.format(date);
     }
 
@@ -144,7 +143,7 @@ public class Utils {
     }
 
     public static String convertUiFormatToDataFormat(String time, String inputFormat,
-                                                     String outputFormat) {
+            String outputFormat) {
         if (TextUtils.isEmpty(time)) {
             return "";
         }
@@ -169,7 +168,7 @@ public class Utils {
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
-    public static Map<String,String> creatParramRequest(RequestCreatorRequest request){
+    public static Map<String, String> creatParramRequest(RequestCreatorRequest request) {
         Map<String, String> parrams = new HashMap<>();
 
         if (!TextUtils.isEmpty(request.getTitle())) {
@@ -178,6 +177,8 @@ public class Utils {
         if (!TextUtils.isEmpty(request.getDescription())) {
             parrams.put(REQUEST_DESCRIPTION, request.getDescription());
         }
+        parrams.put(REQUEST_EXPECTED_DATE, request.getExpectedDate());
+
         if (request.getRequestFor() > 0) {
             parrams.put(REQUEST_FOR_USER_ID, String.valueOf(request.getRequestFor()));
         }
@@ -188,5 +189,19 @@ public class Utils {
             parrams.put(REQUEST_GROUP_ID, String.valueOf(request.getGroupId()));
         }
         return parrams;
+    }
+
+    public static boolean invalidDate(String strDate){
+        Date date = new Date();
+        Date today = new Date();
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            date =  formatter.parse(strDate);
+            today= formatter.parse(formatter.format(today));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if(date.before(today)) return false;
+        else return true;
     }
 }

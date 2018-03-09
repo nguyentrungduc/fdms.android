@@ -386,4 +386,6 @@
     <string name="msg_assgin_meetingroom_missing_id">Please add a meeting room to assign device</string>
     <string name="action_please_wait">Please wait!</string>
     <string name="menu_read_all_notification">Mark all as read</string>
+    <string name="title_expected_date">Expected date</string>
+    <string name="msg_error_date">Invalid date!!</string>
 </resources>

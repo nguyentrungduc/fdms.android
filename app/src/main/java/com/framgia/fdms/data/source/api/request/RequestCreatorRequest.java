@@ -2,6 +2,7 @@ package com.framgia.fdms.data.source.api.request;
 
 import com.framgia.fdms.data.model.Request;
 import com.google.gson.annotations.SerializedName;
+import java.util.Date;
 
 /**
  * Created by MyPC on 18/05/2017.
@@ -18,6 +19,8 @@ public class RequestCreatorRequest extends BaseRequest {
     private int mAssignee;
     @SerializedName("request[request_status_id]")
     private int mStatusId;
+    @SerializedName("request[expected_date]")
+    private String mExpectedDate;
     private int mGroupId;
     private Request mRequest;
 
@@ -75,5 +78,13 @@ public class RequestCreatorRequest extends BaseRequest {
 
     public void setGroupId(int groupId) {
         mGroupId = groupId;
+    }
+
+    public String getExpectedDate() {
+        return mExpectedDate;
+    }
+
+    public void setExpectedDate(String expectedDate) {
+        mExpectedDate = expectedDate;
     }
 }

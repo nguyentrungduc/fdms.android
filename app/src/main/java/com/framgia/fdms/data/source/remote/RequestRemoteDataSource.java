@@ -1,6 +1,5 @@
 package com.framgia.fdms.data.source.remote;
 
-import android.text.TextUtils;
 import com.framgia.fdms.data.model.AssignmentRequest;
 import com.framgia.fdms.data.model.Dashboard;
 import com.framgia.fdms.data.model.Device;
@@ -30,7 +29,6 @@ import static com.framgia.fdms.utils.Constant.ApiParram.RELATIVE_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_ASSIGNEE_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_DESCRIPTION;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_FOR_USER_ID;
-import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_GROUP_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_REQUEST_DETAILS;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_STATUS_ID;
 import static com.framgia.fdms.utils.Constant.ApiParram.REQUEST_STATUS_ID_EDIT;
@@ -139,14 +137,14 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
         parrams.put(REQUEST_TITLE, request.getTitle());
         parrams.put(REQUEST_DESCRIPTION, request.getDescription());
         parrams.put(REQUEST_REQUEST_DETAILS, request.getDevices().toString());
-        if (request.getRequestForId() > 0) {
-            parrams.put(REQUEST_FOR_USER_ID, String.valueOf(request.getRequestForId()));
+        if (request.getRequestFor().getId() > 0) {
+            parrams.put(REQUEST_FOR_USER_ID, String.valueOf(request.getRequestFor().getId()));
         }
-        if (request.getAssigneeId() > 0) {
-            parrams.put(REQUEST_ASSIGNEE_ID, String.valueOf(request.getAssigneeId()));
+        if (request.getAssignee().getId() > 0) {
+            parrams.put(REQUEST_ASSIGNEE_ID, String.valueOf(request.getAssignee().getId()));
         }
-        if (request.getRequestStatusId() > 0) {
-            parrams.put(REQUEST_STATUS_ID_EDIT, String.valueOf(request.getRequestStatusId()));
+        if (request.getRequestStatus().getId() > 0) {
+            parrams.put(REQUEST_STATUS_ID_EDIT, String.valueOf(request.getRequestStatus().getId()));
         }
         return mFDMSApi.updateRequest(request.getId(), parrams);
     }

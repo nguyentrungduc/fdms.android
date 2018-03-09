@@ -120,6 +120,7 @@ public class Constant {
         public static final String ROOM_NAME = "name";
         public static final String REQUEST_TITLE = "request[title]";
         public static final String REQUEST_DESCRIPTION = "request[description]";
+        public static final String REQUEST_EXPECTED_DATE = "request[expected_date]";
         public static final String REQUEST_FOR_USER_ID = "request[for_user_id]";
         public static final String REQUEST_ASSIGNEE_ID = "request[assignee_id]";
         public static final String REQUEST_GROUP_ID = "request[group_id]";
