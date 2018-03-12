@@ -29,7 +29,7 @@ public class RequestInformationFragment extends Fragment {
     public static RequestInformationFragment newInstance(Request request) {
         RequestInformationFragment fragment = new RequestInformationFragment();
         Bundle args = new Bundle();
-        args.putSerializable(BUND_REQUEST, request);
+        args.putParcelable(BUND_REQUEST, request);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,7 +43,7 @@ public class RequestInformationFragment extends Fragment {
                 DataBindingUtil.inflate(inflater, R.layout.fragment_request_information, container,
                         false);
         mViewModel = new RequestInformationViewModel(this, mRequest.getRequestActionList(),
-                mRequest.getRequestStatus(), mRequest, binding.floatActionMenu, mListenner);
+                mRequest.getRequestStatus().getName(), mRequest, binding.floatActionMenu, mListenner);
 
         RequestInformationContract.Presenter presenter = new RequestInformationPresenter(mViewModel,
                 new UserRepository(new UserLocalDataSource(new SharePreferenceImp(getContext()))));

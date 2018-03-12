@@ -29,7 +29,7 @@ public class ListDeviceAssignmentFragment extends Fragment {
     public static ListDeviceAssignmentFragment newInstance(Request request) {
         ListDeviceAssignmentFragment fragment = new ListDeviceAssignmentFragment();
         Bundle args = new Bundle();
-        args.putSerializable(BUND_REQUEST, request);
+        args.putParcelable(BUND_REQUEST, request);
         fragment.setArguments(args);
         return fragment;
     }

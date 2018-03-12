@@ -128,7 +128,7 @@
                                             android:ellipsize="end"
                                             android:focusable="false"
                                             android:maxLines="1"
-                                            android:text="@{viewModel.request.requestFor}"
+                                            android:text="@{viewModel.request.requestFor.name}"
                                             bind:ignore="LabelFor,TextFields"
                                             />
                                     </android.support.design.widget.TextInputLayout>
@@ -162,7 +162,7 @@
                                         android:drawableStart="@drawable/ic_profile_24dp"
                                         android:focusable="false"
                                         android:onClick="@{() -> viewModel.onClickAssignee()}"
-                                        android:text="@{viewModel.request.assignee}"
+                                        android:text="@{viewModel.request.assignee.name}"
                                         android:textSize="@dimen/sp_16"
                                         bind:ignore="TooDeepLayout"
                                         />
@@ -192,9 +192,9 @@
                                 android:drawablePadding="@dimen/dp_10"
                                 android:drawableStart="@drawable/ic_list_24dp"
                                 android:focusable="false"
-                                android:text="@{viewModel.request.requestStatus}"
+                                android:text="@{viewModel.request.requestStatus.name}"
                                 android:textSize="@dimen/sp_16"
-                                bind:deviceStatus="@{viewModel.request.requestStatusId}"
+                                bind:deviceStatus="@{viewModel.request.requestStatus.id}"
                                 />
                         </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
@@ -209,14 +209,14 @@
                         <include
                             layout="@layout/text_input"
                             bind:image="@{@drawable/ic_profile_24dp}"
-                            bind:text="@{viewModel.request.creater}"
+                            bind:text="@{viewModel.request.creater.name}"
                             bind:title="@{@string/title_create_by}"
                             />
 
                         <include
                             layout="@layout/text_input"
                             bind:image="@{@drawable/ic_update_24dp}"
-                            bind:text="@{viewModel.request.updater}"
+                            bind:text="@{viewModel.request.updater.name}"
                             bind:title="@{@string/title_update_by}"
                             />
                     </LinearLayout>

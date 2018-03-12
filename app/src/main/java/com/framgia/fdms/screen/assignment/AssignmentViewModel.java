@@ -129,7 +129,7 @@ public class AssignmentViewModel extends BaseObservable implements AssignmentCon
             default:
             case AssignmentType.ASSIGN_BY_REQUEST:
                 AssignmentRequest assignmentRequest =
-                        new AssignmentRequest(mRequest.getId(), mRequest.getAssigneeId(),
+                        new AssignmentRequest(mRequest.getId(), mRequest.getAssignee().getId(),
                                 mRequest.getDescription(), mAdapter.getData());
                 mPresenter.registerAssignmentForRequest(assignmentRequest);
                 break;

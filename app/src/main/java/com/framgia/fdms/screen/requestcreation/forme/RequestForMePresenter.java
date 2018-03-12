@@ -10,6 +10,7 @@ import com.framgia.fdms.data.source.UserRepository;
 import com.framgia.fdms.data.source.api.error.BaseException;
 import com.framgia.fdms.data.source.api.error.RequestError;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
+import com.framgia.fdms.utils.Utils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
@@ -104,6 +105,16 @@ public final class RequestForMePresenter implements RequestForMeContract.Present
             isValid = false;
             mViewModel.onInputTitleError();
         }
+
+        if( request.getExpectedDate() == null){
+            isValid = false;
+            mViewModel.onInputDateEmpty();
+        }
+        if( request.getExpectedDate() != null && !Utils.invalidDate(request.getExpectedDate())){
+            isValid = false;
+            mViewModel. onInputDateError();
+        }
+
         return isValid;
     }
 

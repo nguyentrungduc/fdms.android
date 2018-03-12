@@ -64,7 +64,7 @@
                     android:text="@{requestModel.request.title}"
                     android:textSize="@dimen/sp_16"
                     android:textStyle="bold"
-                    bind:deviceStatus="@{requestModel.request.requestStatusId}"
+                    bind:deviceStatus="@{requestModel.request.requestStatus.id}"
                     />
 
                 <ImageView
@@ -110,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp_5"
-                    android:text="@{requestModel.request.requestFor}"
+                    android:text="@{requestModel.request.requestFor.name}"
                     android:textColor="@color/color_black"
                     android:textSize="@dimen/sp_14"
                     />
@@ -140,7 +140,7 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/dp_5"
-                    android:text="@{requestModel.request.assignee}"
+                    android:text="@{requestModel.request.assignee.name}"
                     android:textColor="@color/color_black"
                     android:textSize="@dimen/sp_14"
                     />
@@ -187,10 +187,10 @@
                     android:paddingEnd="@dimen/dp_7"
                     android:paddingStart="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_2"
-                    android:text="@{requestModel.request.requestStatus}"
+                    android:text="@{requestModel.request.requestStatus.name}"
                     android:textColor="@color/color_white"
                     android:textSize="@dimen/sp_14"
-                    bind:backgroundstatus="@{requestModel.request.requestStatusId}"
+                    bind:backgroundstatus="@{requestModel.request.requestStatus.id}"
                     />
             </LinearLayout>
         </LinearLayout>

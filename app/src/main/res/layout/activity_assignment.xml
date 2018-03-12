@@ -77,7 +77,7 @@
                             <include
                                 layout="@layout/text_image"
                                 bind:image="@{@drawable/ic_person_24dp}"
-                                bind:text="@{viewModel.request.requestFor}"
+                                bind:text="@{viewModel.request.requestFor.name}"
                                 />
 
                             <android.support.design.widget.TextInputLayout

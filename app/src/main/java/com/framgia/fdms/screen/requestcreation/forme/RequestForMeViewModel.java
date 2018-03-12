@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.requestcreation.forme;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.Toast;
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
@@ -18,6 +20,8 @@ import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 import com.framgia.fdms.screen.requestcreation.assignee.SelectAssigneeRequestActivity;
+import com.framgia.fdms.utils.Utils;
+import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
@@ -42,12 +46,13 @@ public class RequestForMeViewModel extends BaseObservable
     private Status mAssignee;
     private RequestCreatorRequest mRequest;
     private Status mDefaultAssignee;
-
+    private String mExpectedDate;
     private Status mGroup;
     private ArrayAdapter<Status> mAdapter;
     private Context mContext;
     private String mTitleError;
     private String mDescriptionError;
+    private String mDateError;
     private int mProgressBarVisibility = View.GONE;
     private boolean isAllowAddAssignee;
     private boolean isAllowAddRequestFor;
@@ -231,9 +236,55 @@ public class RequestForMeViewModel extends BaseObservable
         }
     }
 
+    @Bindable
+    public String getExpectedDate() {
+        return mExpectedDate;
+    }
+
+    public void setExpectedDate(String date) {
+        mExpectedDate = date;
+        mRequest.setExpectedDate(date);
+        notifyPropertyChanged(BR.expectedDate);
+    }
+
+    @Bindable
+    public String getDateError() {
+        return mDateError;
+    }
+
+    @Override
+    public void onInputDateError() {
+        mDateError = mContext.getString(R.string.msg_error_date);
+        notifyPropertyChanged(BR.dateError);
+    }
+
+    @Override
+    public void onInputDateEmpty(){
+        mDateError=mContext.getString(R.string.msg_error_user_name);
+        notifyPropertyChanged(BR.dateError);
+    }
+
     public void onClickAssignee() {
         mActivity.startActivityForResult(SelectAssigneeRequestActivity.getInstance(mContext),
                 REQUEST_ASSIGNEE);
+    }
+
+    public void onClickExpectedDate() {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog =
+                new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                            int dayOfMonth) {
+                        calendar.set(year, monthOfYear, dayOfMonth);
+                        setExpectedDate(Utils.dateToString(calendar.getTime()));
+                    }
+                }, year, month, day);
+        datePickerDialog.show();
     }
 
     @Bindable

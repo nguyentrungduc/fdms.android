@@ -212,7 +212,7 @@ public class UserRequestViewModel extends BaseFragmentModel
                 break;
 
             case REQUEST_CREATE_REQUEST:
-                request = (Request) bundle.getSerializable(BUNDLE_DATA);
+                request = (Request) bundle.getParcelable(BUNDLE_DATA);
                 if (request != null) {
                     mAdapter.addRequest(request);
                     setScrollPosition(0);

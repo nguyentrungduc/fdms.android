@@ -76,7 +76,7 @@ public class RequestDetailViewModel extends BaseObservable
     private void setResultUpdateActivity(Request request) {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(BUNDLE_RESPONE, request);
+        bundle.putParcelable(BUNDLE_RESPONE, request);
         intent.putExtras(bundle);
         mActivity.setResult(RESULT_OK, intent);
     }
