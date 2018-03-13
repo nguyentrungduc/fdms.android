@@ -1,6 +1,7 @@
 package com.framgia.fdms.screen.requestcreation.forme;
 
 import android.text.TextUtils;
+import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
@@ -108,11 +109,11 @@ public final class RequestForMePresenter implements RequestForMeContract.Present
 
         if( request.getExpectedDate() == null){
             isValid = false;
-            mViewModel.onInputDateEmpty();
+            mViewModel.onInputDateError(R.string.msg_empty_date);
         }
         if( request.getExpectedDate() != null && !Utils.invalidDate(request.getExpectedDate())){
             isValid = false;
-            mViewModel. onInputDateError();
+            mViewModel. onInputDateError(R.string.msg_error_date);
         }
 
         return isValid;

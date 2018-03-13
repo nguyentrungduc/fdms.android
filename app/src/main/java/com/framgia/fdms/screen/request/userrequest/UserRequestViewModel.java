@@ -9,8 +9,10 @@ import android.support.annotation.IntDef;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
 import android.text.TextUtils;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,9 +43,12 @@ import java.util.Calendar;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.framgia.fdms.screen.request.userrequest.UserRequestViewModel.RequestManagerViewType.ALL_REQUESTS;
-import static com.framgia.fdms.screen.request.userrequest.UserRequestViewModel.RequestManagerViewType.REQUESTS_BY_ME;
-import static com.framgia.fdms.screen.request.userrequest.UserRequestViewModel.RequestManagerViewType.REQUEST_FOR_ME;
+import static com.framgia.fdms.screen.request.userrequest.UserRequestViewModel
+        .RequestManagerViewType.ALL_REQUESTS;
+import static com.framgia.fdms.screen.request.userrequest.UserRequestViewModel
+        .RequestManagerViewType.REQUESTS_BY_ME;
+import static com.framgia.fdms.screen.request.userrequest.UserRequestViewModel
+        .RequestManagerViewType.REQUEST_FOR_ME;
 import static com.framgia.fdms.screen.requestcreation.member.RequestCreatorType.MY_REQUEST;
 import static com.framgia.fdms.screen.selection.SelectionType.REQUEST_CREATED_BY;
 import static com.framgia.fdms.screen.selection.SelectionType.STATUS_REQUEST_ALL;
@@ -62,7 +67,7 @@ import static com.framgia.fdms.utils.Constant.RequestConstant.REQUEST_STATUS;
 
 public class UserRequestViewModel extends BaseFragmentModel
         implements UserRequestContract.ViewModel, OnRequestClickListenner,
-        DatePickerDialog.OnDateSetListener,AdapterView.OnItemSelectedListener{
+        DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
 
     private final Context mContext;
     private final Fragment mFragment;
@@ -154,8 +159,7 @@ public class UserRequestViewModel extends BaseFragmentModel
 
     @Override
     public void onRegisterRequestClick() {
-        mFragment.startActivityForResult(
-                RequestForMeActivity.getInstance(mFragment.getActivity()),
+        mFragment.startActivityForResult(RequestForMeActivity.getInstance(mFragment.getActivity()),
                 REQUEST_CREATE_REQUEST);
     }
 
@@ -195,8 +199,7 @@ public class UserRequestViewModel extends BaseFragmentModel
                 mPresenter.getData(mRelative, mStatus, null);
                 break;
             case REQUEST_DETAIL:
-                Request request =
-                        (Request) bundle.getSerializable(BUNDLE_RESPONE);
+                Request request = (Request) bundle.getSerializable(BUNDLE_RESPONE);
                 if (request != null) {
                     onUpdateActionSuccess(request);
                 }
@@ -303,8 +306,7 @@ public class UserRequestViewModel extends BaseFragmentModel
     public void onActionRequestClick(final int reqeuestId, final int actionId) {
         switch (actionId) {
             case RequestStatus.CANCELLED:
-                new LovelyTextInputDialog(mContext)
-                        .setTopColorRes(R.color.colorPrimary)
+                new LovelyTextInputDialog(mContext).setTopColorRes(R.color.colorPrimary)
                         .setTitle(R.string.msg_cancel_request)
                         .setIcon(R.drawable.ic_error_white)
                         .setConfirmButton(android.R.string.ok,
@@ -351,8 +353,8 @@ public class UserRequestViewModel extends BaseFragmentModel
     @Override
     public void onAddDeviceClick(int requestId) {
         mFragment.startActivityForResult(
-                AssignmentActivity.getInstance(mContext, AssignmentType.ASSIGN_BY_REQUEST, requestId),
-                REQUEST_CREATE_ASSIGNMENT);
+                AssignmentActivity.getInstance(mContext, AssignmentType.ASSIGN_BY_REQUEST,
+                        requestId), REQUEST_CREATE_ASSIGNMENT);
     }
 
     @Bindable
@@ -492,7 +494,7 @@ public class UserRequestViewModel extends BaseFragmentModel
 
     }
 
-    @IntDef({ALL_REQUESTS, REQUESTS_BY_ME, REQUEST_FOR_ME})
+    @IntDef({ ALL_REQUESTS, REQUESTS_BY_ME, REQUEST_FOR_ME })
     public @interface RequestManagerViewType {
         int ALL_REQUESTS = 0;
         int REQUESTS_BY_ME = 1;

@@ -30,9 +30,7 @@ public interface RequestForMeContract {
 
         void onInputTitleError();
 
-        void onInputDateError();
-
-        void onInputDateEmpty();
+        void onInputDateError(int id);
 
         void onInputDescriptionError();
 
