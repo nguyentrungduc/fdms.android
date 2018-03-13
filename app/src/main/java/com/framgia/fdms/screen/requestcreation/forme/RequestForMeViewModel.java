@@ -253,14 +253,8 @@ public class RequestForMeViewModel extends BaseObservable
     }
 
     @Override
-    public void onInputDateError() {
-        mDateError = mContext.getString(R.string.msg_error_date);
-        notifyPropertyChanged(BR.dateError);
-    }
-
-    @Override
-    public void onInputDateEmpty(){
-        mDateError=mContext.getString(R.string.msg_error_user_name);
+    public void onInputDateError(int id) {
+        mDateError = mContext.getString(id);
         notifyPropertyChanged(BR.dateError);
     }
 

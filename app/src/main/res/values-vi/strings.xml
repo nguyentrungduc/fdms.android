@@ -387,5 +387,6 @@
     <string name="action_please_wait">Please wait!</string>
     <string name="menu_read_all_notification">Mark all as read</string>
     <string name="title_expected_date">Expected date</string>
-    <string name="msg_error_date">Invalid date!!</string>
+    <string name="msg_error_date">Can not select date in the past!</string>
+    <string name="msg_empty_date">You must select date!</string>
 </resources>

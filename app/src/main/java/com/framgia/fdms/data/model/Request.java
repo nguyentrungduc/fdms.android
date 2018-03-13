@@ -58,7 +58,8 @@ public class Request extends BaseObservable implements Parcelable, Cloneable {
     @SerializedName("handler")
     private String mHandler;
 
-    public Request(){}
+    public Request() {
+    }
 
     public Request(Parcel in) {
         mId = in.readInt();
@@ -72,6 +73,7 @@ public class Request extends BaseObservable implements Parcelable, Cloneable {
         mDevices = in.createTypedArrayList(DeviceRequest.CREATOR);
         mRequestActionList = in.createTypedArrayList(RequestAction.CREATOR);
         mHandler = in.readString();
+        mCreatedAt = (Date) in.readSerializable();
     }
 
     public static final Creator<Request> CREATOR = new Creator<Request>() {
@@ -235,6 +237,7 @@ public class Request extends BaseObservable implements Parcelable, Cloneable {
         parcel.writeTypedList(mDevices);
         parcel.writeTypedList(mRequestActionList);
         parcel.writeString(mHandler);
+        parcel.writeSerializable(mCreatedAt);
     }
 
     public static class DeviceRequest extends BaseObservable implements Parcelable, Cloneable {
@@ -385,8 +388,6 @@ public class Request extends BaseObservable implements Parcelable, Cloneable {
         }
     }
 
-
-
     public static class RequestAction extends BaseObservable implements Parcelable {
         @Expose
         @SerializedName("id")
@@ -395,7 +396,8 @@ public class Request extends BaseObservable implements Parcelable, Cloneable {
         @SerializedName("name")
         private String mName;
 
-        public RequestAction(){}
+        public RequestAction() {
+        }
 
         public RequestAction(Parcel in) {
             mId = in.readInt();
