@@ -52,7 +52,7 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     @Override
     public Observable<List<Request>> getMemberRequests(int requestStatusId, int relativeId,
             int page, int perPage) {
-        return mFDMSApi.getRequests(
+        return mFDMSApi.getMemberRequests(
                 getRequestParams(MEMBER_REQUEST, requestStatusId, relativeId, page, perPage))
                 .flatMap(new Function<Respone<List<Request>>, ObservableSource<List<Request>>>() {
                     @Override
@@ -214,7 +214,8 @@ public class RequestRemoteDataSource extends BaseRemoteDataSource
     @Override
     public Observable<List<Dashboard>> getDashboardRequest() {
         return mFDMSApi.getDashboardRequest()
-                .flatMap( new Function<Respone<List<Dashboard>>, ObservableSource<List<Dashboard>>>
+                .flatMap(
+                        new Function<Respone<List<Dashboard>>, ObservableSource<List<Dashboard>>>
                                 () {
                             @Override
                             public ObservableSource<List<Dashboard>> apply(

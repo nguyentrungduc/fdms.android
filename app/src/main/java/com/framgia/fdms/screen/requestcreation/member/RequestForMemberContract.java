@@ -7,7 +7,6 @@ import com.framgia.fdms.data.model.Request;
 import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
-import java.util.List;
 
 /**
  * This specifies the contract between the view and the presenter.
@@ -32,6 +31,8 @@ public interface RequestForMemberContract {
         void onInputTitleError();
 
         void onInputDescriptionError();
+
+        void onInputDateError(int id);
 
         void onInputRequestForError();
 
