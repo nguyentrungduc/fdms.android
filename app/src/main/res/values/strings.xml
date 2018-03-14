@@ -400,4 +400,5 @@
     <string name="title_expected_date">Expected date</string>
     <string name="msg_error_date">Can not select date in the past!</string>
     <string name="msg_empty_date">You must select date!</string>
+    <string name="msg_request_for_error">Request for must not none!</string>
 </resources>

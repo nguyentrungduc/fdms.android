@@ -1,5 +1,6 @@
 package com.framgia.fdms.screen.requestcreation.member;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
@@ -9,8 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.Toast;
-
 import com.framgia.fdms.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.AssigneeUser;
@@ -20,6 +21,8 @@ import com.framgia.fdms.data.model.User;
 import com.framgia.fdms.data.source.api.request.RequestCreatorRequest;
 import com.framgia.fdms.screen.requestcreation.assignee.SelectAssigneeRequestActivity;
 import com.framgia.fdms.screen.requestcreation.requestfor.SelectRequestForActivity;
+import com.framgia.fdms.utils.Utils;
+import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
 import static com.framgia.fdms.data.anotation.Permission.BO_MANAGER;
@@ -43,6 +46,7 @@ public class RequestForMemberViewModel extends BaseObservable
     private AppCompatActivity mActivity;
     private String mRequestTitle;
     private String mRequestDescription;
+    private String mExpectedDate;
     private AssigneeUser mRequestFor;
     private Status mAssignee;
     private RequestCreatorRequest mRequest;
@@ -55,6 +59,7 @@ public class RequestForMemberViewModel extends BaseObservable
     private String mDescriptionError;
     private String mRequestForError;
     private String mGroupError;
+    private String mDateError;
     private int mProgressBarVisibility = View.GONE;
     private boolean isAllowAddRequestFor;
     private boolean isAllowAddAssignee;
@@ -116,8 +121,8 @@ public class RequestForMemberViewModel extends BaseObservable
                 AssigneeUser user = bundle.getParcelable(BUNDLE_DATA);
                 setRequestFor(user);
                 updateDefaultAssignee();
-                setAdapter(new ArrayAdapter<Status>(mContext,
-                        R.layout.item_group, user.getGroups()));
+                setAdapter(
+                        new ArrayAdapter<Status>(mContext, R.layout.item_group, user.getGroups()));
                 break;
             case REQUEST_ASSIGNEE:
                 Status status = bundle.getParcelable(BUNDLE_DATA);
@@ -155,7 +160,7 @@ public class RequestForMemberViewModel extends BaseObservable
 
     @Override
     public void onInputRequestForError() {
-        mRequestForError = mContext.getString(R.string.msg_error_user_name);
+        mRequestForError = mContext.getString(R.string.msg_request_for_error);
         notifyPropertyChanged(BR.requestForError);
     }
 
@@ -163,6 +168,12 @@ public class RequestForMemberViewModel extends BaseObservable
     public void onInputGroupForError() {
         mGroupError = mContext.getString(R.string.msg_error_user_name);
         notifyPropertyChanged(BR.groupError);
+    }
+
+    @Override
+    public void onInputDateError(int id) {
+        mDateError = mContext.getString(id);
+        notifyPropertyChanged(BR.dateError);
     }
 
     @Override
@@ -232,6 +243,17 @@ public class RequestForMemberViewModel extends BaseObservable
     }
 
     @Bindable
+    public String getExpectedDate() {
+        return mExpectedDate;
+    }
+
+    public void setExpectedDate(String date) {
+        mExpectedDate = date;
+        mRequest.setExpectedDate(date);
+        notifyPropertyChanged(BR.expectedDate);
+    }
+
+    @Bindable
     public String getTitleError() {
         return mTitleError;
     }
@@ -242,8 +264,18 @@ public class RequestForMemberViewModel extends BaseObservable
     }
 
     @Bindable
+    public String getDateError() {
+        return mDateError;
+    }
+
+    @Bindable
     public int getProgressBarVisibility() {
         return mProgressBarVisibility;
+    }
+
+    @Bindable
+    public String getRequestForError() {
+        return mRequestForError;
     }
 
     public void setProgressBarVisibility(int progressBarVisibility) {
@@ -261,16 +293,6 @@ public class RequestForMemberViewModel extends BaseObservable
         notifyPropertyChanged(BR.allowAddRequestFor);
     }
 
-    @Bindable
-    public String getRequestForError() {
-        return mRequestForError;
-    }
-
-    public void setRequestForError(String requestForError) {
-        mRequestForError = requestForError;
-        notifyPropertyChanged(BR.requestForError);
-    }
-
     public void onClickChooseRequestForRelativeStaff() {
         mActivity.startActivityForResult(SelectRequestForActivity.getInstance(mContext),
                 REQUEST_RELATIVE);
@@ -285,6 +307,24 @@ public class RequestForMemberViewModel extends BaseObservable
     public void onClickAssignee() {
         mActivity.startActivityForResult(SelectAssigneeRequestActivity.getInstance(mContext),
                 REQUEST_ASSIGNEE);
+    }
+
+    public void onClickExpectedDate() {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog =
+                new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                            int dayOfMonth) {
+                        calendar.set(year, monthOfYear, dayOfMonth);
+                        setExpectedDate(Utils.dateToString(calendar.getTime()));
+                    }
+                }, year, month, day);
+        datePickerDialog.show();
     }
 
     @Bindable

@@ -73,6 +73,9 @@ public interface FDMSApi {
     @GET("api/my_requests")
     Observable<Respone<List<Request>>> getRequests(@QueryMap Map<String, Integer> params);
 
+    @GET("api/requests")
+    Observable<Respone<List<Request>>> getMemberRequests(@QueryMap Map<String, Integer> params);
+
     @GET("api/request_statuses")
     Observable<Respone<List<Status>>> getListStatusRequest();
 
