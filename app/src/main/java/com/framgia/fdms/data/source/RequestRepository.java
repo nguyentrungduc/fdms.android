@@ -33,7 +33,7 @@ public class RequestRepository implements RequestRepositoryContract {
     @Override
     public Observable<List<Request>> getMemberRequests(int requestStatusId, int relativeId,
             int page, int perPage) {
-        return mRemoteDataSource.getMemberRequests(requestStatusId, relativeId, perPage, page);
+        return mRemoteDataSource.getMemberRequests(requestStatusId, relativeId, page, perPage);
     }
 
     @Override
