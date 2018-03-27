@@ -20,12 +20,12 @@
         tools:replace="android:allowBackup">
         <meta-data
             android:name="android.app.searchable"
-            android:resource="@xml/searchable"></meta-data>
+            android:resource="@xml/searchable" />
 
         <activity
             android:name=".screen.authenication.login.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Design.NoActionBar"></activity>
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".screen.authenication.register.RegisterActivity"
             android:screenOrientation="portrait">
@@ -108,7 +108,6 @@
         <activity
             android:name=".screen.request.requestmanager.select.assignee.SelectAssigneeActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".screen.requestcreation.assignee.SelectAssigneeRequestActivity"
             android:screenOrientation="portrait" />
@@ -133,6 +132,11 @@
         <activity
             android:name=".screen.requestcreation.requestfor.SelectRequestForActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            android:name=".screen.inventorydevice.InventoryDeviceActivity">
+
+        </activity>
     </application>
 
 </manifest>

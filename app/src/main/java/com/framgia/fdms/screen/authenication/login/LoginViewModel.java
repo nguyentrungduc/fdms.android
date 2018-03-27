@@ -13,6 +13,7 @@ import com.framgia.fdms.R;
 import com.framgia.fdms.screen.authenication.forgotpassword.ForgotpasswordActivity;
 import com.framgia.fdms.screen.authenication.register.RegisterActivity;
 import com.framgia.fdms.screen.main.MainActivity;
+import com.framgia.fdms.screen.returndevice.ReturnDeviceActivity;
 
 /**
  * Exposes the data to be used in the Login screen.
