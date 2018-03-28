@@ -12,6 +12,8 @@ import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.R;
 import com.framgia.fdms.screen.authenication.forgotpassword.ForgotpasswordActivity;
 import com.framgia.fdms.screen.authenication.register.RegisterActivity;
+import com.framgia.fdms.screen.inventorydevice.InventoryDeviceActivity;
+import com.framgia.fdms.screen.inventorydevice.InventoryDeviceContract;
 import com.framgia.fdms.screen.main.MainActivity;
 import com.framgia.fdms.screen.returndevice.ReturnDeviceActivity;
 
@@ -60,7 +62,7 @@ public class LoginViewModel extends BaseObservable implements LoginContract.View
 
     @Override
     public void onLoginSuccess() {
-        mContext.startActivity(MainActivity.getInstance(mContext));
+        mContext.startActivity(InventoryDeviceActivity.getInstance(mContext));
         ((Activity) (mContext)).finish();
         isValid = false;
     }

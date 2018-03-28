@@ -4,15 +4,12 @@
     >
     <data>
         <variable
-            name="device"
-            type="com.framgia.fdms.data.model.Device"
-            />
-        <variable
             name="viewModel"
             type="com.framgia.fdms.screen.inventorydevice.ItemDeviceInventoryViewModel"/>
 
     </data>
     <android.support.constraint.ConstraintLayout
+        android:onClick="@{() -> viewModel.onDeviceClick()}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -25,12 +22,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:checked="@{device.selected}"
+            android:checked="@{viewModel.selected}"
             app:buttonTint="@color/state_check_box"
             />
 
         <android.support.v7.widget.AppCompatTextView
-            android:text="@{device.deviceCode}"
+            android:text="@{viewModel.deviceCode}"
             android:textSize="@dimen/sp_16"
             android:layout_marginTop="@dimen/dp_16"
             android:layout_marginStart="@dimen/dp_8"
@@ -41,7 +38,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:text="@{device.productionName}"
+            android:text="@{viewModel.productionName}"
             android:textSize="@dimen/sp_16"
             android:layout_marginTop="@dimen/dp_8"
             android:layout_marginStart="@dimen/dp_8"
@@ -57,9 +54,9 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:onClick="@{() -> viewModel.onDeviceCommentClick()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> viewModel.onDeviceClick()}"
             android:textSize="@dimen/sp_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

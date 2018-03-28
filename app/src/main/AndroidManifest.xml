@@ -133,7 +133,6 @@
             android:name=".screen.requestcreation.requestfor.SelectRequestForActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             android:name=".screen.inventorydevice.InventoryDeviceActivity">
 
         </activity>
