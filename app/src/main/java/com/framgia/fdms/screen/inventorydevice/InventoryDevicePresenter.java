@@ -1,12 +1,8 @@
 package com.framgia.fdms.screen.inventorydevice;
 
-import com.framgia.fdms.data.model.User;
-import com.framgia.fdms.data.source.DeviceRepository;
+import com.framgia.fdms.data.model.DeviceInventory;
+import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.DeviceReturnRepository;
-import com.framgia.fdms.data.source.UserRepository;
-import com.framgia.fdms.screen.returndevice.ReturnDeviceContract;
-
-import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -16,16 +12,12 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class InventoryDevicePresenter implements InventoryDeviceContract.Presenter {
 
-    private UserRepository mUserRepository;
-    private DeviceRepository mDeviceRepository;
+    private DeviceReturnRepository mDeviceReturnRepository;
     private InventoryDeviceViewModel mViewModel;
+    private CompositeDisposable mDisposable;
 
-
-    public InventoryDevicePresenter(InventoryDeviceContract.ViewModel viewModel,
-                        DeviceRepository deviceRepository) {
-        mDeviceRepository = deviceRepository;
-        mViewModel = (InventoryDeviceViewModel) viewModel;
-
+    public InventoryDevicePresenter(DeviceReturnRepository deviceReturnRepository) {
+        mDeviceReturnRepository = deviceReturnRepository;
     }
 
 
@@ -41,12 +33,12 @@ public class InventoryDevicePresenter implements InventoryDeviceContract.Present
 
 
     @Override
-    public void getListDevice(User user) {
+    public void getListDevice(Status status) {
 
     }
 
     @Override
-    public void postInventory() {
+    public void postInventory(DeviceInventory deviceInventory) {
 
     }
 }

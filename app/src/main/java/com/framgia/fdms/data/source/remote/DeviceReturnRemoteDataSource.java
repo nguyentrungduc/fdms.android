@@ -22,7 +22,7 @@ public class DeviceReturnRemoteDataSource
     private static DeviceReturnRemoteDataSource sInstances;
     private FDMSApi mFDMSApi;
 
-    private DeviceReturnRemoteDataSource() {
+    public DeviceReturnRemoteDataSource() {
         mFDMSApi = FDMSServiceClient.getInstance();
     }
 
